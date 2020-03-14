@@ -1,0 +1,88 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+
+import 'ui/home_page.dart';
+import 'ui/components/home_page_background.dart';
+import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import 'resource/db_provider.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  bool initialized = false;
+  CrossFadeState crossFadeState = CrossFadeState.showSecond;
+  Widget child = Platform.isAndroid
+      ? Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        )
+      : Scaffold(
+          appBar: AppBar(
+            title: Text('Manji'),
+          ),
+          body: HomePageBackground());
+  // This widget is the root of your application.
+
+  @override
+  void initState() {
+    super.initState();
+
+//    kanjiBloc.allKanjis.doOnData((_) {
+//      setState(() {
+//        child = HomePage();
+//      });
+//    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+        title: 'Manji',
+        theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
+//        home: AnimatedContainer(
+//          duration: Duration(milliseconds: 300),
+//          child: child,
+//        )
+        home: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          child: StreamBuilder(
+              stream: kanjiBloc.allKanjis,
+              builder: (_, __) {
+                if (__.hasData) {
+                  return HomePage();
+                } else {
+                  if (!initialized) {
+                    initialized = true;
+                    kanjiBloc.getAllKanjis();
+                  } else {
+                    DBProvider.db.initDB(refresh: true).whenComplete(() {
+                      kanjiBloc.getAllKanjis();
+                    });
+                  }
+                  return Platform.isAndroid
+                      ? Scaffold(
+                          body: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Scaffold(
+                          appBar: AppBar(title: Text('Manji'),),
+                          body:HomePageBackground()
+                        );
+                }
+              }),
+        )
+        );
+  }
+}
