@@ -12,7 +12,7 @@ class KanjiListBloc {
 
   final _kanjiListsFetcher = BehaviorSubject<List<KanjiList>>();
 
-  Observable<List<KanjiList>> get kanjiLists => _kanjiListsFetcher.stream;
+  Stream<List<KanjiList>> get kanjiLists => _kanjiListsFetcher.stream;
 
   List<KanjiList> _kanjiLists;
 

@@ -19,8 +19,8 @@ class SentenceBloc{
   List<String> _unloadedSentencesStr = List<String>();
   List<Word> _words = <Word>[];
 
-  Observable<List<Sentence>> get sentences => _sentencesFetcher.stream;
-  Observable<List<Word>> get words => _wordsFetcher.stream;
+  Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
+  Stream<List<Word>> get words => _wordsFetcher.stream;
 
   void fetchSentencesByWords(String str){
     _sentences.clear();

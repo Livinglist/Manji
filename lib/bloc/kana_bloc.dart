@@ -8,8 +8,8 @@ class KanaBloc{
   final _hiraganaFetcher = BehaviorSubject<List<Hiragana>>();
   final _katakanaFetcher = BehaviorSubject<List<Katakana>>();
 
-  Observable<List<Hiragana>> get hiragana => _hiraganaFetcher.stream;
-  Observable<List<Katakana>> get katakana => _katakanaFetcher.stream;
+  Stream<List<Hiragana>> get hiragana => _hiraganaFetcher.stream;
+  Stream<List<Katakana>> get katakana => _katakanaFetcher.stream;
 
   void init(){
     repo.getAllKatakana().then((katakanas){

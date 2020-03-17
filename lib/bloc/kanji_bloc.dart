@@ -37,14 +37,13 @@ class KanjiBloc {
   Map<String, Kanji> _allFavKanjisMap = <String, Kanji>{};
   Map<String, Kanji> _allStarKanjisMap = <String, Kanji>{};
 
-  Observable<List<Sentence>> get sentences => _sentencesFetcher.stream;
-  Observable<List<Word>> get words => _wordsFetcher.stream;
-  Observable<List<Kanji>> get kanjis => _kanjisFetcher.stream;
-  Observable<List<Kanji>> get allKanjis => _allKanjisFetcher.stream;
-  Observable<List<Kanji>> get allKanjisByKana => _allKanjisByKanaFetcher.stream;
-  Observable<Kanji> get kanjiByKana => _kanjiByKanaFetcher.stream;
-//  Observable<Kanji> get kanji => _singleKanjiFetcher.stream;
-  Observable<Kanji> get kanji {
+  Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
+  Stream<List<Word>> get words => _wordsFetcher.stream;
+  Stream<List<Kanji>> get kanjis => _kanjisFetcher.stream;
+  Stream<List<Kanji>> get allKanjis => _allKanjisFetcher.stream;
+  Stream<List<Kanji>> get allKanjisByKana => _allKanjisByKanaFetcher.stream;
+  Stream<Kanji> get kanjiByKana => _kanjiByKanaFetcher.stream;
+  Stream<Kanji> get kanji {
     if (_singleKanjiFetchers.isNotEmpty) {
       return _singleKanjiFetchers.last.stream;
     } else {
@@ -53,11 +52,12 @@ class KanjiBloc {
     }
   }
 
-  Observable<Kanji> get randomKanji => _randomKanjiFetcher.stream;
-  Observable<List<Kanji>> get allFavKanjis => _allFavKanjisFetcher.stream;
-  Observable<List<Kanji>> get allStarKanjis => _allStarKanjisFetcher.stream;
+  Stream<Kanji> get randomKanji => _randomKanjiFetcher.stream;
+  Stream<List<Kanji>> get allFavKanjis => _allFavKanjisFetcher.stream;
+  Stream<List<Kanji>> get allStarKanjis => _allStarKanjisFetcher.stream;
 
   List<Kanji> get allKanjisList => _allKanjisMap.values.toList();
+  Map<String, Kanji> get allKanjisMap => _allKanjisMap;
 
   void getRandomKanji() {
     var ran = Random(DateTime.now().millisecond);
@@ -199,19 +199,6 @@ class KanjiBloc {
       _singleKanjiFetchers.last.add(kanji);
     else
       _singleKanjiFetchers.last.addError('No data found');
-
-//    var kanji = _allKanjisMap[kanjiStr];
-//    if (kanji != null && !_singleKanjiFetcher.isClosed)
-//      _singleKanjiFetcher.add(kanji);
-//    else
-//      _singleKanjiFetcher.addError('No data found');
-
-//    Future<Kanji>((){
-//      return _allKanjis.singleWhere((kanji)=>kanji.kanji == kanjiStr);
-//    }).then((kanji){
-//      if(kanji!=null && !_singleKanjiFetcher.isClosed) _singleKanjiFetcher.add(kanji);
-//      else _singleKanjiFetcher.addError('No data found');
-//    });
   }
 
   void updateKanji(Kanji kanji, {isDeleted = false}) {
@@ -312,6 +299,7 @@ class KanjiBloc {
     _allStarKanjisFetcher.close();
     _singleKanjiFetcher.close();
     _allKanjisByKanaFetcher.close();
+    _kanjiByKanaFetcher.close();
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:apple_sign_in/apple_sign_in.dart';
+
 import 'components/furigana_text.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
 
@@ -122,9 +124,36 @@ class _SettingsPageState extends State<SettingsPage> {
               applicationVersion: '0.9 alpha',
               aboutBoxChildren: <Widget>[Text('Manji helps Japanese learners learn Japanese Kanji')],
             ),
+          ),
+          Divider(),
+          AppleSignInButton(
+            style: ButtonStyle.black,
+            type: ButtonType.signIn,
+            onPressed: appleLogIn,
           )
         ],
       ),
     );
+  }
+
+  void appleLogIn() async {
+    if (await AppleSignIn.isAvailable()) {
+      final result = await AppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          print(result.credential.user ?? "null"); //All the required credentials
+          break;
+        case AuthorizationStatus.error:
+          print("Sign in failed: ${result.error.localizedDescription}");
+          break;
+        case AuthorizationStatus.cancelled:
+          print('User cancelled');
+          break;
+      }
+    } else {
+      print('Apple SignIn is not available for your device');
+    }
   }
 }

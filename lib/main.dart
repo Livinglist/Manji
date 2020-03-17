@@ -31,29 +31,18 @@ class MyAppState extends State<MyApp> {
             title: Text('Manji'),
           ),
           body: HomePageBackground());
-  // This widget is the root of your application.
 
   @override
   void initState() {
     super.initState();
-
-//    kanjiBloc.allKanjis.doOnData((_) {
-//      setState(() {
-//        child = HomePage();
-//      });
-//    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         title: 'Manji',
         theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
-//        home: AnimatedContainer(
-//          duration: Duration(milliseconds: 300),
-//          child: child,
-//        )
         home: AnimatedContainer(
           duration: Duration(milliseconds: 300),
           child: StreamBuilder(
@@ -77,12 +66,12 @@ class MyAppState extends State<MyApp> {
                           ),
                         )
                       : Scaffold(
-                          appBar: AppBar(title: Text('Manji'),),
-                          body:HomePageBackground()
-                        );
+                          appBar: AppBar(
+                            title: Text('Manji'),
+                          ),
+                          body: HomePageBackground());
                 }
               }),
-        )
-        );
+        ));
   }
 }

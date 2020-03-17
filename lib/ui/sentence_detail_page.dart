@@ -173,61 +173,6 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                     style: TextStyle(color: Colors.grey),
                   ),
                 )
-//              Container(
-//                  width: width,
-//                  child: SingleChildScrollView(
-//                    scrollDirection: Axis.horizontal,
-//                    child: Row(
-//                      children: <Widget>[
-//                        //for (var token in widget.sentence.tokens.where((token) => token.isKanji))
-//                        for (var kanji in getKanjis(widget.sentence.tokens))
-//                          Padding(
-//                            padding: EdgeInsets.all(8),
-//                            child: ClipRRect(
-//                              child: Container(
-//                                color: Colors.teal,
-//                                child: Material(
-//                                  color: Colors.transparent,
-//                                  child: InkWell(
-//                                    splashColor: Colors.tealAccent,
-//                                    onTap: (){
-//                                      Navigator.push(context, MaterialPageRoute(builder: (_)=>KanjiDetailPage(kanjiStr: kanji)));
-//                                    },
-//                                    child: Container(
-//                                      width: 60,
-//                                      height: 60,
-//                                      color: Colors.transparent,
-//                                      child: Center(
-//                                          child: Text(
-//                                            getSingleKanji(kanji) ?? "",
-//                                            style: TextStyle(fontSize: 24, color: Colors.white, fontFamily: 'kazei'),
-//                                          )),
-//                                    ),
-//                                  ),
-//                                ),
-//                              ),
-//                              borderRadius: BorderRadius.all(Radius.circular(30)),
-//                            ),
-//                          )
-//                      ],
-//                    ),
-//                  )),
-//              Container(
-//                width: width,
-//                child: Column(
-//                  children: <Widget>[
-//                    for (var token in widget.sentence.tokens.where((token) => token.isKanji))
-//                      Padding(padding: EdgeInsets.symmetric(horizontal: 6), child: WordCard(wordFurigana: token.furigana, wordText: token.text))
-////                      ClipRRect(
-////                        child: Container(
-////                          decoration: BoxDecoration(color: Colors.teal,shape: BoxShape.rectangle, borderRadius: BorderRadius.all(Radius.circular(6))),
-////                          child: Center(child: Text(token.text)),
-////                        ),
-////                        borderRadius: BorderRadius.all(Radius.circular(15)),
-////                      )
-//                  ],
-//                ),
-//              ),
             ],
           ),
         ));

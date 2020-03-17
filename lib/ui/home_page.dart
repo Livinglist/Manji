@@ -19,6 +19,7 @@ import 'settings_page.dart';
 import 'education_kanji_page.dart';
 import 'search_result_page.dart';
 import 'my_list_page.dart';
+import 'quiz_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -150,12 +151,19 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                 },
               ),
               ListTile(
+                title: Text('クイズ', style: TextStyle(color: Colors.white)),
+                subtitle: Text('Quiz'),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => QuizPage()));
+                },
+              ),
+              ListTile(
                 title: Text('設定', style: TextStyle(color: Colors.white)),
                 subtitle: Text('Settings'),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()));
                 },
-              )
+              ),
             ],
           ),
         )),
