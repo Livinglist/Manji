@@ -5,7 +5,7 @@ import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
 typedef void StringCallback(String str);
 
-class KanjiGridView extends StatefulWidget {
+class KanjiGridView extends StatelessWidget{
   final List<Kanji> kanjis;
   final String fallBackFont;
   final StringCallback onLongPressed;
@@ -15,40 +15,23 @@ class KanjiGridView extends StatefulWidget {
   KanjiGridView({this.kanjis, this.fallBackFont, this.onLongPressed, this.canRemove = false, this.scrollController}) : assert(kanjis != null);
 
   @override
-  State<StatefulWidget> createState() => _KanjiGridViewState();
-}
-
-class _KanjiGridViewState extends State<KanjiGridView> {
-  List<Kanji> kanjis;
-  String fallBackFont;
-  StringCallback onLongPressed;
-
-  @override
-  void initState() {
-    kanjis = widget.kanjis;
-    fallBackFont = widget.fallBackFont;
-    onLongPressed = widget.onLongPressed;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GridView.count(
-      controller: widget.scrollController,
+      controller: scrollController,
         shrinkWrap: true,
-        crossAxisCount: 6,
+        crossAxisCount: 5,
         children: List.generate(kanjis.length, (index) {
           var kanji = kanjis[index];
           return Center(
               child: InkWell(
             child: Container(
-                width: MediaQuery.of(context).size.width / 6,
-                height: MediaQuery.of(context).size.width / 6,
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.width / 5,
                 child: Stack(
                   children: <Widget>[
                     Align(
                       alignment: Alignment.center,
-                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: fallBackFont ?? 'kazei')),
+                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
                     ),
                     Positioned(
                       left: 4,

@@ -1,0 +1,39 @@
+name: font_awesome_flutter
+description: The Font Awesome Icon pack available as Flutter Icons. Provides 1500 additional icons to use in your apps.
+maintainer: Brian Egan <brian@brianegan.com>
+authors:
+  - Flutter Community <community@flutter.zone>
+  - Brian Egan <brian@brianegan.com>
+homepage: https://github.com/fluttercommunity/font_awesome_flutter
+version: 8.7.0
+
+environment:
+  sdk: ">=2.0.0-dev.28.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  recase: ^3.0.0
+
+flutter:
+  fonts:
+    - family: FontAwesomeBrands
+      fonts:
+        - asset: lib/fonts/fa-brands-400.ttf
+          weight: 400
+    - family: FontAwesomeRegular
+      fonts:
+        - asset: lib/fonts/fa-regular-400.ttf
+          weight: 400
+    - family: FontAwesomeSolid
+      fonts:
+        - asset: lib/fonts/fa-solid-900.ttf
+          weight: 900
+# To support pro icons, drop fa-light-300.ttf into lib/fonts,
+# regenerate the icon collection and uncomment the following lines:
+    - family: FontAwesomeLight
+      fonts:
+        - asset: lib/fonts/fa-light-300.ttf
+          weight: 300

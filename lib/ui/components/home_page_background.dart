@@ -7,14 +7,15 @@ typedef KanjiCallback = void Function(String);
 
 class HomePageBackground extends StatefulWidget {
   final KanjiCallback callback;
+  final AnimationController animationController;
 
-  HomePageBackground({Key key, this.callback}):super(key:key);
+  HomePageBackground({Key key, this.callback, this.animationController}) : super(key: key);
 
   @override
-  _HomePageBackgroundState createState() => _HomePageBackgroundState();
+  HomePageBackgroundState createState() => HomePageBackgroundState();
 }
 
-class _HomePageBackgroundState extends State<HomePageBackground> {
+class HomePageBackgroundState extends State<HomePageBackground> {
   final total = 170;
   final perRow = 10;
   double width, height;
@@ -89,13 +90,13 @@ class _HomePageBackgroundState extends State<HomePageBackground> {
             onPanStart: (dtl) => setTarget(dtl.globalPosition),
             onPanUpdate: (dtl) => setTarget(dtl.globalPosition),
             onPanEnd: (_) => setState(() {
-              targetKey = null;
-              visible = false;
-            }),
+                  targetKey = null;
+                  visible = false;
+                }),
             onPanCancel: () => setState(() {
-              targetKey = null;
-              visible = true;
-            }),
+                  targetKey = null;
+                  visible = true;
+                }),
             child: FutureBuilder(
                 future: fetch(),
                 builder: (_, snap) {
@@ -117,14 +118,17 @@ class _HomePageBackgroundState extends State<HomePageBackground> {
 
   List<Widget> buildChildren() {
     return List.generate(
-        total,
-        (i) => AnimatedOpacity(
-          opacity: keys[i]==targetKey?1:0.2,
-            duration: Duration(milliseconds: 300),
-            key: keys[i],
-            //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
-            child: Center(
-              child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'kazei')),
-            )));
+      total,
+      (i) => Transform.scale(
+          scale: widget.animationController?.value ?? 1,
+          child: AnimatedOpacity(
+              opacity: keys[i] == targetKey ? 1 : 0.2,
+              duration: Duration(milliseconds: 300),
+              key: keys[i],
+              //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
+              child: Center(
+                child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'kazei')),
+              ))),
+    );
   }
 }

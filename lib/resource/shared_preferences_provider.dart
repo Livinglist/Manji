@@ -34,6 +34,7 @@ class SharedPreferencesProvider {
   void removeFav(String kanjiStr) {
     var favKanjiStrs = _sharedPreferences.getStringList(favKanjiStrsKey);
     favKanjiStrs.remove(kanjiStr);
+    _sharedPreferences.setStringList(favKanjiStrsKey, favKanjiStrs);
   }
 
   List<String> getAllStarKanjiStrs() => _sharedPreferences.getStringList(starKanjiStrsKey);
@@ -47,6 +48,7 @@ class SharedPreferencesProvider {
   void removeStar(String kanjiStr) {
     var starKanjiStrs = _sharedPreferences.getStringList(starKanjiStrsKey);
     starKanjiStrs.remove(kanjiStr);
+    _sharedPreferences.setStringList(starKanjiStrsKey, starKanjiStrs);
   }
 
   List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));

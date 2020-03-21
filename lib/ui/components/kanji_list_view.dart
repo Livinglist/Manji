@@ -2,48 +2,31 @@ import 'package:flutter/material.dart';
 
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
-import 'grade_chip.dart';
+import 'chip_collections.dart';
 
 typedef void StringCallback(String str);
 
-class KanjiListView extends StatefulWidget{
+class KanjiListView extends StatelessWidget {
   final List<Kanji> kanjis;
   final String fallBackFont;
   final StringCallback onLongPressed;
   final bool canRemove;
   final ScrollController scrollController;
 
-
   KanjiListView({this.kanjis, this.fallBackFont, this.onLongPressed, this.canRemove = false, this.scrollController}) : assert(kanjis != null);
-  @override
-  State<StatefulWidget> createState() => _KanjiListViewState();
-}
-
-class _KanjiListViewState extends State<KanjiListView> {
-  List<Kanji> kanjis;
-  String fallBackFont;
-  StringCallback onLongPressed;
-
-  @override
-  void initState() {
-    kanjis = widget.kanjis;
-    fallBackFont = widget.fallBackFont;
-    onLongPressed = widget.onLongPressed;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      shrinkWrap: true,
-      controller: widget.scrollController,
+        shrinkWrap: true,
+        controller: scrollController,
         itemBuilder: (_, index) {
           return ListTile(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanjis[index])));
             },
-            onLongPress: (){
-              if(onLongPressed != null){
+            onLongPress: () {
+              if (onLongPressed != null) {
                 onLongPressed(kanjis[index].kanji);
               }
             },
@@ -63,6 +46,7 @@ class _KanjiListViewState extends State<KanjiListView> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height: 8),
                 Wrap(
                   children: <Widget>[
                     kanjis[index].jlpt != 0
@@ -85,8 +69,11 @@ class _KanjiListViewState extends State<KanjiListView> {
                           )
                         : Container(),
                     kanjis[index].grade != 0
-                        ? GradeChip(grade: kanjis[index].grade,)
+                        ? GradeChip(
+                            grade: kanjis[index].grade,
+                          )
                         : Container(),
+                    StrokeChip(stokeCount: kanjis[index].strokes)
                   ],
                 ),
                 Divider(height: 0),

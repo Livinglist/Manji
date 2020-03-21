@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -14,11 +15,24 @@ class JLPTKanjiPage extends StatefulWidget {
 class JLPTKanjiPageState extends State<JLPTKanjiPage> {
   //show gridview by default
   bool showGrid = true;
+  bool sorted = true;
+  bool altSorted = false;
+  Map<JLPTLevel, List<Kanji>> jlptToKanjisMap = {
+    JLPTLevel.n1: [],
+    JLPTLevel.n2: [],
+    JLPTLevel.n3: [],
+    JLPTLevel.n4: [],
+    JLPTLevel.n5: [],
+  };
 
   @override
   void initState() {
-    //kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n5);
     super.initState();
+
+    for (var kanji in kanjiBloc.allKanjisList) {
+      if (kanji.jlpt == 0) continue;
+      jlptToKanjisMap[kanji.jlptLevel].add(kanji);
+    }
   }
 
   @override
@@ -31,81 +45,72 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
           //title: Text('日本語能力試験漢字'),
           title: FuriganaText(
             text: '日本語能力試験漢字',
-            tokens: [Token(text: '日本語', furigana: 'にほんご'),Token(text: '能力', furigana: 'のうりょく'),Token(text: '試験', furigana: 'しけん'),Token(text: '漢字', furigana: 'かんじ')],
-            style: TextStyle(fontSize: 20),
+            tokens: [
+              Token(text: '日本語', furigana: 'にほんご'),
+              Token(text: '能力', furigana: 'のうりょく'),
+              Token(text: '試験', furigana: 'しけん'),
+              Token(text: '漢字', furigana: 'かんじ')
+            ],
+            style: TextStyle(fontSize: 18),
           ),
           actions: <Widget>[
-//            IconButton(
-//              icon: Icon(Icons.sort),
-//              onPressed: (){
-//
-//              },
-//            ),
-            AnimatedCrossFade(
-              firstChild: IconButton(
-                icon: Icon(
+            IconButton(
+                icon: AnimatedCrossFade(
+                  firstChild: Icon(
+                    FontAwesomeIcons.sortNumericDown,
+                    color: Colors.white,
+                  ),
+                  secondChild: Icon(
+                    FontAwesomeIcons.sortNumericDownAlt,
+                    color: Colors.white,
+                  ),
+                  crossFadeState: altSorted ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  duration: Duration(milliseconds: 200),
+                ),
+                color: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    altSorted = !altSorted;
+                  });
+                }),
+            IconButton(
+              icon: AnimatedCrossFade(
+                firstChild: Icon(
                   Icons.view_headline,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  setState(() {
-                    showGrid = !showGrid;
-                  });
-                },
-              ),
-              secondChild: IconButton(
-                icon: Icon(
+                secondChild: Icon(
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  setState(() {
-                    showGrid = !showGrid;
-                  });
-                },
+                crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                duration: Duration(milliseconds: 200),
               ),
-              crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              duration: Duration(milliseconds: 200),
-            )
+              onPressed: () {
+                setState(() {
+                  showGrid = !showGrid;
+                });
+              },
+            ),
           ],
           //elevation: 0,
-          bottom: TabBar(
-              onTap: (index) {
-//                switch (index) {
-//                  case 0:
-//                    kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n5);
-//                    break;
-//                  case 1:
-//                    kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n4);
-//                    break;
-//                  case 2:
-//                    kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n3);
-//                    break;
-//                  case 3:
-//                    kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n2);
-//                    break;
-//                  case 4:
-//                    kanjiBloc.fetchKanjisByJLPTLevel(JLPTLevel.n1);
-//                    break;
-//                }
-              },
-              tabs: [
-                Tab(
-                  text: 'N5',
-                ),
-                Tab(
-                  text: 'N4',
-                ),
-                Tab(
-                  text: 'N3',
-                ),
-                Tab(
-                  text: 'N2',
-                ),
-                Tab(
-                  text: 'N1',
-                ),
-              ]),
+          bottom: TabBar(tabs: [
+            Tab(
+              text: 'N5',
+            ),
+            Tab(
+              text: 'N4',
+            ),
+            Tab(
+              text: 'N3',
+            ),
+            Tab(
+              text: 'N2',
+            ),
+            Tab(
+              text: 'N1',
+            ),
+          ]),
         ),
         body: TabBarView(children: [
           buildTabBarViewChildren(JLPTLevel.n5),
@@ -119,23 +124,18 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
   }
 
   Widget buildTabBarViewChildren(JLPTLevel jlptLevel) {
-    return StreamBuilder(
-      stream: kanjiBloc.allKanjis,
-      builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-        if (snapshot.hasData) {
-          var kanjis = snapshot.data.where((kanji) => kanji.jlptLevel == jlptLevel).toList();
-          //kanjis.sort((kanjiLeft, kanjiRight)=>kanjiLeft.strokes.compareTo(kanjiRight.strokes));
-          //return KanjiGridView(kanjis: kanjis);
-          return AnimatedCrossFade(
-              firstChild: KanjiGridView(kanjis: kanjis),
-              secondChild: KanjiListView(kanjis: kanjis),
-              crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              duration: Duration(milliseconds: 200));
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+    if (sorted) {
+      if (altSorted) {
+        jlptToKanjisMap[jlptLevel].sort((l, r) => r.strokes.compareTo(l.strokes));
+      } else {
+        jlptToKanjisMap[jlptLevel].sort((l, r) => l.strokes.compareTo(r.strokes));
+      }
+    }
+    return AnimatedCrossFade(
+        firstChild: KanjiGridView(kanjis: jlptToKanjisMap[jlptLevel]),
+        secondChild: KanjiListView(kanjis: jlptToKanjisMap[jlptLevel]),
+        crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        duration: Duration(milliseconds: 200));
   }
 }
 

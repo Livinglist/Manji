@@ -4,7 +4,7 @@ import 'word.dart';
 
 enum JLPTLevel { n1, n2, n3, n4, n5 }
 enum Grade { g1, g2, g3, g4, g5, g6, g7, g8 }
-enum Yomikata {kunyomi, onyomi}
+enum Yomikata { kunyomi, onyomi }
 
 class Kanji {
   int id;
@@ -15,7 +15,23 @@ class Kanji {
   int strokes;
   //bool isJinmeiyo;
   bool isFaved;
-  JLPTLevel jlptLevel;
+
+  JLPTLevel get jlptLevel {
+    switch (jlpt) {
+      case 1:
+        return JLPTLevel.n1;
+      case 2:
+        return JLPTLevel.n2;
+      case 3:
+        return JLPTLevel.n3;
+      case 4:
+        return JLPTLevel.n4;
+      case 5:
+        return JLPTLevel.n5;
+    }
+    return null;
+  }
+
   int grade;
   int jlpt;
   int frequency;
@@ -31,7 +47,6 @@ class Kanji {
       this.meaning,
       //this.isJinmeiyo = false,
       //this.isFaved = false,
-      this.jlptLevel,
       this.grade,
       this.jlpt,
       this.strokes,
@@ -71,8 +86,6 @@ class Kanji {
     kunyomiWords = (map['kunyomiWords'] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
     onyomi = (map['onyomi'] as List ?? []).cast<String>();
     onyomiWords = (map['onyomiWords'] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
-
-    jlptLevel = intToJLPTLevelConverter(jlpt);
   }
 
   Map<String, dynamic> toDBMap() => {
@@ -104,29 +117,21 @@ class Kanji {
     kunyomiWords = (jsonDecode(map['kunyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
     onyomi = (jsonDecode(map['onyomi']) as List).cast<String>();
     onyomiWords = (jsonDecode(map['onyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
-
-    jlptLevel = intToJLPTLevelConverter(jlpt);
   }
 }
 
-int jlptToIntConverter(JLPTLevel jlpt){
-  switch(jlpt){
-    case JLPTLevel.n1: return 1;
-    case JLPTLevel.n2: return 2;
-    case JLPTLevel.n3: return 3;
-    case JLPTLevel.n4: return 4;
-    case JLPTLevel.n5: return 5;
+int jlptToIntConverter(JLPTLevel jlpt) {
+  switch (jlpt) {
+    case JLPTLevel.n1:
+      return 1;
+    case JLPTLevel.n2:
+      return 2;
+    case JLPTLevel.n3:
+      return 3;
+    case JLPTLevel.n4:
+      return 4;
+    case JLPTLevel.n5:
+      return 5;
   }
   return 0;
-}
-
-JLPTLevel intToJLPTLevelConverter(int num){
-  switch(num){
-    case 1: return JLPTLevel.n1;
-    case 2: return JLPTLevel.n2;
-    case 3: return JLPTLevel.n3;
-    case 4: return JLPTLevel.n4;
-    case 5: return JLPTLevel.n5;
-  }
-  return null;
 }

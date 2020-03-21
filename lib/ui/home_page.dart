@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -13,12 +14,12 @@ import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';
 import 'kanji_detail_page.dart';
 import 'jlpt_kanji_page.dart';
-import 'my_kanji_page.dart';
+import 'bookmark_page.dart';
 import 'kana_page.dart';
 import 'settings_page.dart';
 import 'education_kanji_page.dart';
 import 'search_result_page.dart';
-import 'my_list_page.dart';
+import 'custom_list_page.dart';
 import 'quiz_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,6 +31,9 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
   final textEditingController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final backgroundKey = GlobalKey<HomePageBackgroundState>();
+  double mainPageScale = 1.0;
+  double opacity = 0;
   AnimationController animationController;
   Tween<double> tween = Tween<double>(begin: 0, end: 1);
   bool isEntering = false;
@@ -38,22 +42,24 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   void initState() {
     kanaBloc.init();
     KanjiListBloc.instance.init();
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animationController = AnimationController(vsync: this, value: 1, duration: Duration(seconds: 1));
     super.initState();
 
     Timer(Duration(seconds: 2), () {
-      Future.doWhile(startAnimation);
+      setState(() {
+        opacity = 1;
+      });
     });
   }
 
-  Future<bool> startAnimation() async {
-    if (this.mounted) {
-      animationController.forward();
-      return false;
-    } else {
-      return true;
-    }
-  }
+//  Future<bool> startAnimation() async {
+//    if (this.mounted) {
+//      animationController.forward();
+//      return false;
+//    } else {
+//      return true;
+//    }
+//  }
 
   Future onScanPressed() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -86,6 +92,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawerEdgeDragWidth: 50,
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
@@ -107,66 +114,71 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
           title: Text('Manji'),
           elevation: 0,
         ),
-        drawer: Drawer(
-            child: Container(
-          color: Colors.grey[600],
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-              ),
-              ListTile(
-                title: Text('仮名', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Kana'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => KanaPage()));
-                },
-              ),
-              ListTile(
-                title: Text('日本語能力試験漢字', style: TextStyle(color: Colors.white)),
-                subtitle: Text('JLPT Kanji'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => JLPTKanjiPage()));
-                },
-              ),
-              ListTile(
-                title: Text('教育漢字', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Kyōiku Kanji'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => EducationKanjiPage()));
-                },
-              ),
-              ListTile(
-                title: Text('収蔵した漢字', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Favorite Kanji'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => MyKanjiPage()));
-                },
-              ),
-              ListTile(
-                title: Text('漢字リスト', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Kanji Lists'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => MyListPage()));
-                },
-              ),
-              ListTile(
-                title: Text('クイズ', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Quiz'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => QuizPage()));
-                },
-              ),
-              ListTile(
-                title: Text('設定', style: TextStyle(color: Colors.white)),
-                subtitle: Text('Settings'),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()));
-                },
-              ),
-            ],
-          ),
-        )),
+        drawer: DrawerListener(
+          onPositionChange: (FractionalOffset offset) {
+            animationController.value = offset.dx;
+          },
+          child: Drawer(
+              child: Container(
+            color: Colors.grey[600],
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                ListTile(
+                  title: Text('仮名', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Kana'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanaPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('日本語能力試験漢字', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('JLPT Kanji'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => JLPTKanjiPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('教育漢字', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Kyōiku Kanji'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => EducationKanjiPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('収蔵した漢字', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Favorite Kanji'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyKanjiPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('漢字リスト', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Kanji Lists'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyListPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('クイズ', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Quiz'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizPage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('設定', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Settings'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()));
+                  },
+                ),
+              ],
+            ),
+          )),
+        ),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -176,15 +188,14 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   child: AnimatedBuilder(
                       animation: animationController,
                       builder: (_, __) {
-                        return Opacity(
-                          opacity: tween.animate(animationController).value,
-                          child: HomePageBackground(
-                            callback: (String kanji) {
-                              if (textEditingController.text.isEmpty || textEditingController.text.length == 1) {
-                                textEditingController.text = kanji;
-                              }
-                            },
-                          ),
+                        return HomePageBackground(
+                          key: backgroundKey,
+                          animationController: animationController,
+                          callback: (String kanji) {
+                            if (textEditingController.text.isEmpty || textEditingController.text.length == 1) {
+                              textEditingController.text = kanji;
+                            }
+                          },
                         );
                       })),
               Positioned(
@@ -244,43 +255,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                           builder: (_, __) {
                             return Opacity(opacity: tween.animate(animationController).value, child: DailyKanjiCard());
                           })))
-//              StreamBuilder(
-//                stream: kanjiBloc.allKanjis,
-//                builder: (_, snapshot) {
-//                  if (snapshot.hasData) {
-//                    return Positioned(
-//                        top: 160,
-//                        left: 22,
-//                        right: 22,
-//                        child: Container(
-//                            //width: MediaQuery.of(context).size.width * 0.9,
-//                            child: AnimatedBuilder(
-//                                animation: animationController,
-//                                builder: (_, __) {
-//                                  return Opacity(opacity: tween.animate(animationController).value, child: DailyKanjiCard());
-//                                })));
-//                  } else {
-//                    return Positioned(
-//                        top: 160,
-//                        left: 22,
-//                        right: 22,
-//                        child: Container(
-//                          //width: MediaQuery.of(context).size.width * 0.9,
-//                          child: RaisedButton(
-//                              color: Colors.grey[800],
-//                              child: Text(
-//                                'Refresh',
-//                                style: TextStyle(color: Colors.white),
-//                              ),
-//                              onPressed: () async {
-//                                await DBProvider.db.initDB(refresh: true).then((db) {
-//                                  kanjiBloc.getAllKanjis();
-//                                });
-//                              }),
-//                        ));
-//                  }
-//                },
-//              )
             ],
           ),
         ));
@@ -313,5 +287,69 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         return false;
     }
     return true;
+  }
+}
+
+class DrawerListener extends StatefulWidget {
+  final Widget child;
+  final ValueChanged<FractionalOffset> onPositionChange;
+
+  DrawerListener({
+    @required this.child,
+    this.onPositionChange,
+  });
+
+  @override
+  _DrawerListenerState createState() => _DrawerListenerState();
+}
+
+class _DrawerListenerState extends State<DrawerListener> {
+  GlobalKey _drawerKey = GlobalKey();
+  int taskID;
+  Offset currentOffset;
+
+  @override
+  void initState() {
+    super.initState();
+    _postTask();
+  }
+
+  _postTask() {
+    taskID = SchedulerBinding.instance.scheduleFrameCallback((_) {
+      if (widget.onPositionChange != null) {
+        final RenderBox box = _drawerKey.currentContext?.findRenderObject();
+        if (box != null) {
+          Offset newOffset = box.globalToLocal(Offset.zero);
+          if (newOffset != currentOffset) {
+            currentOffset = newOffset;
+            widget.onPositionChange(
+              FractionalOffset.fromOffsetAndRect(
+                currentOffset,
+                Rect.fromLTRB(0, 0, box.size.width, box.size.height),
+              ),
+            );
+          }
+        }
+      }
+
+      _postTask();
+    });
+  }
+
+  @override
+  void dispose() {
+    SchedulerBinding.instance.cancelFrameCallbackWithId(taskID);
+    if (widget.onPositionChange != null) {
+      widget.onPositionChange(FractionalOffset(1.0, 0));
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: _drawerKey,
+      child: widget.child,
+    );
   }
 }

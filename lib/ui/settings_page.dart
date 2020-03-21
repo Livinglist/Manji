@@ -125,12 +125,12 @@ class _SettingsPageState extends State<SettingsPage> {
               aboutBoxChildren: <Widget>[Text('Manji helps Japanese learners learn Japanese Kanji')],
             ),
           ),
-          Divider(),
-          AppleSignInButton(
-            style: ButtonStyle.black,
-            type: ButtonType.signIn,
-            onPressed: appleLogIn,
-          )
+//          Divider(),
+//          AppleSignInButton(
+//            style: ButtonStyle.black,
+//            type: ButtonType.signIn,
+//            onPressed: appleLogIn,
+//          )
         ],
       ),
     );
@@ -144,6 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
       switch (result.status) {
         case AuthorizationStatus.authorized:
           print(result.credential.user ?? "null"); //All the required credentials
+          print(result.credential.fullName.familyName);
           break;
         case AuthorizationStatus.error:
           print("Sign in failed: ${result.error.localizedDescription}");

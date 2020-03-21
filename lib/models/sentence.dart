@@ -3,11 +3,11 @@ import 'dart:convert';
 class Token {
   String text;
   String furigana;
-  bool isKanji;
+  bool containsKanji;
 
   Token({this.text, this.furigana})
       : assert(text != null),
-        isKanji = furigana != null;
+        containsKanji = furigana != null;
 
   Map toMap() => {
         'text': text,
@@ -17,7 +17,7 @@ class Token {
   Token.fromMap(Map map) {
     text = map['text'];
     furigana = map['furigana'];
-    isKanji = furigana != null;
+    containsKanji = furigana != null;
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
+import 'package:kanji_dictionary/utils/list_extension.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
 
 import 'package:kanji_dictionary/models/kanji_list.dart';
@@ -33,6 +34,16 @@ class KanjiListBloc {
   }
 
   void addKanjiList(String listName) {
+    while (_kanjiLists.containsWhere((e) => e.name == listName) == true) {
+      var regex = RegExp(r' [0-9]*$');
+      var match = regex.firstMatch(listName);
+      if (regex.hasMatch(listName)) {
+        var num = int.parse(match.group(0)) + 1;
+        listName = listName.replaceRange(listName.length - 1, listName.length, num.toString());
+      } else {
+        listName = listName.trim() + " 1";
+      }
+    }
     _kanjiLists.add(KanjiList(name: listName, kanjiStrs: []));
     repo.updateKanjiLists(_kanjiLists);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);

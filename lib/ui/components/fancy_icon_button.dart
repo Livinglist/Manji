@@ -7,9 +7,11 @@ enum IconType {star, fav}
 class FancyIconButton extends StatefulWidget {
   final bool isFaved;
   final VoidCallback onTapped;
-  final IconType iconType;
+  final IconData icon;
+  final IconData iconBorder;
+  final Color color;
 
-  FancyIconButton({@required this.isFaved, this.onTapped, this.iconType = IconType.star});
+  FancyIconButton({@required this.isFaved, this.onTapped, this.icon, this.iconBorder, this.color});
 
   @override
   State<StatefulWidget> createState() => FancyIconButtonState();
@@ -26,24 +28,14 @@ class FancyIconButtonState extends State<FancyIconButton> with SingleTickerProvi
   void initState() {
     isFaved = widget.isFaved;
 
-    if(widget.iconType == IconType.star) {
-      icon = isFaved ? Icon(Icons.star) : Icon(Icons.star_border);
-      colorTween = isFaved? ColorTween(begin: Colors.yellow, end: Colors.white):ColorTween(begin: Colors.white, end: Colors.yellow);
-    }
-    else {
-      icon = isFaved ? Icon(Icons.favorite) : Icon(Icons.favorite_border);
-      colorTween = isFaved? ColorTween(begin: Colors.red, end: Colors.white):ColorTween(begin: Colors.white, end: Colors.red);
-    }
+    icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
+    colorTween = isFaved? ColorTween(begin: widget.color, end: Colors.white):ColorTween(begin: Colors.white, end: widget.color);
+
     animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
       ..addListener(() {
         if (animationController.isAnimating) {
           setState(() {
-            if(widget.iconType == IconType.star) {
-              icon = isFaved ? Icon(Icons.star) : Icon(Icons.star_border);
-            }
-            else {
-              icon = isFaved ? Icon(Icons.favorite) : Icon(Icons.favorite_border);
-            }
+            icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
           });
         }
       });

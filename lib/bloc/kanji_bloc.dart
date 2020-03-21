@@ -99,17 +99,17 @@ class KanjiBloc {
     });
   }
 
-  void fetchKanjisByGrade(int grade) {
-    Future<List<Kanji>>(() {
-      var targetKanjis = _allKanjisMap.values.where((kanji) => kanji.grade == grade).toList();
-      return targetKanjis;
-    }).then((kanjis) {
-      _kanjis = kanjis;
-      if (!_kanjisFetcher.isClosed) {
-        _kanjisFetcher.add(_kanjis);
-      }
-    });
-  }
+//  void fetchKanjisByGrade(int grade) {
+//    Future<List<Kanji>>(() {
+//      var targetKanjis = _allKanjisMap.values.where((kanji) => kanji.grade == grade).toList();
+//      return targetKanjis;
+//    }).then((kanjis) {
+//      _kanjis = kanjis;
+//      if (!_kanjisFetcher.isClosed) {
+//        _kanjisFetcher.add(_kanjis);
+//      }
+//    });
+//  }
 
   void fetchKanjisByKanjiStrs(List<String> kanjiStrs) {
     if (!_kanjisFetcher.isClosed) {

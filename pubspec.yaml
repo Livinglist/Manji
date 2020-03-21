@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.11.1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -35,6 +35,8 @@ dependencies:
   image_picker: 0.6.3+1
   url_launcher: 5.4.1
   apple_sign_in: ^0.1.0
+  font_awesome_flutter:
+    path: ./font_awesome_flutter/
 
 
 dev_dependencies:

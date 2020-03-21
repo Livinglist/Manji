@@ -11,10 +11,27 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  double elevation = 0;
+
   @override
   void initState() {
     super.initState();
+
+    scrollController.addListener(() {
+      if (this.mounted) {
+        if (scrollController.offset <= 0) {
+          setState(() {
+            elevation = 0;
+          });
+        } else {
+          setState(() {
+            elevation = 8;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -24,7 +41,7 @@ class _QuizPageState extends State<QuizPage> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           title: Text('クイズ'),
-          elevation: 0,
+          elevation: elevation,
         ),
         body: StreamBuilder(
           stream: KanjiListBloc.instance.kanjiLists,
@@ -38,7 +55,7 @@ class _QuizPageState extends State<QuizPage> {
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: Text(
-                      'When will you start studying！ (╯°Д°）╯',
+                      'Creating your kanji list at Kanji Lists page first.',
                       style: TextStyle(color: Colors.white70),
                     ),
                   ),
@@ -46,6 +63,7 @@ class _QuizPageState extends State<QuizPage> {
               }
 
               return ListView.separated(
+                  controller: scrollController,
                   itemBuilder: (_, index) {
                     var kanjiList = kanjiLists[index];
                     return ListTile(

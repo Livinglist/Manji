@@ -67,6 +67,7 @@ class MyAppState extends State<MyApp> {
                         )
                       : Scaffold(
                           appBar: AppBar(
+                            elevation: 0,
                             title: Text('Manji'),
                           ),
                           body: HomePageBackground());
