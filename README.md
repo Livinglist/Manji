@@ -1,4 +1,4 @@
-# kanji_dictionary
+# Manji
 
 A new Flutter application.
 
