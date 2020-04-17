@@ -80,14 +80,10 @@ class _QuizPageState extends State<QuizPage> {
               var kanjiLists = snapshot.data;
 
               if (kanjiLists.isEmpty) {
-                return Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                    child: Text(
-                      'Creating your kanji list at Kanji Lists page first.',
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                return Center(
+                  child: Text(
+                    'Create your kanji list at Kanji Lists page first.',
+                    style: TextStyle(color: Colors.white70),
                   ),
                 );
               }
