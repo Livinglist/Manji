@@ -828,120 +828,141 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     var yomiTextEditingController = TextEditingController();
     var wordTextEditingController = TextEditingController();
     var meaningTextEditingController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     CustomBottomSheet.showModalBottomSheet(
         context: context,
         builder: (_) {
           return Container(
-            height: 300,
+            height: 500,
             color: Colors.transparent,
             child: Container(
-              height: 300,
+              height: 500,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)), color: Theme.of(context).primaryColor),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Add a word to',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                        SizedBox(width: 12),
-                        Container(
-                          child: Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                yomi,
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              )),
-                          decoration: BoxDecoration(
-                            //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                ),
+              child: Form(
+                key: formKey,
+                autovalidate: false,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Add a word to',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 12),
+                          Container(
+                            child: Padding(
+                                padding: EdgeInsets.all(4),
+                                child: Text(
+                                  yomi,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                )),
+                            decoration: BoxDecoration(
+                              //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width - 24,
-                        height: 42,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21)), color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: TextField(
-                            controller: yomiTextEditingController,
-                            decoration: InputDecoration(hintText: isOnyomi ? 'Onyomi' : 'Kunyomi'),
-                          ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: TextFormField(
+                          validator: (str) {
+                            if (str == null || str.isEmpty) {
+                              return "Can't be empty";
+                            }
+                            return null;
+                          },
+                          controller: yomiTextEditingController,
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: isOnyomi ? 'Onyomi' : 'Kunyomi',
+                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                          minLines: 1,
+                          maxLines: 1,
                         )),
-                  ),
-                  SizedBox(height: 12),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width - 24,
-                        height: 42,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21)), color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: TextField(
-                            controller: wordTextEditingController,
-                            decoration: InputDecoration(hintText: 'Word'),
-                          ),
-                        )),
-                  ),
-                  SizedBox(height: 12),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width - 24,
-                        height: 42,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21)), color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: TextField(
-                            controller: meaningTextEditingController,
-                            decoration: InputDecoration(hintText: 'Meaning'),
-                          ),
-                        )),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width - 24,
-                        height: 42,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21))),
-                        child: RaisedButton(
-                            child: Text('Add'),
-                            onPressed: () {
-                              if (isOnyomi) {
-                                kanji.onyomiWords.add(Word(
-                                    wordText: wordTextEditingController.text,
-                                    wordFurigana: yomiTextEditingController.text,
-                                    meanings: meaningTextEditingController.text));
-                              } else {
-                                kanji.kunyomiWords.add(Word(
-                                    wordText: wordTextEditingController.text,
-                                    wordFurigana: yomiTextEditingController.text,
-                                    meanings: meaningTextEditingController.text));
-                              }
-                              kanjiBloc.updateKanji(kanji);
-                              Navigator.pop(context);
-                              setState(() {});
-                            })),
-                  ),
-                ],
+                    SizedBox(height: 12),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: TextFormField(
+                        validator: (str) {
+                          if (str == null || str.isEmpty) {
+                            return "Can't be empty";
+                          }
+                          return null;
+                        },
+                        controller: wordTextEditingController,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Word',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                        minLines: 1,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: TextFormField(
+                        validator: (str) {
+                          if (str == null || str.isEmpty) {
+                            return "Can't be empty";
+                          }
+                          return null;
+                        },
+                        controller: meaningTextEditingController,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Meaning',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                        minLines: 1,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width - 24,
+                          height: 42,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21))),
+                          child: RaisedButton(
+                              child: Text('Add'),
+                              onPressed: () {
+                                if (formKey.currentState.validate()) {
+                                  if (isOnyomi) {
+                                    kanji.onyomiWords.add(Word(
+                                        wordText: wordTextEditingController.text,
+                                        wordFurigana: yomiTextEditingController.text,
+                                        meanings: meaningTextEditingController.text));
+                                  } else {
+                                    kanji.kunyomiWords.add(Word(
+                                        wordText: wordTextEditingController.text,
+                                        wordFurigana: yomiTextEditingController.text,
+                                        meanings: meaningTextEditingController.text));
+                                  }
+                                }
+                                kanjiBloc.updateKanji(kanji);
+                                Navigator.pop(context);
+                                setState(() {});
+                              })),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

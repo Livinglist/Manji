@@ -3,6 +3,7 @@ import 'package:kanji_dictionary/models/word.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/models/kana.dart';
 import 'package:kanji_dictionary/models/kanji_list.dart';
+import 'package:kanji_dictionary/models/question.dart';
 import 'jisho_api_provider.dart';
 import 'db_provider.dart';
 import 'firebase_api_provider.dart';
@@ -13,6 +14,7 @@ export 'package:kanji_dictionary/models/kanji.dart';
 export 'package:kanji_dictionary/models/kanji_list.dart';
 export 'package:kanji_dictionary/models/sentence.dart';
 export 'package:kanji_dictionary/models/word.dart';
+export 'package:kanji_dictionary/models/question.dart';
 
 class Repository {
   final _jishoApiProvider = JishoApiProvider();
@@ -69,6 +71,12 @@ class Repository {
   List<KanjiList> getAllKanjiList() => _prefsProvider.getAllKanjiLists();
 
   void updateKanjiLists(List<KanjiList> kanjiLists) => _prefsProvider.updateKanjiLists(kanjiLists);
+
+  Future<List<Question>> getIncorrectQuestions() => DBProvider.db.getIncorrectQuestions();
+
+  Future addIncorrectQuestions(List<Question> qs) => DBProvider.db.addIncorrectQuestions(qs);
+
+  Future deleteIncorrectQuestion(Question q) => DBProvider.db.deleteIncorrectQuestion(q);
 }
 
 final repo = Repository();

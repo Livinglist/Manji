@@ -16,7 +16,7 @@ class HomePageBackground extends StatefulWidget {
 }
 
 class HomePageBackgroundState extends State<HomePageBackground> {
-  final total = 170;
+  final total = 190;
   final perRow = 10;
   double width, height;
   List<GlobalKey> keys;

@@ -1,11 +1,21 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'kanji.dart';
 
+const String idKey = "id";
+const String kanjiKey = "kanji";
+const String kanjiIdKey = "kanjiId";
+const String rightAnswerKey = "rightAnswer";
+const String choicesKey = "choices";
+const String selectedIndexKey = "selectedIndex";
+
 class Question {
+  int id;
+
   final Kanji targetedKanji;
   String rightAnswer;
   List<String> wrongAnswers = [];
@@ -28,13 +38,24 @@ class Question {
   List<String> get choices => _choices;
 
   Question({this.targetedKanji}) {
-//    this.rightAnswer = targetedKanji.onyomi.isNotEmpty ? targetedKanji.onyomi.first :["NO] ONOMI";
-//    this.wrongAnswers = ['a', 'b', 'c'];
-//
-//    _choices = [...wrongAnswers, rightAnswer]..shuffle();
     generateChoices();
   }
 
+  Question.from(Question question) : targetedKanji = question.targetedKanji {
+    _choices = question.choices;
+    _selected = question.selected;
+    rightAnswer = question.rightAnswer;
+  }
+
+  Question.fromMap(Map map)
+      : id = map[idKey],
+        targetedKanji = map[kanjiKey],
+        _choices = (jsonDecode(map[choicesKey]) as List).cast<String>(),
+        rightAnswer = map[rightAnswerKey],
+        _selected = map[selectedIndexKey];
+
+  ///Currently this only generates questions for those kanji that have Onyomi.
+  ///Todo: generate questions for kanji with Kunyomi
   void generateChoices() {
     String targetedKana;
     if (targetedKanji.onyomi.isNotEmpty) {
@@ -47,7 +68,7 @@ class Question {
     rightAnswer = targetedKana;
     var firstKana = targetedKana[0];
     if (kanaShiftMap.containsKey(firstKana)) {
-      List<String> shiftableKanas = kanaShiftMap[firstKana];
+      List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])..remove(firstKana);
       List<String> tempKanas = [];
       int pos = -1;
       for (int i = 0; i < 3; i++) {
@@ -61,103 +82,37 @@ class Question {
 
     _choices = [rightAnswer, ...wrongAnswers]..shuffle();
   }
+
+  List<String> getShiftableKana(String kana) {
+    return List.from(kanaShiftMap[kana])..remove(kana);
+  }
+
+  Map<String, dynamic> toMap() => {kanjiIdKey: targetedKanji.id, choicesKey: jsonEncode(_choices), rightAnswerKey: rightAnswer, selectedIndexKey: _selected};
+
+  String toString() => "kanji: ${this.targetedKanji}, choices: ${this._choices}, selected: ${this._selected}";
 }
 
-final HashMap<String, List<String>> kanaShiftMap = HashMap.from({
-  //k-hiragana
-  "か": ["あ", "が", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "が": ["あ", "か", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "き": ["い", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"],
-  "ぎ": ["い", "き", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"],
-  "く": ["ぐ", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "ぐ": ["く", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "け": ["え", "げ", "せ", "ぜ", "て", "ね", "へ", "べ", "ぺ", "れ"],
-  "げ": ["え", "け", "せ", "ぜ", "て", "ね", "へ", "べ", "ぺ", "れ"],
-  "こ": ["お", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  "ご": ["お", "こ", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  //k-katakana
-  "カ": ["ア", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "ガ": ["ア", "カ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "キ": ["イ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"],
-  "ギ": ["イ", "キ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"],
-  "ク": ["グ", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "グ": ["ク", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "ケ": ["エ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "ゲ": ["エ", "ケ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "コ": ["オ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  "ゴ": ["オ", "コ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  //h-hiragana
-  "は": ["あ", "か", "が", "さ", "ざ", "た", "だ", "な", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "ば": ["あ", "か", "が", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ま", "や", "ら", "わ"],
-  "ぱ": ["あ", "か", "が", "さ", "ざ", "た", "な", "は", "ば", "ま", "や", "ら", "わ"],
-  "び": ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "ぴ", "み", "り"],
-  "ぴ": ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "み", "り"],
-  "ひ": ["い", "き", "ぎ", "し", "じ", "ち", "に", "び", "ぴ", "み", "り"],
-  "ぶ": ["く", "ぐ", "す", "ず", "ぬ", "ふ", "ぷ", "む", "ゆ", "る"],
-  "ぷ": ["く", "ぐ", "す", "ず", "ぬ", "ふ", "ぶ", "む", "ゆ", "る"],
-  "ふ": ["く", "ぐ", "す", "ず", "ぬ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "へ": ["え", "け", "げ", "せ", "ぜ", "て", "ね", "べ", "ぺ", "れ"],
-  "べ": ["え", "け", "げ", "せ", "ぜ", "て", "ね", "へ", "ぺ", "れ"],
-  "ぺ": ["え", "け", "げ", "せ", "ぜ", "て", "ね", "へ", "べ", "れ"],
-  "ほ": ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  "ぽ": ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "も", "よ", "ろ", "を"],
-  "ぼ": ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぽ", "も", "よ", "ろ", "を"],
-  //h-katakana
-  "ハ": ["ア", "カ", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "バ": ["ア", "カ", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "マ", "ヤ", "ラ", "ワ"],
-  "パ": ["ア", "カ", "ガ", "サ", "ザ", "タ", "ナ", "ハ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "ビ": ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ピ", "ミ", "リ"],
-  "ピ": ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ミ", "リ"],
-  "ヒ": ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ビ", "ピ", "ミ", "リ"],
-  "ブ": ["ク", "グ", "ス", "ズ", "ヌ", "フ", "プ", "ム", "ユ", "ル"],
-  "プ": ["ク", "グ", "ス", "ズ", "ヌ", "フ", "ブ", "ム", "ユ", "ル"],
-  "フ": ["ク", "グ", "ス", "ズ", "ヌ", "ブ", "プ", "ム", "ユ", "ル"],
-  "ヘ": ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ベ", "ペ", "レ"],
-  "ベ": ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ペ", "レ"],
-  "ペ": ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "レ"],
-  "ホ": ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  "ポ": ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "モ", "ヨ", "ロ", "ヲ"],
-  "ボ": ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  //t-hiragana
-  "だ": ["あ", "か", "が", "さ", "ざ", "た", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "た": ["あ", "か", "が", "さ", "ざ", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "ち": ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"],
-  "つ": ["く", "ぐ", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "づ": ["く", "ぐ", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "て": ["え", "け", "げ", "せ", "ぜ", "で", "ね", "へ", "べ", "ぺ", "れ"],
-  "で": ["え", "け", "げ", "せ", "ぜ", "て", "ね", "へ", "べ", "ぺ", "れ"],
-  "と": ["お", "こ", "ご", "そ", "ぞ", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  "ど": ["お", "こ", "ご", "そ", "ぞ", "と", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  //t-katakana
-  "ダ": ["ア", "カ", "ガ", "サ", "ザ", "タ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "タ": ["ア", "カ", "ガ", "サ", "ザ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "チ": ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"],
-  "ツ": ["ク", "グ", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "ヅ": ["ク", "グ", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "テ": ["エ", "ケ", "ゲ", "セ", "ゼ", "デ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "デ": ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "ト": ["オ", "コ", "ゴ", "ソ", "ゾ", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  "ド": ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  //s-hiragana
-  "さ": ["あ", "か", "が", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "ざ": ["あ", "か", "が", "さ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"],
-  "し": ["い", "き", "ぎ", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"],
-  "じ": ["い", "き", "ぎ", "し" "ち", "に", "ひ", "び", "ぴ", "み", "り"],
-  "す": ["く", "ぐ", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "ぞ": ["お", "こ", "ご", "そ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  "せ": ["え", "け", "げ", "ぜ", "て", "で", "ね", "へ", "べ", "ぺ", "れ"],
-  "ぜ": ["え", "け", "げ", "せ", "て", "で", "ね", "へ", "べ", "ぺ", "れ"],
-  "ず": ["く", "ぐ", "す", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"],
-  "そ": ["お", "こ", "ご", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"],
-  //s-katakana
-  "サ": ["ア", "カ", "ガ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "ザ": ["ア", "カ", "ガ", "サ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"],
-  "シ": ["イ", "キ", "ギ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"],
-  "ジ": ["イ", "キ", "ギ", "シ" "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"],
-  "ス": ["ク", "グ", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "ゾ": ["オ", "コ", "ゴ", "ソ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-  "セ": ["エ", "ケ", "ゲ", "ゼ", "テ", "デ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "ゼ": ["エ", "ケ", "ゲ", "セ", "テ", "デ", "ネ", "ヘ", "ベ", "ペ", "レ"],
-  "ズ": ["ク", "グ", "ス", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"],
-  "ソ": ["オ", "コ", "ゴ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"],
-});
+const List<String> hiraganaA = const ["あ", "か", "が", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"];
+const List<String> hiraganaI = const ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"];
+const List<String> hiraganaU = const ["ぐ", "く", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"];
+const List<String> hiraganaE = const ["え", "け", "げ", "せ", "ぜ", "て", "ね", "へ", "べ", "ぺ", "れ"];
+const List<String> hiraganaO = const ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"];
+
+const List<String> katakanaA = const ["ア", "カ", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"];
+const List<String> katakanaI = const ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"];
+const List<String> katakanaU = const ["グ", "ク", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"];
+const List<String> katakanaE = const ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "ペ", "レ"];
+const List<String> katakanaO = const ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"];
+
+final HashMap<String, List<String>> kanaShiftMap = HashMap.fromEntries([
+  ...hiraganaA.map((kana) => MapEntry<String, List<String>>(kana, hiraganaA)),
+  ...hiraganaI.map((kana) => MapEntry<String, List<String>>(kana, hiraganaI)),
+  ...hiraganaU.map((kana) => MapEntry<String, List<String>>(kana, hiraganaU)),
+  ...hiraganaE.map((kana) => MapEntry<String, List<String>>(kana, hiraganaE)),
+  ...hiraganaO.map((kana) => MapEntry<String, List<String>>(kana, hiraganaO)),
+  ...katakanaA.map((kana) => MapEntry<String, List<String>>(kana, katakanaA)),
+  ...katakanaI.map((kana) => MapEntry<String, List<String>>(kana, katakanaI)),
+  ...katakanaU.map((kana) => MapEntry<String, List<String>>(kana, katakanaU)),
+  ...katakanaE.map((kana) => MapEntry<String, List<String>>(kana, katakanaE)),
+  ...katakanaO.map((kana) => MapEntry<String, List<String>>(kana, katakanaO)),
+]);

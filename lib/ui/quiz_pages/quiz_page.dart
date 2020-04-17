@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 
-import 'components/snack_bar_collections.dart';
+import '../components/snack_bar_collections.dart';
 import 'quiz_detail_page.dart';
+import 'incorrect_question_page.dart';
 
 class QuizPage extends StatefulWidget {
   @override
@@ -18,6 +21,8 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
+
+    iqBloc.getAllIncorrectQuestions();
 
     scrollController.addListener(() {
       if (this.mounted) {
@@ -42,6 +47,31 @@ class _QuizPageState extends State<QuizPage> {
         appBar: AppBar(
           title: Text('クイズ'),
           elevation: elevation,
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Container(
+                height: kToolbarHeight,
+                child: StreamBuilder(
+                    stream: iqBloc.incorrectQuestions,
+                    builder: (_, AsyncSnapshot<List<Question>> snapshot) {
+                      if (snapshot.hasData) {
+                        return Center(
+                          child: Text(snapshot.data.length.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+                        );
+                      }
+                      return Container();
+                    }),
+              )
+            ),
+
+            IconButton(
+              icon: Icon(FontAwesomeIcons.backpack),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>IncorrectQuestionsPage()));
+              },
+            )
+          ],
         ),
         body: StreamBuilder(
           stream: KanjiListBloc.instance.kanjiLists,

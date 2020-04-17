@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:app_review/app_review.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
@@ -20,7 +21,7 @@ import 'settings_page.dart';
 import 'education_kanji_page.dart';
 import 'search_result_page.dart';
 import 'custom_list_page.dart';
-import 'quiz_page.dart';
+import 'quiz_pages/quiz_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,6 +50,12 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       setState(() {
         opacity = 1;
       });
+    });
+
+    AppReview.isRequestReviewAvailable.then((isAvailable) {
+      if (isAvailable) {
+        AppReview.requestReview;
+      }
     });
   }
 

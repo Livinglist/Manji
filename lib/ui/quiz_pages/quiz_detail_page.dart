@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 
 import 'package:kanji_dictionary/models/kanji_list.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/models/quiz.dart';
 import 'package:kanji_dictionary/models/quiz_result.dart';
-import 'components/chip_collections.dart';
-import 'kanji_detail_page.dart';
+import '../components/chip_collections.dart';
+import '../kanji_detail_page.dart';
 
 class QuizDetailPage extends StatefulWidget {
   final KanjiList kanjiList;
@@ -59,7 +60,9 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor, appBar: AppBar(elevation: elevation), body: showResult ? buildResultView() : buildQuizView());
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: AppBar(elevation: elevation),
+        body: showResult ? buildResultView() : buildQuizView());
   }
 
   Widget buildResultView() {
@@ -79,7 +82,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                     "${quizResult.percentage.toStringAsFixed(1).replaceFirst('.0', '')}%",
                     style: TextStyle(color: Colors.white, fontSize: 96),
                   ),
-                  Icon(getCharm(quizResult.percentage), color: Colors.white,size: 90)
+                  Icon(getCharm(quizResult.percentage), color: Colors.white, size: 90)
                 ],
               )),
             ),
@@ -150,6 +153,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                   if (quiz.submitAnswer(index) == false) {
                                     showResult = true;
                                     quizResult = quiz.getQuizResult();
+                                    iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
                                   }
                                 });
                               },
@@ -251,7 +255,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       return FontAwesomeIcons.certificate;
     } else if (percentage >= 80) {
       return FontAwesomeIcons.dragon;
-    }else{
+    } else {
       return FontAwesomeIcons.bookReader;
     }
   }

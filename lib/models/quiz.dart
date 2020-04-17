@@ -6,7 +6,6 @@ class Quiz {
   final List<Kanji> targetedKanjis;
   List<Question> questions;
 
-  Iterator<Question> _iterator;
 
   int _currentQuestionIndex = 0;
 
@@ -20,8 +19,6 @@ class Quiz {
     for (int i = 0; i < questionsCount; i++) {
       questions[i] = Question(targetedKanji: targetedKanjis[i]);
     }
-
-    _iterator = questions.iterator;
   }
 
   ///Submit user's answer to the current question.

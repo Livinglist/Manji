@@ -1,4 +1,6 @@
 PODS:
+  - app_review (1.0.1):
+    - Flutter
   - apple_sign_in (0.0.1):
     - Flutter
   - BoringSSL-GRPC (0.0.3):
@@ -164,6 +166,8 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - package_info (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - Protobuf (3.7.0)
@@ -180,6 +184,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_review (from `.symlinks/plugins/app_review/ios`)
   - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -187,6 +192,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -221,6 +227,8 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  app_review:
+    :path: ".symlinks/plugins/app_review/ios"
   apple_sign_in:
     :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
@@ -235,6 +243,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
@@ -249,6 +259,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
+  app_review: 1253f9c1408e4a9708abbcb28bbea969017b2f81
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: ab9e897ba5cba56f0a722baa2a659204703f5756
@@ -278,6 +289,7 @@ SPEC CHECKSUMS:
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523

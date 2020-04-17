@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:kanji_dictionary/models/incorrect_question.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kanji_dictionary/models/kanji_list.dart';
+import 'package:kanji_dictionary/models/question.dart';
 
 const favKanjiStrsKey = 'favKanjiStrs';
 const starKanjiStrsKey = 'starKanjiStrs';
 const kanjiListStrKey = 'kanjiListStr';
+const incorrectQuestionsKey = 'incorrectQuestions';
 
 class SharedPreferencesProvider {
   SharedPreferences _sharedPreferences;
@@ -20,10 +23,13 @@ class SharedPreferencesProvider {
     if (!_sharedPreferences.containsKey(favKanjiStrsKey)) {
       _sharedPreferences.setStringList(favKanjiStrsKey, []);
       _sharedPreferences.setStringList(starKanjiStrsKey, ['字']);
+      _sharedPreferences.setStringList(incorrectQuestionsKey, []);
     }
   }
 
   List<String> getAllFavKanjiStrs() => _sharedPreferences.getStringList(favKanjiStrsKey);
+
+  List<IncorrectQuestion> _incorrectQuestions;
 
   void addFav(String kanjiStr) {
     var favKanjiStrs = _sharedPreferences.getStringList(favKanjiStrsKey);
@@ -52,6 +58,7 @@ class SharedPreferencesProvider {
   }
 
   List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
+
 
   void updateKanjiLists(List<KanjiList> kanjiLists) => _sharedPreferences.setString(kanjiListStrKey, kanjiListsToJsonStr(kanjiLists));
 }

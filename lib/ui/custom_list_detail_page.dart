@@ -279,7 +279,23 @@ class _ListDetailPageState extends State<ListDetailPage> {
                                 ),
                               ),
                             )
-                          : Container(),
+                          : Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Container(
+                          child: Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                'Junior High',
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              )),
+                          decoration: BoxDecoration(
+                            //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Divider(height: 0),

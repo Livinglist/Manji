@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/kana.dart';
+import 'package:kanji_dictionary/models/question.dart';
 
 class DBProvider {
   DBProvider._();
@@ -37,28 +38,26 @@ class DBProvider {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = join(appDocDir.path, "dictDB.db");
 
-    if (await File(path).exists() && !refresh) {
-      //return await openDatabase(path);
-      print("hi there loading");
+    if (await File(path).exists()) {
+      print("opening");
       return openDatabase(
         path,
         version: 1,
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
-
-//          var res = await db.query('Kanji');
-//
-//          kanjis = res.isNotEmpty
-//              ? res.map((r) {
-//            //print(r.toString());
-//            return Kanji.fromDBMap(r);
-//          }).toList()
-//              : [];
         },
-      );
-    } else {
-      print("hi there copying");
+      ).then((db) {
+        var query = db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
+            '"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'
+            '"kanjiId"	INTEGER NOT NULL,'
+            '"choices"	TEXT NOT NULL,'
+            '"selectedIndex"	INTEGER NOT NULL,'
+            '"rightAnswer"	TEXT NOT NULL)');
 
+        return db;
+      });
+    } else {
+      print("copying");
       ByteData data = await rootBundle.load("data/dictDB.db");
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes);
@@ -83,19 +82,6 @@ class DBProvider {
             return Kanji.fromDBMap(r);
           }).toList()
         : [];
-//    if (kanjis.isNotEmpty) {
-//      final db = await database;
-//      var res = await db.query('Kanji');
-//
-//      return res.isNotEmpty
-//          ? res.map((r) {
-//              //print(r.toString());
-//              return Kanji.fromDBMap(r);
-//            }).toList()
-//          : [];
-//    } else {
-//      return kanjis;
-//    }
   }
 
   @Deprecated('')
@@ -156,11 +142,6 @@ class DBProvider {
 
   Future addSentences(List<Sentence> sentences) async {
     final db = await database;
-    //var table = await db.rawQuery('SELECT MAX(id)+1 as id FROM Sentence');
-    //int id = table.first['id'];
-    //sentence.id = id;
-    //print("the id is $id");
-    //await db.insert('Sentence', map);
     var raw = await db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)", [sentences.first.kanji, sentencesToJson(sentences)]);
     return raw;
   }
@@ -178,33 +159,30 @@ class DBProvider {
       db.rawDelete("DELETE FROM Sentence WHERE kanji = '$kanji'").then((_) {
         db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)", [kanji, sentencesToJson(sentences)]);
       });
-//      await db.delete('Sentence', where: '"kanji" = ?', whereArgs: [kanji]).then((_) {
-//        db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)", [kanji, sentencesToJson(sentences)]);
-//      });
     }
   }
 
-  Future<List<Hiragana>> getAllHiragana() async{
+  Future<List<Hiragana>> getAllHiragana() async {
     final db = await database;
     var res = await db.query('Hiragana');
 
     return res.isNotEmpty
         ? res.map((r) {
-      //print(r.toString());
-      return Hiragana.fromMap(r);
-    }).toList()
+            //print(r.toString());
+            return Hiragana.fromMap(r);
+          }).toList()
         : [];
   }
 
-  Future<List<Katakana>> getAllKatakana() async{
+  Future<List<Katakana>> getAllKatakana() async {
     final db = await database;
     var res = await db.query('Katakana');
 
     return res.isNotEmpty
         ? res.map((r) {
-      //print(r.toString());
-      return Katakana.fromMap(r);
-    }).toList()
+            //print(r.toString());
+            return Katakana.fromMap(r);
+          }).toList()
         : [];
   }
 
@@ -212,21 +190,53 @@ class DBProvider {
     var map = kanji.toDBMap();
     var db = await database;
 
-    db.rawUpdate("UPDATE Kanji SET onyomiWords = ?, onyomi = ?, kunyomiWords = ?, kunyomi = ? WHERE kanji = ?", [
-      map['onyomiWords'],
-      map['onyomi'],
-      map['kunyomiWords'],
-      map['kunyomi'],
-      kanji.kanji
-    ]);
+    db.rawUpdate("UPDATE Kanji SET onyomiWords = ?, onyomi = ?, kunyomiWords = ?, kunyomi = ? WHERE kanji = ?",
+        [map['onyomiWords'], map['onyomi'], map['kunyomiWords'], map['kunyomi'], kanji.kanji]);
   }
 
   Future<Kanji> getSingleKanji(String kanjiStr) async {
     var db = await database;
     var query = await db.rawQuery("SELECT FROM Kanji WHERE kanji = '$kanjiStr' LIMIT 1");
-    if(query == null || query.isEmpty) return null;
+    if (query == null || query.isEmpty) return null;
 
     return Kanji.fromDBMap(query.single);
+  }
+
+  Future addIncorrectQuestions(List<Question> questions) async {
+    var db = await database;
+    for (var q in questions) {
+      print(q.toMap());
+      await db.insert("IncorrectQuestions", q.toMap());
+    }
+    return;
+  }
+
+  Future deleteIncorrectQuestion(Question question) async {
+    var db = await database;
+    return db.delete("IncorrectQuestions", where: "id = ${question.id}");
+  }
+
+  Future<List<Question>> getIncorrectQuestions() async {
+    var db = await database;
+    var query = await db.query("IncorrectQuestions");
+
+    //print(await db.rawQuery("SELECT * FROM IncorrectQuestions INNER JOIN Kanji on Kanji.id = IncorrectQuestions.kanjiId"));
+
+    print("The query is $query");
+    List<Question> qs = [];
+    for (var i in query) {
+      print("inside");
+      print(i);
+      query = await db.query("Kanji", where: "id = ${i[kanjiIdKey]}");
+      var kanji = Kanji.fromDBMap(query.single);
+      i = Map.from(i);
+      i[kanjiKey] = kanji;
+      qs.add(Question.fromMap(i));
+    }
+
+    print(qs);
+
+    return qs;
   }
 }
 
