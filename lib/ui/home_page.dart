@@ -8,11 +8,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:app_review/app_review.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/bloc/kana_bloc.dart';
 import 'package:kanji_dictionary/resource/db_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';
 import 'kanji_detail_page.dart';
@@ -87,15 +89,45 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                 CupertinoActionSheetAction(
                   child: Text('Camera', style: TextStyle(color: Colors.blue)),
                   onPressed: () {
-                    Navigator.pop(context, ImageSource.camera);
-                    return ImageSource.camera;
+                    return Permission.camera.status.then((status) {
+                      if (status == PermissionStatus.granted) {
+                        Navigator.pop(context, ImageSource.camera);
+                        return ImageSource.camera;
+                      } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+                        launch("app-settings:");
+                        return null;
+                      }
+                      return [Permission.camera].request().then((val) {
+                        if (val[Permission.camera] == PermissionStatus.granted) {
+                          Navigator.pop(context, ImageSource.camera);
+                          return ImageSource.camera;
+                        } else {
+                          return null;
+                        }
+                      });
+                    });
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text('Gallery', style: TextStyle(color: Colors.blue)),
                   onPressed: () {
-                    Navigator.pop(context, ImageSource.gallery);
-                    return ImageSource.gallery;
+                    return Permission.photos.status.then((status) {
+                      if (status == PermissionStatus.granted) {
+                        Navigator.pop(context, ImageSource.gallery);
+                        return ImageSource.gallery;
+                      } else if (status == PermissionStatus.permanentlyDenied|| status == PermissionStatus.denied) {
+                        launch("app-settings:");
+                        return null;
+                      }
+                      return [Permission.photos].request().then((val) {
+                        if (val[Permission.photos] == PermissionStatus.granted) {
+                          Navigator.pop(context, ImageSource.gallery);
+                          return ImageSource.gallery;
+                        } else {
+                          return null;
+                        }
+                      });
+                    });
                   },
                 ),
               ],

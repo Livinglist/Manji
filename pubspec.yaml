@@ -41,6 +41,7 @@ dependencies:
   googleapis: ^0.54.0
   googleapis_auth: 0.2.11+1
   connectivity: 0.4.8+2
+  permission_handler: 5.0.0+hotfix.3
 
 
 
