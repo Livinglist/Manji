@@ -3,6 +3,7 @@ import 'dart:convert' show utf8;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app_review/app_review.dart';
 
 import 'package:kanji_dictionary/utils/list_extension.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -78,6 +79,13 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     // kanjiBloc.getSentencesByKanji(widget.kanjiStr ?? widget.kanji.kanji);
     //kanjiBloc.fetchWordsByKanji(widget.kanjiStr ?? widget.kanji.kanji);
     if (widget.kanjiStr != null) kanjiBloc.getKanjiInfoByKanjiStr(widget.kanjiStr);
+
+
+    AppReview.isRequestReviewAvailable.then((isAvailable) {
+      if (isAvailable) {
+        AppReview.requestReview;
+      }
+    });
   }
 
   @override

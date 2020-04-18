@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
-import 'package:app_review/app_review.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -55,12 +54,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       setState(() {
         opacity = 1;
       });
-    });
-
-    AppReview.isRequestReviewAvailable.then((isAvailable) {
-      if (isAvailable) {
-        AppReview.requestReview;
-      }
     });
   }
 

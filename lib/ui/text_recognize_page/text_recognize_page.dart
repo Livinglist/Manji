@@ -100,12 +100,6 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   }
 
   @override
-  void dispose() {
-    textRecognizeBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -172,13 +166,13 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                 if (snapshot.hasData) {
                   text = snapshot.data;
                   if (text.isEmpty) {
-                    return Center(child: Text("No kanji was found in the image."));
+                    return Center(child: Text("No kanji was found in the image.", style: TextStyle(color: Colors.white70)));
                   }
 
                   kanjis = text.getKanjis().map((str) => kanjiBloc.allKanjisMap[str]).toList();
 
                   if (kanjis.isEmpty) {
-                    return Center(child: Text("No kanji was found in the image."));
+                    return Center(child: Text("No kanji was found in the image.", style: TextStyle(color: Colors.white70)));
                   }
 
                   return SingleChildScrollView(
