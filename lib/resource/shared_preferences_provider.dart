@@ -24,6 +24,8 @@ class SharedPreferencesProvider {
       _sharedPreferences.setStringList(favKanjiStrsKey, []);
       _sharedPreferences.setStringList(starKanjiStrsKey, ['字']);
       _sharedPreferences.setStringList(incorrectQuestionsKey, []);
+      var list = KanjiList(name: "My list", kanjiStrs: ["一", "二", "三"]);
+      updateKanjiLists([list]);
     }
   }
 
@@ -58,7 +60,6 @@ class SharedPreferencesProvider {
   }
 
   List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
-
 
   void updateKanjiLists(List<KanjiList> kanjiLists) => _sharedPreferences.setString(kanjiListStrKey, kanjiListsToJsonStr(kanjiLists));
 }

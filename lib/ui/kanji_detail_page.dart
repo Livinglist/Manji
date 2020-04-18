@@ -833,10 +833,10 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
         context: context,
         builder: (_) {
           return Container(
-            height: 500,
+            height: 360,
             color: Colors.transparent,
             child: Container(
-              height: 500,
+              height: 360,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)), color: Theme.of(context).primaryColor),

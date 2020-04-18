@@ -117,12 +117,12 @@ class _SettingsPageState extends State<SettingsPage> {
             textColor: Colors.white70,
             child: AboutListTile(
               applicationIcon: Container(
-                height: 140,
-                width: 140,
-                child: Center(child: Image.asset('data/ic_launcher-web.png', fit: BoxFit.fill)),
+                height: 100,
+                width: 100,
+                child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
-              applicationVersion: '0.9 alpha',
-              aboutBoxChildren: <Widget>[Text('Manji helps Japanese learners learn Japanese Kanji')],
+              applicationVersion: '2.1.0',
+              aboutBoxChildren: <Widget>[SizedBox(height: 24,),Text('Manji helps Japanese learners learn Japanese Kanji')],
             ),
           ),
 //          Divider(),

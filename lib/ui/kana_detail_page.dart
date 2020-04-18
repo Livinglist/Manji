@@ -26,7 +26,6 @@ class KanaDetailPageState extends State<KanaDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     kanjiBloc.findKanjiByKana(widget.kana, widget.yomikata).listen((kanji) {
@@ -35,25 +34,14 @@ class KanaDetailPageState extends State<KanaDetailPage> {
       });
     });
 
-//    scrollController.addListener(() {
-//      if(scrollController.offset == scrollController.position.minScrollExtent){
-//        setState(() {
-//          showShadow = false;
-//        });
-//      }else{
-//        setState(() {
-//          showShadow = true;
-//        });
-//      }
-//    });
 
     gridScrollController.addListener(() {
-      if(this.mounted){
+      if (this.mounted) {
         if (gridScrollController.offset <= 0) {
           setState(() {
             showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
             showShadow = true;
           });
@@ -62,12 +50,12 @@ class KanaDetailPageState extends State<KanaDetailPage> {
     });
 
     listScrollController.addListener(() {
-      if(this.mounted){
+      if (this.mounted) {
         if (listScrollController.offset <= 0) {
           setState(() {
             showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
             showShadow = true;
           });

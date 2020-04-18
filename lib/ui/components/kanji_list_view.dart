@@ -12,12 +12,21 @@ class KanjiListView extends StatelessWidget {
   final StringCallback onLongPressed;
   final bool canRemove;
   final ScrollController scrollController;
+  final ScrollPhysics scrollPhysics;
 
-  KanjiListView({this.kanjis, this.fallBackFont, this.onLongPressed, this.canRemove = false, this.scrollController}) : assert(kanjis != null);
+  KanjiListView(
+      {this.kanjis,
+      this.fallBackFont,
+      this.onLongPressed,
+      this.canRemove = false,
+      this.scrollController,
+      this.scrollPhysics = const AlwaysScrollableScrollPhysics()})
+      : assert(kanjis != null);
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+        physics: scrollPhysics,
         shrinkWrap: true,
         controller: scrollController,
         itemBuilder: (_, index) {

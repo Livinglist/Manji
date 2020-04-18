@@ -15,7 +15,7 @@ class _MyListPageState extends State<MyListPage> {
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final textEditingController = TextEditingController();
-  double elevation = 0;
+  bool showShadow = false;
 
   @override
   void initState() {
@@ -25,11 +25,11 @@ class _MyListPageState extends State<MyListPage> {
       if (this.mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -42,7 +42,7 @@ class _MyListPageState extends State<MyListPage> {
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        elevation: elevation,
+        elevation: showShadow?8:0,
         title: FuriganaText(
           text: '漢字リスト',
           tokens: [Token(text: '漢字', furigana: 'かんじ')],

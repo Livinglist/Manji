@@ -5,21 +5,30 @@ import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
 typedef void StringCallback(String str);
 
-class KanjiGridView extends StatelessWidget{
+class KanjiGridView extends StatelessWidget {
   final List<Kanji> kanjis;
   final String fallBackFont;
   final StringCallback onLongPressed;
   final bool canRemove;
   final ScrollController scrollController;
+  final ScrollPhysics scrollPhysics;
 
-  KanjiGridView({this.kanjis, this.fallBackFont, this.onLongPressed, this.canRemove = false, this.scrollController}) : assert(kanjis != null);
+  KanjiGridView(
+      {this.kanjis,
+      this.fallBackFont,
+      this.onLongPressed,
+      this.canRemove = false,
+      this.scrollController,
+      this.scrollPhysics = const AlwaysScrollableScrollPhysics()})
+      : assert(kanjis != null);
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      controller: scrollController,
+        controller: scrollController,
         shrinkWrap: true,
         crossAxisCount: 5,
+        physics: scrollPhysics,
         children: List.generate(kanjis.length, (index) {
           var kanji = kanjis[index];
           return Center(

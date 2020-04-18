@@ -19,8 +19,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final gridViewScrollController = ScrollController();
   final listViewScrollController = ScrollController();
-  double elevation = 0;
-  bool showGrid = false;
+  bool showGrid = false, showShadow = false;
   bool sortByStrokes = false;
 
   @override
@@ -33,11 +32,11 @@ class _ListDetailPageState extends State<ListDetailPage> {
       if (this.mounted) {
         if (gridViewScrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -47,11 +46,11 @@ class _ListDetailPageState extends State<ListDetailPage> {
       if (this.mounted) {
         if (listViewScrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -64,7 +63,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          elevation: elevation,
+          elevation: showShadow ? 8 : 0,
           title: Text(widget.kanjiList.name),
           actions: <Widget>[
             IconButton(
@@ -280,22 +279,22 @@ class _ListDetailPageState extends State<ListDetailPage> {
                               ),
                             )
                           : Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Container(
-                          child: Padding(
                               padding: EdgeInsets.all(4),
-                              child: Text(
-                                'Junior High',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              )),
-                          decoration: BoxDecoration(
-                            //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                              child: Container(
+                                child: Padding(
+                                    padding: EdgeInsets.all(4),
+                                    child: Text(
+                                      'Junior High',
+                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    )),
+                                decoration: BoxDecoration(
+                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                                      ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   Divider(height: 0),

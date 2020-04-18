@@ -32,12 +32,15 @@ dependencies:
   path_provider: 1.1.0
   shared_preferences: 0.5.2
   firebase_ml_vision: 0.7.0+2
-  image_picker: 0.6.3+1
+  image_picker: 0.6.5
   url_launcher: 5.4.1
   apple_sign_in: ^0.1.0
   font_awesome_flutter:
     path: ./font_awesome_flutter/
   app_review: 1.1.0+1
+  googleapis: ^0.54.0
+  googleapis_auth: 0.2.11+1
+  connectivity: 0.4.8+2
 
 
 
@@ -77,6 +80,7 @@ flutter:
   - data/matts.png
   - data/ic_launcher_round.png
   - data/ic_launcher-web.png
+  - data/1024.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

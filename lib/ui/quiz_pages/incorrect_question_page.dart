@@ -13,7 +13,7 @@ class IncorrectQuestionsPage extends StatefulWidget {
 
 class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
   final scrollController = ScrollController();
-  double elevation = 0;
+  bool showShadow = false;
 
   @override
   void initState() {
@@ -23,11 +23,11 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
       if (this.mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -38,7 +38,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: elevation,
+        elevation: showShadow ? 8 : 0,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_sweep),
@@ -55,7 +55,8 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
             if (snapshot.hasData) {
               if (snapshot.data.isEmpty) {
                 return Center(
-                  child: Text("Questions you got wrong\nwill appear here for you to study.", textAlign: TextAlign.center,style: TextStyle(color: Colors.white70)),
+                  child: Text("Questions you got wrong\nwill appear here for you to study.",
+                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
                 );
               }
               return ListView(

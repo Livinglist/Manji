@@ -23,7 +23,7 @@ class QuizDetailPage extends StatefulWidget {
 
 class _QuizDetailPageState extends State<QuizDetailPage> {
   final scrollController = ScrollController();
-  double elevation = 0;
+  bool showShadow = false;
 
   int currentIndex = 0;
   bool showResult = false;
@@ -46,11 +46,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       if (this.mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -61,7 +61,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(elevation: elevation),
+        appBar: AppBar(elevation: showShadow?8:0),
         body: showResult ? buildResultView() : buildQuizView());
   }
 

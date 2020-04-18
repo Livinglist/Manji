@@ -1,4 +1,4 @@
-extension StringExention on String {
+extension StringExtension on String {
   ///Get whether or not this string is a Chinese character.
   ///Length of the string must be 1.
   bool isKanji() {
@@ -14,7 +14,7 @@ extension StringExention on String {
   List<String> getKanjis() {
     var kanjis = <String>[];
     for (int i = 0; i < this.length; i++) {
-      if (this.codeUnitAt(i) > 12543) {
+      if (this.codeUnitAt(i) > 12543 && kanjis.contains(this[i]) == false) {
         kanjis.add(this[i]);
       }
     }

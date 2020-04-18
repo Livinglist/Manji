@@ -1,4 +1,4 @@
-extension ListHelpers<E> on List<E> {
+extension ListExtension<E> on List<E> {
   bool containsWhere(bool test(E e)) {
     for (var i in this) {
       if (test(i)) return true;

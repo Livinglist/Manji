@@ -16,7 +16,7 @@ class SentenceDetailPage extends StatefulWidget {
 
 class SentenceDetailPageState extends State<SentenceDetailPage> {
   final scrollController = ScrollController();
-  double elevation = 0;
+  bool showShadow = false;
   double width;
 
   @override
@@ -27,11 +27,11 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
       if (this.mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -43,7 +43,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(elevation: elevation),
+        appBar: AppBar(elevation: showShadow ? 8 : 0),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Column(

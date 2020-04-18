@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:app_review/app_review.dart';
+import 'package:connectivity/connectivity.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
@@ -22,6 +24,7 @@ import 'education_kanji_page.dart';
 import 'search_result_page.dart';
 import 'custom_list_page.dart';
 import 'quiz_pages/quiz_page.dart';
+import 'text_recognize_page/text_recognize_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -68,32 +71,35 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 //    }
 //  }
 
-  Future onScanPressed() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    print('Reached A');
-
-    var visionImage = FirebaseVisionImage.fromFile(image);
-
-    print('Reached B');
-
-    var visionText = await textRecognizer.processImage(visionImage);
-
-    String text = visionText.text;
-    for (TextBlock block in visionText.blocks) {
-      final Rect boundingBox = block.boundingBox;
-      final List<Offset> cornerPoints = block.cornerPoints;
-      final String text = block.text;
-      final List<RecognizedLanguage> languages = block.recognizedLanguages;
-
-      for (TextLine line in block.lines) {
-        // Same getters as TextBlock
-        for (TextElement element in line.elements) {
-          // Same getters as TextBlock
-          print(element.text);
-        }
-      }
-    }
+  Future<ImageSource> getImageSource() {
+    return showCupertinoModalPopup<ImageSource>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              message: Text("Choose an image to detect kanji from"),
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context, null);
+                },
+              ),
+              actions: <Widget>[
+                CupertinoActionSheetAction(
+                  child: Text('Camera', style: TextStyle(color: Colors.blue)),
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.camera);
+                    return ImageSource.camera;
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text('Gallery', style: TextStyle(color: Colors.blue)),
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.gallery);
+                    return ImageSource.gallery;
+                  },
+                ),
+              ],
+            )).then((value) => value ?? null);
   }
 
   @override
@@ -107,14 +113,23 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
             IconButton(
               icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
               onPressed: () {
-                scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    'Text Recognition is not yet availible',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  backgroundColor: Colors.yellow,
-                  action: SnackBarAction(label: 'Dismiss', onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar()),
-                ));
+                Connectivity().checkConnectivity().then((val) {
+                  if (val == ConnectivityResult.none) {
+                    print(val);
+                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: Text(
+                        'Text Recognition requires access to Internet',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                      action: SnackBarAction(label: 'Dismiss', onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar()),
+                    ));
+                  } else {
+                    getImageSource().then((val) {
+                      if (val != null) Navigator.push(context, MaterialPageRoute(builder: (_) => TextRecognizePage(imageSource: val)));
+                    });
+                  }
+                });
               },
             )
           ],

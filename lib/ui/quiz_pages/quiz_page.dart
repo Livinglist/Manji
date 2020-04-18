@@ -16,7 +16,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  double elevation = 0;
+  bool showShadow = false;
 
   @override
   void initState() {
@@ -28,11 +28,11 @@ class _QuizPageState extends State<QuizPage> {
       if (this.mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
-            elevation = 0;
+            showShadow = false;
           });
-        } else {
+        } else if (showShadow == false) {
           setState(() {
-            elevation = 8;
+            showShadow = true;
           });
         }
       }
@@ -46,7 +46,7 @@ class _QuizPageState extends State<QuizPage> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           title: Text('クイズ'),
-          elevation: elevation,
+          elevation: showShadow ? 8: 0,
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.all(8),

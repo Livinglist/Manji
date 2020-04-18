@@ -18,12 +18,28 @@ class WordDetailPage extends StatefulWidget {
 
 class WordDetailPageState extends State<WordDetailPage> {
   final sentenceBloc = SentenceBloc();
-  double width;
+  final scrollController = ScrollController();
+  double width, elevation = 0;
+  bool showShadow = false;
 
   @override
   void initState() {
     sentenceBloc.fetchSentencesByWords(widget.word.wordText);
     super.initState();
+
+    scrollController.addListener(() {
+      if (this.mounted) {
+        if (scrollController.offset <= 0) {
+          setState(() {
+            showShadow = false;
+          });
+        } else if (showShadow == false) {
+          setState(() {
+            showShadow = true;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -31,8 +47,9 @@ class WordDetailPageState extends State<WordDetailPage> {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(elevation: 0),
+        appBar: AppBar(elevation: showShadow ? 8 : 0),
         body: SingleChildScrollView(
+          controller: scrollController,
           child: Column(
             children: <Widget>[
               Padding(
@@ -42,10 +59,6 @@ class WordDetailPageState extends State<WordDetailPage> {
                   tokens: [Token(text: widget.word.wordText, furigana: widget.word.wordFurigana)],
                   style: TextStyle(fontSize: 24),
                 ),
-//                child: Text(
-//                  widget.sentence.text,
-//                  style: TextStyle(fontSize: 18, color: Colors.white),
-//                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),

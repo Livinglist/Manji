@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Requires access to your camera</string>
+	<string>Manji requires access to your camera</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Requires access to your microphone</string>
+	<string>Manji requires access to your microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Manji requires the access to your photo library</string>
 	<key>UILaunchStoryboardName</key>
