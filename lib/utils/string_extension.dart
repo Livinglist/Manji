@@ -20,4 +20,26 @@ extension StringExtension on String {
     }
     return kanjis;
   }
+
+  String toKatakana() {
+    var str = '';
+
+    for (var i in Iterable.generate(this.length)) {
+      var code = this.codeUnitAt(i);
+      str += String.fromCharCode(code + 96);
+    }
+
+    return str;
+  }
+
+  String toHiragana() {
+    var str = '';
+
+    for (var i in Iterable.generate(this.length)) {
+      var code = this.codeUnitAt(i);
+      str += String.fromCharCode(code - 96);
+    }
+
+    return str;
+  }
 }

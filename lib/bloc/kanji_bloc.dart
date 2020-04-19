@@ -14,6 +14,8 @@ export 'package:kanji_dictionary/models/kanji.dart';
 export 'package:kanji_dictionary/models/sentence.dart';
 export 'package:kanji_dictionary/models/word.dart';
 
+import 'package:kanji_dictionary/utils/string_extension.dart';
+
 class KanjiBloc {
   //final repo = Repository();
   final _sentencesFetcher = BehaviorSubject<List<Sentence>>();
@@ -260,31 +262,50 @@ class KanjiBloc {
 
   List<Kanji> searchKanjiInfosByStr(String text) {
     var list = <Kanji>[];
+    String hiraganaText = '';
+    String katakanaText = '';
+
+    if (text.codeUnitAt(0) >= 12353 && text.codeUnitAt(0) <= 12447) {
+      hiraganaText = text;
+      katakanaText = text.toKatakana();
+    } else if (text.codeUnitAt(0) >= 12448 && text.codeUnitAt(0) <= 12543) {
+      katakanaText = text;
+      hiraganaText = text.toHiragana();
+    }
+
     for (var kanji in _allKanjisMap.values) {
-      if (kanji.meaning.contains(text)) {
+      if (hiraganaText.isEmpty && kanji.meaning.contains(text)) {
         list.add(kanji);
         continue;
       }
 
-      var onyomiMatch = kanji.onyomi.where((str) => str == text);
-      if (onyomiMatch.isNotEmpty) {
-        list.add(kanji);
-        continue;
+      if (katakanaText.isNotEmpty) {
+        var onyomiMatch = kanji.onyomi.where((str) => str == katakanaText);
+        if (onyomiMatch.isNotEmpty) {
+          list.add(kanji);
+          continue;
+        }
       }
-      var kunyomiMatch = kanji.kunyomi.where((str) => str == text);
-      if (kunyomiMatch.isNotEmpty) {
-        list.add(kanji);
-        continue;
+
+      if (hiraganaText.isNotEmpty) {
+        var kunyomiMatch = kanji.kunyomi.where((str) => str == hiraganaText);
+        if (kunyomiMatch.isNotEmpty) {
+          list.add(kanji);
+          continue;
+        }
       }
-      var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
-      if (onyomiWords.isNotEmpty) {
-        list.add(kanji);
-        continue;
-      }
-      var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
-      if (kunyomiWords.isNotEmpty) {
-        list.add(kanji);
-        continue;
+
+      if (hiraganaText.isEmpty) {
+        var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        if (onyomiWords.isNotEmpty) {
+          list.add(kanji);
+          continue;
+        }
+        var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        if (kunyomiWords.isNotEmpty) {
+          list.add(kanji);
+          continue;
+        }
       }
     }
     return list;
