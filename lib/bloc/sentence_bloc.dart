@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
@@ -11,7 +10,7 @@ export 'package:kanji_dictionary/models/kanji.dart';
 export 'package:kanji_dictionary/models/sentence.dart';
 export 'package:kanji_dictionary/models/word.dart';
 
-class SentenceBloc{
+class SentenceBloc {
   final _sentencesFetcher = BehaviorSubject<List<Sentence>>();
   final _wordsFetcher = BehaviorSubject<List<Word>>();
 
@@ -22,7 +21,7 @@ class SentenceBloc{
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
   Stream<List<Word>> get words => _wordsFetcher.stream;
 
-  void fetchSentencesByWords(String str){
+  void fetchSentencesByWords(String str) {
     _sentences.clear();
     repo.fetchSentencesByKanji(str).listen((sentence) {
       if (!_sentencesFetcher.isClosed) {
@@ -50,6 +49,23 @@ class SentenceBloc{
         _wordsFetcher.sink.add(_words);
       }
     });
+  }
+
+  void getSingleSentenceByKanji(String kanjiStr) async {
+    var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
+    if (jsonStr != null) {
+      var list = (jsonDecode(jsonStr) as List).cast<String>();
+      //var sentences = list.sublist(0 + 10 * currentPortion, 10 + 10 * currentPortion).map((str) => Sentence.fromJsonString(str)).toList();
+      var sentence = Sentence.fromMap(jsonDecode(list.first));
+
+      _unloadedSentencesStr = list;
+
+      _sentences.add(sentence);
+
+      if (sentence != null && !_sentencesFetcher.isClosed) {
+        _sentencesFetcher.sink.add(_sentences);
+      }
+    }
   }
 
   void getSentencesByKanji(String kanjiStr) async {

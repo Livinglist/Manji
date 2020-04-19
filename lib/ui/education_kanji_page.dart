@@ -6,6 +6,7 @@ import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
 import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
 import 'components/furigana_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'kanji_study_page/kanji_study_page.dart';
 
 class EducationKanjiPage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class EducationKanjiPage extends StatefulWidget {
 
 class EducationKanjiPageState extends State<EducationKanjiPage> {
   //show gridview by default
+  int currentGrade = 1;
   bool showGrid = true;
   bool altSorted = false;
   Map<int, List<Kanji>> gradeToKanjisMap = {
@@ -53,6 +55,11 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
               ),
               actions: <Widget>[
                 IconButton(
+                    icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: gradeToKanjisMap[currentGrade])));
+                    }),
+                IconButton(
                     icon: AnimatedCrossFade(
                       firstChild: Icon(
                         FontAwesomeIcons.sortNumericDown,
@@ -91,30 +98,39 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
                   },
                 ),
               ],
-              bottom: TabBar(isScrollable: true, tabs: [
-                //Tab(child: Container(child: Text('N5'),color: Colors.black),),
-                Tab(
-                  text: '1',
-                ),
-                Tab(
-                  text: '2',
-                ),
-                Tab(
-                  text: '3',
-                ),
-                Tab(
-                  text: '4',
-                ),
-                Tab(
-                  text: '5',
-                ),
-                Tab(
-                  text: '6',
-                ),
-                Tab(
-                  text: 'Junior High',
-                ),
-              ]),
+              bottom: TabBar(
+                isScrollable: true,
+                tabs: [
+                  //Tab(child: Container(child: Text('N5'),color: Colors.black),),
+                  Tab(
+                    text: '1',
+                  ),
+                  Tab(
+                    text: '2',
+                  ),
+                  Tab(
+                    text: '3',
+                  ),
+                  Tab(
+                    text: '4',
+                  ),
+                  Tab(
+                    text: '5',
+                  ),
+                  Tab(
+                    text: '6',
+                  ),
+                  Tab(
+                    text: 'Junior High',
+                  ),
+                ],
+                onTap: (index) {
+                  if (index <= 5)
+                    currentGrade = index + 1;
+                  else
+                    currentGrade = 0;
+                },
+              ),
             ),
             body: TabBarView(children: [
               buildTabBarViewChildren(1),

@@ -1,9 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc//kanji_list_bloc.dart';
+import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import 'components/chip_collections.dart';
+import 'components/kanji_list_tile.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
+import 'kanji_study_page/kanji_study_page.dart';
 
 ///This is the page that displays the list created by the user
 class ListDetailPage extends StatefulWidget {
@@ -21,6 +27,18 @@ class _ListDetailPageState extends State<ListDetailPage> {
   final listViewScrollController = ScrollController();
   bool showGrid = false, showShadow = false;
   bool sortByStrokes = false;
+  String studyString = 'When will you start studying！ (╯°Д°）╯';
+  var stupidStrings = [
+    "You can stop it now...",
+    "emmmm......",
+    "why?",
+    "you know this is pointless",
+    "really, nothing special here",
+    "just some random sh*t",
+    "you really think you can deal with this?",
+    "3...2...1...BOOM",
+    "give me a five star review, or..."
+  ];
 
   @override
   void initState() {
@@ -66,6 +84,35 @@ class _ListDetailPageState extends State<ListDetailPage> {
           elevation: showShadow ? 8 : 0,
           title: Text(widget.kanjiList.name),
           actions: <Widget>[
+            StreamBuilder(
+              stream: kanjiBloc.kanjis,
+              builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                return IconButton(
+                    icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                    onPressed: () {
+                      if (snapshot.hasData) {
+                        if (snapshot.data.isEmpty) {
+                          setState(() {
+                            if (studyString.length > 50) {
+                              if (stupidStrings.isEmpty) {
+                                Navigator.pop(context);
+                              } else {
+                                var index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(stupidStrings.length);
+                                var str = stupidStrings[index];
+                                stupidStrings.removeAt(index);
+                                studyString = str;
+                              }
+                            } else {
+                              studyString += "!";
+                            }
+                          });
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: snapshot.data)));
+                        }
+                      }
+                    });
+              },
+            ),
             IconButton(
               icon: Icon(Icons.sort),
               onPressed: () {
@@ -123,7 +170,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: Text(
-                      'When will you start studying！ (╯°Д°）╯',
+                      studyString,
                       style: TextStyle(color: Colors.white70),
                     ),
                   ),
@@ -142,6 +189,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
         ));
   }
 
+  @Deprecated("Prefer removing items by swiping.")
   void onLongPressed(String kanjiStr) {
     scaffoldKey.currentState.showBottomSheet((_) => ListTile(
           title: Text('Remove $kanjiStr from ${widget.kanjiList.name}'),
@@ -209,144 +257,20 @@ class _ListDetailPageState extends State<ListDetailPage> {
           var kanji = kanjis[index];
 
           return Dismissible(
-            direction: DismissDirection.endToStart,
-            key: ObjectKey(kanji),
-            onDismissed: (_) => onDismissed,
-            confirmDismiss: (_) => confirmDismiss(kanji),
-            background: Container(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 20.0),
-              color: Colors.red,
-              child: Icon(
-                Icons.delete,
-                color: Colors.white,
-              ),
-            ),
-            child: ListTile(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
-              },
-              onLongPress: () {
-                onLongPressed(kanji.kanji);
-              },
-              leading: Container(
-                width: 28,
-                height: 28,
-                child: Center(
-                  child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
+              direction: DismissDirection.endToStart,
+              key: ObjectKey(kanji),
+              onDismissed: (_) => onDismissed,
+              confirmDismiss: (_) => confirmDismiss(kanji),
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 20.0),
+                color: Colors.red,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
                 ),
               ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Wrap(
-                    children: <Widget>[
-                      kanji.jlpt != 0
-                          ? Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Container(
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                      'N${kanji.jlpt}',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                    )),
-                                decoration: BoxDecoration(
-                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                      ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      kanji.grade != 0
-                          ? Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Container(
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                      'Grade ${kanji.grade}',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                    )),
-                                decoration: BoxDecoration(
-                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                      ),
-                                ),
-                              ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Container(
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                      'Junior High',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                    )),
-                                decoration: BoxDecoration(
-                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                      ),
-                                ),
-                              ),
-                            ),
-                    ],
-                  ),
-                  Divider(height: 0),
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      for (var kunyomi in kanji.kunyomi)
-                        Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Container(
-                              child: Padding(
-                                  padding: EdgeInsets.all(4),
-                                  child: Text(
-                                    kunyomi,
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  )),
-                              decoration: BoxDecoration(
-                                //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                    ),
-                              ),
-                            )),
-                      for (var onyomi in kanji.onyomi)
-                        Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Container(
-                            child: Padding(
-                                padding: EdgeInsets.all(4),
-                                child: Text(
-                                  onyomi,
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                )),
-                            decoration: BoxDecoration(
-                              //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                  ),
-                            ),
-                          ),
-                        )
-                    ],
-                  ),
-                ],
-              ),
-              subtitle: Text(
-                kanji.meaning,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          );
+              child: KanjiListTile(kanji: kanji));
         },
         separatorBuilder: (_, __) => Divider(height: 0),
         itemCount: kanjis.length);

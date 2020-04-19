@@ -76,3 +76,33 @@ class StrokeChip extends StatelessWidget {
     );
   }
 }
+
+class JLPTChip extends StatelessWidget {
+  final Color color;
+  final int jlpt;
+  final String label;
+
+  JLPTChip({this.color = Colors.white, this.jlpt}) : label = "N$jlpt";
+
+  @override
+  Widget build(BuildContext context) {
+    if (jlpt == 0) return Container();
+    return Padding(
+      padding: EdgeInsets.all(4),
+      child: Container(
+        child: Padding(
+            padding: EdgeInsets.all(4),
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            )),
+        decoration: BoxDecoration(
+          //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+          color: this.color,
+          borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+              ),
+        ),
+      ),
+    );
+  }
+}

@@ -98,53 +98,77 @@ class KanaGridViewState extends State<KanaGridView> {
         children: List.generate(kanas.length, (index) {
           return Center(
               child: InkWell(
+                onTap: (){
+                  setState(() {
+                    crossFadeStates[index] = crossFadeStates[index] == CrossFadeState.showSecond ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+                  });
+                },
             child: GestureDetector(
               child: AnimatedCrossFade(
                   firstChild: Container(
-                      width: MediaQuery.of(context).size.width/5,
-                      height: MediaQuery.of(context).size.width/5,
+                      width: MediaQuery.of(context).size.width / 5,
+                      height: MediaQuery.of(context).size.width / 5,
                       child: Center(
-                        child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai')),
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai')),
+                            ),
+                            Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
+                          ],
+                        ),
                       )),
                   secondChild: Container(
-                      width: MediaQuery.of(context).size.width/5,
-                      height: MediaQuery.of(context).size.width/5,
+                      width: MediaQuery.of(context).size.width / 5,
+                      height: MediaQuery.of(context).size.width / 5,
                       child: Center(
-                        child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white, fontSize: 32, fontFamily: 'kazei')),
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36)),
+                            ),
+                            Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
+                          ],
+                        ),
                       )),
                   crossFadeState: crossFadeStates[index],
                   duration: Duration(milliseconds: 200)),
-              onTapUp:(_){
-                setState(() {
-                  crossFadeStates[index] = crossFadeStates[index] == CrossFadeState.showSecond?CrossFadeState.showFirst:CrossFadeState.showSecond;
-                });
-              },
             ),
-            onTap: () {
-              //Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
-            },
           ));
         }),
-//        children: kanas.map((kana) {
-//          return Center(
-//              child: InkWell(
-//                child: Container(
-//                    width: double.infinity,
-//                    height: double.infinity,
-//                    child: Center(
-//                      child: Text(kana.kana, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
-//                    )),
-//                onTap: () {
-//                  //Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
-//                },
-//                onTapDown: (tapDownDetails){
-//
-//                },
-//                onTapCancel: (){
-//
-//                },
-//              ));
-//        }).toList(),
+      ),
+    );
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 5,
+        children: List.generate(kanas.length, (index) {
+          return Center(
+            child: Container(
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.width / 5,
+                child: Center(
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai')),
+                      ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
+                    ],
+                  ),
+                )),
+          );
+        }),
       ),
     );
   }

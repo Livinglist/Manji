@@ -82,6 +82,8 @@ flutter:
   - data/ic_launcher_round.png
   - data/ic_launcher-web.png
   - data/1024.png
+  - data/left.png
+  - data/right.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

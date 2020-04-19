@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'components/furigana_text.dart';
+import 'components/chip_collections.dart';
+import 'components/kanji_list_tile.dart';
 import 'kanji_detail_page.dart';
 
 class SentenceDetailPage extends StatefulWidget {
@@ -55,10 +57,6 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   tokens: widget.sentence.tokens,
                   style: TextStyle(fontSize: 24),
                 ),
-//                child: Text(
-//                  widget.sentence.text,
-//                  style: TextStyle(fontSize: 18, color: Colors.white),
-//                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -67,112 +65,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
-              for (var kanji in getKanjiInfos(widget.sentence.tokens))
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
-                  },
-                  leading: Container(
-                    width: 28,
-                    height: 28,
-                    child: Center(
-                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
-                    ),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Wrap(
-                        children: <Widget>[
-                          kanji.jlpt != 0
-                              ? Padding(
-                                  padding: EdgeInsets.all(4),
-                                  child: Container(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(4),
-                                        child: Text(
-                                          'N${kanji.jlpt}',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                        )),
-                                    decoration: BoxDecoration(
-                                      //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                          ),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                          kanji.grade != 0
-                              ? Padding(
-                                  padding: EdgeInsets.all(4),
-                                  child: Container(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(4),
-                                        child: Text(
-                                          'Grade ${kanji.grade}',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                        )),
-                                    decoration: BoxDecoration(
-                                      //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                          ),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      Divider(height: 0),
-                      Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        children: <Widget>[
-                          for (var kunyomi in kanji.kunyomi)
-                            Padding(
-                                padding: EdgeInsets.all(4),
-                                child: Container(
-                                  child: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: Text(
-                                        kunyomi,
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                      )),
-                                  decoration: BoxDecoration(
-                                    //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                        ),
-                                  ),
-                                )),
-                          for (var onyomi in kanji.onyomi)
-                            Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Container(
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                      onyomi,
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                    )),
-                                decoration: BoxDecoration(
-                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                      ),
-                                ),
-                              ),
-                            )
-                        ],
-                      ),
-                    ],
-                  ),
-                  subtitle: Text(
-                    kanji.meaning,
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                )
+              for (var kanji in getKanjiInfos(widget.sentence.tokens)) KanjiListTile(kanji: kanji)
             ],
           ),
         ));

@@ -1,0 +1,167 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'components/kanji_card.dart';
+import 'kanji_study_help_page.dart';
+
+class KanjiStudyPage extends StatefulWidget {
+  final List<Kanji> kanjis;
+
+  KanjiStudyPage({List<Kanji> kanjis})
+      : assert(kanjis != null),
+        this.kanjis = List.from(kanjis);
+
+  @override
+  _KanjiStudyPageState createState() => _KanjiStudyPageState();
+}
+
+class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProviderStateMixin {
+  final PageController pageController = PageController();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final Tween<double> angleTween = Tween(begin: 0, end: pi / 8);
+
+  AnimationController animationController;
+  GlobalKey<KanjiCardState> mainCardKey = GlobalKey<KanjiCardState>();
+  List<KanjiCardContent> contents = [];
+  Widget mainCard;
+  int index = 0;
+  double initialDx = 0;
+  double distance = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(vsync: this, lowerBound: -1, upperBound: 1);
+    animationController.value = 0;
+
+    for (var kanji in widget.kanjis) {
+      for (var type in ContentType.values) {
+        var content = KanjiCardContent(kanji: kanji, contentType: type);
+        contents.add(content);
+      }
+    }
+
+    contents.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
+
+    mainCard = GestureDetector(
+      child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+    );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: Text(''),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
+              onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>KanjiStudyHelpPage())),
+            )
+          ],
+        ),
+        body: Listener(
+          onPointerDown: (downEvent) {
+            setState(() {
+              initialDx = downEvent.position.dx;
+              distance = MediaQuery.of(context).size.width - initialDx;
+            });
+          },
+          onPointerMove: (moveEvent) {
+            if (moveEvent.position.dx - initialDx < 0) {
+              animationController.value = (moveEvent.position.dx - initialDx) / initialDx;
+            } else {
+              animationController.value = (moveEvent.position.dx - initialDx) / distance;
+            }
+          },
+          onPointerUp: (_) {
+            animationController.value = 0;
+          },
+          child: Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                ...buildMockCards(),
+                if (contents.length >= 1)
+                  Positioned(
+                      top: 80,
+                      child: Draggable(
+                          data: contents[0],
+                          childWhenDragging: contents.length > 1 ? KanjiCard(kanjiCardContent: contents[1]) : Container(),
+                          feedback: AnimatedBuilder(
+                            animation: animationController,
+                            builder: (_, __) {
+                              return Transform.rotate(angle: animationController.drive(angleTween).value, child: mainCard);
+                            },
+                          ),
+                          onDragStarted: onDragStarted,
+                          onDragCompleted: () {},
+                          onDragEnd: (dragDetails) {
+                            if (dragDetails.offset.dx > 230 || dragDetails.velocity.pixelsPerSecond.dx > 1600) {
+                              setState(() {
+                                contents.add(contents[0]);
+                                contents.removeAt(0);
+                                mainCardKey = GlobalKey<KanjiCardState>();
+                                mainCard = contents.isEmpty
+                                    ? Container()
+                                    : GestureDetector(
+                                        child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                      );
+                              });
+                            } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
+                              setState(() {
+                                contents.removeAt(0);
+                                mainCardKey = GlobalKey<KanjiCardState>();
+                                mainCard = contents.isEmpty
+                                    ? Container()
+                                    : GestureDetector(
+                                        child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                      );
+                              });
+                            }
+                          },
+                          child: mainCard))
+              ],
+            ),
+          ),
+        ));
+  }
+
+  List<Widget> buildMockCards() {
+    var children = <Widget>[];
+    if (contents.length > 1) {
+      for (int i = min(contents.length - 1, 10); i >= 1; i--) {
+        children.add(Positioned(
+          top: 80 - i * 15.0 + i * i,
+          child: Transform.scale(
+              alignment: Alignment.topCenter,
+              scale: 0.6 + (0.4 / 10) * (10 - i),
+              child: KanjiCard(
+                color: Colors.grey[700].withAlpha(200 + ((55 / 10) * (10 - i)).toInt()),
+                kanjiCardContent: contents.elementAt(i),
+              )),
+        ));
+      }
+    }
+
+    return children;
+  }
+
+  void onLiked(Kanji kanji) {}
+
+  void onDragStarted() {}
+
+  void onPanStart(DragStartDetails details) {
+    print(details.localPosition);
+  }
+}

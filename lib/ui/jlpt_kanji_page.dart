@@ -6,6 +6,7 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
 import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
 import 'components/furigana_text.dart';
+import 'kanji_study_page/kanji_study_page.dart';
 
 class JLPTKanjiPage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class JLPTKanjiPage extends StatefulWidget {
 
 class JLPTKanjiPageState extends State<JLPTKanjiPage> {
   //show gridview by default
+  JLPTLevel currentLevel = JLPTLevel.n5;
   bool showGrid = true;
   bool sorted = true;
   bool altSorted = false;
@@ -51,9 +53,14 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
               Token(text: '試験', furigana: 'しけん'),
               Token(text: '漢字', furigana: 'かんじ')
             ],
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 14),
           ),
           actions: <Widget>[
+            IconButton(
+                icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: jlptToKanjisMap[currentLevel])));
+                }),
             IconButton(
                 icon: AnimatedCrossFade(
                   firstChild: Icon(
@@ -94,23 +101,44 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
             ),
           ],
           //elevation: 0,
-          bottom: TabBar(tabs: [
-            Tab(
-              text: 'N5',
-            ),
-            Tab(
-              text: 'N4',
-            ),
-            Tab(
-              text: 'N3',
-            ),
-            Tab(
-              text: 'N2',
-            ),
-            Tab(
-              text: 'N1',
-            ),
-          ]),
+          bottom: TabBar(
+              tabs: [
+                Tab(
+                  text: 'N5',
+                ),
+                Tab(
+                  text: 'N4',
+                ),
+                Tab(
+                  text: 'N3',
+                ),
+                Tab(
+                  text: 'N2',
+                ),
+                Tab(
+                  text: 'N1',
+                ),
+              ],
+              onTap: (index) {
+                switch (index) {
+                  case 0:
+                    currentLevel = JLPTLevel.n5;
+                    break;
+                  case 1:
+                    currentLevel = JLPTLevel.n4;
+                    break;
+                  case 2:
+                    currentLevel = JLPTLevel.n3;
+                    break;
+                  case 3:
+                    currentLevel = JLPTLevel.n2;
+                    break;
+                  case 4:
+                    currentLevel = JLPTLevel.n1;
+                    break;
+                  default:
+                }
+              }),
         ),
         body: TabBarView(children: [
           buildTabBarViewChildren(JLPTLevel.n5),

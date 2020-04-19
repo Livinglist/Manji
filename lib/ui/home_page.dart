@@ -108,7 +108,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                       if (status == PermissionStatus.granted) {
                         Navigator.pop(context, ImageSource.gallery);
                         return ImageSource.gallery;
-                      } else if (status == PermissionStatus.permanentlyDenied|| status == PermissionStatus.denied) {
+                      } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
                         launch("app-settings:");
                         return null;
                       }

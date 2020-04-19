@@ -261,6 +261,11 @@ class KanjiBloc {
   List<Kanji> searchKanjiInfosByStr(String text) {
     var list = <Kanji>[];
     for (var kanji in _allKanjisMap.values) {
+      if (kanji.meaning.contains(text)) {
+        list.add(kanji);
+        continue;
+      }
+
       var onyomiMatch = kanji.onyomi.where((str) => str == text);
       if (onyomiMatch.isNotEmpty) {
         list.add(kanji);
@@ -271,19 +276,15 @@ class KanjiBloc {
         list.add(kanji);
         continue;
       }
-      var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(' ' + text + ' ') || word.wordText.contains(text));
+      var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
       if (onyomiWords.isNotEmpty) {
         list.add(kanji);
         continue;
       }
-      var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(' ' + text + ' ') || word.wordText.contains(text));
+      var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
       if (kunyomiWords.isNotEmpty) {
         list.add(kanji);
         continue;
-      }
-
-      if (kanji.meaning.contains(text)) {
-        list.add(kanji);
       }
     }
     return list;

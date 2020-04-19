@@ -1,4 +1,5 @@
 import 'dart:convert' show utf8;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -80,12 +81,13 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     //kanjiBloc.fetchWordsByKanji(widget.kanjiStr ?? widget.kanji.kanji);
     if (widget.kanjiStr != null) kanjiBloc.getKanjiInfoByKanjiStr(widget.kanjiStr);
 
-
-    AppReview.isRequestReviewAvailable.then((isAvailable) {
-      if (isAvailable) {
-        AppReview.requestReview;
-      }
-    });
+    if (Random(DateTime.now().millisecondsSinceEpoch).nextBool()) {
+      AppReview.isRequestReviewAvailable.then((isAvailable) {
+        if (isAvailable) {
+          AppReview.requestReview;
+        }
+      });
+    }
   }
 
   @override
@@ -157,11 +159,11 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(FontAwesomeIcons.wikipediaW),
+              icon: Icon(FontAwesomeIcons.wikipediaW, size: 20,),
               onPressed: onPressed,
             ),
             IconButton(
-              icon: Icon(Icons.playlist_add),
+              icon: Icon(Icons.playlist_add,size: 28),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -377,7 +379,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                           style: TextStyle(fontSize: 18),
                                         ),
                                       ),
-                                      for (var onyomi in kanji.onyomi)
+                                      for (var onyomi in kanji.onyomi.where((s) => s.contains(r'-') == false))
                                         Padding(
                                             padding: EdgeInsets.all(4),
                                             child: GestureDetector(
@@ -413,7 +415,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                         style: TextStyle(fontSize: 18),
                                       ),
                                     ),
-                                    for (var kunyomi in kanji.kunyomi)
+                                    for (var kunyomi in kanji.kunyomi.where((s) => s.contains(r'-') == false))
                                       Padding(
                                           padding: EdgeInsets.all(4),
                                           child: GestureDetector(
@@ -532,8 +534,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     var onyomiVerbGroup = <Widget>[];
     var kunyomiVerbGroup = <Widget>[];
 
-    var onyomis = kanji.onyomi;
-    var kunyomis = kanji.kunyomi;
+    var onyomis = kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
+    var kunyomis = kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
     onyomis.sort((left, right) => left.length.compareTo(right.length));
     kunyomis.sort((left, right) => left.length.compareTo(right.length));
