@@ -160,6 +160,7 @@ class _MyListPageState extends State<MyListPage> {
   }
 
   void onDismissed(String listName) {
+    print("on dimissed custom list");
     KanjiListBloc.instance.deleteKanjiList(listName);
   }
 }

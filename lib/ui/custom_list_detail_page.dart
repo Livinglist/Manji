@@ -259,7 +259,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
           return Dismissible(
               direction: DismissDirection.endToStart,
               key: ObjectKey(kanji),
-              onDismissed: (_) => onDismissed,
+              onDismissed: (_) => onDismissed(kanji),
               confirmDismiss: (_) => confirmDismiss(kanji),
               background: Container(
                 alignment: Alignment.centerRight,
@@ -286,6 +286,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 child: Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, false);
+                  return false;
                 },
               ),
               actions: <Widget>[
@@ -294,6 +295,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   child: Text('Remove ${kanji.kanji}'),
                   onPressed: () {
                     Navigator.pop(context, true);
+                    return true;
                   },
                 ),
               ],

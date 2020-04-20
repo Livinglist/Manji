@@ -29,6 +29,44 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
   double initialDx = 0;
   double distance = 0;
 
+  ///The progress indicating how many cards out of all have been viewed.
+  double cardsProgress = 0.0;
+
+  ///The progress indicating how many cards out of all have been memorized.
+  double studyProgress = 0.0;
+
+  int cardsCount;
+
+  static const List<String> celebrateString = const [
+    "You are the chosen one.",
+    "お前はもう死んでいる!",
+    "Dannnnng, ain't nobody told me you this good.",
+    "Good",
+    "Perfecto",
+    "You are one step away from being the King of Kanji. ( ͡° ͜ʖ ͡°)",
+    "WOW",
+    "( ✧≖ ͜ʖ≖)",
+    "(ó﹏ò｡)",
+    "ヽ(ﾟДﾟ)ﾉ",
+    "(ง ͡ʘ ͜ʖ ͡ʘ)ง",
+    "(☞ ͡° ͜ʖ ͡°)☞",
+    "ᕕ( ͡° ͜ʖ ͡°)ᕗ",
+    "( ✧≖ ͜ʖ≖)",
+    "( ͡~ ͜ʖ ͡°)",
+    "♡(ŐωŐ人)",
+    "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)",
+    "(ᗒᗣᗕ)՞ STOP IT",
+    "ಥ_ಥ, Can I have at least a five star review",
+    "(╬ಠ益ಠ)",
+    "ᕙ(▀̿̿Ĺ̯̿̿▀̿ ̿) ᕗ",
+    "(╯ ͠° ͟ʖ ͡°)╯┻━┻ Why are you so good",
+    "•́ε•̀٥",
+    "( ͡ʘ ͜ʖ ͡ʘ) すごい！",
+    "すごい...君の名前は？",
+    "这么牛逼的吗",
+    "666"
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +81,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
       }
     }
 
+    cardsCount = contents.length;
     contents.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
 
     mainCard = GestureDetector(
@@ -66,9 +105,23 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
           actions: <Widget>[
             IconButton(
               icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
-              onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>KanjiStudyHelpPage())),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
             )
           ],
+          bottom: PreferredSize(
+              child: Stack(
+                children: <Widget>[
+                  LinearProgressIndicator(
+                      value: cardsProgress,
+                      valueColor: animationController.drive(Tween<Color>(begin: Colors.blueGrey, end: Colors.blueGrey)),
+                      backgroundColor: Colors.grey),
+                  LinearProgressIndicator(
+                      value: studyProgress,
+                      valueColor: animationController.drive(Tween<Color>(begin: Colors.grey[800], end: Colors.grey[800])),
+                      backgroundColor: Colors.transparent),
+                ],
+              ),
+              preferredSize: Size.fromHeight(0)),
         ),
         body: Listener(
           onPointerDown: (downEvent) {
@@ -107,17 +160,19 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                           onDragStarted: onDragStarted,
                           onDragCompleted: () {},
                           onDragEnd: (dragDetails) {
+                            //Swipe right.
                             if (dragDetails.offset.dx > 230 || dragDetails.velocity.pixelsPerSecond.dx > 1600) {
                               setState(() {
                                 contents.add(contents[0]);
                                 contents.removeAt(0);
                                 mainCardKey = GlobalKey<KanjiCardState>();
-                                mainCard = contents.isEmpty
-                                    ? Container()
-                                    : GestureDetector(
-                                        child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
-                                      );
+                                mainCard = GestureDetector(
+                                  child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                );
+                                cardsProgress = cardsProgress == 1 ? 1 : cardsProgress + 1.0 / cardsCount;
                               });
+
+                              //Swipe left.
                             } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
                               setState(() {
                                 contents.removeAt(0);
@@ -127,10 +182,21 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                                     : GestureDetector(
                                         child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
                                       );
+                                studyProgress = studyProgress == 1 ? 1 : studyProgress + 1.0 / cardsCount;
                               });
                             }
                           },
-                          child: mainCard))
+                          child: mainCard)),
+                if(contents.isEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                        child: Text(
+                          celebrateString.elementAt(Random(DateTime.now().millisecondsSinceEpoch).nextInt(celebrateString.length)),
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        )),
+                  )
               ],
             ),
           ),
