@@ -1,10 +1,14 @@
 import 'dart:convert' show utf8;
 import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
+import 'package:video_player/video_player.dart';
 
 import 'package:kanji_dictionary/utils/list_extension.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -18,6 +22,7 @@ import 'components/furigana_text.dart';
 import 'components/custom_bottom_sheet.dart' as CustomBottomSheet;
 import 'components/chip_collections.dart';
 import 'components/label_divider.dart';
+import 'package:kanji_dictionary/resource/constants.dart';
 
 class KanjiDetailPage extends StatefulWidget {
   final Kanji kanji;
@@ -299,32 +304,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                               decoration: BoxDecoration(
                                   boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
                               height: MediaQuery.of(context).size.width / 2 - 24,
-                              child: Center(
-                                child: Stack(
-                                  children: <Widget>[
-                                    Positioned.fill(
-                                        child: Image.asset(
-                                      'data/matts.png',
-                                    )),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Center(
-                                          child: Hero(
-                                              tag: widget.kanjiStr ?? widget.kanji.kanji,
-                                              child: Material(
-                                                //wrap the text in Material so that Hero transition doesn't glitch
-                                                color: Colors.transparent,
-                                                child: Text(
-                                                  widget.kanjiStr ?? widget.kanji.kanji,
-                                                  style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ))),
-                                    )
-                                  ],
-                                ),
-                                //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
-                              )),
+                              child: Center(child: KanjiBlock(kanjiStr: widget.kanjiStr ?? widget.kanji.kanji)
+                                  //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
+                                  )),
                         ),
                         flex: 1),
                     Flexible(child: buildKanjiInfoColumn(), flex: 1),
@@ -543,10 +525,11 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     onyomis.sort((left, right) => left.length.compareTo(right.length));
     kunyomis.sort((left, right) => left.length.compareTo(right.length));
 
-    List<Word> onyomiWords = List.from(kanji.onyomiWords);
+    List<Word> onyomiWords = List.from(kanji.onyomiWords); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
 
     for (var onyomi in onyomis) {
       var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord.wordFurigana.contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
+
       onyomiWords.removeWhere((word) => words.contains(word));
       var tileTitle = Stack(
         children: <Widget>[
@@ -651,7 +634,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
     //children.add(SizedBox(height: 12));
 
-    var kunyomiWords = List.from(kanji.kunyomiWords);
+    var kunyomiWords = List<Word>.from(kanji.kunyomiWords);
+    kunyomis.sort((a, b) => b.length.compareTo(a.length));
 
     for (var kunyomi in kunyomis) {
       var words = List.from(kunyomiWords.where((kunyomiWord) => kunyomiWord.wordFurigana.contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
@@ -774,12 +758,13 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               Flexible(
                   flex: 5,
                   child: Container(
-                    child: Center(child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(children: [
-                          TextSpan(text: 'どうし　　　　けいようし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                          TextSpan(text: '動詞 と 形容詞', style: TextStyle(fontSize: 18, color: Colors.white)),
-                        ]))),
+                    child: Center(
+                        child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
+                              TextSpan(text: 'どうし　　　　けいようし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
+                              TextSpan(text: '動詞 と 形容詞', style: TextStyle(fontSize: 18, color: Colors.white)),
+                            ]))),
                   )),
               Flexible(
                 flex: 4,
@@ -1008,5 +993,265 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     } else {
       throw 'Could not launch $url';
     }
+  }
+}
+
+class KanjiBlock extends StatefulWidget {
+  final String kanjiStr;
+
+  KanjiBlock({this.kanjiStr}) : assert(kanjiStr != null && kanjiStr.length == 1);
+  @override
+  _KanjiBlockState createState() => _KanjiBlockState();
+}
+
+class _KanjiBlockState extends State<KanjiBlock> {
+  VideoPlayerController videoController;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    loadVideo();
+
+    super.initState();
+  }
+
+  loadVideo() async {
+    if (allVideoFiles.contains(widget.kanjiStr)) {
+      setState(() {
+        videoController = VideoPlayerController.asset('video/${widget.kanjiStr}.mp4')
+          ..initialize().whenComplete(() {
+            setState(() {});
+          })
+          ..addListener(() async {
+            if (videoController != null && this.mounted) {
+              if (await videoController.position >= videoController.value.duration + Duration(seconds: 1) && isPlaying) {
+                videoController.pause();
+                videoController.seekTo(Duration(seconds: 0));
+
+                print("paused vc is $videoController");
+
+                setState(() {
+                  isPlaying = false;
+                  //loadVideo();
+                });
+              }
+            }
+          });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    print("${widget.kanjiStr}.mp4 disposed");
+    videoController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("isPlaying now is $isPlaying and vc is $videoController");
+//    return Stack(
+//      children: <Widget>[
+//        Positioned.fill(
+//            child: Center(
+//                child: Padding(
+//          padding: EdgeInsets.all(24),
+//          child: StrokeAnimationPlayer(kanjiStr: widget.kanjiStr, videoController: videoController),
+//        ))),
+//        if (videoController != null && isPlaying == false)
+//          FutureBuilder(
+//            future: videoController.initialize().then((val) {
+//              print("Initialized");
+//              return val;
+//            }),
+//            builder: (_, snapshot) {
+//              print(snapshot.connectionState);
+//              if (snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.waiting) {
+//                return Positioned.fill(
+//                    child: Center(
+//                        child: Opacity(
+//                            opacity: 0.7,
+//                            child: Material(
+//                              child: InkWell(
+//                                  onTap: () {
+//                                    setState(() {
+//                                      isPlaying = true;
+//                                      videoController.play();
+//                                    });
+//                                  },
+//                                  child: Icon(Icons.play_arrow)),
+//                            ))));
+//              }
+//              return Container();
+//            },
+//          )
+//      ],
+//    );
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+            child: Image.asset(
+          'data/matts.png',
+        )),
+        if (isPlaying == false)
+          Align(
+            alignment: Alignment.center,
+            child: Center(
+                child: Hero(
+                    tag: widget.kanjiStr,
+                    child: Material(
+                      //wrap the text in Material so that Hero transition doesn't glitch
+                      color: Colors.transparent,
+                      child: Text(
+                        widget.kanjiStr,
+                        style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                        textAlign: TextAlign.center,
+                      ),
+                    ))),
+          ),
+        if (videoController != null && videoController.value.initialized && isPlaying == true)
+          Positioned.fill(
+              child: Center(
+                  child: Padding(
+            padding: EdgeInsets.all(24),
+            child: StrokeAnimationPlayer(kanjiStr: widget.kanjiStr, videoController: videoController),
+          ))),
+        if (isPlaying)
+          Positioned.fill(
+              child: Image.asset(
+            'data/matts.png',
+          )),
+        if (videoController != null && videoController.value.initialized && isPlaying == false)
+          Positioned.fill(
+              child: Center(
+                  child: Opacity(
+                      opacity: 0.7,
+                      child: Material(
+                        child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isPlaying = true;
+                                videoController.play();
+                              });
+                            },
+                            child: Icon(Icons.play_arrow)),
+                      ))))
+      ],
+    );
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+            child: Image.asset(
+          'data/matts.png',
+        )),
+        if (isPlaying == false)
+          Align(
+            alignment: Alignment.center,
+            child: Center(
+                child: Hero(
+                    tag: widget.kanjiStr,
+                    child: Material(
+                      //wrap the text in Material so that Hero transition doesn't glitch
+                      color: Colors.transparent,
+                      child: Text(
+                        widget.kanjiStr,
+                        style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                        textAlign: TextAlign.center,
+                      ),
+                    ))),
+          ),
+        if (isPlaying)
+          Positioned.fill(
+              child: Center(
+                  child: Padding(
+            padding: EdgeInsets.all(24),
+            child: StrokeAnimationPlayer(kanjiStr: widget.kanjiStr, videoController: videoController),
+          ))),
+        if (isPlaying)
+          Positioned.fill(
+              child: Image.asset(
+            'data/matts.png',
+          )),
+        if (videoController != null && isPlaying == false)
+          FutureBuilder(
+            future: videoController.initialize().then((val) {
+              print("Initialized");
+              return val;
+            }),
+            builder: (_, snapshot) {
+              print(snapshot.connectionState);
+              if (snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.waiting) {
+                return Positioned.fill(
+                    child: Center(
+                        child: Opacity(
+                            opacity: 0.7,
+                            child: Material(
+                              child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isPlaying = true;
+                                      videoController.play();
+                                    });
+                                  },
+                                  child: Icon(Icons.play_arrow)),
+                            ))));
+              }
+              return Container();
+            },
+          )
+      ],
+    );
+  }
+}
+
+class StrokeAnimationPlayer extends StatefulWidget {
+  final String kanjiStr;
+  final VideoPlayerController videoController;
+
+  StrokeAnimationPlayer({this.kanjiStr, this.videoController}) : assert(kanjiStr != null && kanjiStr.length == 1);
+
+  @override
+  _StrokeAnimationPlayerState createState() => _StrokeAnimationPlayerState();
+}
+
+class _StrokeAnimationPlayerState extends State<StrokeAnimationPlayer> {
+  VideoPlayerController videoController;
+
+  @override
+  void initState() {
+    videoController = widget.videoController;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (videoController == null) return Container();
+//    return AspectRatio(
+//      aspectRatio: videoController.value.aspectRatio,
+//      // Use the VideoPlayer widget to display the video.
+//      child: VideoPlayer(videoController),
+//    );
+    return FutureBuilder(
+      future: videoController.initialize(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return AspectRatio(
+            aspectRatio: videoController.value.aspectRatio,
+            // Use the VideoPlayer widget to display the video.
+            child: VideoPlayer(videoController),
+          );
+        } else {
+          return Container();
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }

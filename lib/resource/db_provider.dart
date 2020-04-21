@@ -24,17 +24,28 @@ class DBProvider {
     return _database;
   }
 
-  Future initDB({bool refresh = false}) async {
-    ///Initialize database in external storage
-//    Directory extStoraheDor = await getExternalStorageDirectory();
-//    String path = join(extStoraheDor.path, "dictDB.db");
-//    return await openDatabase(
-//      path,
-//      version: 1,
-//      onOpen: (db) {},
-//    );
+  @Deprecated("Not working properly")
+  Future initVideo() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
 
-    ///Initialize database in external storage
+    var path = appDocDir.path + '/video/一.mp4';
+    File file = File(path);
+    if ((await file.exists()) == false) {
+      print("file does not exist");
+
+      rootBundle.load('video/8.mp4').then((bytes) {
+        path = appDocDir.path + '/video/一.mp4';
+        print(path);
+        file = File(path);
+        file.writeAsBytesSync(bytes.buffer.asUint8List());
+      });
+    } else {
+      print("file exists");
+    }
+  }
+
+  Future initDB({bool refresh = false}) async {
+    //Initialize database in external storage
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = join(appDocDir.path, "dictDB.db");
 
@@ -46,7 +57,7 @@ class DBProvider {
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
         },
-      ).then((db) {
+      ).then((db) async {
         var query = db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
             '"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'
             '"kanjiId"	INTEGER NOT NULL,'
@@ -66,6 +77,23 @@ class DBProvider {
         version: 1,
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
+
+          var dir = await getApplicationDocumentsDirectory();
+
+          db.rawQuery('SELECT kanji FROM Kanji').then((List<Map> results) async {
+            for (var m in results) {
+              var kanjiStr = m['kanji'];
+              try {
+                ByteData bytes = await rootBundle.load('video/$kanjiStr.mp4');
+                var path = dir.path + '/video/$kanjiStr.mp4';
+                print(path);
+                File f = File(path);
+                f.writeAsBytes(bytes.buffer.asUint8List());
+              } catch (_) {
+                continue;
+              }
+            }
+          });
         },
       );
     }
@@ -233,6 +261,15 @@ class DBProvider {
     }
 
     return qs;
+  }
+
+  Future<List<int>> getStrokeVideo(Kanji kanji) async {
+    var db = await database;
+    var query = await db.rawQuery("SELECT strokeAnimation FROM Kanji WHERE id = '${kanji.id}' LIMIT 1");
+
+    if (query == null || query.isEmpty) return null;
+
+    return query.single['strokeAnimation'];
   }
 }
 

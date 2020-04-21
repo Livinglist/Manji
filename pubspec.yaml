@@ -43,6 +43,7 @@ dependencies:
   connectivity: 0.4.8+2
   permission_handler: 5.0.0+hotfix.3
   tflite: 1.0.5
+  video_player: 0.10.9
 
 
 
@@ -88,6 +89,7 @@ flutter:
   - data/labels.txt
   - data/model.tflite
   - data/im.png
+  - video/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
