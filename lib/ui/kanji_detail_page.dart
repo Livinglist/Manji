@@ -159,11 +159,14 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(FontAwesomeIcons.wikipediaW, size: 20,),
+              icon: Icon(
+                FontAwesomeIcons.wikipediaW,
+                size: 20,
+              ),
               onPressed: onPressed,
             ),
             IconButton(
-              icon: Icon(Icons.playlist_add,size: 28),
+              icon: Icon(Icons.playlist_add, size: 28),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -759,13 +762,31 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       ...onyomiGroup,
       ...kunyomiGroup,
-      LabelDivider(
-          child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(children: [
-                TextSpan(text: 'どうし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                TextSpan(text: '動詞', style: TextStyle(fontSize: 18, color: Colors.white))
-              ]))),
+      Padding(
+          padding: EdgeInsets.all(12),
+          child: Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Flexible(
+                flex: 4,
+                child: Divider(color: Colors.white60),
+              ),
+              Flexible(
+                  flex: 5,
+                  child: Container(
+                    child: Center(child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(children: [
+                          TextSpan(text: 'どうし　　　　けいようし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
+                          TextSpan(text: '動詞 と 形容詞', style: TextStyle(fontSize: 18, color: Colors.white)),
+                        ]))),
+                  )),
+              Flexible(
+                flex: 4,
+                child: Divider(color: Colors.white60),
+              ),
+            ],
+          )),
       if (onyomiVerbGroup.isEmpty && kunyomiVerbGroup.isEmpty)
         Container(
           height: 100,

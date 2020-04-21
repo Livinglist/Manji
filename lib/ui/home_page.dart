@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:googleapis/adsense/v1_4.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,6 +28,7 @@ import 'search_result_page.dart';
 import 'custom_list_page.dart';
 import 'quiz_pages/quiz_page.dart';
 import 'text_recognize_page/text_recognize_page.dart';
+import 'kanji_recognize_page/kanji_recog_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -135,6 +138,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           actions: <Widget>[
+            IconButton(
+                icon: Transform.translate(offset: Offset(0,-1.5),child: Icon(FontAwesomeIcons.lightEdit, size: 20)), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()))),
             IconButton(
               icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
               onPressed: () {

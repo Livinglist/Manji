@@ -42,6 +42,8 @@ dependencies:
   googleapis_auth: 0.2.11+1
   connectivity: 0.4.8+2
   permission_handler: 5.0.0+hotfix.3
+  tflite: 1.0.5
+  keyboard_actions: 3.2.1
 
 
 
@@ -84,6 +86,9 @@ flutter:
   - data/1024.png
   - data/left.png
   - data/right.png
+  - data/labels.txt
+  - data/model.tflite
+  - data/im.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

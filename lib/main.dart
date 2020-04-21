@@ -8,6 +8,8 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'resource/db_provider.dart';
 
+import 'ui/custom_keyboard.dart';
+
 void main() {
   runApp(MyApp());
 }
