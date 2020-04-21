@@ -36,6 +36,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
 
   bool showResult = false;
   QuizResult quizResult;
+
 //  Quiz quiz;
 
   @override
@@ -86,7 +87,10 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
             elevation: showShadow ? 8 : 0,
-            actions: <Widget>[if (total != null) Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$currentIndex/$total', style: TextStyle(fontSize: 18))))],
+            actions: <Widget>[
+              if (total != null)
+                Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$currentIndex/$total', style: TextStyle(fontSize: 18))))
+            ],
             bottom: PreferredSize(
                 child: showResult
                     ? Container()
