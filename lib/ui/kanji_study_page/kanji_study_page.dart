@@ -103,6 +103,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
         appBar: AppBar(
           title: Text(''),
           actions: <Widget>[
+            Padding(padding: EdgeInsets.all(12), child: Center(child: Text('${(studyProgress*cardsCount).toInt()}/$cardsCount', style: TextStyle(fontSize: 18)))),
             IconButton(
               icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
@@ -187,15 +188,15 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                             }
                           },
                           child: mainCard)),
-                if(contents.isEmpty)
+                if (contents.isEmpty)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
                         child: Text(
-                          celebrateString.elementAt(Random(DateTime.now().millisecondsSinceEpoch).nextInt(celebrateString.length)),
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          textAlign: TextAlign.center,
-                        )),
+                      celebrateString.elementAt(Random(DateTime.now().millisecondsSinceEpoch).nextInt(celebrateString.length)),
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    )),
                   )
               ],
             ),

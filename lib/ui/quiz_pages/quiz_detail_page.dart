@@ -86,6 +86,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
             elevation: showShadow ? 8 : 0,
+            actions: <Widget>[if (total != null) Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$currentIndex/$total', style: TextStyle(fontSize: 18))))],
             bottom: PreferredSize(
                 child: showResult
                     ? Container()
@@ -162,6 +163,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
                     child: Center(
                         child: Flex(
                       direction: Axis.vertical,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

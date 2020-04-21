@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
@@ -19,6 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        elevation: 0,
         title: FuriganaText(
           text: '設定',
           tokens: [Token(text: '設定', furigana: 'せってい')],
@@ -113,6 +115,20 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           Divider(height: 0),
+          ListTile(
+            leading: Icon(Icons.person, color: Colors.white),
+            title: Text('About me', style: TextStyle(color: Colors.white)),
+            onTap: () async {
+              final url = Uri.encodeFull('https://github.com/Livinglist?tab=repositories');
+
+              if (await canLaunch(url)) {
+                await launch(url, forceSafariVC: true, forceWebView: true);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+          ),
+          Divider(height: 0),
           ListTileTheme(
             textColor: Colors.white70,
             child: AboutListTile(
@@ -122,7 +138,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
               applicationVersion: '2.3.0',
-              aboutBoxChildren: <Widget>[SizedBox(height: 24,),Text('Manji helps Japanese learners learn Japanese Kanji')],
+              aboutBoxChildren: <Widget>[
+                SizedBox(
+                  height: 24,
+                ),
+                Text('Manji helps Japanese learners learn Japanese Kanji')
+              ],
             ),
           ),
 //          Divider(),
