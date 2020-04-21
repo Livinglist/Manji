@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'resource/db_provider.dart';
-
-import 'ui/custom_keyboard.dart';
 
 void main() {
   runApp(MyApp());

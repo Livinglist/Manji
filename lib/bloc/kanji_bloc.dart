@@ -316,6 +316,7 @@ class KanjiBloc {
       }
     }
 
+    list.sort((a, b) => a.strokes.compareTo(b.strokes));
     _searchResultsFetcher.sink.add(list);
   }
 
