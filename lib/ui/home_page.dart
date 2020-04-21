@@ -139,13 +139,17 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         appBar: AppBar(
           actions: <Widget>[
             IconButton(
-                icon: Transform.translate(offset: Offset(0,-1.5),child: Icon(FontAwesomeIcons.edit, size: 20)), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()))),
+                icon: Transform.translate(offset: Offset(0, -1.5), child: Icon(FontAwesomeIcons.edit, size: 20)),
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()));
+                }),
             IconButton(
               icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 Connectivity().checkConnectivity().then((val) {
                   if (val == ConnectivityResult.none) {
-                    print(val);
                     scaffoldKey.currentState.showSnackBar(SnackBar(
                       content: Text(
                         'Text Recognition requires access to Internet',

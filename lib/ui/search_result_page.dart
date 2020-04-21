@@ -18,7 +18,6 @@ class SearchResultPage extends StatefulWidget {
 class SearchResultPageState extends State<SearchResultPage> {
   final scrollController = ScrollController();
   bool showShadow = false;
-  String text;
   List<Kanji> kanjis = <Kanji>[];
   Map<int, bool> jlptMap = {1: false, 2: false, 3: false, 4: false, 5: false};
 
@@ -49,7 +48,7 @@ class SearchResultPageState extends State<SearchResultPage> {
     });
 
     super.initState();
-    kanjiBloc.searchKanjiInfosByStr(text);
+    kanjiBloc.searchKanjiInfosByStr(widget.text);
   }
 
   @override

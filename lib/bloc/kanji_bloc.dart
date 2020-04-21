@@ -268,9 +268,22 @@ class KanjiBloc {
       _searchResultsFetcher.sink.add(allKanjisList);
       return;
     }
+
     var list = <Kanji>[];
     String hiraganaText = '';
     String katakanaText = '';
+
+    if (text.isAllKanji()) {
+      for (var i in Iterable.generate(text.length)) {
+        var kanjiStr = text[i];
+        if (allKanjisMap.containsKey(kanjiStr)) {
+          list.add(allKanjisMap[kanjiStr]);
+        }
+      }
+
+      _searchResultsFetcher.add(list);
+      return;
+    }
 
     if (text.codeUnitAt(0) >= 12353 && text.codeUnitAt(0) <= 12447) {
       hiraganaText = text;
@@ -281,9 +294,33 @@ class KanjiBloc {
     }
 
     for (var kanji in _allKanjisMap.values) {
-      if (hiraganaText.isEmpty && kanji.meaning.contains(text)) {
-        list.add(kanji);
-        continue;
+      if (hiraganaText.isEmpty) {
+        if (kanji.meaning.contains(text)) {
+          list.add(kanji);
+          continue;
+        }
+
+        bool matched = false;
+
+        for (var word in kanji.onyomiWords) {
+          if (word.meanings.contains(text)) {
+            list.add(kanji);
+            matched = true;
+            break;
+          }
+        }
+
+        if (matched) continue;
+
+        for (var word in kanji.kunyomiWords) {
+          if (word.meanings.contains(text)) {
+            list.add(kanji);
+            matched = true;
+            break;
+          }
+        }
+
+        if (matched) continue;
       }
 
       if (katakanaText.isNotEmpty) {
