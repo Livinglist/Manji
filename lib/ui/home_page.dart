@@ -139,7 +139,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         appBar: AppBar(
           actions: <Widget>[
             IconButton(
-                icon: Transform.translate(offset: Offset(0,-1.5),child: Icon(FontAwesomeIcons.lightEdit, size: 20)), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()))),
+                icon: Transform.translate(offset: Offset(0,-1.5),child: Icon(FontAwesomeIcons.edit, size: 20)), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()))),
             IconButton(
               icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
               onPressed: () {
