@@ -212,13 +212,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.5"
-  keyboard_actions:
-    dependency: "direct main"
-    description:
-      name: keyboard_actions
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.1"
   matcher:
     dependency: transitive
     description:

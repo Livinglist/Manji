@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 100,
                 child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
-              applicationVersion: '2.2.0',
+              applicationVersion: '2.3.0',
               aboutBoxChildren: <Widget>[SizedBox(height: 24,),Text('Manji helps Japanese learners learn Japanese Kanji')],
             ),
           ),

@@ -43,7 +43,6 @@ dependencies:
   connectivity: 0.4.8+2
   permission_handler: 5.0.0+hotfix.3
   tflite: 1.0.5
-  keyboard_actions: 3.2.1
 
 
 

@@ -326,10 +326,9 @@ class KanjiBloc {
       if (jlptMap[kanji.jlpt] || gradeMap[kanji.grade]) list.add(kanji);
     }
 
-    if (list.isEmpty)
-      _searchResultsFetcher.sink.add(allKanjisList);
-    else
-      _searchResultsFetcher.sink.add(list);
+    if (list.isEmpty) list = List.from(allKanjisList);
+    list.sort((a, b) => a.strokes.compareTo(b.strokes));
+    _searchResultsFetcher.sink.add(list);
   }
 
   void dispose() {
