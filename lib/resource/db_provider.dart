@@ -225,16 +225,12 @@ class DBProvider {
     print("The query is $query");
     List<Question> qs = [];
     for (var i in query) {
-      print("inside");
-      print(i);
       query = await db.query("Kanji", where: "id = ${i[kanjiIdKey]}");
       var kanji = Kanji.fromDBMap(query.single);
       i = Map.from(i);
       i[kanjiKey] = kanji;
       qs.add(Question.fromMap(i));
     }
-
-    print(qs);
 
     return qs;
   }

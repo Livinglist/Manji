@@ -87,21 +87,22 @@ class Question {
     return List.from(kanaShiftMap[kana])..remove(kana);
   }
 
-  Map<String, dynamic> toMap() => {kanjiIdKey: targetedKanji.id, choicesKey: jsonEncode(_choices), rightAnswerKey: rightAnswer, selectedIndexKey: _selected};
+  Map<String, dynamic> toMap() =>
+      {kanjiIdKey: targetedKanji.id, choicesKey: jsonEncode(_choices), rightAnswerKey: rightAnswer, selectedIndexKey: _selected};
 
   String toString() => "kanji: ${this.targetedKanji}, choices: ${this._choices}, selected: ${this._selected}";
 }
 
 const List<String> hiraganaA = const ["あ", "か", "が", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"];
 const List<String> hiraganaI = const ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"];
-const List<String> hiraganaU = const ["ぐ", "く", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る"];
-const List<String> hiraganaE = const ["え", "け", "げ", "せ", "ぜ", "て", "ね", "へ", "べ", "ぺ", "れ"];
+const List<String> hiraganaU = const ["う","ぐ", "く", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る", "つ"];
+const List<String> hiraganaE = const ["え", "け", "げ", "せ", "ぜ", "て", "で", "ね", "へ", "べ", "ぺ", "れ", "め"];
 const List<String> hiraganaO = const ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"];
 
 const List<String> katakanaA = const ["ア", "カ", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"];
 const List<String> katakanaI = const ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"];
-const List<String> katakanaU = const ["グ", "ク", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル"];
-const List<String> katakanaE = const ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "ネ", "ヘ", "ベ", "ペ", "レ"];
+const List<String> katakanaU = const ["ウ","グ", "ク", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル", "ツ"];
+const List<String> katakanaE = const ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "デ", "ネ", "ヘ", "ベ", "ペ", "レ", "メ"];
 const List<String> katakanaO = const ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"];
 
 final HashMap<String, List<String>> kanaShiftMap = HashMap.fromEntries([

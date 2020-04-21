@@ -11,6 +11,8 @@ class IqBloc {
   List<Question> _qs = [];
   Stream<List<Question>> get incorrectQuestions => _iqFetcher.stream;
 
+  List<Kanji> get kanjisContainedInQuiz => _qs.map((q) => q.targetedKanji).toList();
+
   void getAllIncorrectQuestions() {
     repo.getIncorrectQuestions().then((qs) {
       _qs = qs;
@@ -34,8 +36,8 @@ class IqBloc {
     });
   }
 
-  void deleteAllIncorrectQuestions(){
-    for(var q in _qs){
+  void deleteAllIncorrectQuestions() {
+    for (var q in _qs) {
       repo.deleteIncorrectQuestion(q);
     }
     _qs.clear();

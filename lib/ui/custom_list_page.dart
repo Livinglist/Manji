@@ -42,7 +42,7 @@ class _MyListPageState extends State<MyListPage> {
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        elevation: showShadow?8:0,
+        elevation: showShadow ? 8 : 0,
         title: FuriganaText(
           text: '漢字リスト',
           tokens: [Token(text: '漢字', furigana: 'かんじ')],
@@ -52,29 +52,7 @@ class _MyListPageState extends State<MyListPage> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (_) {
-                    return Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Material(
-                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: TextField(
-                              onSubmitted: (str) {
-                                KanjiListBloc.instance.addKanjiList(textEditingController.text);
-                                Navigator.pop(context);
-                              },
-                              controller: textEditingController,
-                              decoration: InputDecoration(hintText: 'List Name'),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
+              showCreatingDialog();
             },
           )
         ],
@@ -105,7 +83,7 @@ class _MyListPageState extends State<MyListPage> {
                     return Dismissible(
                         key: ObjectKey(kanjiList),
                         onDismissed: (_) => onDismissed(kanjiList.name),
-                        confirmDismiss: (_) => confirmDismiss(kanjiList.name),
+                        confirmDismiss: (_) => confirmDelete(kanjiList.name),
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: EdgeInsets.only(right: 20.0),
@@ -124,6 +102,7 @@ class _MyListPageState extends State<MyListPage> {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (_) => ListDetailPage(kanjiList: kanjiList)));
                           },
+                          onLongPress: () => confirmChangeName(kanjiList.name),
                         ));
                   },
                   separatorBuilder: (_, index) => Divider(height: 0),
@@ -135,7 +114,115 @@ class _MyListPageState extends State<MyListPage> {
     );
   }
 
-  Future<bool> confirmDismiss(String listName) async {
+  Future<bool> confirmChangeName(String listName) async {
+    return showCupertinoModalPopup<bool>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              title: Text("Choose an action"),
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+              actions: <Widget>[
+                CupertinoActionSheetAction(
+                  isDestructiveAction: false,
+                  child: Text('Edit name of $listName'),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                    showNameChangingDialog(listName);
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  isDestructiveAction: true,
+                  child: Text('Remove $listName'),
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                    confirmDelete(listName).then((val) {
+                      if (val) {
+                        KanjiListBloc.instance.deleteKanjiList(listName);
+                      }
+                    });
+                  },
+                ),
+              ],
+            )).then((value) => value ?? false);
+  }
+
+  void showNameChangingDialog(String listName) => showCupertinoDialog(
+      context: context,
+      builder: (_) {
+        return CupertinoAlertDialog(
+          content: Flex(
+            direction: Axis.vertical,
+            children: <Widget>[
+              SizedBox(height: 12),
+              CupertinoTextField(
+                style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
+                controller: textEditingController,
+              )
+            ],
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  var name = textEditingController.text;
+                  if (name.isNotEmpty) {
+                    textEditingController.clear();
+                    Navigator.pop(context);
+                    KanjiListBloc.instance.changeName(listName, name);
+                  }
+                },
+                child: Text("Confirm"),
+                isDefaultAction: true),
+          ],
+        );
+      });
+
+  void showCreatingDialog() => showCupertinoDialog(
+      context: context,
+      builder: (_) {
+        return CupertinoAlertDialog(
+          title: Text("Create a list"),
+          content: Flex(
+            direction: Axis.vertical,
+            children: <Widget>[
+              SizedBox(height: 12),
+              CupertinoTextField(
+                style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
+                controller: textEditingController,
+              )
+            ],
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  var name = textEditingController.text;
+                  if (name.isNotEmpty) {
+                    textEditingController.clear();
+                    KanjiListBloc.instance.addKanjiList(name);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text("Confirm"),
+                isDefaultAction: true),
+          ],
+        );
+      });
+
+  Future<bool> confirmDelete(String listName) async {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/ui/quiz_pages/components/IncorrectQuestionListTile.dart';
+import 'package:kanji_dictionary/ui/kanji_study_page/kanji_study_page.dart';
 
 class IncorrectQuestionsPage extends StatefulWidget {
   @override
@@ -40,6 +41,21 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
       appBar: AppBar(
         elevation: showShadow ? 8 : 0,
         actions: <Widget>[
+          StreamBuilder(
+              stream: iqBloc.incorrectQuestions,
+              builder: (_, AsyncSnapshot<List<Question>> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.isEmpty) {
+                    return Container();
+                  }
+                  return IconButton(
+                      icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: iqBloc.kanjisContainedInQuiz)));
+                      });
+                }
+                return Container();
+              }),
           IconButton(
             icon: Icon(Icons.delete_sweep),
             onPressed: () => confirmDeleteAll().then((val) {

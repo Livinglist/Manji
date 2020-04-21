@@ -2,10 +2,11 @@ import 'kanji.dart';
 import 'question.dart';
 import 'quiz_result.dart';
 
+export 'question.dart';
+
 class Quiz {
   final List<Kanji> targetedKanjis;
   List<Question> questions;
-
 
   int _currentQuestionIndex = 0;
 
@@ -19,6 +20,10 @@ class Quiz {
     for (int i = 0; i < questionsCount; i++) {
       questions[i] = Question(targetedKanji: targetedKanjis[i]);
     }
+  }
+
+  Quiz.from(List<Question> questions) : this.targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
+    this.questions = questions;
   }
 
   ///Submit user's answer to the current question.

@@ -23,6 +23,11 @@ class KanjiListBloc {
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 
+  void changeName(String listName, String newName){
+    _kanjiLists.singleWhere((list)=>list.name == listName).name = newName;
+    repo.updateKanjiLists(_kanjiLists);
+  }
+
   void addKanji(String listName, String kanjiStr) {
     _kanjiLists.singleWhere((list) => list.name == listName).kanjiStrs.add(kanjiStr);
     repo.updateKanjiLists(_kanjiLists);
