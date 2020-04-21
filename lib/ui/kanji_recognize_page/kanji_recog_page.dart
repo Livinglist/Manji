@@ -73,20 +73,18 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
         title: Text(widget.title),
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.all(12),
-            child: StreamBuilder(
-              stream: kanjiRecogBloc.predictedKanji,
-              initialData: <Kanji>[],
-              builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                var kanjis = snapshot.data;
-                if (kanjis.isEmpty) {
-                  return Container();
-                }
+              padding: EdgeInsets.all(12),
+              child: StreamBuilder(
+                stream: kanjiRecogBloc.predictedKanji,
+                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                  if(snapshot.hasData) {
+                    var kanjis = snapshot.data;
 
-                return Center(child: Text('${kanjis.length} kanji found'));
-              },
-            )
-          )
+                    return Center(child: Text('${kanjis.length} kanji found'));
+                  }
+                  return Container();
+                },
+              ))
         ],
       ),
       backgroundColor: Theme.of(context).primaryColor,
@@ -115,17 +113,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
                       ),
                     );
                   },
-                )
-            ),
+                )),
             Spacer(),
             Container(
               height: MediaQuery.of(context).size.width,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-//                border: Border.all(
-//                  width: 3.0,
-//                  color: Colors.blue,
-//                ),
                 color: Colors.white,
               ),
               child: Builder(
@@ -147,21 +140,6 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
                       points.add(null);
 
                       kanjiRecogBloc.predict(points, MediaQuery.of(context).size.width);
-//                      brain.processCanvasPoints(points, ).then((predictions) {
-//                        print(predictions[0].runtimeType);
-//                        print(predictions[0]['label']);
-//
-//                        var temp = [];
-//                        for (var i in predictions) {
-//                          print(i);
-//                          if (kanjiBloc.allKanjisMap.containsKey(i)) {
-//                            temp.add(kanjiBloc.allKanjisMap[i]);
-//                          }
-//                        }
-//                        setState(() {
-//                          resultKanji = temp;
-//                        });
-//                      });
                     },
                     child: ClipRect(
                       child: CustomPaint(

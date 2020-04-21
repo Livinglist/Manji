@@ -28,6 +28,7 @@ class KanjiBloc {
   final _allStarKanjisFetcher = BehaviorSubject<List<Kanji>>();
   final _allKanjisByKanaFetcher = BehaviorSubject<List<Kanji>>();
   final _kanjiByKanaFetcher = BehaviorSubject<Kanji>();
+  final _searchResultsFetcher = BehaviorSubject<List<Kanji>>();
   final Queue<BehaviorSubject<Kanji>> _singleKanjiFetchers = Queue<BehaviorSubject<Kanji>>();
 
   List<Sentence> _sentences = <Sentence>[];
@@ -53,6 +54,8 @@ class KanjiBloc {
       return _singleKanjiFetchers.last.stream;
     }
   }
+
+  Stream<List<Kanji>> get searchResults => _searchResultsFetcher.stream;
 
   Stream<Kanji> get randomKanji => _randomKanjiFetcher.stream;
   Stream<List<Kanji>> get allFavKanjis => _allFavKanjisFetcher.stream;
@@ -260,7 +263,11 @@ class KanjiBloc {
     return _allKanjisMap[kanjiStr];
   }
 
-  List<Kanji> searchKanjiInfosByStr(String text) {
+  void searchKanjiInfosByStr(String text) {
+    if (text == null || text.isEmpty) {
+      _searchResultsFetcher.sink.add(allKanjisList);
+      return;
+    }
     var list = <Kanji>[];
     String hiraganaText = '';
     String katakanaText = '';
@@ -308,7 +315,21 @@ class KanjiBloc {
         }
       }
     }
-    return list;
+
+    _searchResultsFetcher.sink.add(list);
+  }
+
+  void filterKanji(Map<int, bool> jlptMap, Map<int, bool> gradeMap) {
+    var list = <Kanji>[];
+    for (var kanji in allKanjisList) {
+      if (kanji.jlpt == 0) continue;
+      if (jlptMap[kanji.jlpt] || gradeMap[kanji.grade]) list.add(kanji);
+    }
+
+    if (list.isEmpty)
+      _searchResultsFetcher.sink.add(allKanjisList);
+    else
+      _searchResultsFetcher.sink.add(list);
   }
 
   void dispose() {
@@ -322,6 +343,7 @@ class KanjiBloc {
     _singleKanjiFetcher.close();
     _allKanjisByKanaFetcher.close();
     _kanjiByKanaFetcher.close();
+    _searchResultsFetcher.close();
   }
 }
 

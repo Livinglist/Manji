@@ -4,9 +4,11 @@ import 'package:kanji_dictionary/resource/google_api_provider.dart';
 class TextRecognizeBloc {
   final _textFetcher = PublishSubject<String>();
 
+
   Stream<String> get text => _textFetcher.stream;
 
   void extractTextFromImage(String imgStr) {
+    _textFetcher.sink.add(null);
     GoogleApiProvider.extractTextFromImage(imgStr).then((text) => _textFetcher.sink.add(text));
   }
 
