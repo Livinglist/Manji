@@ -526,7 +526,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     kunyomis.sort((left, right) => left.length.compareTo(right.length));
 
     List<Word> onyomiWords = List.from(kanji.onyomiWords); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
-
+    onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
       var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord.wordFurigana.contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
 

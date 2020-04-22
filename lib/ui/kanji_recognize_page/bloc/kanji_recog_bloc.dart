@@ -1,7 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'brain.dart';
+import '../resource/brain.dart';
 
 class KanjiRecogBloc {
   final _predictedKanjiFetcher = PublishSubject<List<Kanji>>();
