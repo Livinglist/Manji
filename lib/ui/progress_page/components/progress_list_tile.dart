@@ -7,13 +7,23 @@ class ProgressListTile extends StatelessWidget {
   final double progress;
   final VoidCallback onTap;
   final Map<int, double> studiedTimes;
+  final double totalStudiedPercentage;
 
-  ProgressListTile({this.title, this.progress, this.onTap, this.studiedTimes});
+  ProgressListTile({this.title, this.progress, this.onTap, this.studiedTimes, this.totalStudiedPercentage});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title, style: TextStyle(color: Colors.white)),
+      title: Text(title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      leading: Padding(
+          padding: EdgeInsets.only(top: 0),
+          child: Container(
+            width: 36,
+            height: 36,
+            child: Center(
+              child: Text('${(totalStudiedPercentage??(progress * 100)).truncate()}%', style: TextStyle(color: Colors.white)),
+            ),
+          )),
       subtitle: ProgressIndicator(value: progress, values: studiedTimes),
       onTap: onTap,
     );

@@ -73,15 +73,9 @@ class DBProvider {
       await File(path).writeAsBytes(bytes);
       return openDatabase(
         path,
-        version: 1,
+        version: 2,
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
-
-          db.getVersion().then((version) {
-            if (version == 1) {
-              db.rawQuery("ALTER TABLE Kanji ADD COLUMN studiedTimeStamps TEXT DEFAULT '[]'");
-            }
-          });
         },
       );
     }
@@ -255,7 +249,6 @@ class DBProvider {
     var db = await database;
 
     print(kanji.timeStamps);
-
 
     return db.rawUpdate("UPDATE Kanji SET studiedTimeStamps = ? WHERE kanji = ?", [jsonEncode(kanji.timeStamps), kanji.kanji]);
   }

@@ -85,6 +85,9 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                               title: 'N$jlpt',
                               progress: controllers[index].value,
                               studiedTimes: jlptToValuesMap[jlpt],
+                              totalStudiedPercentage: jlptToKanjisMap[jlpt] == null
+                                  ? 0
+                                  : jlptToKanjisMap[jlpt].where((kanji) => kanji.timeStamps.isNotEmpty).length / jlptToKanjisMap[jlpt].length * 100,
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -92,7 +95,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                                         builder: (_) => ProgressDetailPage(
                                             kanjis: jlptToKanjisMap[jlpt],
                                             title: 'N$jlpt',
-                                            totalStudied: (jlptToValuesMap[jlpt][1] ?? 0 * jlptToKanjisMap[jlpt].length).toInt())));
+                                            totalStudied: jlptToKanjisMap[jlpt].where((kanji) => kanji.timeStamps.isNotEmpty).length)));
                               });
                         },
                       );
@@ -128,13 +131,16 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
   }
 
   Stream<double> computeJLPTProgress(int jlpt) async* {
-    double progress = 1.0;
+    double progress = 0.0;
     int total = 0;
-    int studied = 0;
+    int iterated = 0;
     var kanjis = await compute<List<dynamic>, List<Kanji>>(getTargetedKanjis, [jlpt, kanjiBloc.allKanjisList]);
     jlptToKanjisMap[jlpt] = kanjis;
     total = kanjis.length;
     for (var kanji in kanjis) {
+      progress = (++iterated) / total;
+      yield progress;
+
       if (kanji.timeStamps.isNotEmpty) {
         for (var timeCount in Iterable.generate(kanji.timeStamps.length)) {
           if (jlptToValuesMap[jlpt].containsKey(timeCount + 1) == false) {
@@ -143,13 +149,6 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
             jlptToValuesMap[jlpt][timeCount + 1] = (jlptToValuesMap[jlpt][timeCount + 1] * total + 1) / total;
           }
         }
-
-        studied += 1;
-        progress = studied / total;
-        yield progress;
-      } else {
-        progress = studied / total;
-        yield progress;
       }
     }
   }

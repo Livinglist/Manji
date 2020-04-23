@@ -176,7 +176,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
             animationController.value = offset.dx;
           },
           child: Drawer(
-              child: Container(
+              child: Material(
             color: Colors.grey[600],
             child: Column(
               children: <Widget>[
@@ -211,19 +211,22 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                     Navigator.push(context, MaterialPageRoute(builder: (_) => MyKanjiPage()));
                   },
                 ),
-                Divider(color: Colors.white70, height: 0),
-                ListTile(
-                  title: Text('進度', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Progress'),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => ProgressPage()));
-                  },
-                ),
                 ListTile(
                   title: Text('漢字リスト', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Kanji Lists'),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => MyListPage()));
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Divider(color: Colors.white60, height: 0),
+                ),
+                ListTile(
+                  title: Text('進度', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Progress'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ProgressPage()));
                   },
                 ),
                 ListTile(

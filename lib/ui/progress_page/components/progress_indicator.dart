@@ -13,12 +13,10 @@ class ProgressIndicator extends StatefulWidget {
 
 class _ProgressIndicatorState extends State<ProgressIndicator> with SingleTickerProviderStateMixin {
   final singleColor = Colors.grey;
-  AnimationController controller;
   Map<int, double> values;
 
   @override
   void initState() {
-    controller = AnimationController(vsync: this);
     values = widget.values;
     super.initState();
   }
@@ -30,8 +28,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator> with SingleTicker
 
       for (var studiedTimes in values.keys.toList()..sort((a, b) => a.compareTo(b))) {
         var color = Colors.blueGrey[min(800, 100 + 100 * studiedTimes)];
-        print("study times : $studiedTimes value: ${values[studiedTimes] * 100}");
-        children.add(LinearProgressIndicator(backgroundColor: Colors.transparent,valueColor: AlwaysStoppedAnimation<Color>(color), value: widget.value*values[studiedTimes]));
+        children.add(LinearProgressIndicator(
+            backgroundColor: Colors.transparent, valueColor: AlwaysStoppedAnimation<Color>(color), value: widget.value * values[studiedTimes]));
       }
 
       return Container(
