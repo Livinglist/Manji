@@ -9,7 +9,7 @@ import 'package:kanji_dictionary/models/question.dart';
 const favKanjiStrsKey = 'favKanjiStrs';
 const starKanjiStrsKey = 'starKanjiStrs';
 const kanjiListStrKey = 'kanjiListStr';
-const incorrectQuestionsKey = 'incorrectQuestions';
+const uidsKey = 'uids';
 
 class SharedPreferencesProvider {
   SharedPreferences _sharedPreferences;
@@ -23,15 +23,14 @@ class SharedPreferencesProvider {
     if (!_sharedPreferences.containsKey(favKanjiStrsKey)) {
       _sharedPreferences.setStringList(favKanjiStrsKey, []);
       _sharedPreferences.setStringList(starKanjiStrsKey, ['字']);
-      _sharedPreferences.setStringList(incorrectQuestionsKey, []);
       var list = KanjiList(name: "My list", kanjiStrs: ["一", "二", "三"]);
-      updateKanjiLists([list]);
+      addKanjiList(list);
     }
   }
 
   List<String> getAllFavKanjiStrs() => _sharedPreferences.getStringList(favKanjiStrsKey);
 
-  List<IncorrectQuestion> _incorrectQuestions;
+  List<String> uids = [];
 
   void addFav(String kanjiStr) {
     var favKanjiStrs = _sharedPreferences.getStringList(favKanjiStrsKey);
@@ -59,7 +58,45 @@ class SharedPreferencesProvider {
     _sharedPreferences.setStringList(starKanjiStrsKey, starKanjiStrs);
   }
 
-  List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
+  List<KanjiList> getAllKanjiLists() {
+    uids = _sharedPreferences.getStringList(uidsKey) ?? [];
+    var kanjiLists = <KanjiList>[];
+    for (var uid in uids) {
+      kanjiLists.add(getKanjiListByUid(uid));
+    }
+    return kanjiLists;
+  }
 
-  void updateKanjiLists(List<KanjiList> kanjiLists) => _sharedPreferences.setString(kanjiListStrKey, kanjiListsToJsonStr(kanjiLists));
+  void addKanjiList(KanjiList kanjiList) {
+    uids.add(kanjiList.uid);
+    _sharedPreferences.setStringList(uidsKey, uids);
+    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
+  }
+
+  void updateKanjiListKanjis(KanjiList kanjiList) {
+    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+  }
+
+  void updateKanjiListName(KanjiList kanjiList) {
+    _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
+  }
+
+  void deleteKanjiList(KanjiList kanjiList) {
+    uids.remove(kanjiList.uid);
+    _sharedPreferences.setStringList(uidsKey, uids);
+    _sharedPreferences.remove(kanjiList.uid + 'kanjis');
+    _sharedPreferences.remove(kanjiList.uid + 'name');
+  }
+
+  KanjiList getKanjiListByUid(String uid) {
+    var kanjiStrs = _sharedPreferences.getStringList(uid + 'kanjis');
+    var name = _sharedPreferences.getString(uid + 'name');
+    var list = KanjiList.from(uid: uid, name: name, kanjiStrs: kanjiStrs);
+    return list;
+  }
+
+  //List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
+
+  //void updateKanjiLists(List<KanjiList> kanjiLists) => _sharedPreferences.setString(kanjiListStrKey, kanjiListsToJsonStr(kanjiLists));
 }

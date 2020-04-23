@@ -1,3 +1,5 @@
+import 'dart:math' show Random;
+
 import 'package:flutter/foundation.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -22,10 +24,15 @@ class QuizBloc {
     _quizFetcher.sink.add(quiz);
   }
 
-  List<Kanji> generateQuizFromJLPT(int jlpt) {
+  List<Kanji> generateQuizFromJLPT(int jlpt, {int amount = 0}) {
     var kanjis = kanjiBloc.allKanjisList.where((kanji) => kanji.jlpt == jlpt).toList();
+    print(amount);
+    if (amount != 0 && amount <= kanjis.length) {
+      var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+      kanjis = kanjis.sublist(start, start + amount);
+    }
     compute<List<Kanji>, Quiz>(generate, kanjis).then((quiz) {
-      _quizFetcher.sink.add(quiz);
+      if (_quizFetcher.isClosed == false) _quizFetcher.sink.add(quiz);
     });
     return kanjis;
   }

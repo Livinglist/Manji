@@ -205,7 +205,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
 
                     widget.kanjiList.kanjiStrs.remove(kanjiStr);
                     kanjiBloc.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
-                    KanjiListBloc.instance.removeKanji(widget.kanjiList.name, kanjiStr);
+                    KanjiListBloc.instance.removeKanji(widget.kanjiList, kanjiStr);
                   }),
             ));
           },
@@ -306,6 +306,6 @@ class _ListDetailPageState extends State<ListDetailPage> {
     String dismissedKanji = kanji.kanji;
     widget.kanjiList.kanjiStrs.remove(kanji.kanji);
     kanjiBloc.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
-    KanjiListBloc.instance.removeKanji(widget.kanjiList.name, dismissedKanji);
+    KanjiListBloc.instance.removeKanji(widget.kanjiList, dismissedKanji);
   }
 }

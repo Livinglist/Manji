@@ -1,4 +1,8 @@
+import 'dart:math' show Random;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
@@ -15,6 +19,8 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  static final actionTextStyle = TextStyle(color: Colors.blue);
+
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool showShadow = false;
@@ -78,15 +84,6 @@ class _QuizPageState extends State<QuizPage> {
             if (snapshot.hasData) {
               var kanjiLists = snapshot.data;
 
-              if (kanjiLists.isEmpty) {
-                return Center(
-                  child: Text(
-                    'Create your kanji list at Kanji Lists page first.',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                );
-              }
-
               var children = buildChildren(kanjiLists);
 
               return ListView(
@@ -100,19 +97,22 @@ class _QuizPageState extends State<QuizPage> {
                       spacing: 12,
                       children: <Widget>[
                         SizedBox(width: 12),
-                        for (var n in [1, 2, 3, 4, 5])
-                          ActionChip(
-                              elevation: 4,
-                              label: Text("N$n"),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => QuizDetailPage(jlpt: n)));
-                              }),
+                        for (var n in [5, 4, 3, 2, 1])
+                          ActionChip(elevation: 4, label: Text("N$n"), onPressed: () => showJLPTAmountDialog(n, 'N$n Kanji')),
                       ],
                     ),
                   ),
+                  if (children.isEmpty)
+                    Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text(
+                          'Your own lists will also show up here (´・ω・`)',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                      ),
+                    ),
                   if (children.isNotEmpty) Divider(height: 0),
                   ...children
                 ],
@@ -125,6 +125,7 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   List<Widget> buildChildren(List<KanjiList> kanjiLists) {
+    if (kanjiLists.isEmpty) return [];
     var children = <Widget>[];
     for (var kanjiList in kanjiLists) {
       children.add(ListTile(
@@ -135,7 +136,7 @@ class _QuizPageState extends State<QuizPage> {
         subtitle: Text('${kanjiList.kanjiStrs.length} Kanji'),
         onTap: () {
           if (kanjiList.kanjiStrs.isNotEmpty)
-            Navigator.push(context, MaterialPageRoute(builder: (_) => QuizDetailPage(kanjiList: kanjiList)));
+            showAmountDialog(kanjiList.kanjiStrs.map((str) => kanjiBloc.allKanjisMap[str]).toList(), kanjiList.name);
           else
             scaffoldKey.currentState.showSnackBar(WarningSnackBar(message: "List is empty."));
         },
@@ -146,5 +147,80 @@ class _QuizPageState extends State<QuizPage> {
     children.removeLast();
 
     return children;
+  }
+
+  void showJLPTAmountDialog(int jlpt, String title) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (_) {
+          return CupertinoActionSheet(
+            title: Text(title),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizDetailPage(jlpt: jlpt, jlptAmount: 0)));
+                  },
+                  child: Text("All of N$jlpt Kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onJLPTAmountPressed(jlpt, 100), child: Text("100 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onJLPTAmountPressed(jlpt, 50), child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onJLPTAmountPressed(jlpt, 20), child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onJLPTAmountPressed(jlpt, 10), child: Text("10 kanji", style: actionTextStyle)),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel", style: actionTextStyle)),
+          );
+        });
+  }
+
+  void onJLPTAmountPressed(int jlpt, int amount) {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizDetailPage(jlpt: jlpt, jlptAmount: amount)));
+  }
+
+  void showAmountDialog(List<Kanji> kanjis, String title) {
+    if (kanjis.length <= 20) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => QuizDetailPage(kanjis: kanjis)));
+      return;
+    }
+
+    showCupertinoModalPopup(
+        context: context,
+        builder: (_) {
+          return CupertinoActionSheet(
+            title: Text(title),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizPage()));
+                  },
+                  child: Text("All of ${kanjis.length} kanji", style: actionTextStyle)),
+              if (kanjis.length >= 100)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(100, kanjis), child: Text("100 kanji", style: actionTextStyle)),
+              if (kanjis.length >= 50)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(50, kanjis), child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(20, kanjis), child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(10, kanjis), child: Text("10 kanji", style: actionTextStyle)),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel", style: actionTextStyle)),
+          );
+        });
+  }
+
+  void onAmountPressed(int amount, List<Kanji> kanjis) {
+    Navigator.pop(context);
+    var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+    var temp = kanjis.sublist(start, start + amount);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizDetailPage(kanjis: temp)));
   }
 }

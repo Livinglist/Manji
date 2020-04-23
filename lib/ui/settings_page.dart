@@ -28,6 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       body: ListView(
+        physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           AnimatedContainer(
             duration: Duration(milliseconds: 300),

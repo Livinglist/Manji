@@ -225,7 +225,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                                   ),
                                                 ));
                                               } else {
-                                                KanjiListBloc.instance.addKanji(kanjiList.name, kanjiStr);
+                                                KanjiListBloc.instance.addKanji(kanjiList, kanjiStr);
                                                 scaffoldKey.currentState.hideCurrentSnackBar();
                                                 scaffoldKey.currentState.showSnackBar(SnackBar(
                                                   content: Text(

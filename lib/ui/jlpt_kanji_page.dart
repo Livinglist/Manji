@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -14,6 +17,7 @@ class JLPTKanjiPage extends StatefulWidget {
 }
 
 class JLPTKanjiPageState extends State<JLPTKanjiPage> {
+  static final actionTextStyle = TextStyle(color: Colors.blue);
   //show gridview by default
   JLPTLevel currentLevel = JLPTLevel.n5;
   bool showGrid = true;
@@ -58,9 +62,7 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: jlptToKanjisMap[currentLevel])));
-                }),
+                onPressed: () => showAmountDialog(jlptToKanjisMap[currentLevel], 'Study N${currentLevel.index + 1}')),
             IconButton(
                 icon: AnimatedCrossFade(
                   firstChild: Icon(
@@ -165,33 +167,46 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
         crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         duration: Duration(milliseconds: 200));
   }
-}
 
-//class KanjiGridView extends StatelessWidget {
-//  final List<Kanji> kanjis;
-//
-//  KanjiGridView({this.kanjis}) : assert(kanjis != null);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return GridView.count(
-//      crossAxisCount: 6,
-//      children: kanjis.map((kanji) {
-//        return Center(
-//          child: InkWell(
-//            child:Container(
-//              width: double.infinity,
-//              height: double.infinity,
-//              child: Center(
-//                child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
-//              )
-//            ),
-//            onTap: (){
-//              Navigator.push(context, MaterialPageRoute(builder: (_)=>KanjiDetailPage(kanji: kanji)));
-//            },
-//          )
-//        );
-//      }).toList(),
-//    );
-//  }
-//}
+  void showAmountDialog(List<Kanji> kanjis, String title) {
+    if (kanjis.length <= 20) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+      return;
+    }
+
+    showCupertinoModalPopup(
+        context: context,
+        builder: (_) {
+          return CupertinoActionSheet(
+            title: Text(title),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+                  },
+                  child: Text("All of ${kanjis.length} kanji", style: actionTextStyle)),
+              if (kanjis.length >= 100)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(100, kanjis), child: Text("100 kanji", style: actionTextStyle)),
+              if (kanjis.length >= 50)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(50, kanjis), child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(20, kanjis), child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(10, kanjis), child: Text("10 kanji", style: actionTextStyle)),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel", style: actionTextStyle)),
+          );
+        });
+  }
+
+  void onAmountPressed(int amount, List<Kanji> kanjis) {
+    Navigator.pop(context);
+    var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+    var temp = kanjis.sublist(start, start + amount);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
+  }
+}

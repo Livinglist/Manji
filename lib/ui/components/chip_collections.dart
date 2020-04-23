@@ -4,8 +4,9 @@ class GradeChip extends StatelessWidget {
   final int grade;
   final Color color;
   final String label;
+  final TextStyle textStyle;
 
-  GradeChip({@required this.grade, this.color = Colors.white}) : label = getStr(grade);
+  GradeChip({@required this.grade, this.color = Colors.white, this.textStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)}) : label = getStr(grade);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class GradeChip extends StatelessWidget {
             padding: EdgeInsets.all(4),
             child: Text(
               label,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: textStyle,
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],

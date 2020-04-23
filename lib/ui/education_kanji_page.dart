@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -14,12 +17,13 @@ class EducationKanjiPage extends StatefulWidget {
 }
 
 class EducationKanjiPageState extends State<EducationKanjiPage> {
+  static final actionTextStyle = TextStyle(color: Colors.blue);
   //show gridview by default
   int currentGrade = 1;
   bool showGrid = true;
   bool altSorted = false;
   Map<int, List<Kanji>> gradeToKanjisMap = {
-    0: [],
+    0: [], //Junior High
     1: [],
     2: [],
     3: [],
@@ -56,9 +60,7 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
               actions: <Widget>[
                 IconButton(
                     icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: gradeToKanjisMap[currentGrade])));
-                    }),
+                    onPressed: () => showAmountDialog(gradeToKanjisMap[currentGrade], 'Study ${toGradeString(currentGrade)}')),
                 IconButton(
                     icon: AnimatedCrossFade(
                       firstChild: Icon(
@@ -165,5 +167,66 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
         ),
         crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         duration: Duration(milliseconds: 200));
+  }
+
+  void showAmountDialog(List<Kanji> kanjis, String title) {
+    if (kanjis.length <= 20) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+      return;
+    }
+
+    showCupertinoModalPopup(
+        context: context,
+        builder: (_) {
+          return CupertinoActionSheet(
+            title: Text(title),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+                  },
+                  child: Text("All of ${kanjis.length} kanji", style: actionTextStyle)),
+              if (kanjis.length >= 100)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(100, kanjis), child: Text("100 kanji", style: actionTextStyle)),
+              if (kanjis.length >= 50)
+                CupertinoActionSheetAction(onPressed: () => onAmountPressed(50, kanjis), child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(20, kanjis), child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(onPressed: () => onAmountPressed(10, kanjis), child: Text("10 kanji", style: actionTextStyle)),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel", style: actionTextStyle)),
+          );
+        });
+  }
+
+  void onAmountPressed(int amount, List<Kanji> kanjis) {
+    Navigator.pop(context);
+    var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+    var temp = kanjis.sublist(start, start + amount);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
+  }
+
+  String toGradeString(int grade) {
+    if (grade > 3) {
+      return '${grade}th Grade';
+    } else {
+      switch (grade) {
+        case 1:
+          return '1st Grade';
+        case 2:
+          return '2nd Grade';
+        case 3:
+          return '3rd Grade';
+        case 0:
+          return 'Junior High';
+        default:
+          throw Exception('Unmatched grade');
+      }
+    }
   }
 }

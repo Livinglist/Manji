@@ -35,6 +35,8 @@ class Repository {
 
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) => DBProvider.db.getSentencesJsonStringByKanji(kanjiStr);
 
+  Future updateKanjiStudiedTimeStamps(Kanji kanji) => DBProvider.db.updateKanjiStudiedTimeStamps(kanji);
+
   Future checkForUpdate(Map<String, Kanji> allLocalKanjis) => _firebaseApiProvider.checkForUpdate(allLocalKanjis);
 
   void updateKanji(Kanji kanji, [bool isDeleted = false]) {
@@ -70,7 +72,14 @@ class Repository {
 
   List<KanjiList> getAllKanjiList() => _prefsProvider.getAllKanjiLists();
 
-  void updateKanjiLists(List<KanjiList> kanjiLists) => _prefsProvider.updateKanjiLists(kanjiLists);
+  void updateKanjiListName(KanjiList kanjiList) => _prefsProvider.updateKanjiListName(kanjiList);
+
+  void updateKanjiListKanjis(KanjiList kanjiList) => _prefsProvider.updateKanjiListKanjis(kanjiList);
+
+  void deleteKanjiList(KanjiList kanjiList) => _prefsProvider.deleteKanjiList(kanjiList);
+
+  void addKanjiList(KanjiList kanjiList) => _prefsProvider.addKanjiList(kanjiList);
+
 
   Future<List<Question>> getIncorrectQuestions() => DBProvider.db.getIncorrectQuestions();
 
@@ -80,4 +89,3 @@ class Repository {
 }
 
 final repo = Repository();
-

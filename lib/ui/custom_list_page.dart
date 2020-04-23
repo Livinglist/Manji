@@ -5,6 +5,8 @@ import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/ui/custom_list_detail_page.dart';
 
+const actionTextStyle = TextStyle(color: Colors.blue);
+
 ///This is the page that displays lists created by users
 class MyListPage extends StatefulWidget {
   @override
@@ -82,8 +84,8 @@ class _MyListPageState extends State<MyListPage> {
                     var kanjiList = kanjiLists[index];
                     return Dismissible(
                         key: ObjectKey(kanjiList),
-                        onDismissed: (_) => onDismissed(kanjiList.name),
-                        confirmDismiss: (_) => confirmDelete(kanjiList.name),
+                        onDismissed: (_) => onDismissed(kanjiList),
+                        confirmDismiss: (_) => confirmDelete(kanjiList),
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: EdgeInsets.only(right: 20.0),
@@ -102,7 +104,7 @@ class _MyListPageState extends State<MyListPage> {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (_) => ListDetailPage(kanjiList: kanjiList)));
                           },
-                          onLongPress: () => confirmChangeName(kanjiList.name),
+                          onLongPress: () => confirmChangeName(kanjiList),
                         ));
                   },
                   separatorBuilder: (_, index) => Divider(height: 0),
@@ -114,14 +116,15 @@ class _MyListPageState extends State<MyListPage> {
     );
   }
 
-  Future<bool> confirmChangeName(String listName) async {
+  Future<bool> confirmChangeName(KanjiList kanjiList) async {
+    var listName = kanjiList.name;
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
               title: Text("Choose an action"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: Text('Cancel', style: actionTextStyle),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -129,10 +132,10 @@ class _MyListPageState extends State<MyListPage> {
               actions: <Widget>[
                 CupertinoActionSheetAction(
                   isDestructiveAction: false,
-                  child: Text('Edit name of $listName'),
+                  child: Text('Edit name of $listName', style: actionTextStyle),
                   onPressed: () {
                     Navigator.pop(context, true);
-                    showNameChangingDialog(listName);
+                    showNameChangingDialog(kanjiList);
                   },
                 ),
                 CupertinoActionSheetAction(
@@ -140,9 +143,9 @@ class _MyListPageState extends State<MyListPage> {
                   child: Text('Remove $listName'),
                   onPressed: () {
                     Navigator.pop(context, false);
-                    confirmDelete(listName).then((val) {
+                    confirmDelete(kanjiList).then((val) {
                       if (val) {
-                        KanjiListBloc.instance.deleteKanjiList(listName);
+                        KanjiListBloc.instance.deleteKanjiList(kanjiList);
                       }
                     });
                   },
@@ -151,40 +154,47 @@ class _MyListPageState extends State<MyListPage> {
             )).then((value) => value ?? false);
   }
 
-  void showNameChangingDialog(String listName) => showCupertinoDialog(
-      context: context,
-      builder: (_) {
-        return CupertinoAlertDialog(
-          content: Flex(
-            direction: Axis.vertical,
-            children: <Widget>[
-              SizedBox(height: 12),
-              CupertinoTextField(
-                style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
-                controller: textEditingController,
-              )
-            ],
-          ),
-          actions: <Widget>[
-            CupertinoActionSheetAction(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("Cancel")),
-            CupertinoActionSheetAction(
-                onPressed: () {
-                  var name = textEditingController.text;
-                  if (name.isNotEmpty) {
-                    textEditingController.clear();
+  void showNameChangingDialog(KanjiList kanjiList) {
+    textEditingController.text = kanjiList.name;
+    showCupertinoDialog(
+        context: context,
+        builder: (_) {
+          return CupertinoAlertDialog(
+            title: Text('Edit name of ${kanjiList.name}'),
+            content: Flex(
+              direction: Axis.vertical,
+              children: <Widget>[
+                SizedBox(height: 12),
+                CupertinoTextField(
+                  style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
+                  controller: textEditingController,
+                )
+              ],
+            ),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                  onPressed: () {
                     Navigator.pop(context);
-                    KanjiListBloc.instance.changeName(listName, name);
-                  }
-                },
-                child: Text("Confirm"),
-                isDefaultAction: true),
-          ],
-        );
-      });
+                  },
+                  child: Text("Cancel")),
+              CupertinoActionSheetAction(
+                  onPressed: () {
+                    var name = textEditingController.text;
+                    if (name.isNotEmpty) {
+                      textEditingController.clear();
+                      Navigator.pop(context);
+                      KanjiListBloc.instance.changeName(kanjiList, name);
+                    }
+                  },
+                  child: Text("Confirm"),
+                  isDefaultAction: true),
+            ],
+          );
+        }).whenComplete(() {
+      print("clear");
+      textEditingController.clear();
+    });
+  }
 
   void showCreatingDialog() => showCupertinoDialog(
       context: context,
@@ -206,7 +216,7 @@ class _MyListPageState extends State<MyListPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel")),
+                child: Text("Cancel", style: actionTextStyle)),
             CupertinoActionSheetAction(
                 onPressed: () {
                   var name = textEditingController.text;
@@ -216,20 +226,20 @@ class _MyListPageState extends State<MyListPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text("Confirm"),
+                child: Text("Confirm", style: actionTextStyle),
                 isDefaultAction: true),
           ],
         );
       });
 
-  Future<bool> confirmDelete(String listName) async {
+  Future<bool> confirmDelete(KanjiList kanjiList) async {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
               message: Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: Text('Cancel', style: actionTextStyle),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -237,7 +247,7 @@ class _MyListPageState extends State<MyListPage> {
               actions: <Widget>[
                 CupertinoActionSheetAction(
                   isDestructiveAction: true,
-                  child: Text('Remove $listName'),
+                  child: Text('Remove ${kanjiList.name}'),
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
@@ -246,8 +256,8 @@ class _MyListPageState extends State<MyListPage> {
             )).then((value) => value ?? false);
   }
 
-  void onDismissed(String listName) {
+  void onDismissed(KanjiList kanjiList) {
     print("on dimissed custom list");
-    KanjiListBloc.instance.deleteKanjiList(listName);
+    KanjiListBloc.instance.deleteKanjiList(kanjiList);
   }
 }

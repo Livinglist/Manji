@@ -10,16 +10,19 @@ import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/models/quiz.dart';
 import 'package:kanji_dictionary/models/quiz_result.dart';
 import 'package:kanji_dictionary/ui/quiz_pages/bloc/quiz_bloc.dart';
+import 'package:kanji_dictionary/ui/quiz_pages/components/IncorrectQuestionListTile.dart';
 import '../components/chip_collections.dart';
 import '../kanji_detail_page.dart';
 
 class QuizDetailPage extends StatefulWidget {
+  final List<Kanji> kanjis;
   final KanjiList kanjiList;
   final int jlpt;
-  final List<Kanji> kanjis;
+  final int jlptAmount;
 
-  QuizDetailPage({this.kanjiList, this.kanjis, this.jlpt})
-      : assert((kanjiList != null && kanjiList.kanjiStrs.isNotEmpty) || (kanjis != null && kanjis.isNotEmpty) || jlpt != null);
+  QuizDetailPage({this.kanjiList, this.kanjis, this.jlpt, this.jlptAmount})
+      : assert((kanjiList != null && kanjiList.kanjiStrs.isNotEmpty) || (kanjis != null && kanjis.isNotEmpty) || jlpt != null),
+        assert((jlpt != null && jlptAmount != null) || jlpt == null);
 
   @override
   _QuizDetailPageState createState() => _QuizDetailPageState();
@@ -37,8 +40,6 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
   bool showResult = false;
   QuizResult quizResult;
 
-//  Quiz quiz;
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +56,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
       }
       quizBloc.generateQuiz(kanjis);
     } else {
-      kanjis = quizBloc.generateQuizFromJLPT(widget.jlpt);
+      kanjis = quizBloc.generateQuizFromJLPT(widget.jlpt, amount: widget.jlptAmount);
     }
 
     total = kanjis.length;
@@ -229,6 +230,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
     var kanji = question.targetedKanji;
     var wrongKana = question.choices[question.selected];
     var rightKana = question.rightAnswer;
+    return IncorrectQuestionListTile(question: question);
     return ListTile(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));

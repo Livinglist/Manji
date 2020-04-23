@@ -15,6 +15,9 @@ class Kanji {
   int strokes;
   //bool isJinmeiyo;
   bool isFaved;
+  List<int> timeStamps = [];
+
+  set timeStamp(int timeStamp) => timeStamps.add(timeStamp);
 
   JLPTLevel get jlptLevel {
     switch (jlpt) {
@@ -100,7 +103,8 @@ class Kanji {
         'parts': jsonEncode(this.parts),
         'meaning': this.meaning,
         'kunyomiWords': jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
-        'onyomiWords': jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList())
+        'onyomiWords': jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
+        'studiedTimeStamps': jsonEncode(this.timeStamps)
       };
 
   Kanji.fromDBMap(Map map) {
@@ -117,6 +121,7 @@ class Kanji {
     kunyomiWords = (jsonDecode(map['kunyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
     onyomi = (jsonDecode(map['onyomi']) as List).cast<String>();
     onyomiWords = (jsonDecode(map['onyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
+    timeStamps = (jsonDecode(map['studiedTimeStamps'] ?? '[]') as List).cast<int>();
   }
 }
 

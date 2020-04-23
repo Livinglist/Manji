@@ -23,19 +23,22 @@ class KanjiListBloc {
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 
-  void changeName(String listName, String newName){
-    _kanjiLists.singleWhere((list)=>list.name == listName).name = newName;
-    repo.updateKanjiLists(_kanjiLists);
+  void changeName(KanjiList kanjiList, String newName) {
+    var temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
+    temp.name = newName;
+    repo.updateKanjiListName(temp);
   }
 
-  void addKanji(String listName, String kanjiStr) {
-    _kanjiLists.singleWhere((list) => list.name == listName).kanjiStrs.add(kanjiStr);
-    repo.updateKanjiLists(_kanjiLists);
+  void addKanji(KanjiList kanjiList, String kanjiStr) {
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    temp.kanjiStrs.add(kanjiStr);
+    repo.updateKanjiListKanjis(temp);
   }
 
-  void removeKanji(String listName, String kanjiStr) {
-    _kanjiLists.singleWhere((list) => list.name == listName).kanjiStrs.remove(kanjiStr);
-    repo.updateKanjiLists(_kanjiLists);
+  void removeKanji(KanjiList kanjiList, String kanjiStr) {
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    temp.kanjiStrs.remove(kanjiStr);
+    repo.updateKanjiListKanjis(temp);
   }
 
   void addKanjiList(String listName) {
@@ -49,14 +52,15 @@ class KanjiListBloc {
         listName = listName.trim() + " 1";
       }
     }
-    _kanjiLists.add(KanjiList(name: listName, kanjiStrs: []));
-    repo.updateKanjiLists(_kanjiLists);
+    var temp = KanjiList(name: listName, kanjiStrs: []);
+    _kanjiLists.add(temp);
+    repo.addKanjiList(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 
-  void deleteKanjiList(String listName) {
-    _kanjiLists.removeWhere((kanjiList) => kanjiList.name == listName);
-    repo.updateKanjiLists(_kanjiLists);
+  void deleteKanjiList(KanjiList kanjiList) {
+    _kanjiLists.remove(kanjiList);
+    repo.deleteKanjiList(kanjiList);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 

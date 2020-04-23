@@ -369,6 +369,14 @@ class KanjiBloc {
     _searchResultsFetcher.sink.add(list);
   }
 
+  void updateTimeStampsForSingleKanji(Kanji kanji) => repo.updateKanjiStudiedTimeStamps(kanji);
+
+  void updateTimeStampsForKanjis(List<Kanji> kanjis) {
+    for (var i in kanjis) {
+      updateTimeStampsForSingleKanji(i);
+    }
+  }
+
   void dispose() {
     _sentencesFetcher.close();
     _wordsFetcher.close();

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -51,21 +52,19 @@ class DBProvider {
 
     if (await File(path).exists()) {
       print("opening");
-      return openDatabase(
-        path,
-        version: 1,
-        onOpen: (db) async {
-          print(await db.query("sqlite_master"));
-        },
-      ).then((db) async {
-        var query = db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
+      return openDatabase(path, version: 2, onOpen: (db) async {
+        print(await db.query("sqlite_master"));
+      }, onUpgrade: (db, oldVersion, newVersion) {
+        print('upgrade');
+
+        db.rawQuery("ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
+
+        db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
             '"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'
             '"kanjiId"	INTEGER NOT NULL,'
             '"choices"	TEXT NOT NULL,'
             '"selectedIndex"	INTEGER NOT NULL,'
             '"rightAnswer"	TEXT NOT NULL)');
-
-        return db;
       });
     } else {
       print("copying");
@@ -78,20 +77,9 @@ class DBProvider {
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
 
-          var dir = await getApplicationDocumentsDirectory();
-
-          db.rawQuery('SELECT kanji FROM Kanji').then((List<Map> results) async {
-            for (var m in results) {
-              var kanjiStr = m['kanji'];
-              try {
-                ByteData bytes = await rootBundle.load('video/$kanjiStr.mp4');
-                var path = dir.path + '/video/$kanjiStr.mp4';
-                print(path);
-                File f = File(path);
-                f.writeAsBytes(bytes.buffer.asUint8List());
-              } catch (_) {
-                continue;
-              }
+          db.getVersion().then((version) {
+            if (version == 1) {
+              db.rawQuery("ALTER TABLE Kanji ADD COLUMN studiedTimeStamps TEXT DEFAULT '[]'");
             }
           });
         },
@@ -263,13 +251,13 @@ class DBProvider {
     return qs;
   }
 
-  Future<List<int>> getStrokeVideo(Kanji kanji) async {
+  Future updateKanjiStudiedTimeStamps(Kanji kanji) async {
     var db = await database;
-    var query = await db.rawQuery("SELECT strokeAnimation FROM Kanji WHERE id = '${kanji.id}' LIMIT 1");
 
-    if (query == null || query.isEmpty) return null;
+    print(kanji.timeStamps);
 
-    return query.single['strokeAnimation'];
+
+    return db.rawUpdate("UPDATE Kanji SET studiedTimeStamps = ? WHERE kanji = ?", [jsonEncode(kanji.timeStamps), kanji.kanji]);
   }
 }
 

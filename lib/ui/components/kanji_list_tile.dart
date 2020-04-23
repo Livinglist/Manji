@@ -26,14 +26,14 @@ class KanjiListTile extends StatelessWidget {
         }
       },
       leading: Container(
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
         child: Center(
           child: Hero(
             tag: kanji.kanji,
             child: Material(
               color: Colors.transparent,
-              child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei', fontFamilyFallback: ['Ai'])),
+              child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'kazei', fontFamilyFallback: ['Ai'])),
             ),
           ),
         ),

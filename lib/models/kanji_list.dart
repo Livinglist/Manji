@@ -1,17 +1,27 @@
 import 'dart:convert';
+import 'package:uuid/uuid.dart';
 
 class KanjiList {
+  String uid;
   String name;
   List<String> kanjiStrs;
 
-  KanjiList({this.name, this.kanjiStrs});
+  KanjiList({this.name, this.kanjiStrs}) : uid = Uuid().v1();
+  KanjiList.from({this.name, this.kanjiStrs, this.uid});
 
   KanjiList.fromMap(Map map) {
+    uid = map['uid'] ?? Uuid().v1();
     name = map['name'];
     kanjiStrs = (jsonDecode(map['kanjiStrs']) as List).cast<String>();
   }
 
-  Map toMap() => {'name': name, 'kanjiStrs': jsonEncode(kanjiStrs)};
+  Map toMap() => {'uid': uid, 'name': name, 'kanjiStrs': jsonEncode(kanjiStrs)};
+
+  @override
+  bool operator ==(Object other) => other is KanjiList && this.uid == other.uid;
+
+  @override
+  int get hashCode => this.uid.hashCode;
 }
 
 List<KanjiList> kanjiListsFromJsonStr(String str) {

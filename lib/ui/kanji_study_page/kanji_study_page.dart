@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
 import 'components/kanji_card.dart';
 import 'kanji_study_help_page.dart';
@@ -103,7 +104,9 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
         appBar: AppBar(
           title: Text(''),
           actions: <Widget>[
-            Padding(padding: EdgeInsets.all(12), child: Center(child: Text('${(studyProgress*cardsCount).toInt()}/$cardsCount', style: TextStyle(fontSize: 18)))),
+            Padding(
+                padding: EdgeInsets.all(12),
+                child: Center(child: Text('$index/$cardsCount', style: TextStyle(fontSize: 18)))),
             IconButton(
               icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
@@ -113,13 +116,9 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
               child: Stack(
                 children: <Widget>[
                   LinearProgressIndicator(
-                      value: cardsProgress,
-                      valueColor: animationController.drive(Tween<Color>(begin: Colors.blueGrey, end: Colors.blueGrey)),
-                      backgroundColor: Colors.grey),
+                      value: cardsProgress, valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey), backgroundColor: Colors.grey),
                   LinearProgressIndicator(
-                      value: studyProgress,
-                      valueColor: animationController.drive(Tween<Color>(begin: Colors.grey[800], end: Colors.grey[800])),
-                      backgroundColor: Colors.transparent),
+                      value: studyProgress, valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[800]), backgroundColor: Colors.transparent),
                 ],
               ),
               preferredSize: Size.fromHeight(0)),
@@ -176,13 +175,22 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                               //Swipe left.
                             } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
                               setState(() {
+                                index++;
                                 contents.removeAt(0);
                                 mainCardKey = GlobalKey<KanjiCardState>();
-                                mainCard = contents.isEmpty
-                                    ? Container()
-                                    : GestureDetector(
-                                        child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
-                                      );
+                                if (contents.isEmpty) {
+                                  mainCard = Container();
+                                  var timeStamp = DateTime.now().millisecondsSinceEpoch;
+                                  for (var i in widget.kanjis) {
+                                    i.timeStamp = timeStamp;
+                                  }
+                                  kanjiBloc.updateTimeStampsForKanjis(widget.kanjis);
+                                } else {
+                                  mainCard = GestureDetector(
+                                    child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                  );
+                                }
+
                                 studyProgress = studyProgress == 1 ? 1 : studyProgress + 1.0 / cardsCount;
                               });
                             }

@@ -29,6 +29,7 @@ import 'custom_list_page.dart';
 import 'quiz_pages/quiz_page.dart';
 import 'text_recognize_page/text_recognize_page.dart';
 import 'kanji_recognize_page/kanji_recog_page.dart';
+import 'progress_page/progress_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -208,6 +209,14 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   subtitle: Text('Favorite Kanji'),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => MyKanjiPage()));
+                  },
+                ),
+                Divider(color: Colors.white70, height: 0),
+                ListTile(
+                  title: Text('進度', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('Progress'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ProgressPage()));
                   },
                 ),
                 ListTile(
