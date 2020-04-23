@@ -6,7 +6,7 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/ui/custom_list_detail_page.dart';
-import 'package:kanji_dictionary/ui/progress_page/components/kanji_progress_list_tile.dart';
+import 'components/kanji_progress_list_tile.dart';
 
 import 'components/progress_list_tile.dart';
 

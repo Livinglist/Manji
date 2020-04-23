@@ -6,13 +6,11 @@ import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 
 import 'package:kanji_dictionary/models/kanji_list.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/models/quiz.dart';
 import 'package:kanji_dictionary/models/quiz_result.dart';
-import 'package:kanji_dictionary/ui/quiz_pages/bloc/quiz_bloc.dart';
-import 'package:kanji_dictionary/ui/quiz_pages/components/IncorrectQuestionListTile.dart';
-import '../components/chip_collections.dart';
-import '../kanji_detail_page.dart';
+import 'bloc/quiz_bloc.dart';
+import 'components/incorrect_question_list_tile.dart';
+import 'components/correct_question_list_tile.dart';
 
 class QuizDetailPage extends StatefulWidget {
   final List<Kanji> kanjis;
@@ -121,7 +119,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "${quizResult.percentage.toStringAsFixed(1).replaceFirst('.0', '')}%",
+                    "${quizResult.percentage.toStringAsFixed(0)}%",
                     style: TextStyle(color: Colors.white, fontSize: 96),
                   ),
                   Icon(getCharm(quizResult.percentage), color: Colors.white, size: 90)
@@ -144,7 +142,8 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
                 SizedBox(width: 12)
               ],
             ),
-            ...quizResult.incorrectQuestions.map((question) => buildIncorrectListTile(question)).toList()
+            ...quizResult.incorrectQuestions.map((question) => IncorrectQuestionListTile(question: question)).toList(),
+            ...quizResult.correctQuestions.map((question) => CorrectQuestionListTile(question: question)).toList()
           ],
         ));
   }
@@ -223,82 +222,6 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
 
         return Center(child: CircularProgressIndicator());
       },
-    );
-  }
-
-  Widget buildIncorrectListTile(Question question) {
-    var kanji = question.targetedKanji;
-    var wrongKana = question.choices[question.selected];
-    var rightKana = question.rightAnswer;
-    return IncorrectQuestionListTile(question: question);
-    return ListTile(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
-      },
-      leading: Container(
-        width: 28,
-        height: 28,
-        child: Center(
-          child: Hero(
-            tag: kanji,
-            child: Material(
-              color: Colors.transparent,
-              child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
-            ),
-          ),
-        ),
-      ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: 8),
-          Wrap(
-            children: <Widget>[
-              kanji.jlpt != 0
-                  ? Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Container(
-                        child: Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text(
-                              'N${kanji.jlpt}',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            )),
-                        decoration: BoxDecoration(
-                          //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                              ),
-                        ),
-                      ),
-                    )
-                  : Container(),
-              kanji.grade != 0
-                  ? GradeChip(
-                      grade: kanji.grade,
-                    )
-                  : Container(),
-            ],
-          ),
-          Divider(),
-          Row(children: <Widget>[
-            Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-            Spacer(),
-            Text(rightKana, style: TextStyle(color: Colors.greenAccent))
-          ]),
-          Divider(),
-          Row(children: <Widget>[
-            Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
-            Spacer(),
-            Text(wrongKana, style: TextStyle(color: Colors.redAccent))
-          ]),
-          Divider(),
-          Text(
-            question.targetedKanji.meaning,
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
-      ),
     );
   }
 

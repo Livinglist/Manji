@@ -29,7 +29,7 @@ import 'custom_list_page.dart';
 import 'quiz_pages/quiz_page.dart';
 import 'text_recognize_page/text_recognize_page.dart';
 import 'kanji_recognize_page/kanji_recog_page.dart';
-import 'progress_page/progress_page.dart';
+import 'progress_pages/progress_page.dart';
 
 class HomePage extends StatefulWidget {
   @override

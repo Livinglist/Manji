@@ -1051,43 +1051,6 @@ class _KanjiBlockState extends State<KanjiBlock> {
   @override
   Widget build(BuildContext context) {
     print("isPlaying now is $isPlaying and vc is $videoController");
-//    return Stack(
-//      children: <Widget>[
-//        Positioned.fill(
-//            child: Center(
-//                child: Padding(
-//          padding: EdgeInsets.all(24),
-//          child: StrokeAnimationPlayer(kanjiStr: widget.kanjiStr, videoController: videoController),
-//        ))),
-//        if (videoController != null && isPlaying == false)
-//          FutureBuilder(
-//            future: videoController.initialize().then((val) {
-//              print("Initialized");
-//              return val;
-//            }),
-//            builder: (_, snapshot) {
-//              print(snapshot.connectionState);
-//              if (snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.waiting) {
-//                return Positioned.fill(
-//                    child: Center(
-//                        child: Opacity(
-//                            opacity: 0.7,
-//                            child: Material(
-//                              child: InkWell(
-//                                  onTap: () {
-//                                    setState(() {
-//                                      isPlaying = true;
-//                                      videoController.play();
-//                                    });
-//                                  },
-//                                  child: Icon(Icons.play_arrow)),
-//                            ))));
-//              }
-//              return Container();
-//            },
-//          )
-//      ],
-//    );
     return Stack(
       children: <Widget>[
         Positioned.fill(

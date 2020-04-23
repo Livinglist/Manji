@@ -8,6 +8,7 @@ import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/ui/custom_list_detail_page.dart';
 
 import 'components/progress_list_tile.dart';
+import 'components/activity_panel.dart';
 import 'progress_detail_page.dart';
 
 ///This is the page that displays lists created by users
@@ -59,7 +60,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        elevation: showShadow ? 8 : 0,
+        elevation: 8,
         title: FuriganaText(
           text: '進度',
           tokens: [Token(text: '進度', furigana: 'しんど')],
@@ -75,6 +76,14 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
               return ListView.separated(
                   controller: scrollController,
                   itemBuilder: (_, index) {
+                    if (index == 0) {
+                      return Material(
+                        elevation: showShadow ? 8 : 0,
+                        child: ActivityPanel(),
+                      );
+                    }
+
+                    index--;
                     if (index < 5) {
                       int jlpt = 5 - index;
 
@@ -110,7 +119,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                         });
                   },
                   separatorBuilder: (_, index) => Divider(height: 0),
-                  itemCount: 5 + kanjiLists.length);
+                  itemCount: 1 + 5 + kanjiLists.length);
             } else {
               return Container();
             }
