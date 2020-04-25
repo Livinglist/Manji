@@ -13,7 +13,7 @@ class ProgressDetailPage extends StatefulWidget {
 
   ProgressDetailPage({this.kanjis, this.title = '', int totalStudied})
       : assert(kanjis != null),
-        totalStudied = totalStudied ?? kanjis.where((kanji) => kanji.timeStamps.isNotEmpty) {
+        totalStudied = totalStudied ?? kanjis.where((kanji) => kanji.timeStamps.isNotEmpty).length {
     kanjis.sort((a, b) => b.timeStamps.length.compareTo(a.timeStamps.length));
   }
 
