@@ -52,19 +52,25 @@ class DBProvider {
 
     if (await File(path).exists()) {
       print("opening");
-      return openDatabase(path, version: 2, onOpen: (db) async {
+      return openDatabase(path, version: 3, onOpen: (db) async {
         print(await db.query("sqlite_master"));
       }, onUpgrade: (db, oldVersion, newVersion) {
         print('upgrade');
 
         db.rawQuery("ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
 
-        db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
-            '"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'
-            '"kanjiId"	INTEGER NOT NULL,'
-            '"choices"	TEXT NOT NULL,'
-            '"selectedIndex"	INTEGER NOT NULL,'
-            '"rightAnswer"	TEXT NOT NULL)');
+        if (oldVersion == 1) {
+          db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
+              '"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'
+              '"kanjiId"	INTEGER NOT NULL,'
+              '"choices"	TEXT NOT NULL,'
+              '"selectedIndex"	INTEGER NOT NULL,'
+              '"rightAnswer"	TEXT NOT NULL)'
+              '"questionType" INTEGER NOT NULL DEFAULT 0');
+        }
+        if (oldVersion == 2) {
+          db.rawQuery("ALTER TABLE IncorrectQuestions ADD questionType INTEGER NOT NULL DEFAULT 0");
+        }
       });
     } else {
       print("copying");
@@ -73,7 +79,7 @@ class DBProvider {
       await File(path).writeAsBytes(bytes);
       return openDatabase(
         path,
-        version: 2,
+        version: 3,
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
         },

@@ -1,4 +1,3 @@
-import 'package:kanji_dictionary/models/incorrect_question.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/resource/repository.dart';

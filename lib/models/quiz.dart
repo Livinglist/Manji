@@ -10,12 +10,12 @@ class Quiz {
 
   int _currentQuestionIndex = 0;
 
-  int get questionsCount => targetedKanjis.length;
+  int get questionsCount => questions.length;
 
   Question get currentQuestion => questions[_currentQuestionIndex];
 
   Quiz({this.targetedKanjis}) {
-    questions = List<Question>(targetedKanjis.length);
+    questions = List<Question>();
 
     for (int i = 0; i < questionsCount; i++) {
       questions[i] = Question(targetedKanji: targetedKanjis[i]);

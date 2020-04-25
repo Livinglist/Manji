@@ -144,32 +144,5 @@ class KanaGridViewState extends State<KanaGridView> {
         }),
       ),
     );
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: 5,
-        children: List.generate(kanas.length, (index) {
-          return Center(
-            child: Container(
-                width: MediaQuery.of(context).size.width / 5,
-                height: MediaQuery.of(context).size.width / 5,
-                child: Center(
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai')),
-                      ),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
-                    ],
-                  ),
-                )),
-          );
-        }),
-      ),
-    );
   }
 }

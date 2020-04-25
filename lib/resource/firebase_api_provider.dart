@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -64,7 +63,7 @@ class FirebaseApiProvider {
       var kanjiStr = lis[0];
       Sentence sentence = lis[1];
       //print('I am listening: ${sentence.text}');
-      var docRef = firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
+      firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
           {'text': sentence.text, 'englishText': sentence.englishText, 'tokens': sentence.tokens.map((token) => jsonEncode(token.toMap())).toList()});
     });
   }
@@ -118,7 +117,7 @@ class FirebaseApiProvider {
       var kanjiStr = lis[0];
       var sentence = lis[1];
       //print('I am listening: ${sentence.text}');
-      var docRef = firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
+      firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
           {'text': sentence.text, 'englishText': sentence.englishText, 'tokens': sentence.tokens.map((token) => jsonEncode(token.toMap())).toList()});
       await DBProvider.db.addSentence(sentence);
     });
@@ -167,7 +166,7 @@ class FirebaseApiProvider {
   Future uploadUserModifiedKanji(Kanji kanji) async {
     var snap = await firestore.collection('userUpdates').document(kanji.kanji).get();
 
-    if(snap.exists) {
+    if (snap.exists) {
       firestore.collection('userUpdates').document(kanji.kanji).updateData({
         'kanji': kanji.kanji,
         'onyomi': FieldValue.arrayUnion(kanji.onyomi),
@@ -175,7 +174,7 @@ class FirebaseApiProvider {
         'onyomiWords': FieldValue.arrayUnion(kanji.onyomiWords.map((word) => word.toString()).toList()),
         'kunyomiWords': FieldValue.arrayUnion(kanji.kunyomiWords.map((word) => word.toString()).toList())
       });
-    }else{
+    } else {
       firestore.collection('userUpdates').document(kanji.kanji).setData({
         'kanji': kanji.kanji,
         'onyomi': FieldValue.arrayUnion(kanji.onyomi),

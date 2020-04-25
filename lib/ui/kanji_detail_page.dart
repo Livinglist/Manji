@@ -1,16 +1,11 @@
-import 'dart:convert' show utf8;
 import 'dart:math';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:kanji_dictionary/utils/list_extension.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
@@ -27,8 +22,11 @@ import 'package:kanji_dictionary/resource/constants.dart';
 class KanjiDetailPage extends StatefulWidget {
   final Kanji kanji;
   final String kanjiStr;
+  final String tag;
 
-  KanjiDetailPage({this.kanji, this.kanjiStr}) : assert(kanji != null || kanjiStr != null);
+  KanjiDetailPage({this.kanji, this.kanjiStr, String tag})
+      : assert(kanji != null || kanjiStr != null),
+        tag = tag ?? kanjiStr ?? kanji.kanji;
 
   @override
   State<StatefulWidget> createState() => _KanjiDetailPageState();
@@ -513,7 +511,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
   }
 
   Widget buildCompoundWordColumn(Kanji kanji) {
-    var children = <Widget>[];
     var onyomiGroup = <Widget>[];
     var kunyomiGroup = <Widget>[];
     var onyomiVerbGroup = <Widget>[];
@@ -1102,69 +1099,6 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       ))))
       ],
     );
-    return Stack(
-      children: <Widget>[
-        Positioned.fill(
-            child: Image.asset(
-          'data/matts.png',
-        )),
-        if (isPlaying == false)
-          Align(
-            alignment: Alignment.center,
-            child: Center(
-                child: Hero(
-                    tag: widget.kanjiStr,
-                    child: Material(
-                      //wrap the text in Material so that Hero transition doesn't glitch
-                      color: Colors.transparent,
-                      child: Text(
-                        widget.kanjiStr,
-                        style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
-                        textAlign: TextAlign.center,
-                      ),
-                    ))),
-          ),
-        if (isPlaying)
-          Positioned.fill(
-              child: Center(
-                  child: Padding(
-            padding: EdgeInsets.all(24),
-            child: StrokeAnimationPlayer(kanjiStr: widget.kanjiStr, videoController: videoController),
-          ))),
-        if (isPlaying)
-          Positioned.fill(
-              child: Image.asset(
-            'data/matts.png',
-          )),
-        if (videoController != null && isPlaying == false)
-          FutureBuilder(
-            future: videoController.initialize().then((val) {
-              print("Initialized");
-              return val;
-            }),
-            builder: (_, snapshot) {
-              print(snapshot.connectionState);
-              if (snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.waiting) {
-                return Positioned.fill(
-                    child: Center(
-                        child: Opacity(
-                            opacity: 0.7,
-                            child: Material(
-                              child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      isPlaying = true;
-                                      videoController.play();
-                                    });
-                                  },
-                                  child: Icon(Icons.play_arrow)),
-                            ))));
-              }
-              return Container();
-            },
-          )
-      ],
-    );
   }
 }
 
@@ -1212,7 +1146,6 @@ class _StrokeAnimationPlayerState extends State<StrokeAnimationPlayer> {
           );
         } else {
           return Container();
-          return Center(child: CircularProgressIndicator());
         }
       },
     );

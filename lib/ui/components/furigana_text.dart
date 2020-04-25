@@ -32,7 +32,6 @@ class FuriganaText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textSpanChildren = <TextSpan>[];
     var richTexts = <RichText>[];
     var queue = Queue<Token>.from(this.tokens.where((token) => token.containsKanji));
     Color unmarkedColor = Colors.white.withOpacity(0.8);
@@ -91,20 +90,5 @@ class FuriganaText extends StatelessWidget {
 
     return Wrap(children: richTexts, alignment: alignment, runAlignment: alignment);
     //return RichText(text: TextSpan(children: textSpanChildren));
-  }
-
-  List<String> _getKanjis(String text) {
-    var kanjis = <String>[];
-    for (int i = 0; i < text.length; i++) {
-      if (text.codeUnitAt(i) > 12543) {
-        kanjis.add(text[i]);
-      }
-    }
-    return kanjis;
-  }
-
-  bool _isKanji(String text) {
-    if (text.codeUnitAt(0) > 12543) return true;
-    return false;
   }
 }

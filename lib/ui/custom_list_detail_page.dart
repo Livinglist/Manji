@@ -6,10 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'components/chip_collections.dart';
 import 'components/kanji_list_tile.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
-import 'kanji_study_page/kanji_study_page.dart';
+import 'kanji_study_pages/kanji_study_page.dart';
 
 ///This is the page that displays the list created by the user
 class ListDetailPage extends StatefulWidget {
@@ -189,7 +188,6 @@ class _ListDetailPageState extends State<ListDetailPage> {
         ));
   }
 
-  @Deprecated("Prefer removing items by swiping.")
   void onLongPressed(String kanjiStr) {
     scaffoldKey.currentState.showBottomSheet((_) => ListTile(
           title: Text('Remove $kanjiStr from ${widget.kanjiList.name}'),

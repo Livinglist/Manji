@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
-import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
-import 'components/furigana_text.dart';
 
 class SearchResultPage extends StatefulWidget {
   final String text;

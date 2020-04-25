@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'components/furigana_text.dart';
-import 'components/chip_collections.dart';
 import 'components/kanji_list_tile.dart';
-import 'kanji_detail_page.dart';
 
 class SentenceDetailPage extends StatefulWidget {
   final Sentence sentence;

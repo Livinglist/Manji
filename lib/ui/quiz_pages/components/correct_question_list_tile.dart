@@ -8,24 +8,28 @@ import 'package:kanji_dictionary/models/question.dart';
 
 class CorrectQuestionListTile extends StatelessWidget {
   final Question question;
+  final double fontSize;
 
-  CorrectQuestionListTile({this.question}) : assert(question != null);
+  CorrectQuestionListTile({this.question})
+      : assert(question != null),
+        fontSize = typeToFontSize(question.questionType);
 
   @override
   Widget build(BuildContext context) {
     var kanji = question.targetedKanji;
-    var wrongKana = question.choices[question.selected];
     var rightKana = question.rightAnswer;
+    var tag = UniqueKey().toString() + kanji.kanji + question.questionType.index.toString();
+
     return ListTile(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji, tag: tag)));
       },
       leading: Container(
         width: 36,
         height: 36,
         child: Center(
           child: Hero(
-            tag: kanji,
+            tag: tag,
             child: Material(
               color: Colors.transparent,
               child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'kazei')),
@@ -103,11 +107,20 @@ class CorrectQuestionListTile extends StatelessWidget {
             ],
           ),
           Divider(),
-          Row(children: <Widget>[
-            Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-            Spacer(),
-            Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: 22))
-          ]),
+          if (question.questionType == QuestionType.KanjiToKatakana)
+            Row(children: <Widget>[
+              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
+              Spacer(),
+              Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: fontSize))
+            ]),
+          if (question.questionType == QuestionType.KanjiToMeaning || question.questionType == QuestionType.KanjiToHiragana)
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
+              Spacer(),
+              Flexible(
+                child: Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: fontSize), maxLines: 1, overflow: TextOverflow.ellipsis),
+              )
+            ]),
           Divider(),
           Text(
             question.targetedKanji.meaning,
@@ -116,6 +129,16 @@ class CorrectQuestionListTile extends StatelessWidget {
         ],
       ),
     );
-    ;
+  }
+
+  static double typeToFontSize(QuestionType type) {
+    switch (type) {
+      case QuestionType.KanjiToKatakana:
+        return 22;
+      case QuestionType.KanjiToMeaning:
+        return 16;
+      default:
+        return 16;
+    }
   }
 }

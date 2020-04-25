@@ -13,15 +13,9 @@ class QuizBloc {
   Stream<Quiz> get quiz => _quizFetcher.stream;
 
   void generateQuiz(List<Kanji> kanjis) {
-    var questions = List<Question>(kanjis.length);
-
-    for (int i = 0; i < kanjis.length; i++) {
-      questions[i] = Question(targetedKanji: kanjis[i]);
-    }
-
-    var quiz = Quiz.from(questions);
-
-    _quizFetcher.sink.add(quiz);
+    compute<List<Kanji>, Quiz>(generate, kanjis).then((quiz) {
+      if (_quizFetcher.isClosed == false) _quizFetcher.sink.add(quiz);
+    });
   }
 
   List<Kanji> generateQuizFromJLPT(int jlpt, {int amount = 0}) {
@@ -43,13 +37,49 @@ class QuizBloc {
 }
 
 Quiz generate(List<Kanji> kanjis) {
-  var questions = List<Question>(kanjis.length);
+  var questions = List<Question>();
 
-  for (int i = 0; i < kanjis.length; i++) {
-    questions[i] = Question(targetedKanji: kanjis[i]);
+  if (kanjis.length < 4) {
+    for (int i = 0; i < kanjis.length; i++) {
+      questions.add(Question(targetedKanji: kanjis[i]));
+    }
+  } else {
+    for (int i = 0; i < kanjis.length; i++) {
+      //KanjiToKatakana
+      questions.add(Question(targetedKanji: kanjis[i]));
+
+      //KanjiToMeaning
+      var random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      while (random == i || (i - random <= 2 && i - random > 0)) {
+        print('i: $i random: $random');
+        random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      }
+      var a = kanjis[random].meaning;
+      var b = kanjis[random + 1].meaning;
+      var c = kanjis[random + 2].meaning;
+
+      questions.add(Question(targetedKanji: kanjis[i], mockChoices: [a, b, c], questionType: QuestionType.KanjiToMeaning));
+
+      //KanjiToHiragana
+      random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      while (random == i || (i - random <= 2 && i - random > 0)) {
+        print('i: $i random: $random');
+        random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      }
+      a = kanjis[random].kunyomi.isEmpty ? '[すき]' : kanjis[random].kunyomi.toString();
+      a = a.substring(1, a.length - 1);
+      b = kanjis[random + 1].kunyomi.isEmpty ? '[すき]' : kanjis[random + 1].kunyomi.toString();
+      b = b.substring(1, b.length - 1);
+      c = kanjis[random + 2].kunyomi.isEmpty ? '[すき]' : kanjis[random + 2].kunyomi.toString();
+      c = c.substring(1, c.length - 1);
+
+      questions.add(Question(targetedKanji: kanjis[i], mockChoices: [a, b, c], questionType: QuestionType.KanjiToHiragana));
+    }
   }
 
   var quiz = Quiz.from(questions);
+
+  print("generated");
 
   return quiz;
 }

@@ -34,7 +34,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app needs access to calendars.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Manji requires access to your camera</string>
+	<string>Manji needs access to your camera for image text extraction.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This app needs access to contacts.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -46,7 +46,7 @@
 	<key>NSMotionUsageDescription</key>
 	<string>This app needs access to motion.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Manji requires the access to your photo library</string>
+	<string>Manji needs access to your photo library for image text extraction.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This app needs access to speech.</string>
 	<key>UILaunchStoryboardName</key>

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:rxdart/rxdart.dart';
-
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'components/kanji_grid_view.dart';
 import 'components/kanji_list_view.dart';

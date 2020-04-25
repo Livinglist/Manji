@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 import 'package:kanji_dictionary/models/question.dart';
 import 'package:kanji_dictionary/ui/quiz_pages/components/incorrect_question_list_tile.dart';
-import 'package:kanji_dictionary/ui/kanji_study_page/kanji_study_page.dart';
+import 'package:kanji_dictionary/ui/kanji_study_pages/kanji_study_page.dart';
 
 class IncorrectQuestionsPage extends StatefulWidget {
   @override

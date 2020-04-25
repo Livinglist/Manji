@@ -5,7 +5,6 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
 import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/ui/custom_list_detail_page.dart';
 
 import 'components/progress_list_tile.dart';
 import 'components/activity_panel.dart';
@@ -19,16 +18,25 @@ class ProgressPage extends StatefulWidget {
 
 class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMixin {
   final List<AnimationController> controllers = List<AnimationController>(5);
+  AnimationController panelAnimationController;
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final textEditingController = TextEditingController();
   final Map<int, List<Kanji>> jlptToKanjisMap = {};
   final Map<int, Map<int, double>> jlptToValuesMap = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}};
 
+  bool showPanel = false;
+
   bool showShadow = false;
+
+  double screenWidth, panelHeight = 120;
 
   @override
   void initState() {
+    super.initState();
+
+    panelAnimationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 120)..value = 0;
+
     for (var index in [0, 1, 2, 3, 4]) {
       controllers[index] = AnimationController(vsync: this, duration: Duration(milliseconds: 600));
 
@@ -37,25 +45,27 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
       });
     }
 
-    super.initState();
-
     scrollController.addListener(() {
-      if (this.mounted) {
-        if (scrollController.offset <= 0) {
-          setState(() {
-            showShadow = false;
-          });
-        } else if (showShadow == false) {
-          setState(() {
-            showShadow = true;
-          });
-        }
-      }
+      panelAnimationController.value = scrollController.offset;
+    });
+
+    Future.delayed(Duration(milliseconds: 600), () {
+      setState(() {
+        showPanel = true;
+      });
     });
   }
 
   @override
+  void dispose() {
+    controllers.forEach((c) => c.dispose());
+    panelAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
@@ -74,12 +84,26 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
             if (snapshot.hasData) {
               var kanjiLists = snapshot.data;
               return ListView.separated(
+                  addAutomaticKeepAlives: true,
                   controller: scrollController,
                   itemBuilder: (_, index) {
                     if (index == 0) {
-                      return Material(
-                        elevation: showShadow ? 8 : 0,
-                        child: ActivityPanel(),
+                      return AnimatedOpacity(
+                        duration: Duration(milliseconds: 300),
+                        opacity: showPanel ? 1 : 0,
+                        child: AnimatedBuilder(
+                          animation: panelAnimationController,
+                          child: ActivityPanel(),
+                          builder: (_, child) {
+                            return Transform.scale(
+                                //offset: Offset(panelAnimationController.value / 120 * screenWidth, 0),
+                                scale: 1 - panelAnimationController.value / 120,
+                                child: Container(
+                                  height: panelHeight,
+                                  child: child,
+                                ));
+                          },
+                        ),
                       );
                     }
 

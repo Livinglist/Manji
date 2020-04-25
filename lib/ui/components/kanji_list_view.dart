@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
-import 'chip_collections.dart';
 import 'kanji_list_tile.dart';
 
 //typedef void StringCallback(String str);

@@ -6,15 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:googleapis/adsense/v1_4.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/bloc/kana_bloc.dart';
-import 'package:kanji_dictionary/resource/db_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';

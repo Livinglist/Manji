@@ -123,6 +123,10 @@ class Kanji {
     onyomiWords = (jsonDecode(map['onyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
     timeStamps = (jsonDecode(map['studiedTimeStamps'] ?? '[]') as List).cast<int>();
   }
+
+  String toString(){
+    return 'Instance of Kanji: $kanji';
+  }
 }
 
 int jlptToIntConverter(JLPTLevel jlpt) {

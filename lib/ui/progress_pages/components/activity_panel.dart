@@ -2,60 +2,63 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import '../yearly_activity_page.dart';
 
 class ActivityPanel extends StatelessWidget {
-  double height, width;
+  static Map<DateTime, List<Kanji>> data;
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.width / 40;
-    width = MediaQuery.of(context).size.width / 40;
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      color: Colors.white,
-      width: MediaQuery.of(context).size.width,
-      child: buildView(),
-    );
+    return buildView(context);
   }
 
-  Widget buildView() {
+  Widget buildView(BuildContext context) {
+    double width = MediaQuery.of(context).size.width / 40;
     return FutureBuilder(
       future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(convertTimeStampsToDateTimeMap, kanjiBloc.allKanjisList),
       builder: (_, AsyncSnapshot<Map<DateTime, List<Kanji>>> snapshot) {
         if (snapshot.hasData) {
           var map = snapshot.data;
-          print(map);
-          return Container(
-            height: 120,
-            child: GridView.count(
-                padding: EdgeInsets.all(2),
-                childAspectRatio: 1,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                scrollDirection: Axis.horizontal,
-                crossAxisCount: 10,
-                children: Iterable.generate(366, (index) {
-                  var d = DateTime.now().subtract(Duration(days: 365 - index));
-                  var date = DateTime(d.year, d.month, d.day);
-                  print(date);
-                  if (map.containsKey(date)) {
-                    return Material(
-                      elevation: 2,
-                      child: Container(
-                        height: width - 2,
-                        width: width - 2,
-                        color: Colors.redAccent,
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      height: width - 2,
-                      width: width - 2,
-                      color: Colors.grey,
-                    );
-                  }
-                }).toList()),
-          );
+          ActivityPanel.data = map;
+          return Material(
+              child: InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => YearlyActivityPage(dateToKanjisMap: map))),
+            child: Container(
+              height: 120,
+              child: GridView.count(
+                  controller: scrollController,
+                  padding: EdgeInsets.all(2),
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 2,
+                  mainAxisSpacing: 2,
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 10,
+                  children: Iterable.generate(366, (index) {
+                    var d = DateTime.now().subtract(Duration(days: 365 - index));
+                    var date = DateTime(d.year, d.month, d.day);
+                    if (map.containsKey(date)) {
+                      return Material(
+                        elevation: 2,
+                        child: Container(
+                          height: width - 2,
+                          width: width - 2,
+                          color: Colors.redAccent,
+                        ),
+                      );
+                    } else {
+                      return Material(
+                        elevation: 1,
+                        child: Container(
+                          height: width - 2,
+                          width: width - 2,
+                          color: Colors.grey,
+                        ),
+                      );
+                    }
+                  }).toList()),
+            ),
+          ));
         }
         return Container();
       },
@@ -70,7 +73,7 @@ Map<DateTime, List<Kanji>> convertTimeStampsToDateTimeMap(List<Kanji> kanjis) {
       var dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).toLocal();
       dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day);
       if (map.containsKey(dateTime) == false) map[dateTime] = [];
-      map[dateTime].add(kanji);
+      if (map[dateTime].contains(kanji) == false) map[dateTime].add(kanji);
     }
   }
   return map;

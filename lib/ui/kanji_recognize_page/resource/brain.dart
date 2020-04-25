@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as im;
 import 'package:tflite/tflite.dart';
 import 'constants.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 export 'package:flutter/material.dart' show Offset;
 

@@ -9,7 +9,7 @@ import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
 import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
 import 'components/furigana_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'kanji_study_page/kanji_study_page.dart';
+import 'kanji_study_pages/kanji_study_page.dart';
 
 class EducationKanjiPage extends StatefulWidget {
   @override

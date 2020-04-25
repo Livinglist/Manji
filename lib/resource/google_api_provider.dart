@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:googleapis/vision/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 

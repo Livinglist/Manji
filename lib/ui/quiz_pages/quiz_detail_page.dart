@@ -26,8 +26,7 @@ class QuizDetailPage extends StatefulWidget {
   _QuizDetailPageState createState() => _QuizDetailPageState();
 }
 
-class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProviderStateMixin {
-  AnimationController animationController;
+class _QuizDetailPageState extends State<QuizDetailPage> {
   final scrollController = ScrollController();
   final quizBloc = QuizBloc();
   bool showShadow = false;
@@ -41,8 +40,6 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-
-    animationController = AnimationController(vsync: this);
 
     var kanjis = <Kanji>[];
     if (widget.kanjis != null) {
@@ -87,20 +84,41 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
         appBar: AppBar(
             elevation: showShadow ? 8 : 0,
             actions: <Widget>[
-              if (total != null)
-                Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$currentIndex/$total', style: TextStyle(fontSize: 18))))
+              StreamBuilder(
+                stream: quizBloc.quiz,
+                builder: (_, AsyncSnapshot<Quiz> snapshot) {
+                  if (snapshot.hasData) {
+                    return Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Center(child: Text('$currentIndex/${snapshot.data.questionsCount}', style: TextStyle(fontSize: 18))));
+                  }
+                  return Container();
+                },
+              )
             ],
             bottom: PreferredSize(
-                child: showResult
-                    ? Container()
-                    : Stack(
-                        children: <Widget>[
-                          LinearProgressIndicator(
-                              value: currentIndex / total,
-                              valueColor: animationController.drive(Tween<Color>(begin: Colors.blueGrey, end: Colors.blueGrey)),
-                              backgroundColor: Colors.grey),
-                        ],
-                      ),
+                child: StreamBuilder(
+                  stream: quizBloc.quiz,
+                  builder: (_, AsyncSnapshot<Quiz> snapshot) {
+                    if (snapshot.hasData) {
+                      return showResult
+                          ? Container()
+                          : Stack(
+                              children: <Widget>[
+                                LinearProgressIndicator(
+                                    value: currentIndex / snapshot.data.questionsCount,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),
+                                    backgroundColor: Colors.grey),
+                              ],
+                            );
+                    }
+                    return Stack(
+                      children: <Widget>[
+                        LinearProgressIndicator(value: 0.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey), backgroundColor: Colors.grey),
+                      ],
+                    );
+                  },
+                ),
                 preferredSize: Size.fromHeight(0))),
         body: showResult ? buildResultView() : buildQuizView());
   }
@@ -176,45 +194,83 @@ class _QuizDetailPageState extends State<QuizDetailPage> with SingleTickerProvid
                             Text(quiz.currentQuestion.targetedKanji.kanji, style: TextStyle(fontSize: 128, color: Colors.white, fontFamily: 'ming')),
                           ],
                         ),
-                        Text(
-                          quiz.currentQuestion.targetedKanji.meaning,
-                          style: TextStyle(fontSize: 18, color: Colors.white60),
-                          textAlign: TextAlign.center,
-                        )
+//                        Text(
+//                          quiz.currentQuestion.targetedKanji.meaning,
+//                          style: TextStyle(fontSize: 18, color: Colors.white60),
+//                          textAlign: TextAlign.center,
+//                        )
                       ],
                     )),
                   ),
                 ),
-                Flexible(
-                    flex: 6,
-                    child: GridView.count(
-                        physics: NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        children: List.generate(quiz.currentQuestion.choices.length, (index) {
-                          return Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Material(
-                                child: Ink(
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        currentIndex++;
-                                        if (quiz.submitAnswer(index) == false) {
-                                          showResult = true;
-                                          quizResult = quiz.getQuizResult();
-                                          iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                      child: Center(
-                                        child: Text(quiz.currentQuestion.choices[index], style: TextStyle(fontSize: 24)),
+                if (quiz.currentQuestion.questionType == QuestionType.KanjiToMeaning ||
+                    quiz.currentQuestion.questionType == QuestionType.KanjiToHiragana)
+                  Flexible(
+                      flex: 6,
+                      child: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          children: List.generate(quiz.currentQuestion.choices.length, (index) {
+                            return Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Material(
+                                  child: Ink(
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          currentIndex++;
+                                          if (quiz.submitAnswer(index) == false) {
+                                            showResult = true;
+                                            quizResult = quiz.getQuizResult();
+                                            iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 48,
+                                        child: Center(
+                                          child: Text(
+                                            quiz.currentQuestion.choices[index],
+                                            style: TextStyle(fontSize: 18),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.fade,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ));
-                        })))
+                                ));
+                          }))),
+                if (quiz.currentQuestion.questionType == QuestionType.KanjiToKatakana)
+                  Flexible(
+                      flex: 6,
+                      child: GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          children: List.generate(quiz.currentQuestion.choices.length, (index) {
+                            return Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Material(
+                                  child: Ink(
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          currentIndex++;
+                                          if (quiz.submitAnswer(index) == false) {
+                                            showResult = true;
+                                            quizResult = quiz.getQuizResult();
+                                            iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        child: Center(
+                                          child: Text(quiz.currentQuestion.choices[index], style: TextStyle(fontSize: 24)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                          })))
               ],
             ),
           );

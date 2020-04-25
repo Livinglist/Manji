@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:kanji_dictionary/models/incorrect_question.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kanji_dictionary/models/kanji_list.dart';
-import 'package:kanji_dictionary/models/question.dart';
 
 const favKanjiStrsKey = 'favKanjiStrs';
 const starKanjiStrsKey = 'starKanjiStrs';

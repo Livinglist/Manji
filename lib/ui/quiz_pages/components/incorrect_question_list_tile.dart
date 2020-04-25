@@ -8,24 +8,28 @@ import 'package:kanji_dictionary/models/question.dart';
 
 class IncorrectQuestionListTile extends StatelessWidget {
   final Question question;
+  final double fontSize;
 
-  IncorrectQuestionListTile({this.question}) : assert(question != null);
+  IncorrectQuestionListTile({this.question})
+      : assert(question != null),
+        fontSize = typeToFontSize(question.questionType);
 
   @override
   Widget build(BuildContext context) {
     var kanji = question.targetedKanji;
     var wrongKana = question.choices[question.selected];
     var rightKana = question.rightAnswer;
+    var tag = UniqueKey().toString() + kanji.kanji + question.questionType.index.toString();
     return ListTile(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji, tag: tag)));
       },
       leading: Container(
         width: 36,
         height: 36,
         child: Center(
           child: Hero(
-            tag: kanji,
+            tag: tag,
             child: Material(
               color: Colors.transparent,
               child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'kazei')),
@@ -79,7 +83,7 @@ class IncorrectQuestionListTile extends StatelessWidget {
                         //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                        ),
+                            ),
                       ),
                     )),
               for (var onyomi in kanji.onyomi)
@@ -96,24 +100,45 @@ class IncorrectQuestionListTile extends StatelessWidget {
                       //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                      ),
+                          ),
                     ),
                   ),
                 )
             ],
           ),
           Divider(),
-          Row(children: <Widget>[
-            Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-            Spacer(),
-            Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: 22))
-          ]),
+          if (question.questionType == QuestionType.KanjiToKatakana)
+            Row(children: <Widget>[
+              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
+              Spacer(),
+              Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: fontSize))
+            ]),
+          if (question.questionType == QuestionType.KanjiToMeaning || question.questionType == QuestionType.KanjiToHiragana)
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
+              Spacer(),
+              Flexible(
+                child: Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: fontSize), maxLines: 1, overflow: TextOverflow.ellipsis),
+              )
+            ]),
           Divider(),
-          Row(children: <Widget>[
-            Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
-            Spacer(),
-            Text(wrongKana, style: TextStyle(color: Colors.redAccent, fontSize: 22))
-          ]),
+          if (question.questionType == QuestionType.KanjiToKatakana)
+            Row(children: <Widget>[
+              Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
+              Spacer(),
+              Text(wrongKana, style: TextStyle(color: Colors.redAccent, fontSize: fontSize))
+            ]),
+          if (question.questionType == QuestionType.KanjiToMeaning || question.questionType == QuestionType.KanjiToHiragana)
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+              Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
+              Spacer(),
+              Flexible(
+                  child: Text(wrongKana,
+                      style: TextStyle(color: Colors.redAccent, fontSize: fontSize),
+                      textAlign: TextAlign.end,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis))
+            ]),
           Divider(),
           Text(
             question.targetedKanji.meaning,
@@ -122,6 +147,16 @@ class IncorrectQuestionListTile extends StatelessWidget {
         ],
       ),
     );
-    ;
+  }
+
+  static double typeToFontSize(QuestionType type) {
+    switch (type) {
+      case QuestionType.KanjiToKatakana:
+        return 22;
+      case QuestionType.KanjiToMeaning:
+        return 16;
+      default:
+        return 16;
+    }
   }
 }

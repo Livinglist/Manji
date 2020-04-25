@@ -133,9 +133,7 @@ class JishoApiProvider {
 
   Stream<List> fetchAllWordsByKanjis(List<String> kanjis) async*{
     var types = [WordType.noun, WordType.verb, WordType.adjective];
-    for(var type in types){
 
-    }
     for(var kanji in kanjis){
       for(var type in types){
         int pageNum = 1;
@@ -568,7 +566,7 @@ class JishoApiProvider {
           print(kanji.kanji);
           firebaseApiProvider.uploadKanji(kanji);
           yield kanji;
-          print("total kanji count:${index}");
+          print("total kanji count:$index");
           index++;
         }
         pageNum++;
