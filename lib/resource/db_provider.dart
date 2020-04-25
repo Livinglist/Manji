@@ -12,6 +12,8 @@ import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/kana.dart';
 import 'package:kanji_dictionary/models/question.dart';
 
+const Script = 'Script';
+
 class DBProvider {
   DBProvider._();
 
@@ -100,7 +102,7 @@ class DBProvider {
         : [];
   }
 
-  @Deprecated('')
+  @Script
   Future<List<Sentence>> getSentencesByKanji(String kanjiStr) async {
     final db = await database;
     //print(await db.query("sqlite_master"));
@@ -111,7 +113,7 @@ class DBProvider {
     return sentences;
   }
 
-  @Deprecated('')
+  @Script
   Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) async* {
     final db = await database;
     print(await db.query("sqlite_master"));

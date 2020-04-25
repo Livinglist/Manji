@@ -176,7 +176,7 @@ class JishoApiProvider {
     }
   }
 
-  @Deprecated('Used for scrapping')
+  //Used for scrapping.
   Stream<List> fetchAllSentencesByKanjis(List<String> kanjis) async* {
     //const alreadyScrappedKanjis = <String>['一','二'];
     for(var kanji in kanjis){
@@ -343,7 +343,7 @@ class JishoApiProvider {
     return sentences;
   }
 
-  @Deprecated('Used for scrapping')
+  //Used for scrapping.
   Stream<Sentence> fetchAllSentencesByKanji(String kanji) async* {
     //get the html from
     int pageNum = 1;
@@ -627,7 +627,7 @@ class JishoApiProvider {
     yield null;
   }
 
-  @Deprecated('Used for scrapping')
+  //'Used for scrapping'
   Future<Kanji> fetchKanjiInfo(String kanji) async {
     var url = 'https://jisho.org/search/$kanji%20%23kanji';
     var response = await client.get(url);
