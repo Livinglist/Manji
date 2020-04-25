@@ -79,7 +79,5 @@ Quiz generate(List<Kanji> kanjis) {
 
   var quiz = Quiz.from(questions);
 
-  print("generated");
-
   return quiz;
 }

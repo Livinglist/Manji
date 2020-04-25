@@ -23,7 +23,7 @@ class Quiz {
   }
 
   Quiz.from(List<Question> questions) : this.targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
-    this.questions = questions;
+    this.questions = questions..shuffle();
   }
 
   ///Submit user's answer to the current question.

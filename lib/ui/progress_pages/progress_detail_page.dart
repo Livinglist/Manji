@@ -5,14 +5,13 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'components/kanji_progress_list_tile.dart';
 
-
 ///This is the page that displays lists created by users
 class ProgressDetailPage extends StatefulWidget {
   final List<Kanji> kanjis;
   final String title;
   final int totalStudied;
 
-  ProgressDetailPage({this.kanjis, this.title = '', totalStudied = 0})
+  ProgressDetailPage({this.kanjis, this.title = '', int totalStudied})
       : assert(kanjis != null),
         totalStudied = totalStudied ?? kanjis.where((kanji) => kanji.timeStamps.isNotEmpty) {
     kanjis.sort((a, b) => b.timeStamps.length.compareTo(a.timeStamps.length));

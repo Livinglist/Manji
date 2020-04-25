@@ -114,7 +114,8 @@ class ActivityGridView extends StatelessWidget {
       }
     }
 
-    for (var i in kanjisByYears.keys.toList()..sort((a, b) => a.compareTo(b))) {
+    for (var i in kanjisByYears.keys.isEmpty ? [DateTime.now().year] : kanjisByYears.keys.toList()
+      ..sort((a, b) => a.compareTo(b))) {
       for (var d in Iterable.generate(31)) {
         children.add(Container(height: 12, width: 12, child: Center(child: Text((d + 1).toString(), style: TextStyle(color: Colors.white)))));
         for (var m in Iterable.generate(12)) {

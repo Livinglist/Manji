@@ -231,8 +231,9 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                           child: Text(
                                             quiz.currentQuestion.choices[index],
                                             style: TextStyle(fontSize: 18),
+                                            textAlign: TextAlign.center,
                                             maxLines: 2,
-                                            overflow: TextOverflow.fade,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
