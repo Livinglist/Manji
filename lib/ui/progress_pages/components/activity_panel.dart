@@ -34,8 +34,8 @@ class ActivityPanel extends StatelessWidget {
                   mainAxisSpacing: 2,
                   scrollDirection: Axis.horizontal,
                   crossAxisCount: 10,
-                  children: Iterable.generate(366, (index) {
-                    var d = DateTime.now().subtract(Duration(days: 365 - index));
+                  children: Iterable.generate(316, (index) {
+                    var d = DateTime.now().subtract(Duration(days: 315 - index));
                     var date = DateTime(d.year, d.month, d.day);
                     if (map.containsKey(date)) {
                       return Material(

@@ -33,6 +33,7 @@ class KanjiDetailPage extends StatefulWidget {
 }
 
 class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProviderStateMixin {
+  AnimationController animationController;
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final sentenceBloc = SentenceBloc();
@@ -45,6 +46,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
   @override
   void initState() {
+    animationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 1.1)..value = 1;
     kanjiStr = widget.kanjiStr ?? widget.kanji.kanji;
     isFaved = kanjiBloc.getIsFaved(kanjiStr);
     isStared = kanjiBloc.getIsStared(kanjiStr);
@@ -78,6 +80,10 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       }
     });
 
+    scrollController.addListener(() {
+      animationController.value = (190 - scrollController.offset) / 190;
+    });
+
     sentenceBloc.getSentencesByKanji(kanjiStr);
     sentenceBloc.fetchWordsByKanji(kanjiStr);
     // kanjiBloc.getSentencesByKanji(widget.kanjiStr ?? widget.kanji.kanji);
@@ -98,7 +104,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     scrollController.dispose();
     sentenceBloc.dispose();
     kanjiBloc.reset();
-    //kanjiBloc.resetSentencesFetcher();
     super.dispose();
   }
 
@@ -153,7 +158,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                 if (snapshot.hasData || widget.kanji != null) {
                   var kanji = widget.kanji == null ? snapshot.data : widget.kanji;
                   this.kanji = kanji;
-                  return Text(getAppBarInfo());
+                  return Text(kanji.kanji ?? '');
                 } else {
                   return Container();
                 }
@@ -291,25 +296,35 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
           controller: scrollController,
           child: Column(
             children: <Widget>[
-              Container(
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: <Widget>[
-                    Flexible(
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
-                              height: MediaQuery.of(context).size.width / 2 - 24,
-                              child: Center(child: KanjiBlock(kanjiStr: widget.kanjiStr ?? widget.kanji.kanji)
-                                  //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
-                                  )),
-                        ),
-                        flex: 1),
-                    Flexible(child: buildKanjiInfoColumn(), flex: 1),
-                  ],
+              AnimatedBuilder(
+                animation: animationController,
+                child: Container(
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
+                                height: MediaQuery.of(context).size.width / 2 - 24,
+                                child: Center(child: KanjiBlock(kanjiStr: widget.kanjiStr ?? widget.kanji.kanji)
+                                    //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
+                                    )),
+                          ),
+                          flex: 1),
+                      Flexible(child: buildKanjiInfoColumn(), flex: 1),
+                    ],
+                  ),
                 ),
+                builder: (_, child) {
+                  var scale = 0.5 + 0.5 * animationController.value;
+                  return Opacity(
+                    opacity: animationController.value <= 1 ? animationController.value : 1,
+                    child: Transform.scale(scale: scale, alignment: scale > 1 ? Alignment.centerLeft : Alignment.center, child: child),
+                  );
+                },
               ),
               StreamBuilder(
                 stream: kanjiBloc.kanji,

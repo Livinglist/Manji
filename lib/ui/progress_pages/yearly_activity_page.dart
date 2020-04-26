@@ -96,9 +96,7 @@ class ActivityGridView extends StatelessWidget {
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
       controller: scrollController,
-      children: <Widget>[
-        ...buildChildren(context),
-      ],
+      children: <Widget>[...buildChildren(context), SizedBox(height: 12)],
     );
   }
 
