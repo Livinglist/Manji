@@ -35,7 +35,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
   void initState() {
     super.initState();
 
-    panelAnimationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 120)..value = 0;
+    panelAnimationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 3)..value = 1;
 
     for (var index in [0, 1, 2, 3, 4]) {
       controllers[index] = AnimationController(vsync: this, duration: Duration(milliseconds: 600));
@@ -46,7 +46,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
     }
 
     scrollController.addListener(() {
-      panelAnimationController.value = scrollController.offset;
+      panelAnimationController.value = (120 - scrollController.offset) / 120;
     });
 
     Future.delayed(Duration(milliseconds: 600), () {
@@ -96,8 +96,8 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                           child: ActivityPanel(),
                           builder: (_, child) {
                             return Transform.scale(
-                                //offset: Offset(panelAnimationController.value / 120 * screenWidth, 0),
-                                scale: 1 - panelAnimationController.value / 120,
+                                origin: Offset(0, 60),
+                                scale: panelAnimationController.value,
                                 child: Container(
                                   height: panelHeight,
                                   child: child,

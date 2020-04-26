@@ -167,6 +167,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   }
 
   Widget buildQuizView() {
+    print(MediaQuery.of(context).devicePixelRatio);
     return StreamBuilder(
       stream: quizBloc.quiz,
       builder: (_, AsyncSnapshot<Quiz> snapshot) {
@@ -177,10 +178,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Flex(
+              mainAxisSize: MainAxisSize.min,
               direction: Axis.vertical,
               children: <Widget>[
                 Flexible(
-                  flex: 4,
+                  flex: 2,
                   child: Container(
                     child: Center(
                         child: Flex(
@@ -194,11 +196,6 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                             Text(quiz.currentQuestion.targetedKanji.kanji, style: TextStyle(fontSize: 128, color: Colors.white, fontFamily: 'ming')),
                           ],
                         ),
-//                        Text(
-//                          quiz.currentQuestion.targetedKanji.meaning,
-//                          style: TextStyle(fontSize: 18, color: Colors.white60),
-//                          textAlign: TextAlign.center,
-//                        )
                       ],
                     )),
                   ),
@@ -206,13 +203,14 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                 if (quiz.currentQuestion.questionType == QuestionType.KanjiToMeaning ||
                     quiz.currentQuestion.questionType == QuestionType.KanjiToHiragana)
                   Flexible(
-                      flex: 6,
+                      flex: 4,
                       child: ListView(
                           physics: NeverScrollableScrollPhysics(),
                           children: List.generate(quiz.currentQuestion.choices.length, (index) {
                             return Padding(
                                 padding: EdgeInsets.all(12),
                                 child: Material(
+                                  elevation: 4,
                                   child: Ink(
                                     child: InkWell(
                                       onTap: () {
@@ -226,8 +224,10 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                         });
                                       },
                                       child: Container(
-                                        height: 48,
+                                        height: 72,
                                         child: Center(
+                                            child: Padding(
+                                          padding: EdgeInsets.all(12),
                                           child: Text(
                                             quiz.currentQuestion.choices[index],
                                             style: TextStyle(fontSize: 18),
@@ -235,7 +235,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                        ),
+                                        )),
                                       ),
                                     ),
                                   ),
@@ -243,14 +243,17 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                           }))),
                 if (quiz.currentQuestion.questionType == QuestionType.KanjiToKatakana)
                   Flexible(
-                      flex: 6,
+                      flex: 4,
                       child: GridView.count(
                           physics: NeverScrollableScrollPhysics(),
                           crossAxisCount: 2,
+                          shrinkWrap: true,
+                          childAspectRatio: 1,
                           children: List.generate(quiz.currentQuestion.choices.length, (index) {
                             return Padding(
                                 padding: EdgeInsets.all(12),
                                 child: Material(
+                                  elevation: 4,
                                   child: Ink(
                                     child: InkWell(
                                       onTap: () {
