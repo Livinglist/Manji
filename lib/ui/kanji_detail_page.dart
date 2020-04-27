@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:googleapis/adsense/v1_4.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
 import 'package:video_player/video_player.dart';
@@ -145,6 +146,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width / 2 - 24);
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
@@ -299,6 +301,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               AnimatedBuilder(
                 animation: animationController,
                 child: Container(
+                  //constraints: BoxConstraints(minWidth: 100, maxWidth: 240, minHeight: 100, maxHeight: 240),
                   child: Flex(
                     direction: Axis.horizontal,
                     children: <Widget>[
@@ -306,6 +309,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                           child: Padding(
                             padding: EdgeInsets.all(12),
                             child: Container(
+                                //constraints: BoxConstraints(maxWidth: 180, maxHeight: 180),
                                 decoration: BoxDecoration(
                                     boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
                                 height: MediaQuery.of(context).size.width / 2 - 24,
@@ -1012,6 +1016,7 @@ class KanjiBlock extends StatefulWidget {
   final String kanjiStr;
 
   KanjiBlock({this.kanjiStr}) : assert(kanjiStr != null && kanjiStr.length == 1);
+
   @override
   _KanjiBlockState createState() => _KanjiBlockState();
 }
@@ -1081,6 +1086,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       child: Text(
                         widget.kanjiStr,
                         style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                        textScaleFactor: computeScaleFactor(MediaQuery.of(context).size.width / 2 - 24),
                         textAlign: TextAlign.center,
                       ),
                     ))),
@@ -1114,6 +1120,11 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       ))))
       ],
     );
+  }
+
+  static double computeScaleFactor(double width) {
+    print(((163.5 - width).abs() / 163.5));
+    return (width / 163.5);
   }
 }
 

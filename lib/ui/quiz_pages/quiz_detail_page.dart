@@ -244,37 +244,41 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                 if (quiz.currentQuestion.questionType == QuestionType.KanjiToKatakana)
                   Flexible(
                       flex: 4,
-                      child: GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          shrinkWrap: true,
-                          childAspectRatio: 1,
-                          children: List.generate(quiz.currentQuestion.choices.length, (index) {
-                            return Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Material(
-                                  elevation: 4,
-                                  child: Ink(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          currentIndex++;
-                                          if (quiz.submitAnswer(index) == false) {
-                                            showResult = true;
-                                            quizResult = quiz.getQuizResult();
-                                            iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        child: Center(
-                                          child: Text(quiz.currentQuestion.choices[index], style: TextStyle(fontSize: 24)),
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 640, maxHeight: 640),
+                        child: GridView.count(
+                            physics: NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            childAspectRatio: 1,
+                            children: List.generate(quiz.currentQuestion.choices.length, (index) {
+                              return Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Material(
+                                    elevation: 4,
+                                    child: Ink(
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            currentIndex++;
+                                            if (quiz.submitAnswer(index) == false) {
+                                              showResult = true;
+                                              quizResult = quiz.getQuizResult();
+                                              iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          child: Center(
+                                            child: Text(quiz.currentQuestion.choices[index], style: TextStyle(fontSize: 24)),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ));
-                          })))
+                                  ));
+                            })),
+                      )
+                  )
               ],
             ),
           );
