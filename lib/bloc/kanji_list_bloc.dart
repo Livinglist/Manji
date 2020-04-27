@@ -19,7 +19,6 @@ class KanjiListBloc {
 
   void init() {
     _kanjiLists = repo.getAllKanjiList();
-    print("init ${_kanjiLists.length}");
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 

@@ -230,11 +230,5 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
     return children;
   }
 
-  void onLiked(Kanji kanji) {}
-
   void onDragStarted() {}
-
-  void onPanStart(DragStartDetails details) {
-    print(details.localPosition);
-  }
 }

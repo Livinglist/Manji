@@ -91,7 +91,6 @@ class SearchResultPageState extends State<SearchResultPage> {
                                 elevation: 4,
                                 label: Text("N$n"),
                                 onSelected: (val) {
-                                  print(val);
                                   setState(() {
                                     jlptMap[n] = !jlptMap[n];
                                   });

@@ -18,8 +18,9 @@ class HomePageBackground extends StatefulWidget {
 }
 
 class HomePageBackgroundState extends State<HomePageBackground> {
+  final totalKanji = Device.get().isTablet ? 500 : 190;
   final total = Device.get().isTablet ? 500 : 190;
-  final perRow = Device.get().isTablet ? 20 : 10;
+  var perRow = Device.get().isTablet ? 20 : 10;
   double width, height;
   List<GlobalKey> keys;
   List<String> kanji = ['', '', ''];
@@ -31,7 +32,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
   @override
   void initState() {
     super.initState();
-    keys = List.generate(total, (_) => GlobalKey());
+    keys = List.generate(totalKanji, (_) => GlobalKey());
   }
 
   setTarget(Offset ptrPos) {
@@ -62,7 +63,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
     if (!initialized) {
       var res = await rootBundle.loadString('data/data').whenComplete(() => initialized = true);
       kanjiJsons = (json.decode(res) as List).map((map) => map["kanji"]).toList()..shuffle();
-      kanjiJsons = kanjiJsons.take(total);
+      kanjiJsons = kanjiJsons.take(totalKanji);
     }
   }
 
@@ -70,6 +71,8 @@ class HomePageBackgroundState extends State<HomePageBackground> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
+    perRow = Device.get().isTablet ? (width < 505 ? 10 : 20) : 10;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -119,9 +122,8 @@ class HomePageBackgroundState extends State<HomePageBackground> {
   }
 
   List<Widget> buildChildren() {
-    return List.generate(
-      total,
-      (i) => Transform.scale(
+    return List.generate(total, (i) {
+      return Transform.scale(
           scale: widget.animationController?.value ?? 1,
           child: AnimatedOpacity(
               opacity: keys[i] == targetKey ? 1 : 0.2,
@@ -130,7 +132,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
               //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
               child: Center(
                 child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'kazei')),
-              ))),
-    );
+              )));
+    });
   }
 }

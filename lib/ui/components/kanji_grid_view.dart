@@ -26,10 +26,12 @@ class KanjiGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return GridView.count(
         controller: scrollController,
         shrinkWrap: true,
-        crossAxisCount: Device.get().isTablet?10:5,
+        crossAxisCount: Device.get().isTablet ? (width < 505 ? 5 : 10) : 5,
         physics: scrollPhysics,
         children: List.generate(kanjis.length, (index) {
           var kanji = kanjis[index];
