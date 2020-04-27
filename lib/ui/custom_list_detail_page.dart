@@ -7,8 +7,6 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
-import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
 import 'components/kanji_list_tile.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'kanji_study_pages/kanji_study_page.dart';

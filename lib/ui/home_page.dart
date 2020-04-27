@@ -59,15 +59,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     });
   }
 
-//  Future<bool> startAnimation() async {
-//    if (this.mounted) {
-//      animationController.forward();
-//      return false;
-//    } else {
-//      return true;
-//    }
-//  }
-
   Future<ImageSource> getImageSource() {
     return showCupertinoModalPopup<ImageSource>(
         context: context,
@@ -131,6 +122,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
         drawerEdgeDragWidth: 50,
         key: scaffoldKey,
@@ -171,7 +164,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         ),
         drawer: DrawerListener(
           onPositionChange: (FractionalOffset offset) {
-            animationController.value = offset.dx;
+            if (Device.get().isTablet == false) animationController.value = offset.dx;
           },
           child: Drawer(
               child: Material(
@@ -266,8 +259,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                       })),
               Positioned(
                   top: 80,
-                  left: Device.get().isTablet?256:22,
-                  right: Device.get().isTablet?256:22,
+                  left: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
+                  right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
                   child: Center(
                     child: Container(
                         decoration: BoxDecoration(
@@ -312,16 +305,15 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   )),
               Positioned(
                   top: 160,
-                  left: Device.get().isTablet?256:22,
-                  right: Device.get().isTablet?256:22,
+                  left: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
+                  right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
                   child: Container(
                       child: AnimatedBuilder(
                           animation: animationController,
                           child: DailyKanjiCard(),
                           builder: (_, child) {
                             return Opacity(opacity: tween.animate(animationController).value, child: child);
-                          }))
-              )
+                          })))
             ],
           ),
         ));

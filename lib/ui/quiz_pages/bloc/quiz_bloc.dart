@@ -51,7 +51,6 @@ Quiz generate(List<Kanji> kanjis) {
       //KanjiToMeaning
       var random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
       while (random == i || (i - random <= 2 && i - random > 0)) {
-        print('i: $i random: $random');
         random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
       }
       var a = kanjis[random].meaning;
