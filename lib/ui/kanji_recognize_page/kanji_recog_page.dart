@@ -214,8 +214,8 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
-          color: Colors.black,
-          width: 8,
+          color: Colors.black54,
+          width: 2,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
