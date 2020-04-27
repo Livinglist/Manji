@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_device_type/flutter_device_type.dart';
+
 import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
@@ -27,7 +29,7 @@ class KanjiGridView extends StatelessWidget {
     return GridView.count(
         controller: scrollController,
         shrinkWrap: true,
-        crossAxisCount: 5,
+        crossAxisCount: Device.get().isTablet?10:5,
         physics: scrollPhysics,
         children: List.generate(kanjis.length, (index) {
           var kanji = kanjis[index];

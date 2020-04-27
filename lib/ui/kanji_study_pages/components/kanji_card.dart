@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_device_type/flutter_device_type.dart';
+
 import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
 import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
@@ -104,29 +106,48 @@ class KanjiCardState extends State<KanjiCard> {
                                     );
                                   }
                                   return Padding(
-                                    padding: EdgeInsets.only(
-                                        left: sentence.text.length > 45 ? 4 : 8,
-                                        right: sentence.text.length > 45 ? 4 : 8,
-                                        bottom: sentence.englishText.length > 140 ? 0 : 48),
-                                    child: ListTile(
-                                      title: Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 4),
-                                          child: FuriganaText(
-                                            text: sentence.text,
-                                            tokens: sentence.tokens,
-                                            style: TextStyle(fontSize: sentence.text.length > 50 ? 14 : 16),
-                                          )),
-                                      subtitle: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 4),
-                                        child: Text(
-                                          sentence.englishText,
-                                          style: TextStyle(color: Colors.white54),
-                                          maxLines: 4,
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                      padding: EdgeInsets.only(
+                                          left: sentence.text.length > 45 ? 4 : 8,
+                                          right: sentence.text.length > 45 ? 4 : 8,
+                                          bottom: sentence.englishText.length > 140 ? 0 : 48),
+                                      child: Device.get().isTablet
+                                          ? Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Padding(
+                                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                                    child: FuriganaText(
+                                                      text: sentence.text,
+                                                      tokens: sentence.tokens,
+                                                      style: TextStyle(fontSize: sentence.text.length > 50 ? 18 : 22),
+                                                    )),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 48),
+                                                  child: Text(
+                                                    sentence.englishText,
+                                                    style: TextStyle(color: Colors.white54),
+                                                    overflow: TextOverflow.fade,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : ListTile(
+                                              title: Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                                  child: FuriganaText(
+                                                    text: sentence.text,
+                                                    tokens: sentence.tokens,
+                                                    style: TextStyle(fontSize: sentence.text.length > 50 ? 14 : 16),
+                                                  )),
+                                              subtitle: Padding(
+                                                padding: EdgeInsets.symmetric(vertical: 4),
+                                                child: Text(
+                                                  sentence.englishText,
+                                                  style: TextStyle(color: Colors.white54),
+                                                  maxLines: 4,
+                                                  overflow: TextOverflow.fade,
+                                                ),
+                                              )));
                                 } else {
                                   return Container(
                                     height: 200,
@@ -142,6 +163,7 @@ class KanjiCardState extends State<KanjiCard> {
                               },
                             ),
                           ),
+                          SizedBox(height: 24)
                         ],
                       ),
                     ),

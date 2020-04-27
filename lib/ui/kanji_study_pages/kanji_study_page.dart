@@ -104,9 +104,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
         appBar: AppBar(
           title: Text(''),
           actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(12),
-                child: Center(child: Text('$index/$cardsCount', style: TextStyle(fontSize: 18)))),
+            Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$index/$cardsCount', style: TextStyle(fontSize: 18)))),
             IconButton(
               icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),

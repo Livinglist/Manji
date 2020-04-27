@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import 'package:kanji_dictionary/ui/components/kanji_grid_view.dart';
+import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
 import 'components/kanji_list_tile.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
@@ -215,18 +218,18 @@ class _ListDetailPageState extends State<ListDetailPage> {
         controller: gridViewScrollController,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        crossAxisCount: 6,
+        crossAxisCount: Device.get().isTablet ? 10 : 5,
         children: List.generate(kanjis.length, (index) {
           var kanji = kanjis[index];
           return InkWell(
             child: Container(
-                width: MediaQuery.of(context).size.width / 6,
-                height: MediaQuery.of(context).size.width / 6,
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.width / 5,
                 child: Stack(
                   children: <Widget>[
                     Align(
                       alignment: Alignment.center,
-                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
+                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: 'kazei')),
                     ),
                     Positioned(
                       left: 4,
@@ -242,7 +245,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
               Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
             },
             onLongPress: () {
-              onLongPressed(kanji.kanji);
+              confirmDismiss(kanji);
             },
           );
         }));

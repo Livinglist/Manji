@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_device_type/flutter_device_type.dart';
+
 typedef KanjiCallback = void Function(String);
 
 class HomePageBackground extends StatefulWidget {
@@ -16,8 +18,8 @@ class HomePageBackground extends StatefulWidget {
 }
 
 class HomePageBackgroundState extends State<HomePageBackground> {
-  final total = 190;
-  final perRow = 10;
+  final total = Device.get().isTablet ? 500 : 190;
+  final perRow = Device.get().isTablet ? 20 : 10;
   double width, height;
   List<GlobalKey> keys;
   List<String> kanji = ['', '', ''];

@@ -40,6 +40,10 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(12),
+                child: Text('Tap on the card to reveal more information about the kanji.', style: TextStyle(color: Colors.white)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(12),
                 child: Text('Tip: You can double tap on the card to check out detailed information about the kanji.',
                     style: TextStyle(color: Colors.white)),
               ),
@@ -50,9 +54,7 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
               Material(
                 elevation: 8,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Image.asset('data/right.png'),
+                  child: Image.asset('data/right.png', width: 240),
                 ),
               ),
               Padding(
@@ -63,12 +65,10 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
               Material(
                 elevation: 8,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Image.asset('data/left.png'),
+                  child: Image.asset('data/left.png', width: 240),
                 ),
               ),
-              SizedBox(height: 48)
+              SizedBox(height: 48, width: double.infinity)
             ],
           ),
         ));

@@ -90,6 +90,7 @@ class KanaGridViewState extends State<KanaGridView> {
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width);
     return Container(
       height: MediaQuery.of(context).size.height,
       child: GridView.count(
@@ -98,11 +99,11 @@ class KanaGridViewState extends State<KanaGridView> {
         children: List.generate(kanas.length, (index) {
           return Center(
               child: InkWell(
-                onTap: (){
-                  setState(() {
-                    crossFadeStates[index] = crossFadeStates[index] == CrossFadeState.showSecond ? CrossFadeState.showFirst : CrossFadeState.showSecond;
-                  });
-                },
+            onTap: () {
+              setState(() {
+                crossFadeStates[index] = crossFadeStates[index] == CrossFadeState.showSecond ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+              });
+            },
             child: GestureDetector(
               child: AnimatedCrossFade(
                   firstChild: Container(
@@ -113,11 +114,16 @@ class KanaGridViewState extends State<KanaGridView> {
                           children: <Widget>[
                             Align(
                               alignment: Alignment.center,
-                              child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai')),
+                              child: Text(
+                                kanas[index].kana ?? '',
+                                style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai'),
+                                textScaleFactor: MediaQuery.of(context).size.width / 375,
+                              ),
                             ),
                             Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
+                                child: Text(kanas[index].pron ?? '',
+                                    style: TextStyle(color: Colors.white70, fontSize: 12), textScaleFactor: MediaQuery.of(context).size.width / 375))
                           ],
                         ),
                       )),
@@ -129,11 +135,13 @@ class KanaGridViewState extends State<KanaGridView> {
                           children: <Widget>[
                             Align(
                               alignment: Alignment.center,
-                              child: Text(kanas[index].kana ?? '', style: TextStyle(color: Colors.white, fontSize: 36)),
+                              child: Text(kanas[index].kana ?? '',
+                                  style: TextStyle(color: Colors.white, fontSize: 36), textScaleFactor: MediaQuery.of(context).size.width / 375),
                             ),
                             Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Text(kanas[index].pron ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)))
+                                child: Text(kanas[index].pron ?? '',
+                                    style: TextStyle(color: Colors.white70, fontSize: 12), textScaleFactor: MediaQuery.of(context).size.width / 375))
                           ],
                         ),
                       )),

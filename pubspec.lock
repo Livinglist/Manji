@@ -139,6 +139,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_device_type:
+    dependency: "direct main"
+    description:
+      name: flutter_device_type
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
