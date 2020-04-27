@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/bloc/kana_bloc.dart';
@@ -265,8 +266,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                       })),
               Positioned(
                   top: 80,
-                  left: 22,
-                  right: 22,
+                  left: Device.get().isTablet?256:22,
+                  right: Device.get().isTablet?256:22,
                   child: Center(
                     child: Container(
                         decoration: BoxDecoration(
@@ -311,15 +312,16 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   )),
               Positioned(
                   top: 160,
-                  left: 22,
-                  right: 22,
+                  left: Device.get().isTablet?256:22,
+                  right: Device.get().isTablet?256:22,
                   child: Container(
-                      //width: MediaQuery.of(context).size.width * 0.9,
                       child: AnimatedBuilder(
                           animation: animationController,
-                          builder: (_, __) {
-                            return Opacity(opacity: tween.animate(animationController).value, child: DailyKanjiCard());
-                          })))
+                          child: DailyKanjiCard(),
+                          builder: (_, child) {
+                            return Opacity(opacity: tween.animate(animationController).value, child: child);
+                          }))
+              )
             ],
           ),
         ));

@@ -146,7 +146,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width / 2 - 24);
+    double kanjiBlockHeight = MediaQuery.of(context).size.width / 2 - 24;
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
@@ -309,11 +309,14 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                           child: Padding(
                             padding: EdgeInsets.all(12),
                             child: Container(
-                                //constraints: BoxConstraints(maxWidth: 180, maxHeight: 180),
+                                constraints: BoxConstraints(maxWidth: 360, maxHeight: 360),
                                 decoration: BoxDecoration(
                                     boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
-                                height: MediaQuery.of(context).size.width / 2 - 24,
-                                child: Center(child: KanjiBlock(kanjiStr: widget.kanjiStr ?? widget.kanji.kanji)
+                                height: kanjiBlockHeight,
+                                child: Center(
+                                    child: KanjiBlock(
+                                        kanjiStr: widget.kanjiStr ?? widget.kanji.kanji,
+                                        scaleFactor: computeScaleFactor(kanjiBlockHeight > 360 ? 360 : kanjiBlockHeight))
                                     //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
                                     )),
                           ),
@@ -487,10 +490,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                     }
                     for (var sentence in sentences) {
                       children.add(ListTile(
-//                        title: Text(
-//                          sentence.text,
-//                          style: TextStyle(color: Colors.white),
-//                        ),
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
@@ -1010,12 +1009,17 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       throw 'Could not launch $url';
     }
   }
+
+  static double computeScaleFactor(double width) {
+    return (width / 163.5);
+  }
 }
 
 class KanjiBlock extends StatefulWidget {
   final String kanjiStr;
+  final double scaleFactor;
 
-  KanjiBlock({this.kanjiStr}) : assert(kanjiStr != null && kanjiStr.length == 1);
+  KanjiBlock({this.kanjiStr, this.scaleFactor = 1}) : assert(kanjiStr != null && kanjiStr.length == 1);
 
   @override
   _KanjiBlockState createState() => _KanjiBlockState();
@@ -1086,7 +1090,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       child: Text(
                         widget.kanjiStr,
                         style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
-                        textScaleFactor: computeScaleFactor(MediaQuery.of(context).size.width / 2 - 24),
+                        textScaleFactor: widget.scaleFactor,
                         textAlign: TextAlign.center,
                       ),
                     ))),
@@ -1120,11 +1124,6 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       ))))
       ],
     );
-  }
-
-  static double computeScaleFactor(double width) {
-    print(((163.5 - width).abs() / 163.5));
-    return (width / 163.5);
   }
 }
 
