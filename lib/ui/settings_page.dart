@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
@@ -5,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
+import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -30,6 +32,37 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
+          StreamBuilder(
+            stream: FirebaseAuthProvider.instance.onAuthStateChanged,
+            builder: (_, AsyncSnapshot<FirebaseUser> snapshot) {
+              var user = snapshot.data;
+
+              if (user != null) {
+                return ListTile(
+                  title: Text('Sign out'),
+                  subtitle: Text(user.email),
+                  onTap: () => FirebaseAuthProvider.instance.signOut(),
+                );
+              }
+
+              return ListTile(
+                title: Text('Sign in'),
+                onTap: () => getSignInMethod().then((method) {
+                  switch (method) {
+                    case SignInMethod.Apple:
+                      FirebaseAuthProvider.instance.signInApple();
+                      return;
+                    case SignInMethod.Google:
+                      FirebaseAuthProvider.instance.signInGoogle();
+                      return;
+                    default:
+                      return;
+                  }
+                }),
+              );
+            },
+          ),
+          Divider(height: 0),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
             child: FutureBuilder(
@@ -147,12 +180,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-//          Divider(),
-//          AppleSignInButton(
-//            style: ButtonStyle.black,
-//            type: ButtonType.signIn,
-//            onPressed: appleLogIn,
-//          )
         ],
       ),
     );
@@ -178,5 +205,24 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       print('Apple SignIn is not available for your device');
     }
+  }
+
+  Future<SignInMethod> getSignInMethod() {
+    return showCupertinoModalPopup<SignInMethod>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              message: Text("Sign In Via"),
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context, null);
+                },
+              ),
+              actions: <Widget>[
+                CupertinoActionSheetAction(child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => SignInMethod.Apple),
+                CupertinoActionSheetAction(child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => SignInMethod.Google),
+              ],
+            )).then((value) => value ?? null);
   }
 }
