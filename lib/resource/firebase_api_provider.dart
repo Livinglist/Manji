@@ -183,29 +183,6 @@ class FirebaseApiProvider {
         'kunyomiWords': FieldValue.arrayUnion(kanji.kunyomiWords.map((word) => word.toString()).toList())
       });
     }
-//    int i = 0;
-//    var snap = await firestore.collection('userUpdates').document(kanji.kanji).get();
-//    if(snap.exists) {
-//      while (snap.exists) {
-//        i++;
-//        snap = await firestore.collection('userUpdates').document(kanji.kanji + i.toString()).get();
-//      }
-//      firestore.collection('userUpdates').document(kanji.kanji+i.toString()).setData({
-//        'kanji': kanji.kanji,
-//        'onyomi': FieldValue.arrayUnion(kanji.onyomi),
-//        'kunyomi': FieldValue.arrayUnion(kanji.kunyomi),
-//        'onyomiWords': FieldValue.arrayUnion(kanji.onyomiWords.map((word) => word.toString()).toList()),
-//        'kunyomiWords': FieldValue.arrayUnion(kanji.kunyomiWords.map((word) => word.toString()).toList())
-//      });
-//    }else{
-//      firestore.collection('userUpdates').document(kanji.kanji).setData({
-//        'kanji': kanji.kanji,
-//        'onyomi': FieldValue.arrayUnion(kanji.onyomi),
-//        'kunyomi': FieldValue.arrayUnion(kanji.kunyomi),
-//        'onyomiWords': FieldValue.arrayUnion(kanji.onyomiWords.map((word) => word.toString()).toList()),
-//        'kunyomiWords': FieldValue.arrayUnion(kanji.kunyomiWords.map((word) => word.toString()).toList())
-//      });
-//    }
   }
 
   Future fetchUpdates() async {

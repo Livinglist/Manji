@@ -7,6 +7,7 @@ import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'resource/db_provider.dart';
+import 'resource/firebase_auth_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +36,8 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    FirebaseAuthProvider.instance.signInUserSilently();
   }
 
   @override
