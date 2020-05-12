@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
@@ -39,14 +40,24 @@ class _SettingsPageState extends State<SettingsPage> {
 
               if (user != null) {
                 return ListTile(
-                  title: Text('Sign out'),
-                  subtitle: Text(user.email),
+                  leading: Icon(
+                    FontAwesomeIcons.signOut,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                  title: Text('Sign out', style: TextStyle(color: Colors.white)),
+                  subtitle: Text(user.email, style: TextStyle(color: Colors.white)),
                   onTap: () => FirebaseAuthProvider.instance.signOut(),
                 );
               }
 
               return ListTile(
-                title: Text('Sign in'),
+                leading: Icon(
+                  FontAwesomeIcons.signIn,
+                  color: Colors.white,
+                  size: 22,
+                ),
+                title: Text('Sign in', style: TextStyle(color: Colors.white)),
                 onTap: () => getSignInMethod().then((method) {
                   switch (method) {
                     case SignInMethod.Apple:
@@ -220,8 +231,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               actions: <Widget>[
-                CupertinoActionSheetAction(child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => SignInMethod.Apple),
-                CupertinoActionSheetAction(child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => SignInMethod.Google),
+                CupertinoActionSheetAction(
+                    child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+                CupertinoActionSheetAction(
+                    child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
               ],
             )).then((value) => value ?? null);
   }
