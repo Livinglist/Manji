@@ -349,7 +349,7 @@ SPEC CHECKSUMS:
   FirebaseMLCommon: d430756ba2a16bac8fefc81ea416e7f822f052fd
   FirebaseMLVision: 35d0a720334b141d70a55e7e817c1cac23f32285
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
+  flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
@@ -366,7 +366,7 @@ SPEC CHECKSUMS:
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: 4a985b5448897c27fdeadde84f7452520c0e6c58
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
