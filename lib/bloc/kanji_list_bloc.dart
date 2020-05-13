@@ -1,3 +1,4 @@
+import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/utils/list_extension.dart';
@@ -15,29 +16,60 @@ class KanjiListBloc {
 
   Stream<List<KanjiList>> get kanjiLists => _kanjiListsFetcher.stream;
 
-  List<KanjiList> _kanjiLists;
+  static List<KanjiList> _kanjiLists;
+
+  List<KanjiList> get allKanjiLists {
+    if (_kanjiLists == null) {
+      _kanjiLists = repo.getAllKanjiList();
+
+      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+
+      return _kanjiLists;
+    }
+
+    return _kanjiLists;
+  }
 
   void init() {
-    _kanjiLists = repo.getAllKanjiList();
-    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    if (_kanjiLists == null) {
+      _kanjiLists = repo.getAllKanjiList();
+      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    }
   }
 
   void changeName(KanjiList kanjiList, String newName) {
     var temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
     temp.name = newName;
     repo.updateKanjiListName(temp);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (value != null) {
+        repo.uploadKanjiList(kanjiList);
+      }
+    });
   }
 
   void addKanji(KanjiList kanjiList, String kanjiStr) {
     var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     temp.kanjiStrs.add(kanjiStr);
     repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (value != null) {
+        repo.uploadKanjiList(kanjiList);
+      }
+    });
   }
 
   void removeKanji(KanjiList kanjiList, String kanjiStr) {
     var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     temp.kanjiStrs.remove(kanjiStr);
     repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (value != null) {
+        repo.uploadKanjiList(kanjiList);
+      }
+    });
   }
 
   void addKanjiList(String listName) {
@@ -55,16 +87,45 @@ class KanjiListBloc {
     _kanjiLists.add(temp);
     repo.addKanjiList(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (value != null) {
+        repo.uploadKanjiList(temp);
+      }
+    });
   }
 
   void deleteKanjiList(KanjiList kanjiList) {
     _kanjiLists.remove(kanjiList);
     repo.deleteKanjiList(kanjiList);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (value != null) {
+        repo.deleteKanjiListFromCloud(kanjiList);
+      }
+    });
   }
 
   bool isInList(String listName, String kanjiStr) {
     return _kanjiLists.singleWhere((list) => list.name == listName).kanjiStrs.contains(kanjiStr);
+  }
+
+  void clearThenAddKanjiLists(List<KanjiList> kanjiLists) {
+    if (_kanjiLists == null) init();
+    for (var list in kanjiLists) {
+      if (_kanjiLists.contains(list)) {
+        var remoteKanjis = list.kanjiStrs;
+        var localKanjis = _kanjiLists.singleWhere((e) => e == list).kanjiStrs;
+        var mergedKanjis = [...remoteKanjis, ...localKanjis].toSet().toList();
+        list.kanjiStrs = mergedKanjis;
+
+        repo.deleteKanjiList(list);
+      } else {
+        _kanjiLists.add(list);
+      }
+      repo.addKanjiList(list);
+    }
+
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
   }
 
   void dispose() {

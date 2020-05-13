@@ -8,6 +8,7 @@ import 'jisho_api_provider.dart';
 import 'db_provider.dart';
 import 'firebase_api_provider.dart';
 import 'shared_preferences_provider.dart';
+import 'firestore_provider.dart';
 
 export 'package:kanji_dictionary/models/kana.dart';
 export 'package:kanji_dictionary/models/kanji.dart';
@@ -86,6 +87,24 @@ class Repository {
   Future addIncorrectQuestions(List<Question> qs) => DBProvider.db.addIncorrectQuestions(qs);
 
   Future deleteIncorrectQuestion(Question q) => DBProvider.db.deleteIncorrectQuestion(q);
+
+  Future uploadFavKanjis(List<String> kanjis) => FirestoreProvider.instance.uploadFavKanjis(kanjis);
+
+  Future uploadMarkedKanjis(List<String> kanjis) => FirestoreProvider.instance.uploadMarkedKanjis(kanjis);
+
+  Future uploadKanjiList(KanjiList kanjiList) => FirestoreProvider.instance.uploadKanjiList(kanjiList);
+
+  Future<List<String>> fetchFavKanjis() => FirestoreProvider.instance.fetchFavKanjis();
+
+  Future<List<String>> fetchMarkedKanjis() => FirestoreProvider.instance.fetchMarkedKanjis();
+
+  Stream<KanjiList> fetchKanjiLists() => FirestoreProvider.instance.fetchKanjiLists();
+
+  Future deleteKanjiListFromCloud(KanjiList kanjiList) => FirestoreProvider.instance.deleteKanjiList(kanjiList);
+
+  Future removeFavKanjiFromCloud(String kanji) => FirestoreProvider.instance.removeFavKanji(kanji);
+
+  Future removeMarkedKanjiFromCloud(String kanji) => FirestoreProvider.instance.removeMarkedKanji(kanji);
 }
 
 final repo = Repository();

@@ -57,10 +57,12 @@ class MyAppState extends State<MyApp> {
                   if (!initialized) {
                     initialized = true;
                     kanjiBloc.getAllKanjis();
+                    FirebaseAuthProvider.instance.checkForUpdates();
                   } else {
-                    DBProvider.db.initDB(refresh: true).whenComplete(() {
-                      kanjiBloc.getAllKanjis();
-                    });
+                    DBProvider.db
+                        .initDB(refresh: true)
+                        .whenComplete(kanjiBloc.getAllKanjis)
+                        .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
                   }
                   return Platform.isAndroid
                       ? Scaffold(

@@ -34,7 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           StreamBuilder(
-            stream: FirebaseAuthProvider.instance.onAuthStateChanged,
+            stream: FirebaseAuthProvider.onAuthStateChanged,
             builder: (_, AsyncSnapshot<FirebaseUser> snapshot) {
               var user = snapshot.data;
 
@@ -182,7 +182,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 100,
                 child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
-              applicationVersion: '2.3.3',
+              applicationVersion: '2.3.4',
               aboutBoxChildren: <Widget>[
                 SizedBox(
                   height: 24,
@@ -222,20 +222,20 @@ class _SettingsPageState extends State<SettingsPage> {
     return showCupertinoModalPopup<SignInMethod>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Sign In Via"),
-              cancelButton: CupertinoActionSheetAction(
-                isDefaultAction: true,
-                child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.pop(context, null);
-                },
-              ),
-              actions: <Widget>[
-                CupertinoActionSheetAction(
-                    child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
-                CupertinoActionSheetAction(
-                    child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
-              ],
-            )).then((value) => value ?? null);
+          message: Text("Sign In Via"),
+          cancelButton: CupertinoActionSheetAction(
+            isDefaultAction: true,
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context, null);
+            },
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+            CupertinoActionSheetAction(
+                child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
+          ],
+        )).then((value) => value ?? null);
   }
 }

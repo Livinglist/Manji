@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:collection';
 
+import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -223,15 +224,31 @@ class KanjiBloc {
   }
 
   void addFav(String kanjiStr) {
-    _allFavKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
-    _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
-    repo.addFav(kanjiStr);
+    var allFav = _allFavKanjisMap.keys.toList();
+    if (allFav.contains(kanjiStr) == false) {
+      _allFavKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
+      _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
+      repo.addFav(kanjiStr);
+
+      FirebaseAuthProvider.instance.firebaseUser.then((user) {
+        if (user != null) {
+          print("Fav kanjis are: ${_allFavKanjisMap.keys.toList()}");
+          repo.uploadFavKanjis(_allFavKanjisMap.keys.toList());
+        }
+      });
+    }
   }
 
   void removeFav(String kanjiStr) {
     _allFavKanjisMap.remove(kanjiStr);
     _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
     repo.removeFav(kanjiStr);
+
+    FirebaseAuthProvider.instance.firebaseUser.then((user) {
+      if (user != null) {
+        repo.removeFavKanjiFromCloud(kanjiStr);
+      }
+    });
   }
 
   bool getIsFaved(String kanji) {
@@ -239,15 +256,28 @@ class KanjiBloc {
   }
 
   void addStar(String kanjiStr) {
-    _allStarKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
-    _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
-    repo.addStar(kanjiStr);
+    var allStar = _allStarKanjisMap.keys.toList();
+    if (allStar.contains(kanjiStr) == false) {
+      _allStarKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
+      _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
+      repo.addStar(kanjiStr);
+      FirebaseAuthProvider.instance.firebaseUser.then((user) {
+        if (user != null) {
+          repo.uploadMarkedKanjis(_allStarKanjisMap.keys.toList());
+        }
+      });
+    }
   }
 
   void removeStar(String kanjiStr) {
     _allStarKanjisMap.remove(kanjiStr);
     _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
     repo.removeStar(kanjiStr);
+    FirebaseAuthProvider.instance.firebaseUser.then((user) {
+      if (user != null) {
+        repo.removeMarkedKanjiFromCloud(kanjiStr);
+      }
+    });
   }
 
   bool getIsStared(String kanji) {
@@ -376,6 +406,10 @@ class KanjiBloc {
       updateTimeStampsForSingleKanji(i);
     }
   }
+
+  List<String> get getAllFavKanjis => _allFavKanjisMap.keys.toList();
+
+  List<String> get getAllMarkedKanjis => _allStarKanjisMap.keys.toList();
 
   void dispose() {
     _sentencesFetcher.close();

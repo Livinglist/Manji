@@ -12,7 +12,11 @@ class KanjiList {
   KanjiList.fromMap(Map map) {
     uid = map['uid'] ?? Uuid().v1();
     name = map['name'];
-    kanjiStrs = (jsonDecode(map['kanjiStrs']) as List).cast<String>();
+    if (map['kanjiStrs'].runtimeType is String) {
+      kanjiStrs = (jsonDecode(map['kanjiStrs']) as List).cast<String>();
+    } else {
+      kanjiStrs = (map['kanjiStrs'] as List).cast<String>();
+    }
   }
 
   Map toMap() => {'uid': uid, 'name': name, 'kanjiStrs': jsonEncode(kanjiStrs)};

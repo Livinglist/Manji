@@ -55,7 +55,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
     scrollController.addListener(() {
       if (this.mounted && scrollController.offset == scrollController.position.maxScrollExtent) {
-        //kanjiBloc.getMoreSentencesByKanji();
         sentenceBloc.getMoreSentencesByKanji();
       }
     });

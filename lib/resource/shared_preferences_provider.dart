@@ -6,9 +6,16 @@ const favKanjiStrsKey = 'favKanjiStrs';
 const starKanjiStrsKey = 'starKanjiStrs';
 const kanjiListStrKey = 'kanjiListStr';
 const uidsKey = 'uids';
+const lastFetchedAtKey = 'lastFetchedAt';
 
 class SharedPreferencesProvider {
-  SharedPreferences _sharedPreferences;
+  static SharedPreferences _sharedPreferences;
+
+  SharedPreferencesProvider._() {
+    if (_sharedPreferences == null) initSharedPrefs();
+  }
+
+  static final instance = SharedPreferencesProvider._();
 
   SharedPreferencesProvider() {
     initSharedPrefs();
@@ -91,6 +98,10 @@ class SharedPreferencesProvider {
     var list = KanjiList.from(uid: uid, name: name, kanjiStrs: kanjiStrs);
     return list;
   }
+
+  int get lastFetchedAt => _sharedPreferences.getInt(lastFetchedAtKey);
+
+  set lastFetchedAt(int timestamp) => _sharedPreferences.setInt(lastFetchedAtKey, timestamp);
 
   //List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
 

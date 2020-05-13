@@ -6,6 +6,7 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:kanji_dictionary/resource/firestore_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -14,19 +15,30 @@ export 'package:firebase_auth/firebase_auth.dart';
 enum SignInMethod { Apple, Google }
 
 class FirebaseAuthProvider {
-  FirebaseUser firebaseUser;
+  Future<FirebaseUser> get firebaseUser => FirebaseAuth.instance.currentUser();
 
   static final instance = FirebaseAuthProvider._();
 
   FirebaseAuthProvider._();
 
-  final Stream<FirebaseUser> onAuthStateChanged = FirebaseAuth.instance.onAuthStateChanged;
+  static final Stream<FirebaseUser> onAuthStateChanged = FirebaseAuth.instance.onAuthStateChanged;
 
   GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: <String>[
       'email',
     ],
   );
+
+  Future checkForUpdates() async {
+    var user = await FirebaseAuth.instance.currentUser();
+    if (user != null) {
+      FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
+        if (isUpgradable) {
+          FirestoreProvider.instance.fetchAll();
+        }
+      });
+    }
+  }
 
   Future uploadUser(FirebaseUser firebaseUser) async {
     return Firestore.instance.collection('users').document(firebaseUser.uid).setData({
@@ -41,6 +53,7 @@ class FirebaseAuthProvider {
 
       saveEmailAndPassword(email, password);
 
+      Firestore.instance.collection(usersKey).document(authResult.user.uid).setData({}).whenComplete(FirestoreProvider.instance.uploadAll);
       return authResult.user;
     });
   }
@@ -48,10 +61,10 @@ class FirebaseAuthProvider {
   Future<FirebaseUser> signInUser(String email, String password) async {
     return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) async {
       if (authResult.user.isEmailVerified || true) {
-        firebaseUser = authResult.user;
+        var firebaseUser = authResult.user;
         return firebaseUser;
       } else {
-        firebaseUser = authResult.user;
+        var firebaseUser = authResult.user;
         return firebaseUser;
         // return Future.value(null);
       }
@@ -61,8 +74,11 @@ class FirebaseAuthProvider {
     });
   }
 
+
+  @Deprecated("FirebaseAuth will automatically sign in the user.")
   ///Sign in user silently if previously signed in.
   Future<FirebaseUser> signInUserSilently() async {
+    print("sign in silently");
     final sharedPrefs = await SharedPreferences.getInstance();
     String email = sharedPrefs.getString('email');
     String password = sharedPrefs.getString('password');
@@ -70,8 +86,12 @@ class FirebaseAuthProvider {
     if (email != null && password != null) {
       print(email);
       return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) {
-        firebaseUser = authResult.user;
-        return firebaseUser;
+        FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
+          if (isUpgradable) {
+            FirestoreProvider.instance.fetchAll();
+          }
+        });
+        return authResult.user;
       }).catchError((_) {});
     } else {
       return Future.value(null);
@@ -82,7 +102,6 @@ class FirebaseAuthProvider {
     final sharedPrefs = await SharedPreferences.getInstance();
     sharedPrefs.remove('email');
     sharedPrefs.remove('password');
-    firebaseUser = null;
     FirebaseAuth.instance.signOut();
   }
 
@@ -118,7 +137,11 @@ class FirebaseAuthProvider {
           }
 
           return firebaseAuth.signInWithEmailAndPassword(email: email, password: password).then((authResult) {
-            this.firebaseUser = authResult.user;
+            FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
+              if (isUpgradable) {
+                FirestoreProvider.instance.fetchAll();
+              }
+            });
 
             return authResult.user;
           }, onError: (PlatformException error) {
@@ -127,8 +150,6 @@ class FirebaseAuthProvider {
               return registerNewUser(appleIdCredential.email, appleIdCredential.email).then((value) {
                 saveEmailAndPassword(email, password);
 
-                firebaseUser = value;
-
                 return value;
               });
             }
@@ -136,7 +157,6 @@ class FirebaseAuthProvider {
           });
         } else {
           return firebaseAuth.signInWithEmailAndPassword(email: email, password: password).then((authResult) {
-            this.firebaseUser = authResult.user;
 
             return authResult.user;
           }, onError: (Object error) {
@@ -169,10 +189,9 @@ class FirebaseAuthProvider {
 
   Future<FirebaseUser> signInGoogle() async {
     var firebaseAuth = FirebaseAuth.instance;
-    GoogleSignInAccount googleSignInAccount;
 
     var googleUser = await googleSignIn.signIn().then((value) {
-      googleSignInAccount = value;
+
       return value;
     }, onError: (_) {
       return null;
@@ -184,7 +203,13 @@ class FirebaseAuthProvider {
     var password = email;
 
     return firebaseAuth.signInWithEmailAndPassword(email: email, password: email).then((authResult) {
-      this.firebaseUser = authResult.user;
+      var firebaseUser = authResult.user;
+
+      FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
+        if (isUpgradable) {
+          FirestoreProvider.instance.fetchAll();
+        }
+      });
 
       return authResult.user;
     }, onError: (Object error) {
