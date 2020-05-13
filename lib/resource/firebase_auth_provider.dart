@@ -74,8 +74,8 @@ class FirebaseAuthProvider {
     });
   }
 
-  @Deprecated("FirebaseAuth will automatically sign in the user.")
 
+  @Deprecated("FirebaseAuth will automatically sign in the user.")
   ///Sign in user silently if previously signed in.
   Future<FirebaseUser> signInUserSilently() async {
     print("sign in silently");
@@ -86,10 +86,8 @@ class FirebaseAuthProvider {
     if (email != null && password != null) {
       print(email);
       return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) {
-        print("fuck you");
         FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
           if (isUpgradable) {
-            print("is upgradable");
             FirestoreProvider.instance.fetchAll();
           }
         });
@@ -159,6 +157,7 @@ class FirebaseAuthProvider {
           });
         } else {
           return firebaseAuth.signInWithEmailAndPassword(email: email, password: password).then((authResult) {
+
             return authResult.user;
           }, onError: (Object error) {
             ///TODO: The problem is that if names are null, email is going to be null as well.
@@ -192,6 +191,7 @@ class FirebaseAuthProvider {
     var firebaseAuth = FirebaseAuth.instance;
 
     var googleUser = await googleSignIn.signIn().then((value) {
+
       return value;
     }, onError: (_) {
       return null;

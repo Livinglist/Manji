@@ -36,6 +36,8 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    FirebaseAuthProvider.instance.signInUserSilently();
   }
 
   @override
