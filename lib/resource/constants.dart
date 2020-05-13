@@ -1,4 +1,6 @@
-const List<String> allVideoFiles = [
+import 'dart:collection';
+
+const Set<String> allVideoFiles = {
   "一",
   "丁",
   "七",
@@ -1233,4 +1235,4 @@ const List<String> allVideoFiles = [
   "黒",
   "鼻",
   "齢"
-];
+};

@@ -7,6 +7,7 @@ import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'resource/db_provider.dart';
+import 'resource/firebase_auth_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,10 +55,12 @@ class MyAppState extends State<MyApp> {
                   if (!initialized) {
                     initialized = true;
                     kanjiBloc.getAllKanjis();
+                    FirebaseAuthProvider.instance.checkForUpdates();
                   } else {
-                    DBProvider.db.initDB(refresh: true).whenComplete(() {
-                      kanjiBloc.getAllKanjis();
-                    });
+                    DBProvider.db
+                        .initDB(refresh: true)
+                        .whenComplete(kanjiBloc.getAllKanjis)
+                        .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
                   }
                   return Platform.isAndroid
                       ? Scaffold(

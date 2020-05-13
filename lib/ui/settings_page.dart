@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
+import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -30,6 +33,47 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
+          StreamBuilder(
+            stream: FirebaseAuthProvider.onAuthStateChanged,
+            builder: (_, AsyncSnapshot<FirebaseUser> snapshot) {
+              var user = snapshot.data;
+
+              if (user != null) {
+                return ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.signOut,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                  title: Text('Sign out', style: TextStyle(color: Colors.white)),
+                  subtitle: Text(user.email, style: TextStyle(color: Colors.white)),
+                  onTap: () => FirebaseAuthProvider.instance.signOut(),
+                );
+              }
+
+              return ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.signIn,
+                  color: Colors.white,
+                  size: 22,
+                ),
+                title: Text('Sign in', style: TextStyle(color: Colors.white)),
+                onTap: () => getSignInMethod().then((method) {
+                  switch (method) {
+                    case SignInMethod.Apple:
+                      FirebaseAuthProvider.instance.signInApple();
+                      return;
+                    case SignInMethod.Google:
+                      FirebaseAuthProvider.instance.signInGoogle();
+                      return;
+                    default:
+                      return;
+                  }
+                }),
+              );
+            },
+          ),
+          Divider(height: 0),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
             child: FutureBuilder(
@@ -138,7 +182,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 100,
                 child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
-              applicationVersion: '2.3.3',
+              applicationVersion: '2.3.4',
               aboutBoxChildren: <Widget>[
                 SizedBox(
                   height: 24,
@@ -147,12 +191,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-//          Divider(),
-//          AppleSignInButton(
-//            style: ButtonStyle.black,
-//            type: ButtonType.signIn,
-//            onPressed: appleLogIn,
-//          )
         ],
       ),
     );
@@ -178,5 +216,26 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       print('Apple SignIn is not available for your device');
     }
+  }
+
+  Future<SignInMethod> getSignInMethod() {
+    return showCupertinoModalPopup<SignInMethod>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+          message: Text("Sign In Via"),
+          cancelButton: CupertinoActionSheetAction(
+            isDefaultAction: true,
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context, null);
+            },
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+                child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+            CupertinoActionSheetAction(
+                child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
+          ],
+        )).then((value) => value ?? null);
   }
 }
