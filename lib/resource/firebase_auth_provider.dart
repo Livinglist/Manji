@@ -75,10 +75,8 @@ class FirebaseAuthProvider {
   }
 
   @Deprecated("FirebaseAuth will automatically sign in the user.")
-
   ///Sign in user silently if previously signed in.
   Future<FirebaseUser> signInUserSilently() async {
-    print("sign in silently");
     final sharedPrefs = await SharedPreferences.getInstance();
     String email = sharedPrefs.getString('email');
     String password = sharedPrefs.getString('password');
@@ -86,10 +84,8 @@ class FirebaseAuthProvider {
     if (email != null && password != null) {
       print(email);
       return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) {
-        print("fuck you");
         FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
           if (isUpgradable) {
-            print("is upgradable");
             FirestoreProvider.instance.fetchAll();
           }
         });

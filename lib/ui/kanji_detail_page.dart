@@ -206,7 +206,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                         shrinkWrap: true,
                                         itemBuilder: (_, index) {
                                           var kanjiList = kanjiLists[index];
-                                          var isInList = KanjiListBloc.instance.isInList(kanjiList.name, kanjiStr);
+                                          var isInList = KanjiListBloc.instance.isInList(kanjiList, kanjiStr);
 
                                           return ListTile(
                                             title: Text(kanjiLists[index].name, style: TextStyle(color: isInList ? Colors.black54 : Colors.black)),

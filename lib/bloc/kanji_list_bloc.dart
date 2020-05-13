@@ -105,8 +105,8 @@ class KanjiListBloc {
     });
   }
 
-  bool isInList(String listName, String kanjiStr) {
-    return _kanjiLists.singleWhere((list) => list.name == listName).kanjiStrs.contains(kanjiStr);
+  bool isInList(KanjiList list, String kanjiStr) {
+    return _kanjiLists.singleWhere((li) => li == list).kanjiStrs.contains(kanjiStr);
   }
 
   void clearThenAddKanjiLists(List<KanjiList> kanjiLists) {
@@ -123,6 +123,13 @@ class KanjiListBloc {
         _kanjiLists.add(list);
       }
       repo.addKanjiList(list);
+    }
+
+    for (var list in _kanjiLists) {
+      if (kanjiLists.contains(list) == false) {
+        print("The list that should not exits");
+        repo.deleteKanjiList(list);
+      }
     }
 
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);

@@ -52,7 +52,7 @@ class SharedPreferencesProvider {
   void addStar(String kanjiStr) {
     var starKanjiStrs = _sharedPreferences.getStringList(starKanjiStrsKey);
     starKanjiStrs.add(kanjiStr);
-    _sharedPreferences.setStringList(favKanjiStrsKey, starKanjiStrs);
+    _sharedPreferences.setStringList(starKanjiStrsKey, starKanjiStrs);
   }
 
   void removeStar(String kanjiStr) {

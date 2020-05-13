@@ -232,7 +232,6 @@ class KanjiBloc {
 
       FirebaseAuthProvider.instance.firebaseUser.then((user) {
         if (user != null) {
-          print("Fav kanjis are: ${_allFavKanjisMap.keys.toList()}");
           repo.uploadFavKanjis(_allFavKanjisMap.keys.toList());
         }
       });
