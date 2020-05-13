@@ -1,7 +1,6 @@
 //
 // Generated file. Do not edit.
 //
-import 'dart:ui';
 
 import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:url_launcher_web/url_launcher_web.dart';
