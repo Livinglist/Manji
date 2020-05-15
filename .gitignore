@@ -8,8 +8,8 @@
 .buildlog/
 .history
 .svn/
-*.db
-*.mp4
+#*.db
+#*.mp4
 
 
 # IntelliJ related
