@@ -44,10 +44,6 @@ class HomePageBackgroundState extends State<HomePageBackground> {
   }
 
   setTarget(Offset ptrPos) {
-    if (shouldVibrate) {
-      Vibration.vibrate(duration: 300, amplitude: 128);
-    }
-
     for (int i = 0; i < keys.length; i++) {
       var cxt = keys[i].currentContext;
       if (cxt != null) {
@@ -56,6 +52,12 @@ class HomePageBackgroundState extends State<HomePageBackground> {
 
         if (ptrPos.dy >= pos.dy && ptrPos.dy <= pos.dy + cxt.size.height && ptrPos.dx >= pos.dx && ptrPos.dx <= pos.dx + (width / perRow)) {
           setState(() {
+            if (targetKey != keys[i] && shouldVibrate) {
+              Vibration.cancel().then((_) {
+                Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+              });
+            }
+
             targetKey = keys[i];
             kanji = [
               kanjiJsons[i]["character"],
