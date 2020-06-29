@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:vibration/vibration.dart';
 
 typedef KanjiCallback = void Function(String);
 
@@ -28,14 +29,25 @@ class HomePageBackgroundState extends State<HomePageBackground> {
   List<dynamic> kanjiJsons;
   bool initialized = false;
   bool visible = false;
+  bool shouldVibrate = false;
 
   @override
   void initState() {
     super.initState();
     keys = List.generate(totalKanji, (_) => GlobalKey());
+
+    Vibration.hasCustomVibrationsSupport().then((hasCoreHaptics) {
+      setState(() {
+        shouldVibrate = hasCoreHaptics;
+      });
+    });
   }
 
   setTarget(Offset ptrPos) {
+    if (shouldVibrate) {
+      Vibration.vibrate(duration: 300, amplitude: 128);
+    }
+
     for (int i = 0; i < keys.length; i++) {
       var cxt = keys[i].currentContext;
       if (cxt != null) {

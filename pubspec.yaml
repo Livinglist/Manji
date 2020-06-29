@@ -49,6 +49,7 @@ dependencies:
   uuid: 2.0.4
   flutter_device_type: 0.2.0
   flutter_siri_suggestions: 1.0.2+hotfix1
+  vibration: 1.4.0
 
 
 

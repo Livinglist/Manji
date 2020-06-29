@@ -23,7 +23,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   bool initialized = false;
   CrossFadeState crossFadeState = CrossFadeState.showSecond;
-  Widget child = Platform.isAndrgit oid
+  Widget child = Platform.isAndroid
       ? Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
