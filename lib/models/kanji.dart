@@ -125,7 +125,7 @@ class Kanji {
   }
 
   String toString(){
-    return 'Instance of Kanji: $kanji';
+    return 'Instance of Kanji: $kanji, meaning: $meaning';
   }
 }
 

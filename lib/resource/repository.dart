@@ -81,6 +81,7 @@ class Repository {
 
   void addKanjiList(KanjiList kanjiList) => _prefsProvider.addKanjiList(kanjiList);
 
+  bool getIsFirstTimeUser() => _prefsProvider.getIsFirstTimeUser();
 
   Future<List<Question>> getIncorrectQuestions() => DBProvider.db.getIncorrectQuestions();
 

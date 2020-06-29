@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:collection';
 
+import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
+import 'package:kanji_dictionary/bloc/siri_suggestion_bloc.dart';
 import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -16,6 +18,7 @@ export 'package:kanji_dictionary/models/sentence.dart';
 export 'package:kanji_dictionary/models/word.dart';
 
 import 'package:kanji_dictionary/utils/string_extension.dart';
+import 'package:kanji_dictionary/utils/list_extension.dart';
 
 class KanjiBloc {
   //final repo = Repository();
@@ -139,7 +142,15 @@ class KanjiBloc {
         _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
       }
       //firebaseApiProvider.completeDatabase();
+
+      Future.forEach(kanjis.takeRandomly(20), addSuggestion);
     });
+  }
+
+  Future addSuggestion(Kanji kanji) async {
+    print("adding the $kanji");
+    return FlutterSiriSuggestions.instance.buildActivity(FlutterSiriActivity(kanji.kanji, kanji.kanji,
+        isEligibleForSearch: true, isEligibleForPrediction: true, contentDescription: kanji.meaning, suggestedInvocationPhrase: "open my app"));
   }
 
   Stream<Kanji> findKanjiByKana(String kana, Yomikata yomikata) async* {

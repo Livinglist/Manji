@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
@@ -96,6 +97,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
         }
       });
     }
+
+    addSuggestion(widget.kanji);
   }
 
   @override
@@ -1006,6 +1009,11 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Future addSuggestion(Kanji kanji) async {
+    return FlutterSiriSuggestions.instance.buildActivity(FlutterSiriActivity(kanji.kanji, kanji.kanji,
+        isEligibleForSearch: true, isEligibleForPrediction: true, contentDescription: kanji.meaning, suggestedInvocationPhrase: "open my app"));
   }
 
   static double computeScaleFactor(double width) {

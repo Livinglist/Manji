@@ -48,6 +48,7 @@ dependencies:
   video_player: 0.10.9
   uuid: 2.0.4
   flutter_device_type: 0.2.0
+  flutter_siri_suggestions: 1.0.2+hotfix1
 
 
 

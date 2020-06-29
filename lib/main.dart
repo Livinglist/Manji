@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 
 import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'resource/db_provider.dart';
 import 'resource/firebase_auth_provider.dart';
+import 'bloc/siri_suggestion_bloc.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,7 +23,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   bool initialized = false;
   CrossFadeState crossFadeState = CrossFadeState.showSecond;
-  Widget child = Platform.isAndroid
+  Widget child = Platform.isAndrgit oid
       ? Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
@@ -36,6 +38,12 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    //This is for Siri suggestion.
+    FlutterSiriSuggestions.instance.configure(onLaunch: (Map<String, dynamic> message) async {
+      String siriKanji = message['key'];
+      SiriSuggestionBloc.instance.suggest(siriKanji);
+    });
   }
 
   @override

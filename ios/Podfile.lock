@@ -109,6 +109,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_plugin_android_lifecycle (0.0.1):
     - Flutter
+  - flutter_siri_suggestions (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -231,6 +233,7 @@ DEPENDENCIES:
   - firebase_ml_vision (from `.symlinks/plugins/firebase_ml_vision/ios`)
   - Flutter (from `Flutter`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
+  - flutter_siri_suggestions (from `.symlinks/plugins/flutter_siri_suggestions/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -298,6 +301,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_plugin_android_lifecycle:
     :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
+  flutter_siri_suggestions:
+    :path: ".symlinks/plugins/flutter_siri_suggestions/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
   google_sign_in_web:
@@ -350,6 +355,7 @@ SPEC CHECKSUMS:
   FirebaseMLVision: 35d0a720334b141d70a55e7e817c1cac23f32285
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
+  flutter_siri_suggestions: 2c0bc235516b5b51a86a641d0f39dba3cd336ac3
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
