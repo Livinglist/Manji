@@ -64,6 +64,13 @@ class KanaDetailPageState extends State<KanaDetailPage> {
   }
 
   @override
+  void dispose() {
+    listScrollController.dispose();
+    gridScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,

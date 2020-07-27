@@ -67,6 +67,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).size.width - MediaQuery.of(context).padding.top);
     return Scaffold(

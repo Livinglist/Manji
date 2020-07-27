@@ -50,6 +50,12 @@ class SearchResultPageState extends State<SearchResultPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,

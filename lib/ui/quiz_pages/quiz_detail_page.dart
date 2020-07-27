@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:confetti/confetti.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 
@@ -27,6 +29,7 @@ class QuizDetailPage extends StatefulWidget {
 }
 
 class _QuizDetailPageState extends State<QuizDetailPage> {
+  final confettiController = ConfettiController(duration: Duration(seconds: 6));
   final scrollController = ScrollController();
   final quizBloc = QuizBloc();
   bool showShadow = false;
@@ -34,7 +37,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   int currentIndex = 0;
   int total;
 
-  bool showResult = false;
+  bool showResult = false, confettiPlayed = false;
   QuizResult quizResult;
 
   @override
@@ -74,11 +77,20 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   @override
   void dispose() {
     quizBloc.dispose();
+    scrollController.dispose();
+    confettiController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((context) {
+      if (showResult && (quizResult?.percentage ?? 0) >= 90 && confettiPlayed == false) {
+        confettiController.play();
+        confettiPlayed = true;
+      }
+    });
+
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
@@ -127,41 +139,57 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: ListView(
-          controller: scrollController,
+        child: Stack(
           children: <Widget>[
-            Container(
-              height: 220,
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "${quizResult.percentage.toStringAsFixed(0)}%",
-                    style: TextStyle(color: Colors.white, fontSize: 96),
-                  ),
-                  Icon(getCharm(quizResult.percentage), color: Colors.white, size: 90)
-                ],
-              )),
-            ),
-            Row(
+            ListView(
+              controller: scrollController,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Icon(FontAwesomeIcons.timesCircle, color: Colors.white),
+                Container(
+                  height: 220,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "${quizResult.percentage.toStringAsFixed(0)}%",
+                        style: TextStyle(color: Colors.white, fontSize: 96),
+                      ),
+                      Icon(getCharm(quizResult.percentage), color: Colors.white, size: 90)
+                    ],
+                  )),
                 ),
-                Text("Incorrect: ${quizResult.totalIncorrect}", style: TextStyle(color: Colors.white)),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Icon(FontAwesomeIcons.checkCircle, color: Colors.white),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(FontAwesomeIcons.timesCircle, color: Colors.white),
+                    ),
+                    Text("Incorrect: ${quizResult.totalIncorrect}", style: TextStyle(color: Colors.white)),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(FontAwesomeIcons.checkCircle, color: Colors.white),
+                    ),
+                    Text("Correct: ${quizResult.totalCorrect}", style: TextStyle(color: Colors.white)),
+                    SizedBox(width: 12)
+                  ],
                 ),
-                Text("Correct: ${quizResult.totalCorrect}", style: TextStyle(color: Colors.white)),
-                SizedBox(width: 12)
+                ...quizResult.incorrectQuestions.map((question) => IncorrectQuestionListTile(question: question)).toList(),
+                ...quizResult.correctQuestions.map((question) => CorrectQuestionListTile(question: question)).toList()
               ],
             ),
-            ...quizResult.incorrectQuestions.map((question) => IncorrectQuestionListTile(question: question)).toList(),
-            ...quizResult.correctQuestions.map((question) => CorrectQuestionListTile(question: question)).toList()
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: confettiController,
+                blastDirection: pi / 2,
+                maxBlastForce: 5, // set a lower max blast force
+                minBlastForce: 2, // set a lower min blast force
+                emissionFrequency: 0.05,
+                numberOfParticles: 50, // a lot of particles at once
+                gravity: 1,
+              ),
+            ),
           ],
         ));
   }
@@ -277,8 +305,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                     ),
                                   ));
                             })),
-                      )
-                  )
+                      ))
               ],
             ),
           );

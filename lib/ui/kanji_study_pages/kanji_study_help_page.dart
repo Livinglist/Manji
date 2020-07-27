@@ -29,6 +29,12 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(elevation: showShadow ? 8 : 0),

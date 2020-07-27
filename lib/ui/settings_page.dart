@@ -182,7 +182,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 100,
                 child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
               ),
-              applicationVersion: '2.3.4',
+              applicationVersion: '2.3.6',
               aboutBoxChildren: <Widget>[
                 SizedBox(
                   height: 24,

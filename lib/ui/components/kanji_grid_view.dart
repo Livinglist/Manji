@@ -24,6 +24,7 @@ class KanjiGridView extends StatelessWidget {
       this.scrollPhysics = const AlwaysScrollableScrollPhysics()})
       : assert(kanjis != null);
 
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

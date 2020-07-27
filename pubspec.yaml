@@ -50,6 +50,7 @@ dependencies:
   flutter_device_type: 0.2.0
   flutter_siri_suggestions: 1.0.2+hotfix1
   vibration: 1.4.0
+  confetti: 0.5.4
 
 
 

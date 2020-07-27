@@ -99,6 +99,12 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

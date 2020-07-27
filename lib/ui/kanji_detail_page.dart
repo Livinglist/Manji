@@ -98,7 +98,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       });
     }
 
-    addSuggestion(widget.kanji);
+    if (widget.kanji != null) addSuggestion(widget.kanji);
   }
 
   @override

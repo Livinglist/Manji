@@ -47,6 +47,12 @@ class _ProgressDetailPageState extends State<ProgressDetailPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
