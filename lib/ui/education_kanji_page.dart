@@ -156,17 +156,15 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
       gradeToKanjisMap[grade].sort((l, r) => l.strokes.compareTo(r.strokes));
     }
 
-    return AnimatedCrossFade(
-        firstChild: KanjiGridView(
-          kanjis: gradeToKanjisMap[grade],
-          fallBackFont: 'ming',
-        ),
-        secondChild: KanjiListView(
-          kanjis: gradeToKanjisMap[grade],
-          fallBackFont: 'ming',
-        ),
-        crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        duration: Duration(milliseconds: 200));
+    if (showGrid)
+      return KanjiGridView(
+        kanjis: gradeToKanjisMap[grade],
+        fallBackFont: 'ming',
+      );
+    return KanjiListView(
+      kanjis: gradeToKanjisMap[grade],
+      fallBackFont: 'ming',
+    );
   }
 
   void showAmountDialog(List<Kanji> kanjis, String title) {

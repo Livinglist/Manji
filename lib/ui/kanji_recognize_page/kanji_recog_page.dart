@@ -97,15 +97,17 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
-            Device.get().isTablet ? buildForTablet() : buildForPhone()
-          ],
-        ),
-      ),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
+                Device.get().isTablet ? buildForTablet() : buildForPhone()
+              ],
+            ),
+          )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _cleanDrawing();
@@ -130,14 +132,21 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
             if (kanjis.isEmpty) {
               return Center(child: Text(r'Empty ¯\_(ツ)_/¯', style: TextStyle(color: Colors.white70)));
             }
+
             for (var i in kanjis) {
               print(i.kanji);
             }
-            return SingleChildScrollView(
+
+            var children = kanjis.map((k) => Material(
+              color: Colors.transparent,
+              child: KanjiListTile(kanji: k),
+            )).toList();
+
+            return ListView.separated(
               controller: scrollController,
-              child: Column(
-                children: <Widget>[...kanjis.map((k) => KanjiListTile(kanji: k))],
-              ),
+              itemBuilder: (_, index) => children[index],
+              separatorBuilder: (_, __) => Divider(height: 0),
+              itemCount: children.length,
             );
           },
         ));

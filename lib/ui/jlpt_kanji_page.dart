@@ -161,11 +161,10 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
         jlptToKanjisMap[jlptLevel].sort((l, r) => l.strokes.compareTo(r.strokes));
       }
     }
-    return AnimatedCrossFade(
-        firstChild: KanjiGridView(kanjis: jlptToKanjisMap[jlptLevel]),
-        secondChild: KanjiListView(kanjis: jlptToKanjisMap[jlptLevel]),
-        crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        duration: Duration(milliseconds: 200));
+
+    if(showGrid) return KanjiGridView(kanjis: jlptToKanjisMap[jlptLevel]);
+
+    return KanjiListView(kanjis: jlptToKanjisMap[jlptLevel]);
   }
 
   void showAmountDialog(List<Kanji> kanjis, String title) {

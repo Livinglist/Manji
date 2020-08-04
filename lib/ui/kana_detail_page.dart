@@ -21,7 +21,6 @@ class KanaDetailPageState extends State<KanaDetailPage> {
   ScrollController gridScrollController = ScrollController();
   ScrollController listScrollController = ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -31,7 +30,6 @@ class KanaDetailPageState extends State<KanaDetailPage> {
         kanjis.add(kanji);
       });
     });
-
 
     gridScrollController.addListener(() {
       if (this.mounted) {
@@ -60,7 +58,6 @@ class KanaDetailPageState extends State<KanaDetailPage> {
         }
       }
     });
-
   }
 
   @override
@@ -113,25 +110,32 @@ class KanaDetailPageState extends State<KanaDetailPage> {
                 alignment: Alignment.topCenter,
                 child: Material(
                   color: Theme.of(context).primaryColor,
-                  elevation: showShadow?8:0,
+                  elevation: showShadow ? 8 : 0,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 100,
                     child: Center(
-                      child: Text(widget.kana, style: TextStyle(
-                        fontSize: 48,
-                        color: Colors.white,
-                        //fontFamily: 'Ai'
-                      ),),
+                      child: Text(
+                        widget.kana,
+                        style: TextStyle(
+                          fontSize: 48,
+                          color: Colors.white,
+                          //fontFamily: 'Ai'
+                        ),
+                      ),
                     ),
                   ),
                 )),
             Expanded(
-              child: AnimatedCrossFade(
-                  firstChild: KanjiGridView(kanjis: kanjis, scrollController: gridScrollController,),
-                  secondChild: KanjiListView(kanjis: kanjis, scrollController: listScrollController,),
-                  crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                  duration: Duration(milliseconds: 200)),
+              child: showGrid
+                  ? KanjiGridView(
+                      kanjis: kanjis,
+                      scrollController: gridScrollController,
+                    )
+                  : KanjiListView(
+                      kanjis: kanjis,
+                      scrollController: listScrollController,
+                    ),
             )
           ],
         ));

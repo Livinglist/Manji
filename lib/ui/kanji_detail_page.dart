@@ -516,6 +516,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                       ));
                       children.add(Divider(height: 0));
                     }
+                    children.add(SizedBox(height: 48));
                     return Column(
                       children: children,
                     );
@@ -1045,7 +1046,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
   loadVideo() async {
     if (allVideoFiles.contains(widget.kanjiStr)) {
       setState(() {
-        videoController = VideoPlayerController.asset('video/${widget.kanjiStr}.mp4')
+        videoController = VideoPlayerController.asset(Uri.encodeFull('video/${widget.kanjiStr}.mp4'))
           ..initialize().whenComplete(() {
             setState(() {});
           })

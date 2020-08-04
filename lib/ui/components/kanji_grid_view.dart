@@ -24,7 +24,6 @@ class KanjiGridView extends StatelessWidget {
       this.scrollPhysics = const AlwaysScrollableScrollPhysics()})
       : assert(kanjis != null);
 
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -45,7 +44,13 @@ class KanjiGridView extends StatelessWidget {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.center,
-                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
+                      child: Hero(
+                        tag: kanji.kanji,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
+                        )
+                      )
                     ),
                     Positioned(
                       left: 4,

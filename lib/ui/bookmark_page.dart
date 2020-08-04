@@ -93,11 +93,9 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                   );
                 }
 
-                return AnimatedCrossFade(
-                    firstChild: KanjiGridView(kanjis: kanjis),
-                    secondChild: KanjiListView(kanjis: kanjis),
-                    crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                    duration: Duration(milliseconds: 200));
+                if (showGrid) return KanjiGridView(kanjis: kanjis);
+                return KanjiListView(kanjis: kanjis);
+
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -125,11 +123,9 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                   );
                 }
 
-                return AnimatedCrossFade(
-                    firstChild: KanjiGridView(kanjis: kanjis),
-                    secondChild: KanjiListView(kanjis: kanjis),
-                    crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                    duration: Duration(milliseconds: 200));
+                if (showGrid) return KanjiGridView(kanjis: kanjis);
+                return KanjiListView(kanjis: kanjis);
+
               } else {
                 return Center(child: CircularProgressIndicator());
               }
