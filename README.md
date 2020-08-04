@@ -1,6 +1,13 @@
 # Manji
 
-A new Flutter application.
+On the surface, Manji is just a Japanese dictionary, but it can actually do more than that:
+
+- Handwritten kanji recognition
+- Image kanji extraction
+- Kanji card
+- Kanji quiz generated dynamically based on selected groups of kanji
+
+Therotically, Manji is cross-platform since it is powered by Flutter, but since I want to maximize the elegance of its user experience and also because I am an Apple fanboy to some degree, I chose to focus on the iOS side. I have already forgotten when the last time was that I debugged and tested on Android but feel free if you want to make it work and optimize for Android.
 
 ## Getting Started
 
