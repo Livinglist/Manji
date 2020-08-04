@@ -175,22 +175,49 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Divider(height: 0),
           ListTileTheme(
-            textColor: Colors.white70,
-            child: AboutListTile(
-              applicationIcon: Container(
-                height: 100,
-                width: 100,
-                child: Center(child: Image.asset('data/1024.png', fit: BoxFit.contain)),
-              ),
-              applicationVersion: '2.3.6',
-              aboutBoxChildren: <Widget>[
-                SizedBox(
-                  height: 24,
+              textColor: Colors.white70,
+              child: AboutListTile(
+                applicationIcon: Container(
+                  height: 50,
+                  width: 50,
+                  child: Image.asset(
+                    'data/1024.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                Text('Manji helps Japanese learners learn Japanese Kanji')
-              ],
-            ),
-          ),
+                applicationName: "Manji",
+                applicationVersion: "v2.3.6",
+                aboutBoxChildren: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                      launch("https://livinglist.github.io");
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(FontAwesomeIcons.addressCard),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text("Developer"),
+                      ],
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      launch("https://github.com/Livinglist/Manji");
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(FontAwesomeIcons.github),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text("Source Code"),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
         ],
       ),
     );
@@ -222,20 +249,20 @@ class _SettingsPageState extends State<SettingsPage> {
     return showCupertinoModalPopup<SignInMethod>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          message: Text("Sign In Via"),
-          cancelButton: CupertinoActionSheetAction(
-            isDefaultAction: true,
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context, null);
-            },
-          ),
-          actions: <Widget>[
-            CupertinoActionSheetAction(
-                child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
-            CupertinoActionSheetAction(
-                child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
-          ],
-        )).then((value) => value ?? null);
+              message: Text("Sign In Via"),
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context, null);
+                },
+              ),
+              actions: <Widget>[
+                CupertinoActionSheetAction(
+                    child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+                CupertinoActionSheetAction(
+                    child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
+              ],
+            )).then((value) => value ?? null);
   }
 }
