@@ -104,7 +104,11 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
-                Device.get().isTablet ? buildForTablet() : buildForPhone()
+                Device.get().isTablet ? buildForTablet() : buildForPhone(),
+                Container(
+                  height: 50,
+                  color: Colors.white,
+                )
               ],
             ),
           )),
@@ -137,10 +141,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
               print(i.kanji);
             }
 
-            var children = kanjis.map((k) => Material(
-              color: Colors.transparent,
-              child: KanjiListTile(kanji: k),
-            )).toList();
+            var children = kanjis
+                .map((k) => Material(
+                      color: Colors.transparent,
+                      child: KanjiListTile(kanji: k),
+                    ))
+                .toList();
 
             return ListView.separated(
               controller: scrollController,
