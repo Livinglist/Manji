@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kanji_dictionary/ui/search_result_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
 import 'package:video_player/video_player.dart';
@@ -847,6 +848,32 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                     "${kanji.strokes} strokes",
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   )),
+              if (kanji.radicals != null && kanji.radicals.isNotEmpty)
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SearchResultPage(radicals: kanji.radicals)));
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      LabelDivider(
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: [
+                                TextSpan(text: 'ぶしゅ' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
+                                TextSpan(text: '部首', style: TextStyle(fontSize: 18, color: Colors.white))
+                              ]))),
+                      Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text("${kanji.radicals}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Text("${kanji.radicalsMeaning}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      )
+                    ],
+                  ),
+                ),
             ],
           );
         } else {

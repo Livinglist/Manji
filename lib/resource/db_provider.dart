@@ -54,12 +54,10 @@ class DBProvider {
 
     if (await File(path).exists()) {
       print("opening");
-      return openDatabase(path, version: 3, onOpen: (db) async {
+      return openDatabase(path, version: 4, onOpen: (db) async {
         print(await db.query("sqlite_master"));
-      }, onUpgrade: (db, oldVersion, newVersion) {
+      }, onUpgrade: (db, oldVersion, newVersion) async {
         print('upgrade');
-
-        db.rawQuery("ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
 
         if (oldVersion == 1) {
           db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('
@@ -70,8 +68,42 @@ class DBProvider {
               '"rightAnswer"	TEXT NOT NULL)'
               '"questionType" INTEGER NOT NULL DEFAULT 0');
         }
+
         if (oldVersion == 2) {
           db.rawQuery("ALTER TABLE IncorrectQuestions ADD questionType INTEGER NOT NULL DEFAULT 0");
+          db.rawQuery("ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
+        }
+
+        if (oldVersion == 3) {
+          String tempPath = join(appDocDir.path, "temp.db");
+          ByteData data = await rootBundle.load("data/dictDB.db");
+          List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          await File(path).writeAsBytes(bytes);
+          var tempDB = await openDatabase(tempPath);
+          var kanjis = await tempDB.query("Kanji");
+          await db.delete('Kanji');
+          await db.rawQuery('''CREATE TABLE "Kanji" (
+              "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+              "grade"	INTEGER,
+              "kanji"	TEXT,
+              "strokes"	INTEGER,
+              "onyomi"	TEXT,
+              "meaning"	TEXT,
+              "jlpt"	INTEGER,
+              "frequency"	INTEGER,
+              "jinmeiyo"	INTEGER,
+              "faved"	INTEGER,
+              "kunyomi"	TEXT,
+              "kunyomiWords"	TEXT,
+              "parts"	TEXT,
+              "onyomiWords"	TEXT,
+              "studiedTimeStamps"	TEXT DEFAULT '[]',
+              "radicals"	TEXT DEFAULT '',
+              "radicalsMeaning"	TEXT DEFAULT ''
+          )''');
+          for (var kanji in kanjis) {
+            db.insert('Kanji', kanji);
+          }
         }
       });
     } else {
@@ -81,7 +113,7 @@ class DBProvider {
       await File(path).writeAsBytes(bytes);
       return openDatabase(
         path,
-        version: 3,
+        version: 4,
         onOpen: (db) async {
           print(await db.query("sqlite_master"));
         },

@@ -12,13 +12,12 @@ import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/word.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
+import 'package:kanji_dictionary/utils/string_extension.dart';
+import 'package:kanji_dictionary/utils/list_extension.dart';
 
 export 'package:kanji_dictionary/models/kanji.dart';
 export 'package:kanji_dictionary/models/sentence.dart';
 export 'package:kanji_dictionary/models/word.dart';
-
-import 'package:kanji_dictionary/utils/string_extension.dart';
-import 'package:kanji_dictionary/utils/list_extension.dart';
 
 class KanjiBloc {
   //final repo = Repository();
@@ -397,11 +396,37 @@ class KanjiBloc {
     _searchResultsFetcher.sink.add(list);
   }
 
-  void filterKanji(Map<int, bool> jlptMap, Map<int, bool> gradeMap) {
+  void filterKanji(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
+
+    _filterKanjiStream(jlptMap, gradeMap, radicalsMap).listen((kanji) {
+      list.add(kanji);
+      if (list.isEmpty) list = List.from(allKanjisList);
+      list.sort((a, b) => a.strokes.compareTo(b.strokes));
+      _searchResultsFetcher.sink.add(list);
+    });
+  }
+
+  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
+    bool jlptIsEmpty = !jlptMap.containsValue(true), gradeIsEmpty = !gradeMap.containsValue(true), radicalIsEmpty = !radicalsMap.containsValue(true);
+
     for (var kanji in allKanjisList) {
       if (kanji.jlpt == 0) continue;
-      if (jlptMap[kanji.jlpt] || gradeMap[kanji.grade]) list.add(kanji);
+      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) && (gradeIsEmpty || gradeMap[kanji.grade]) && (radicalIsEmpty || radicalsMap[kanji.radicals]))
+        yield kanji;
+    }
+  }
+
+  @Deprecated("Use filterKanji() instead for better performance")
+  void filterKanjiSync(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
+    var list = <Kanji>[];
+
+    bool jlptIsEmpty = !jlptMap.containsValue(true), gradeIsEmpty = !gradeMap.containsValue(true), radicalIsEmpty = !radicalsMap.containsValue(true);
+
+    for (var kanji in allKanjisList) {
+      if (kanji.jlpt == 0) continue;
+      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) && (gradeIsEmpty || gradeMap[kanji.grade]) && (radicalIsEmpty || radicalsMap[kanji.radicals]))
+        list.add(kanji);
     }
 
     if (list.isEmpty) list = List.from(allKanjisList);

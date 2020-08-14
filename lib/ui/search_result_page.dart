@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/ui/components/kanji_list_view.dart';
+import 'package:kanji_dictionary/ui/radicals_page.dart';
+
+import 'components/kanji_list_tile.dart';
+import 'kanji_detail_page.dart';
+
+double _filterPanelHeight = 140;
 
 class SearchResultPage extends StatefulWidget {
   final String text;
+  final String radicals;
 
-  SearchResultPage({this.text}) : assert(text != null);
+  SearchResultPage({this.text, this.radicals}) : assert(text != null || radicals != null);
 
   @override
-  State<StatefulWidget> createState() => SearchResultPageState();
+  State<StatefulWidget> createState() => _SearchResultPageState();
 }
 
-class SearchResultPageState extends State<SearchResultPage> {
+class _SearchResultPageState extends State<SearchResultPage> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
-  bool showShadow = false;
-  List<Kanji> kanjis = <Kanji>[];
-  Map<int, bool> jlptMap = {1: false, 2: false, 3: false, 4: false, 5: false};
-
-  Map<int, bool> gradeMap = {
+  final Map<int, bool> jlptMap = {1: false, 2: false, 3: false, 4: false, 5: false};
+  final Map<int, bool> gradeMap = {
     0: false, //Junior High
     1: false,
     2: false,
@@ -28,12 +30,15 @@ class SearchResultPageState extends State<SearchResultPage> {
     5: false,
     6: false
   };
+  AnimationController animationController;
+  Map<String, bool> radicalsMap = {};
+  bool showShadow = false;
 
   @override
   void initState() {
     scrollController.addListener(() {
       if (this.mounted) {
-        if (scrollController.offset <= 0) {
+        if (scrollController.offset <= _filterPanelHeight) {
           setState(() {
             showShadow = false;
           });
@@ -45,8 +50,21 @@ class SearchResultPageState extends State<SearchResultPage> {
       }
     });
 
+    scrollController.addListener(() {
+      if (this.mounted) {
+        animationController.value = scrollController.offset >= _filterPanelHeight ? 0 : 1 - scrollController.offset / _filterPanelHeight;
+      }
+    });
+
+    animationController = AnimationController(vsync: this, value: 1);
+
+    radicalsMap = radicalsToMeaning.map((key, value) => MapEntry(key, false));
+
+    if (widget.text != null) kanjiBloc.searchKanjiInfosByStr(widget.text);
+
+    if (widget.radicals != null) radicalsMap[widget.radicals] = true;
+
     super.initState();
-    kanjiBloc.searchKanjiInfosByStr(widget.text);
   }
 
   @override
@@ -77,77 +95,148 @@ class SearchResultPageState extends State<SearchResultPage> {
               ),
             )
           ],
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(80),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        runSpacing: 12,
-                        spacing: 12,
-                        children: <Widget>[
-                          SizedBox(width: 12),
-                          for (var n in jlptMap.keys)
-                            FilterChip(
-                                selected: jlptMap[n],
-                                elevation: 4,
-                                label: Text("N$n"),
-                                onSelected: (val) {
-                                  setState(() {
-                                    jlptMap[n] = !jlptMap[n];
-                                  });
-                                  kanjiBloc.filterKanji(jlptMap, gradeMap);
-                                })
-                        ],
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        spacing: 8,
-                        children: <Widget>[
-                          SizedBox(width: 12),
-                          for (var g in gradeMap.keys)
-                            FilterChip(
-                                selected: gradeMap[g],
-                                elevation: 4,
-                                label: Text(getGradeStr(g)),
-                                onSelected: (val) {
-                                  setState(() {
-                                    gradeMap[g] = !gradeMap[g];
-                                  });
-                                  kanjiBloc.filterKanji(jlptMap, gradeMap);
-                                })
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )),
         ),
-        body: StreamBuilder(
-          stream: kanjiBloc.searchResults,
-          builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-            if (snapshot.hasData) {
-              var kanjis = snapshot.data;
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: StreamBuilder(
+                stream: kanjiBloc.searchResults,
+                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                  if (snapshot.hasData) {
+                    var kanjis = snapshot.data;
 
-              return kanjis.isNotEmpty
-                  ? KanjiListView(kanjis: kanjis, scrollController: scrollController)
-                  : Center(
-                      child: Text(
-                        'No results found _(┐「ε:)_',
-                        style: TextStyle(color: Colors.white70),
-                      ),
+                    return kanjis.isNotEmpty
+                        ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
+                        : Center(
+                            child: Text(
+                              'No results found _(┐「ε:)_',
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            ),
+            Align(
+                alignment: Alignment.topCenter,
+                child: AnimatedBuilder(
+                  animation: animationController,
+                  child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            runSpacing: 12,
+                            spacing: 12,
+                            children: <Widget>[
+                              SizedBox(width: 12),
+                              for (var n in jlptMap.keys)
+                                FilterChip(
+                                    selected: jlptMap[n],
+                                    elevation: 4,
+                                    label: Text("N$n"),
+                                    onSelected: (val) {
+                                      setState(() {
+                                        jlptMap[n] = !jlptMap[n];
+                                      });
+                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                    })
+                            ],
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 8,
+                            children: <Widget>[
+                              SizedBox(width: 12),
+                              for (var g in gradeMap.keys)
+                                FilterChip(
+                                    selected: gradeMap[g],
+                                    elevation: 4,
+                                    label: Text(getGradeStr(g)),
+                                    onSelected: (val) {
+                                      setState(() {
+                                        gradeMap[g] = !gradeMap[g];
+                                      });
+                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                    })
+                            ],
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 8,
+                            children: <Widget>[
+                              SizedBox(width: 12),
+                              for (var r in radicalsMap.keys.toList().sublist(0, 4))
+                                FilterChip(
+                                    selected: radicalsMap[r],
+                                    elevation: 4,
+                                    label: Text(r),
+                                    onSelected: (val) {
+                                      setState(() {
+                                        radicalsMap[r] = !radicalsMap[r];
+                                      });
+                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                    }),
+                              for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
+                                FilterChip(
+                                    selected: true,
+                                    elevation: 4,
+                                    label: Text(r),
+                                    onSelected: (val) {
+                                      setState(() {
+                                        radicalsMap[r] = !radicalsMap[r];
+                                      });
+                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                    }),
+                              Hero(
+                                tag: 'hero',
+                                child: MaterialButton(
+                                  onPressed: showRadicalsDialog,
+                                  child: Text('More Radicals'),
+                                  shape: StadiumBorder(),
+                                  color: Colors.grey,
+                                  height: 32,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  builder: (_, child) {
+                    return Opacity(
+                      opacity: animationController.value,
+                      child: animationController.value <= 0 ? Container() : child,
                     );
-            }
-            return Center(child: CircularProgressIndicator());
-          },
+                  },
+                )),
+          ],
         ));
+  }
+
+  showRadicalsDialog() {
+    Navigator.push(context,
+            MaterialPageRoute(builder: (_) => RadicalsPage(selectedRadicals: radicalsMap.keys.where((element) => radicalsMap[element]).toList())))
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          radicalsMap = value;
+        });
+        kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+      }
+    });
   }
 
   static String getGradeStr(int grade) {
@@ -170,31 +259,45 @@ class SearchResultPageState extends State<SearchResultPage> {
   }
 }
 
-//class KanjiGridView extends StatelessWidget {
-//  final List<Kanji> kanjis;
-//
-//  KanjiGridView({this.kanjis}) : assert(kanjis != null);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return GridView.count(
-//      crossAxisCount: 6,
-//      children: kanjis.map((kanji) {
-//        return Center(
-//          child: InkWell(
-//            child:Container(
-//              width: double.infinity,
-//              height: double.infinity,
-//              child: Center(
-//                child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei')),
-//              )
-//            ),
-//            onTap: (){
-//              Navigator.push(context, MaterialPageRoute(builder: (_)=>KanjiDetailPage(kanji: kanji)));
-//            },
-//          )
-//        );
-//      }).toList(),
-//    );
-//  }
-//}
+class _KanjiListView extends StatelessWidget {
+  final List<Kanji> kanjis;
+  final String fallBackFont;
+  final ValueChanged<String> onLongPressed;
+  final bool canRemove;
+  final ScrollController scrollController;
+  final ScrollPhysics scrollPhysics;
+
+  _KanjiListView(
+      {this.kanjis,
+      this.fallBackFont,
+      this.onLongPressed,
+      this.canRemove = false,
+      this.scrollController,
+      this.scrollPhysics = const AlwaysScrollableScrollPhysics()})
+      : assert(kanjis != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        physics: scrollPhysics,
+        shrinkWrap: true,
+        controller: scrollController,
+        itemBuilder: (_, index) {
+          if (index == 0)
+            return Container(
+              height: _filterPanelHeight,
+            );
+          index = index - 1;
+          return Material(
+            color: Theme.of(context).primaryColor,
+            child: KanjiListTile(
+              kanji: kanjis[index],
+              onLongPressed: onLongPressed,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanjis[index]))),
+            ),
+          );
+        },
+        separatorBuilder: (_, __) => Divider(height: 0),
+        itemCount: kanjis.length + 1);
+  }
+}
