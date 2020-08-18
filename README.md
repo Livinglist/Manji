@@ -4,7 +4,7 @@
 ![App Store](https://img.shields.io/itunes/v/1464774967?label=App%20Store)
 
 
-<p float="left">
+<p align="center">
   <img width="200" alt="Screen Shot 2020-03-03 at 1 22 57 PM" src="https://user-images.githubusercontent.com/7277662/90493962-d5660b80-e0f7-11ea-9971-dba0951fd60e.png"> 
   <img width="200" alt="Screen Shot 2020-03-03 at 1 23 17 PM" src="https://user-images.githubusercontent.com/7277662/90494055-ee6ebc80-e0f7-11ea-9fdf-652f18deb4b8.png">
   <img width="200" alt="Screen Shot 2020-03-03 at 1 24 40 PM" src="https://user-images.githubusercontent.com/7277662/90494371-4b6a7280-e0f8-11ea-999c-dbf01e58c329.png">
