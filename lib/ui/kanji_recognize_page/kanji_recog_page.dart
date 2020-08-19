@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -35,9 +36,10 @@ class KanjiRecognizePage extends StatefulWidget {
   _KanjiRecognizePageState createState() => _KanjiRecognizePageState();
 }
 
-class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
+class _KanjiRecognizePageState extends State<KanjiRecognizePage> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
-  bool showShadow = false;
+  AnimationController animationController;
+  bool showShadow = false, canvasEnabled = true;
   List<Offset> points = List();
   Uint8List bytesData;
 
@@ -49,7 +51,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
 
   @override
   void initState() {
-    super.initState();
+    animationController = AnimationController(vsync: this, value: 1);
 
     scrollController.addListener(() {
       if (this.mounted) {
@@ -64,6 +66,28 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
         }
       }
     });
+
+    scrollController.addListener(() {
+      if (this.mounted) {
+//        if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+//          setState(() {
+//            canvasEnabled = true;
+//          });
+//        } else {
+//          setState(() {
+//            canvasEnabled = false;
+//          });
+//        }
+
+        scrollController.addListener(() {
+          if (this.mounted) {
+            animationController.value = scrollController.offset >= 120 ? 0 : 1 - scrollController.offset / 120;
+          }
+        });
+      }
+    });
+
+    super.initState();
   }
 
   @override
@@ -74,7 +98,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width - MediaQuery.of(context).padding.top);
+    //print(MediaQuery.of(context).size.width - MediaQuery.of(context).padding.top);
     return Scaffold(
       appBar: AppBar(
         elevation: showShadow ? 8 : 0,
@@ -96,22 +120,42 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
         ],
       ),
       backgroundColor: Theme.of(context).primaryColor,
-      body: Container(
-          color: Colors.white,
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
-                Device.get().isTablet ? buildForTablet() : buildForPhone(),
-                Container(
-                  height: 50,
-                  color: Colors.white,
-                )
-              ],
+      body: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedBuilder(
+              animation: animationController,
+              child: Device.get().isTablet ? buildForTablet() : buildForPhone(),
+              builder: (_, child) {
+                return Opacity(
+                  opacity: animationController.value,
+                  child: animationController.value <= 0 ? Container() : child,
+                );
+              },
             ),
-          )),
+          ),
+        ],
+      ),
+//      body: Container(
+//          color: Colors.white,
+//          child: SingleChildScrollView(
+//            physics: NeverScrollableScrollPhysics(),
+//            child: Column(
+//              mainAxisAlignment: MainAxisAlignment.start,
+//              children: <Widget>[
+//                Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
+//                Device.get().isTablet ? buildForTablet() : buildForPhone(),
+//                Container(
+//                  height: 50,
+//                  color: Colors.white,
+//                )
+//              ],
+//            ),
+//          )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _cleanDrawing();
@@ -137,16 +181,20 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
               return Center(child: Text(r'Empty ¯\_(ツ)_/¯', style: TextStyle(color: Colors.white70)));
             }
 
-            for (var i in kanjis) {
-              print(i.kanji);
+            List<Widget> children = [];
+
+            for (var k in kanjis) {
+              print(k.kanji);
+              children.add(Material(
+                color: Colors.transparent,
+                child: KanjiListTile(kanji: k),
+              ));
+              children.add(Divider(height: 0));
             }
 
-            var children = kanjis
-                .map((k) => Material(
-                      color: Colors.transparent,
-                      child: KanjiListTile(kanji: k),
-                    ))
-                .toList();
+            children.removeLast();
+
+            children.add(SizedBox(height: 360));
 
             return ListView.separated(
               controller: scrollController,
@@ -186,8 +234,8 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> {
   }
 
   Widget buildForPhone() {
+    print(MediaQuery.of(context).size.width);
     return Container(
-      constraints: BoxConstraints(maxHeight: 360, maxWidth: 360),
       height: MediaQuery.of(context).size.width,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(

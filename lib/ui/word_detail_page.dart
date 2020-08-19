@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/word.dart';
@@ -19,13 +20,20 @@ class WordDetailPage extends StatefulWidget {
 class WordDetailPageState extends State<WordDetailPage> {
   final sentenceBloc = SentenceBloc();
   final scrollController = ScrollController();
+  final flutterTts = FlutterTts();
   double width, elevation = 0;
   bool showShadow = false;
 
   @override
   void initState() {
+    flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
+      IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+      IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+      IosTextToSpeechAudioCategoryOptions.mixWithOthers
+    ]);
+    flutterTts.setLanguage("ja");
+
     sentenceBloc.fetchSentencesByWords(widget.word.wordText);
-    super.initState();
 
     scrollController.addListener(() {
       if (this.mounted) {
@@ -40,6 +48,8 @@ class WordDetailPageState extends State<WordDetailPage> {
         }
       }
     });
+
+    super.initState();
   }
 
   @override
@@ -47,7 +57,15 @@ class WordDetailPageState extends State<WordDetailPage> {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(elevation: showShadow ? 8 : 0),
+        appBar: AppBar(
+          elevation: showShadow ? 8 : 0,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.volume_up),
+              onPressed: () => flutterTts.speak(widget.word.wordText),
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Column(

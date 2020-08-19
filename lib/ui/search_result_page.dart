@@ -62,7 +62,10 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
 
     if (widget.text != null) kanjiBloc.searchKanjiInfosByStr(widget.text);
 
-    if (widget.radicals != null) radicalsMap[widget.radicals] = true;
+    if (widget.radicals != null) {
+      radicalsMap[widget.radicals] = true;
+      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+    }
 
     super.initState();
   }
@@ -278,26 +281,32 @@ class _KanjiListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        physics: scrollPhysics,
-        shrinkWrap: true,
-        controller: scrollController,
-        itemBuilder: (_, index) {
-          if (index == 0)
-            return Container(
-              height: _filterPanelHeight,
-            );
-          index = index - 1;
-          return Material(
-            color: Theme.of(context).primaryColor,
-            child: KanjiListTile(
-              kanji: kanjis[index],
-              onLongPressed: onLongPressed,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanjis[index]))),
-            ),
-          );
-        },
-        separatorBuilder: (_, __) => Divider(height: 0),
-        itemCount: kanjis.length + 1);
+    var children = <Widget>[];
+
+    children.add(Container(
+      height: _filterPanelHeight,
+    ));
+    for (var kanji in kanjis) {
+      children.add(Material(
+        color: Theme.of(context).primaryColor,
+        child: KanjiListTile(
+          kanji: kanji,
+          onLongPressed: onLongPressed,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
+        ),
+      ));
+      children.add(Divider(height: 0));
+    }
+    children.removeLast();
+    children.add(Container(
+      height: _filterPanelHeight,
+    ));
+
+    return ListView(
+      physics: scrollPhysics,
+      shrinkWrap: true,
+      controller: scrollController,
+      children: children,
+    );
   }
 }

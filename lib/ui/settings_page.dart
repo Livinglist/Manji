@@ -164,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
             leading: Icon(Icons.person, color: Colors.white),
             title: Text('About me', style: TextStyle(color: Colors.white)),
             onTap: () async {
-              final url = Uri.encodeFull('https://github.com/Livinglist?tab=repositories');
+              final url = Uri.encodeFull('https://github.com/Livinglist');
 
               if (await canLaunch(url)) {
                 await launch(url, forceSafariVC: true, forceWebView: true);
@@ -186,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 applicationName: "Manji",
-                applicationVersion: "v2.3.7",
+                applicationVersion: "v2.3.8",
                 aboutBoxChildren: <Widget>[
                   RaisedButton(
                     onPressed: () {

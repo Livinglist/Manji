@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:core';
-import 'dart:convert';
 
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -199,7 +198,6 @@ class FirebaseAuthProvider {
     var password = email;
 
     return firebaseAuth.signInWithEmailAndPassword(email: email, password: email).then((authResult) {
-      var firebaseUser = authResult.user;
 
       FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
         if (isUpgradable) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'components/kanji_grid_view.dart';
@@ -15,6 +16,7 @@ class KanaDetailPage extends StatefulWidget {
 }
 
 class KanaDetailPageState extends State<KanaDetailPage> {
+  final flutterTts = FlutterTts();
   List<Kanji> kanjis = [];
   bool showGrid = false;
   bool showShadow = false;
@@ -23,7 +25,12 @@ class KanaDetailPageState extends State<KanaDetailPage> {
 
   @override
   void initState() {
-    super.initState();
+    flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
+      IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+      IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+      IosTextToSpeechAudioCategoryOptions.mixWithOthers
+    ]);
+    flutterTts.setLanguage("ja");
 
     kanjiBloc.findKanjiByKana(widget.kana, widget.yomikata).listen((kanji) {
       this.setState(() {
@@ -58,6 +65,8 @@ class KanaDetailPageState extends State<KanaDetailPage> {
         }
       }
     });
+
+    super.initState();
   }
 
   @override
@@ -75,32 +84,28 @@ class KanaDetailPageState extends State<KanaDetailPage> {
           elevation: 0,
           title: Container(),
           actions: <Widget>[
-            AnimatedCrossFade(
-              firstChild: IconButton(
-                icon: Icon(
-                  Icons.view_headline,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    showGrid = !showGrid;
-                  });
-                },
-              ),
-              secondChild: IconButton(
-                icon: Icon(
-                  Icons.view_comfy,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    showGrid = !showGrid;
-                  });
-                },
-              ),
-              crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              duration: Duration(milliseconds: 200),
-            )
+            IconButton(
+              icon: Icon(Icons.volume_up),
+              onPressed: () => flutterTts.speak(widget.kana),
+            ),
+            IconButton(
+              icon: AnimatedCrossFade(
+                  firstChild: Icon(
+                    Icons.view_headline,
+                    color: Colors.white,
+                  ),
+                  secondChild: Icon(
+                    Icons.view_comfy,
+                    color: Colors.white,
+                  ),
+                  crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  duration: Duration(milliseconds: 200)),
+              onPressed: () {
+                setState(() {
+                  showGrid = !showGrid;
+                });
+              },
+            ),
           ],
         ),
         body: Flex(

@@ -37,13 +37,13 @@ class FuriganaText extends StatelessWidget {
     Color unmarkedColor = Colors.white.withOpacity(0.8);
     Color markedColor = Colors.white;
     TextStyle furiganaTextStyle = style == null
-        ? TextStyle(fontSize: Theme.of(context).textTheme.body1.fontSize * 0.5, color: markedColor)
+        ? TextStyle(fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5, color: markedColor)
         : TextStyle(fontSize: style.fontSize * 0.5, color: markedColor);
     TextStyle markedTextStyle = style == null
-        ? TextStyle(fontSize: Theme.of(context).textTheme.body1.fontSize * 0.5, color: markedColor)
+        ? TextStyle(fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5, color: markedColor)
         : TextStyle(fontSize: style.fontSize, color: markedColor);
     TextStyle textTextStyle = style == null
-        ? TextStyle(fontSize: Theme.of(context).textTheme.body1.fontSize * 0.5, color: unmarkedColor)
+        ? TextStyle(fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5, color: unmarkedColor)
         : TextStyle(fontSize: style.fontSize, color: unmarkedColor);
     TextStyle invisibleTextStyle = style == null
         ? TextStyle(fontSize: furiganaTextStyle.fontSize, color: Colors.transparent)

@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
@@ -32,8 +30,6 @@ import 'quiz_pages/quiz_page.dart';
 import 'text_recognize_page/text_recognize_page.dart';
 import 'kanji_recognize_page/kanji_recog_page.dart';
 import 'progress_pages/progress_page.dart';
-
-import 'package:kanji_dictionary/main.dart';
 
 class HomePage extends StatefulWidget {
   @override

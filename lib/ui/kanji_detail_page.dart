@@ -850,6 +850,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                   )),
               if (kanji.radicals != null && kanji.radicals.isNotEmpty)
                 InkWell(
+                  splashColor: Theme.of(context).primaryColor,
+                  highlightColor: Theme.of(context).primaryColor,
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => SearchResultPage(radicals: kanji.radicals)));
                   },
@@ -889,6 +891,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     var wordTextEditingController = TextEditingController();
     var meaningTextEditingController = TextEditingController();
     final formKey = GlobalKey<FormState>();
+
+    yomiTextEditingController.text = yomi.replaceFirst('.', '');
+
     CustomBottomSheet.showModalBottomSheet(
         context: context,
         builder: (_) {

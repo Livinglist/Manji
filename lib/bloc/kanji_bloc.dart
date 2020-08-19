@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:collection';
 
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
-import 'package:kanji_dictionary/bloc/siri_suggestion_bloc.dart';
 import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -70,7 +69,10 @@ class KanjiBloc {
   void getRandomKanji() {
     var ran = Random(DateTime.now().millisecond);
     if (!_randomKanjiFetcher.isClosed) {
-      var kanji = _allKanjisMap.values.elementAt(ran.nextInt(_allKanjisMap.length));
+      Kanji kanji;
+      do {
+        kanji = _allKanjisMap.values.elementAt(ran.nextInt(_allKanjisMap.length));
+      } while (kanji.jlptLevel == null);
       _randomKanjiFetcher.sink.add(kanji);
     }
   }

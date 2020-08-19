@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -11,35 +12,39 @@ import 'jisho_api_provider.dart';
 class FirebaseApiProvider {
   final firestore = Firestore.instance;
 
-  void uploadKanjis(List<Kanji> kanjis) {
+  void uploadKanjis(List<Kanji> kanjis, {bool overwrite = false}) {
+    debugPrint("Uploading kanjis to Firebase. overwrite is $overwrite");
     for (var kanji in kanjis) {
-      uploadKanji(kanji);
+      debugPrint('Uploading ${kanji.kanji} to Firebase.');
+      uploadKanji(kanji, overwrite: overwrite);
     }
+    debugPrint('Uploading completed.');
   }
 
-  Future uploadKanji(Kanji kanji) async {
+  Future uploadKanji(Kanji kanji, {bool overwrite = false}) async {
     var docRef = firestore.collection('kanjis').document(kanji.kanji);
     var snapshot = await docRef.get();
-    if (!snapshot.exists) {
+    if (!snapshot.exists || overwrite) {
       docRef.setData({
         'grade': kanji.grade,
         'jlpt': kanji.jlpt,
         'kanji': kanji.kanji,
-        'kunyomi': kanji.kunyomi,
         'frequency': kanji.frequency,
         'onyomi': kanji.onyomi,
         'kunyomi': kanji.kunyomi,
         'strokes': kanji.strokes,
         'parts': kanji.parts,
         'meaning': kanji.meaning,
-        'onyomiWords': kanji.onyomiWords.map((word) => word.toString()).toList(),
-        'kunyomiWords': kanji.kunyomiWords.map((word) => word.toString()).toList()
+        'radicals': kanji.radicals,
+        'radicalsMeaning': kanji.radicalsMeaning,
+        'onyomiWords': kanji.onyomiWords.map((word) => word.toMap()).toList(),
+        'kunyomiWords': kanji.kunyomiWords.map((word) => word.toMap()).toList()
       });
     } else {
       docRef.updateData({
         'parts': kanji.parts,
-        'onyomiWords': kanji.onyomiWords.map((word) => word.toString()).toList(),
-        'kunyomiWords': kanji.kunyomiWords.map((word) => word.toString()).toList()
+        'onyomiWords': kanji.onyomiWords.map((word) => word.toMap()).toList(),
+        'kunyomiWords': kanji.kunyomiWords.map((word) => word.toMap()).toList()
       });
     }
   }

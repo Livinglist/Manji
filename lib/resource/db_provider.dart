@@ -57,7 +57,7 @@ class DBProvider {
       return openDatabase(path, version: 4, onOpen: (db) async {
         print(await db.query("sqlite_master"));
       }, onUpgrade: (db, oldVersion, newVersion) async {
-        print('upgrade');
+        print('upgrading');
 
         if (oldVersion == 1) {
           db.rawQuery('CREATE TABLE IF NOT EXISTS "IncorrectQuestions" ('

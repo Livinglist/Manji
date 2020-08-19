@@ -43,37 +43,47 @@ class _RadicalsPageState extends State<RadicalsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(radicalsMap),
-          ),
-          title: Text('Radicals'),
-          elevation: showShadow ? 8 : 0,
-        ),
-        body: SingleChildScrollView(
-            controller: scrollController,
-            scrollDirection: Axis.vertical,
-            child: Padding(
-              padding: EdgeInsets.only(left: 8, bottom: 48),
-              child: Wrap(
-                alignment: WrapAlignment.start,
-                spacing: 8,
-                children: <Widget>[
-                  for (var r in radicalsMap.keys)
-                    FilterChip(
-                        selected: radicalsMap[r],
-                        elevation: radicalsMap[r] ? 4 : 0,
-                        label: Text(r),
-                        onSelected: (val) {
-                          setState(() {
-                            radicalsMap[r] = !radicalsMap[r];
-                          });
-                        }),
-                ],
+    return WillPopScope(
+        child: Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(radicalsMap),
               ),
-            )));
+              title: Text('Radicals'),
+              elevation: showShadow ? 8 : 0,
+            ),
+            body: SingleChildScrollView(
+                controller: scrollController,
+                scrollDirection: Axis.vertical,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8, bottom: 48),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 8,
+                    children: <Widget>[
+                      ActionChip(
+                        label: Text('Clear'),
+                        onPressed: () {
+                          setState(() {
+                            radicalsMap.updateAll((key, value) => radicalsMap[key] = false);
+                          });
+                        },
+                      ),
+                      for (var r in radicalsMap.keys)
+                        FilterChip(
+                            selected: radicalsMap[r],
+                            elevation: radicalsMap[r] ? 4 : 0,
+                            label: Text(r),
+                            onSelected: (val) {
+                              setState(() {
+                                radicalsMap[r] = !radicalsMap[r];
+                              });
+                            }),
+                    ],
+                  ),
+                ))),
+        onWillPop: () => Future.value(false));
   }
 }
