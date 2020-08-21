@@ -151,6 +151,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
+                              showShadow: true,
                               text: sentence.text,
                               tokens: sentence.tokens,
                               style: TextStyle(fontSize: 20),

@@ -22,7 +22,6 @@ class KanaPageState extends State<KanaPage> {
       IosTextToSpeechAudioCategoryOptions.mixWithOthers
     ]);
     flutterTts.setLanguage("ja");
-    flutterTts.setSpeechRate(0.8);
 
     super.initState();
   }

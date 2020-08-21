@@ -51,4 +51,14 @@ extension StringExtension on String {
 
     return str;
   }
+
+  bool isHiragana() {
+    if (this.codeUnitAt(0) >= 12353 && this.codeUnitAt(0) <= 12447) return true;
+    return false;
+  }
+
+  bool isKatakana() {
+    if (this.codeUnitAt(0) >= 12448 && this.codeUnitAt(0) <= 12543) return true;
+    return false;
+  }
 }

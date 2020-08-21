@@ -117,6 +117,7 @@ class KanjiCardState extends State<KanjiCard> {
                                                 Padding(
                                                     padding: EdgeInsets.symmetric(vertical: 4),
                                                     child: FuriganaText(
+                                                      showShadow: true,
                                                       text: sentence.text,
                                                       tokens: sentence.tokens,
                                                       style: TextStyle(fontSize: sentence.text.length > 50 ? 18 : 22),
@@ -135,6 +136,7 @@ class KanjiCardState extends State<KanjiCard> {
                                               title: Padding(
                                                   padding: EdgeInsets.symmetric(vertical: 4),
                                                   child: FuriganaText(
+                                                    showShadow: true,
                                                     text: sentence.text,
                                                     tokens: sentence.tokens,
                                                     style: TextStyle(fontSize: sentence.text.length > 50 ? 14 : 16),

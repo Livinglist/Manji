@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ List<String> getKanjis(String text) {
 }
 
 class FuriganaText extends StatelessWidget {
+  final bool showShadow;
   final String text;
   //final List<String> furigana;
   final TextStyle style;
@@ -24,7 +26,7 @@ class FuriganaText extends StatelessWidget {
   final WrapAlignment alignment;
   final List<Token> tokens;
 
-  FuriganaText({this.text, this.style, this.tokens, this.alignment = WrapAlignment.start, this.textAlign = TextAlign.start})
+  FuriganaText({this.showShadow = false, this.text, this.style, this.tokens, this.alignment = WrapAlignment.start, this.textAlign = TextAlign.start})
       : assert(text != null),
         assert(tokens != null),
         //assert(getKanjis(text).length == furigana.length),
@@ -33,7 +35,9 @@ class FuriganaText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var richTexts = <RichText>[];
-    var queue = Queue<Token>.from(this.tokens.where((token) => token.containsKanji));
+
+    var queue = Queue<Token>.from(this.tokens.where((element) => text.contains(element.text) || element.furigana != null));
+
     Color unmarkedColor = Colors.white.withOpacity(0.8);
     Color markedColor = Colors.white;
     TextStyle furiganaTextStyle = style == null
@@ -49,44 +53,104 @@ class FuriganaText extends StatelessWidget {
         ? TextStyle(fontSize: furiganaTextStyle.fontSize, color: Colors.transparent)
         : TextStyle(fontSize: furiganaTextStyle.fontSize, color: Colors.transparent);
 
-    try {
-      int i = 0;
-      for (; i < text.length;) {
-        if (queue.isEmpty) break;
-        if (queue.first.text == text.substring(i, i + queue.first.text.length)) {
-          var japText = text.substring(i, i + queue.first.text.length);
-          var furigana = queue.first.furigana;
-          //var containedKanji = _getKanjis(japText);
+    debugPrint(text);
+    debugPrint(Map<String, String>.fromEntries(tokens.map((e) => MapEntry<String, String>(e.text, e.furigana ?? 'null'))).toString());
 
-//          if(containedKanji.length == 1){
-//            if(_isKanji(japText[0])) textAlign = TextAlign.left;
-//          }
+    //try {
+    int i = 0;
+    for (; i < text.length;) {
+      if (queue.isEmpty) break;
 
-          if (japText[0].isKanji() && japText[japText.length - 1].isKanji() == false && tokens.length != 1) {
-            richTexts.add(RichText(
-                textAlign: TextAlign.start,
-                text: TextSpan(
-                    children: [TextSpan(text: furigana + '\n', style: furiganaTextStyle), TextSpan(text: japText, style: markedTextStyle)])));
+      var currentText = queue.first.text;
+      bool hasFurigana = false;
+      String japText, furigana;
+
+      if (currentText[0] == text[i]) {
+        if (currentText == text.substring(i, min(text.length, i + currentText.length))) {
+          hasFurigana = true;
+          if (currentText == text.substring(i, min(text.length, i + currentText.length))) {
+            japText = currentText;
           } else {
-            richTexts.add(RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    children: [TextSpan(text: furigana + '\n', style: furiganaTextStyle), TextSpan(text: japText, style: markedTextStyle)])));
+            int matchIndex = text.substring(i).indexOf(currentText[currentText.length - 1]);
+            if (matchIndex == -1)
+              matchIndex = text.length - 1;
+            else
+              matchIndex = min(text.length, matchIndex);
+            japText = text.substring(i, i + matchIndex + 1);
           }
 
-          i += queue.removeFirst().text.length;
+          furigana = queue.first.furigana ?? '';
+          i += japText.length;
+          queue.removeFirst();
         } else {
-          richTexts.add(RichText(
-              textAlign: textAlign,
-              text: TextSpan(children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text[i], style: textTextStyle)])));
-          i++;
+          hasFurigana = true;
+
+          //The current one did not match any word in the sentence then we replace the part in the sentence that is incorrect.
+          var nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
+          var nextWordIndex = nextWord == null ? null : text.substring(i).indexOf(nextWord.text);
+
+          if (nextWordIndex != null && nextWordIndex != -1 && text.substring(i, i + nextWordIndex - 1).contains(RegExp(r'[、。「」？！.]'))) {
+            nextWordIndex = text.substring(i, i + nextWordIndex - 1).indexOf(RegExp(r'[、。「」？！.]'));
+          } else if (nextWordIndex == null) {
+            nextWordIndex = text.substring(i).indexOf(RegExp(r'[、。「」？！.]'));
+          }
+
+          furigana = queue.first.furigana ?? '';
+          japText = currentText;
+          i += nextWordIndex ?? japText.length;
+          queue.removeFirst();
         }
       }
-      richTexts.add(RichText(
-          textAlign: textAlign,
-          text: TextSpan(
-              children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text.substring(i, text.length), style: textTextStyle)])));
-    } catch (ex) {}
+
+      if (hasFurigana) {
+        if (japText[0].isKanji() && japText[japText.length - 1].isKanji() == false && tokens.length != 1) {
+          richTexts.add(RichText(
+              textAlign: TextAlign.start,
+              text: TextSpan(
+                  style: TextStyle(
+                    shadows: [
+                      if (showShadow)
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black45,
+                          offset: Offset(0, 0),
+                        ),
+                    ],
+                  ),
+                  children: [TextSpan(text: furigana + '\n', style: furiganaTextStyle), TextSpan(text: japText, style: markedTextStyle)])));
+        } else {
+          richTexts.add(RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  style: TextStyle(
+                    shadows: [
+                      if (showShadow)
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black45,
+                          offset: Offset(0, 0),
+                        ),
+                    ],
+                  ),
+                  children: [
+                    TextSpan(text: furigana + '\n', style: furiganaTextStyle),
+                    TextSpan(text: japText, style: furigana.isEmpty ? textTextStyle : markedTextStyle)
+                  ])));
+        }
+      } else {
+        richTexts.add(RichText(
+            textAlign: textAlign,
+            text: TextSpan(children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text[i], style: textTextStyle)])));
+        i++;
+      }
+    }
+    richTexts.add(RichText(
+        textAlign: textAlign,
+        text: TextSpan(
+            children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text.substring(i, text.length), style: textTextStyle)])));
+//    } catch (ex) {
+//      throw ex;
+//    }
 
     return Wrap(children: richTexts, alignment: alignment, runAlignment: alignment);
     //return RichText(text: TextSpan(children: textSpanChildren));

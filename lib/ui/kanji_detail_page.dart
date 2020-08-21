@@ -495,6 +495,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
+                              showShadow: true,
                               text: sentence.text,
                               tokens: sentence.tokens,
                               style: TextStyle(fontSize: 20),
@@ -540,10 +541,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     var onyomis = kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
     var kunyomis = kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
-    onyomis.sort((left, right) => left.length.compareTo(right.length));
-    kunyomis.sort((left, right) => left.length.compareTo(right.length));
+//
 
-    List<Word> onyomiWords = List.from(kanji.onyomiWords); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
+    List<Word> onyomiWords = Set<Word>.from(kanji.onyomiWords).toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
     onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
       var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord.wordFurigana.contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
@@ -652,7 +652,10 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
     //children.add(SizedBox(height: 12));
 
-    var kunyomiWords = List<Word>.from(kanji.kunyomiWords);
+    var kunyomiWords = Set<Word>.from(kanji.kunyomiWords).toList();
+
+    print(kunyomiWords);
+
     kunyomis.sort((a, b) => b.length.compareTo(a.length));
 
     for (var kunyomi in kunyomis) {
