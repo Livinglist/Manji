@@ -56,101 +56,101 @@ class FuriganaText extends StatelessWidget {
     debugPrint(text);
     debugPrint(Map<String, String>.fromEntries(tokens.map((e) => MapEntry<String, String>(e.text, e.furigana ?? 'null'))).toString());
 
-    //try {
-    int i = 0;
-    for (; i < text.length;) {
-      if (queue.isEmpty) break;
+    try {
+      int i = 0;
+      for (; i < text.length;) {
+        if (queue.isEmpty) break;
 
-      var currentText = queue.first.text;
-      bool hasFurigana = false;
-      String japText, furigana;
+        var currentText = queue.first.text;
+        bool hasFurigana = false;
+        String japText, furigana;
 
-      if (currentText[0] == text[i]) {
-        if (currentText == text.substring(i, min(text.length, i + currentText.length))) {
-          hasFurigana = true;
+        if (currentText[0] == text[i]) {
           if (currentText == text.substring(i, min(text.length, i + currentText.length))) {
-            japText = currentText;
+            hasFurigana = true;
+            if (currentText == text.substring(i, min(text.length, i + currentText.length))) {
+              japText = currentText;
+            } else {
+              int matchIndex = text.substring(i).indexOf(currentText[currentText.length - 1]);
+              if (matchIndex == -1)
+                matchIndex = text.length - 1;
+              else
+                matchIndex = min(text.length, matchIndex);
+              japText = text.substring(i, i + matchIndex + 1);
+            }
+
+            furigana = queue.first.furigana ?? '';
+            i += japText.length;
+            queue.removeFirst();
           } else {
-            int matchIndex = text.substring(i).indexOf(currentText[currentText.length - 1]);
-            if (matchIndex == -1)
-              matchIndex = text.length - 1;
-            else
-              matchIndex = min(text.length, matchIndex);
-            japText = text.substring(i, i + matchIndex + 1);
-          }
+            hasFurigana = true;
 
-          furigana = queue.first.furigana ?? '';
-          i += japText.length;
-          queue.removeFirst();
+            //The current one did not match any word in the sentence then we replace the part in the sentence that is incorrect.
+            var nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
+            var nextWordIndex = nextWord == null ? null : text.substring(i).indexOf(nextWord.text);
+
+            if (nextWordIndex != null && nextWordIndex != -1 && text.substring(i, i + nextWordIndex - 1).contains(RegExp(r'[、。「」？！.]'))) {
+              nextWordIndex = text.substring(i, i + nextWordIndex - 1).indexOf(RegExp(r'[、。「」？！.]'));
+            } else if (nextWordIndex == null) {
+              nextWordIndex = text.substring(i).indexOf(RegExp(r'[、。「」？！.]'));
+            }
+
+            furigana = queue.first.furigana ?? '';
+            japText = currentText;
+            i += nextWordIndex ?? japText.length;
+            queue.removeFirst();
+          }
+        }
+
+        if (hasFurigana) {
+          if (japText[0].isKanji() && japText[japText.length - 1].isKanji() == false && tokens.length != 1) {
+            richTexts.add(RichText(
+                textAlign: TextAlign.start,
+                text: TextSpan(
+                    style: TextStyle(
+                      shadows: [
+                        if (showShadow && furigana.isNotEmpty)
+                          Shadow(
+                            blurRadius: 4,
+                            color: Colors.black45,
+                            offset: Offset(0, 0),
+                          ),
+                      ],
+                    ),
+                    children: [TextSpan(text: furigana + '\n', style: furiganaTextStyle), TextSpan(text: japText, style: markedTextStyle)])));
+          } else {
+            richTexts.add(RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    style: TextStyle(
+                      shadows: [
+                        if (showShadow && furigana.isNotEmpty)
+                          Shadow(
+                            blurRadius: 4,
+                            color: Colors.black45,
+                            offset: Offset(0, 0),
+                          ),
+                      ],
+                    ),
+                    children: [
+                      TextSpan(text: furigana + '\n', style: furiganaTextStyle),
+                      TextSpan(text: japText, style: furigana.isEmpty ? textTextStyle : markedTextStyle)
+                    ])));
+          }
         } else {
-          hasFurigana = true;
-
-          //The current one did not match any word in the sentence then we replace the part in the sentence that is incorrect.
-          var nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
-          var nextWordIndex = nextWord == null ? null : text.substring(i).indexOf(nextWord.text);
-
-          if (nextWordIndex != null && nextWordIndex != -1 && text.substring(i, i + nextWordIndex - 1).contains(RegExp(r'[、。「」？！.]'))) {
-            nextWordIndex = text.substring(i, i + nextWordIndex - 1).indexOf(RegExp(r'[、。「」？！.]'));
-          } else if (nextWordIndex == null) {
-            nextWordIndex = text.substring(i).indexOf(RegExp(r'[、。「」？！.]'));
-          }
-
-          furigana = queue.first.furigana ?? '';
-          japText = currentText;
-          i += nextWordIndex ?? japText.length;
-          queue.removeFirst();
+          richTexts.add(RichText(
+              textAlign: textAlign,
+              text: TextSpan(children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text[i], style: textTextStyle)])));
+          i++;
         }
       }
-
-      if (hasFurigana) {
-        if (japText[0].isKanji() && japText[japText.length - 1].isKanji() == false && tokens.length != 1) {
-          richTexts.add(RichText(
-              textAlign: TextAlign.start,
-              text: TextSpan(
-                  style: TextStyle(
-                    shadows: [
-                      if (showShadow)
-                        Shadow(
-                          blurRadius: 4,
-                          color: Colors.black45,
-                          offset: Offset(0, 0),
-                        ),
-                    ],
-                  ),
-                  children: [TextSpan(text: furigana + '\n', style: furiganaTextStyle), TextSpan(text: japText, style: markedTextStyle)])));
-        } else {
-          richTexts.add(RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                  style: TextStyle(
-                    shadows: [
-                      if (showShadow)
-                        Shadow(
-                          blurRadius: 4,
-                          color: Colors.black45,
-                          offset: Offset(0, 0),
-                        ),
-                    ],
-                  ),
-                  children: [
-                    TextSpan(text: furigana + '\n', style: furiganaTextStyle),
-                    TextSpan(text: japText, style: furigana.isEmpty ? textTextStyle : markedTextStyle)
-                  ])));
-        }
-      } else {
-        richTexts.add(RichText(
-            textAlign: textAlign,
-            text: TextSpan(children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text[i], style: textTextStyle)])));
-        i++;
-      }
+      richTexts.add(RichText(
+          textAlign: textAlign,
+          text: TextSpan(
+              children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text.substring(i, text.length), style: textTextStyle)])));
+    } catch (ex) {
+      throw ex;
     }
-    richTexts.add(RichText(
-        textAlign: textAlign,
-        text: TextSpan(
-            children: [TextSpan(text: 'あ\n', style: invisibleTextStyle), TextSpan(text: text.substring(i, text.length), style: textTextStyle)])));
-//    } catch (ex) {
-//      throw ex;
-//    }
 
     return Wrap(children: richTexts, alignment: alignment, runAlignment: alignment);
     //return RichText(text: TextSpan(children: textSpanChildren));
