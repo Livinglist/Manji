@@ -1,6 +1,6 @@
 # Manji
 
-![iOS](https://img.shields.io/badge/iOS-9%20-blue)
+![iOS](https://img.shields.io/badge/iOS-11%20-blue)
 [![App Store](https://img.shields.io/itunes/v/1464774967?label=App%20Store)](https://apps.apple.com/us/app/manji-learn-kanji/id1464774967)
 
 
