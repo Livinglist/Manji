@@ -8,7 +8,7 @@ class TextRecognizeBloc {
 
   void extractTextFromImage(String imgStr) {
     _textFetcher.sink.add(null);
-    GoogleApiProvider.extractTextFromImage(imgStr).then((text) => _textFetcher.sink.add(text));
+    // GoogleApiProvider.extractTextFromImage(imgStr).then((text) => _textFetcher.sink.add(text));
   }
 
   void reset() => _textFetcher.drain();

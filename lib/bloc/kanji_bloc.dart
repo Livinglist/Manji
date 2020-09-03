@@ -31,7 +31,8 @@ class KanjiBloc {
   final _allKanjisByKanaFetcher = BehaviorSubject<List<Kanji>>();
   final _kanjiByKanaFetcher = BehaviorSubject<Kanji>();
   final _searchResultsFetcher = BehaviorSubject<List<Kanji>>();
-  final Queue<BehaviorSubject<Kanji>> _singleKanjiFetchers = Queue<BehaviorSubject<Kanji>>();
+  final Queue<BehaviorSubject<Kanji>> _singleKanjiFetchers =
+      Queue<BehaviorSubject<Kanji>>();
 
   List<Sentence> _sentences = <Sentence>[];
   List<String> _unloadedSentencesStr = List<String>();
@@ -71,7 +72,8 @@ class KanjiBloc {
     if (!_randomKanjiFetcher.isClosed) {
       Kanji kanji;
       do {
-        kanji = _allKanjisMap.values.elementAt(ran.nextInt(_allKanjisMap.length));
+        kanji =
+            _allKanjisMap.values.elementAt(ran.nextInt(_allKanjisMap.length));
       } while (kanji.jlptLevel == null);
       _randomKanjiFetcher.sink.add(kanji);
     }
@@ -99,7 +101,9 @@ class KanjiBloc {
 
   void fetchKanjisByJLPTLevel(JLPTLevel jlptLevel) {
     Future<List<Kanji>>(() {
-      var targetKanjis = _allKanjisMap.values.where((kanji) => kanji.jlptLevel == jlptLevel).toList();
+      var targetKanjis = _allKanjisMap.values
+          .where((kanji) => kanji.jlptLevel == jlptLevel)
+          .toList();
       return targetKanjis;
     }).then((kanjis) {
       _kanjis = kanjis;
@@ -130,19 +134,21 @@ class KanjiBloc {
   void getAllKanjis() async {
     repo.getAllKanjisFromDB().then((kanjis) {
       if (kanjis.isNotEmpty) {
-        _allKanjisMap = Map.fromEntries(kanjis.map((kanji) => MapEntry(kanji.kanji, kanji)));
+        _allKanjisMap = Map.fromEntries(
+            kanjis.map((kanji) => MapEntry(kanji.kanji, kanji)));
         _allKanjisFetcher.sink.add(_allKanjisMap.values.toList());
         getRandomKanji();
 
         var allFavKanjiStrs = repo.getAllFavKanjiStrs();
-        _allFavKanjisMap = Map.fromEntries(allFavKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
+        _allFavKanjisMap = Map.fromEntries(
+            allFavKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
         _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
 
         var allStarKanjiStrs = repo.getAllStarKanjiStrs();
-        _allStarKanjisMap = Map.fromEntries(allStarKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
+        _allStarKanjisMap = Map.fromEntries(
+            allStarKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
         _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
       }
-      //firebaseApiProvider.completeDatabase();
 
       Future.forEach(kanjis.takeRandomly(20), addSuggestion);
     });
@@ -150,8 +156,12 @@ class KanjiBloc {
 
   Future addSuggestion(Kanji kanji) async {
     print("adding the $kanji");
-    return FlutterSiriSuggestions.instance.buildActivity(FlutterSiriActivity(kanji.kanji, kanji.kanji,
-        isEligibleForSearch: true, isEligibleForPrediction: true, contentDescription: kanji.meaning, suggestedInvocationPhrase: "open my app"));
+    return FlutterSiriSuggestions.instance.buildActivity(FlutterSiriActivity(
+        kanji.kanji, kanji.kanji,
+        isEligibleForSearch: true,
+        isEligibleForPrediction: true,
+        contentDescription: kanji.meaning,
+        suggestedInvocationPhrase: "open my app"));
   }
 
   Stream<Kanji> findKanjiByKana(String kana, Yomikata yomikata) async* {
@@ -175,7 +185,8 @@ class KanjiBloc {
     if (jsonStr != null) {
       var list = (jsonDecode(jsonStr) as List).cast<String>();
       //var sentences = list.sublist(0 + 10 * currentPortion, 10 + 10 * currentPortion).map((str) => Sentence.fromJsonString(str)).toList();
-      var sentences = await jsonToSentences(list.sublist(0, list.length < 5 ? list.length : 5));
+      var sentences = await jsonToSentences(
+          list.sublist(0, list.length < 5 ? list.length : 5));
 
       list.removeRange(0, list.length < 5 ? list.length : 5);
 
@@ -190,9 +201,11 @@ class KanjiBloc {
   }
 
   void getMoreSentencesByKanji() async {
-    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
+    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
+        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
 
-    _unloadedSentencesStr.removeRange(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
+    _unloadedSentencesStr.removeRange(0,
+        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
 
     _sentences.addAll(sentences);
 
@@ -242,11 +255,9 @@ class KanjiBloc {
       _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
       repo.addFav(kanjiStr);
 
-      FirebaseAuthProvider.instance.firebaseUser.then((user) {
-        if (user != null) {
-          repo.uploadFavKanjis(_allFavKanjisMap.keys.toList());
-        }
-      });
+      if (FirebaseAuth.instance.currentUser != null) {
+        repo.uploadFavKanjis(_allFavKanjisMap.keys.toList());
+      }
     }
   }
 
@@ -255,11 +266,9 @@ class KanjiBloc {
     _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
     repo.removeFav(kanjiStr);
 
-    FirebaseAuthProvider.instance.firebaseUser.then((user) {
-      if (user != null) {
-        repo.removeFavKanjiFromCloud(kanjiStr);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.removeFavKanjiFromCloud(kanjiStr);
+    }
   }
 
   bool getIsFaved(String kanji) {
@@ -272,11 +281,10 @@ class KanjiBloc {
       _allStarKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
       _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
       repo.addStar(kanjiStr);
-      FirebaseAuthProvider.instance.firebaseUser.then((user) {
-        if (user != null) {
-          repo.uploadMarkedKanjis(_allStarKanjisMap.keys.toList());
-        }
-      });
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        repo.uploadMarkedKanjis(_allStarKanjisMap.keys.toList());
+      }
     }
   }
 
@@ -284,11 +292,10 @@ class KanjiBloc {
     _allStarKanjisMap.remove(kanjiStr);
     _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
     repo.removeStar(kanjiStr);
-    FirebaseAuthProvider.instance.firebaseUser.then((user) {
-      if (user != null) {
-        repo.removeMarkedKanjiFromCloud(kanjiStr);
-      }
-    });
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.removeMarkedKanjiFromCloud(kanjiStr);
+    }
   }
 
   bool getIsStared(String kanji) {
@@ -381,12 +388,14 @@ class KanjiBloc {
       }
 
       if (hiraganaText.isEmpty) {
-        var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        var onyomiWords = kanji.onyomiWords.where((word) =>
+            word.meanings.contains(text) || word.wordText.contains(text));
         if (onyomiWords.isNotEmpty) {
           list.add(kanji);
           continue;
         }
-        var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        var kunyomiWords = kanji.kunyomiWords.where((word) =>
+            word.meanings.contains(text) || word.wordText.contains(text));
         if (kunyomiWords.isNotEmpty) {
           list.add(kanji);
           continue;
@@ -398,7 +407,8 @@ class KanjiBloc {
     _searchResultsFetcher.sink.add(list);
   }
 
-  void filterKanji(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
+  void filterKanji(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
+      Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
 
     _filterKanjiStream(jlptMap, gradeMap, radicalsMap).listen((kanji) {
@@ -409,26 +419,34 @@ class KanjiBloc {
     });
   }
 
-  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
-    bool jlptIsEmpty = !jlptMap.containsValue(true), gradeIsEmpty = !gradeMap.containsValue(true), radicalIsEmpty = !radicalsMap.containsValue(true);
+  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap,
+      Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
+    bool jlptIsEmpty = !jlptMap.containsValue(true),
+        gradeIsEmpty = !gradeMap.containsValue(true),
+        radicalIsEmpty = !radicalsMap.containsValue(true);
 
     for (var kanji in allKanjisList) {
       if (kanji.jlpt == 0) continue;
-      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) && (gradeIsEmpty || gradeMap[kanji.grade]) && (radicalIsEmpty || radicalsMap[kanji.radicals]))
-        yield kanji;
+      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
+          (gradeIsEmpty || gradeMap[kanji.grade]) &&
+          (radicalIsEmpty || radicalsMap[kanji.radicals])) yield kanji;
     }
   }
 
   @Deprecated("Use filterKanji() instead for better performance")
-  void filterKanjiSync(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
+  void filterKanjiSync(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
+      Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
 
-    bool jlptIsEmpty = !jlptMap.containsValue(true), gradeIsEmpty = !gradeMap.containsValue(true), radicalIsEmpty = !radicalsMap.containsValue(true);
+    bool jlptIsEmpty = !jlptMap.containsValue(true),
+        gradeIsEmpty = !gradeMap.containsValue(true),
+        radicalIsEmpty = !radicalsMap.containsValue(true);
 
     for (var kanji in allKanjisList) {
       if (kanji.jlpt == 0) continue;
-      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) && (gradeIsEmpty || gradeMap[kanji.grade]) && (radicalIsEmpty || radicalsMap[kanji.radicals]))
-        list.add(kanji);
+      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
+          (gradeIsEmpty || gradeMap[kanji.grade]) &&
+          (radicalIsEmpty || radicalsMap[kanji.radicals])) list.add(kanji);
     }
 
     if (list.isEmpty) list = List.from(allKanjisList);
@@ -436,7 +454,8 @@ class KanjiBloc {
     _searchResultsFetcher.sink.add(list);
   }
 
-  void updateTimeStampsForSingleKanji(Kanji kanji) => repo.updateKanjiStudiedTimeStamps(kanji);
+  void updateTimeStampsForSingleKanji(Kanji kanji) =>
+      repo.updateKanjiStudiedTimeStamps(kanji);
 
   void updateTimeStampsForKanjis(List<Kanji> kanjis) {
     for (var i in kanjis) {

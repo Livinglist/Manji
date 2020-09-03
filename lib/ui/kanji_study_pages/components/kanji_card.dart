@@ -6,9 +6,9 @@ import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
 import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
-import '../models/kanji_card_content.dart';
+import '../../../models/kanji_card_content.dart';
 
-export '../models/kanji_card_content.dart';
+export '../../../models/kanji_card_content.dart';
 
 class KanjiCard extends StatefulWidget {
   final KanjiCardContent kanjiCardContent;
@@ -61,7 +61,8 @@ class KanjiCardState extends State<KanjiCard> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
           splashColor: Colors.grey[600],
           onTap: switchContent,
-          onDoubleTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
+          onDoubleTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
           child: AnimatedContainer(
             duration: Duration(microseconds: 600),
             child: kanjiDetailsDisplayed
@@ -79,20 +80,32 @@ class KanjiCardState extends State<KanjiCard> {
                           SizedBox(height: 48),
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 24),
-                              child: Text(kanji.meaning, textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
-                          Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 64)),
+                              child: Text(kanji.meaning,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white70))),
+                          Text(kanji.kanji,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 64)),
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 24),
-                              child: Text([...kanji.onyomi, ...kanji.kunyomi].where((s) => s.contains('\.|-') == false).join(','),
-                                  textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18))),
+                              child: Text(
+                                  [...kanji.onyomi, ...kanji.kunyomi]
+                                      .where((s) => s.contains('\.|-') == false)
+                                      .join(','),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18))),
                           Spacer(),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 0),
                             child: StreamBuilder(
                               stream: sentenceBloc.sentences,
-                              builder: (_, AsyncSnapshot<List<Sentence>> snapshot) {
+                              builder:
+                                  (_, AsyncSnapshot<List<Sentence>> snapshot) {
                                 if (snapshot.hasData) {
-                                  var sentence = snapshot.data.isEmpty ? null : snapshot.data.first;
+                                  var sentence = snapshot.data.isEmpty
+                                      ? null
+                                      : snapshot.data.first;
                                   if (sentence == null) {
                                     return Container(
                                       height: 200,
@@ -100,33 +113,51 @@ class KanjiCardState extends State<KanjiCard> {
                                       child: Center(
                                         child: Text(
                                           'No example sentences found _(┐「ε:)_',
-                                          style: TextStyle(color: Colors.white70),
+                                          style:
+                                              TextStyle(color: Colors.white70),
                                         ),
                                       ),
                                     );
                                   }
                                   return Padding(
                                       padding: EdgeInsets.only(
-                                          left: sentence.text.length > 45 ? 4 : 8,
-                                          right: sentence.text.length > 45 ? 4 : 8,
-                                          bottom: sentence.englishText.length > 140 ? 0 : 48),
+                                          left:
+                                              sentence.text.length > 45 ? 4 : 8,
+                                          right:
+                                              sentence.text.length > 45 ? 4 : 8,
+                                          bottom:
+                                              sentence.englishText.length > 140
+                                                  ? 0
+                                                  : 48),
                                       child: Device.get().isTablet
                                           ? Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Padding(
-                                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4),
                                                     child: FuriganaText(
                                                       showShadow: true,
                                                       text: sentence.text,
                                                       tokens: sentence.tokens,
-                                                      style: TextStyle(fontSize: sentence.text.length > 50 ? 18 : 22),
+                                                      style: TextStyle(
+                                                          fontSize: sentence
+                                                                      .text
+                                                                      .length >
+                                                                  50
+                                                              ? 18
+                                                              : 22),
                                                     )),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 48),
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 48),
                                                   child: Text(
                                                     sentence.englishText,
-                                                    style: TextStyle(color: Colors.white54),
+                                                    style: TextStyle(
+                                                        color: Colors.white54),
                                                     overflow: TextOverflow.fade,
                                                   ),
                                                 ),
@@ -134,18 +165,26 @@ class KanjiCardState extends State<KanjiCard> {
                                             )
                                           : ListTile(
                                               title: Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 4),
                                                   child: FuriganaText(
                                                     showShadow: true,
                                                     text: sentence.text,
                                                     tokens: sentence.tokens,
-                                                    style: TextStyle(fontSize: sentence.text.length > 50 ? 14 : 16),
+                                                    style: TextStyle(
+                                                        fontSize: sentence.text
+                                                                    .length >
+                                                                50
+                                                            ? 14
+                                                            : 16),
                                                   )),
                                               subtitle: Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 4),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4),
                                                 child: Text(
                                                   sentence.englishText,
-                                                  style: TextStyle(color: Colors.white54),
+                                                  style: TextStyle(
+                                                      color: Colors.white54),
                                                   maxLines: 4,
                                                   overflow: TextOverflow.fade,
                                                 ),
@@ -181,16 +220,28 @@ class KanjiCardState extends State<KanjiCard> {
                         direction: Axis.vertical,
                         children: <Widget>[
                           if (type == ContentType.kanji)
-                            Text(kanji.kanji, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 64)),
+                            Text(kanji.kanji,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 64)),
                           if (type == ContentType.meaning)
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 24),
-                                child: Text(kanji.meaning, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 24))),
+                                child: Text(kanji.meaning,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 24))),
                           if (type == ContentType.yomi)
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 24),
-                                child: Text([...kanji.onyomi, ...kanji.kunyomi].where((s) => s.contains('\.|-') == false).join(','),
-                                    textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 24)))
+                                child: Text(
+                                    [...kanji.onyomi, ...kanji.kunyomi]
+                                        .where(
+                                            (s) => s.contains('\.|-') == false)
+                                        .join(','),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 24)))
                           //Text(widget.kanji.meaning, style: TextStyle(color: Colors.white70))
                         ],
                       ),

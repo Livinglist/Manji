@@ -5,16 +5,16 @@ import '../ui/kanji_recognize_page/resource/brain.dart';
 
 class KanjiRecognizeBloc {
   final _predictedKanjiFetcher = PublishSubject<List<Kanji>>();
-  final brain = AppBrain();
+  final _brain = AppBrain();
 
   Stream<List<Kanji>> get predictedKanji => _predictedKanjiFetcher.stream;
 
   KanjiRecognizeBloc() {
-    brain.loadModel();
+    _brain.loadModel();
   }
 
   void predict(List<Offset> points, double canvasSize) {
-    brain.processCanvasPoints(points, canvasSize).then((predicts) {
+    _brain.processCanvasPoints(points, canvasSize).then((predicts) {
       var temp = <Kanji>[];
       for (var p in predicts) {
         if (kanjiBloc.allKanjisMap.containsKey(p['label'])) {
@@ -30,4 +30,4 @@ class KanjiRecognizeBloc {
   }
 }
 
-final kanjiRecogBloc = KanjiRecognizeBloc();
+final kanjiRecognizeBloc = KanjiRecognizeBloc();
