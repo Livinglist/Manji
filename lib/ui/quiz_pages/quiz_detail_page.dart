@@ -52,7 +52,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       quizBloc.generateQuiz(kanjis);
     } else if (widget.kanjiList != null) {
       for (var kanjiString in widget.kanjiList.kanjiStrs) {
-        kanjis.add(kanjiBloc.allKanjisMap[kanjiString]);
+        kanjis.add(KanjiBloc.instance.allKanjisMap[kanjiString]);
       }
       quizBloc.generateQuiz(kanjis);
     } else {

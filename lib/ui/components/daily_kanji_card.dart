@@ -22,7 +22,7 @@ class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProvide
       vsync: this,
       duration: Duration(milliseconds: 300),
       child: StreamBuilder(
-        stream: kanjiBloc.randomKanji,
+        stream: KanjiBloc.instance.randomKanji,
         builder: (_, AsyncSnapshot<Kanji> snapshot) {
           if (snapshot.hasData) {
             var kanji = snapshot.data;

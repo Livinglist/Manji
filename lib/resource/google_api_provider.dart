@@ -12,8 +12,6 @@ class GoogleApiProvider {
     return clientViaServiceAccount(credentials, _SCOPES).then((httpClient) {
       var vision = VisionApi(httpClient);
 
-      print("after vision before requestion ");
-
       BatchAnnotateImagesRequest r = BatchAnnotateImagesRequest();
       r.requests = [
         AnnotateImageRequest.fromJson({
@@ -30,9 +28,7 @@ class GoogleApiProvider {
       ];
 
       return vision.images.annotate(r).then((BatchAnnotateImagesResponse b) {
-        return b.responses.single.textAnnotations.isEmpty
-            ? ""
-            : b.responses.single.fullTextAnnotation.text;
+        return b.responses.single.textAnnotations.isEmpty ? "" : b.responses.single.fullTextAnnotation.text;
       });
     }, onError: (Object err) {
       print(err);
@@ -41,7 +37,5 @@ class GoogleApiProvider {
     });
   }
 
-  static Future<List<String>> extractKanjiFromImage(String imgStr) =>
-      extractTextFromImage(imgStr)
-          .then<List<String>>((text) => text.getKanjis());
+  static Future<List<String>> extractKanjiFromImage(String imgStr) => extractTextFromImage(imgStr).then<List<String>>((text) => text.getKanjis());
 }

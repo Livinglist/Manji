@@ -53,8 +53,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
         AnimationController(vsync: this, lowerBound: 0, upperBound: 1.1)
           ..value = 1;
     kanjiStr = widget.kanjiStr ?? widget.kanji.kanji;
-    isFaved = kanjiBloc.getIsFaved(kanjiStr);
-    isStared = kanjiBloc.getIsStared(kanjiStr);
+    isFaved = KanjiBloc.instance.getIsFaved(kanjiStr);
+    isStared = KanjiBloc.instance.getIsStared(kanjiStr);
 
     super.initState();
 
@@ -91,10 +91,10 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
     });
 
     sentenceBloc.getSentencesByKanji(kanjiStr);
-    // kanjiBloc.getSentencesByKanji(widget.kanjiStr ?? widget.kanji.kanji);
-    //kanjiBloc.fetchWordsByKanji(widget.kanjiStr ?? widget.kanji.kanji);
+    // KanjiBloc.instance.getSentencesByKanji(widget.kanjiStr ?? widget.kanji.kanji);
+    //KanjiBloc.instance.fetchWordsByKanji(widget.kanjiStr ?? widget.kanji.kanji);
     if (widget.kanjiStr != null)
-      kanjiBloc.getKanjiInfoByKanjiStr(widget.kanjiStr);
+      KanjiBloc.instance.getKanjiInfoByKanjiStr(widget.kanjiStr);
 
     if (Random(DateTime.now().millisecondsSinceEpoch).nextBool()) {
       AppReview.isRequestReviewAvailable.then((isAvailable) {
@@ -111,7 +111,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
   void dispose() {
     scrollController.dispose();
     sentenceBloc.dispose();
-    kanjiBloc.reset();
+    KanjiBloc.instance.reset();
     super.dispose();
   }
 
@@ -162,7 +162,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
           title: Opacity(
             opacity: opacity,
             child: StreamBuilder(
-              stream: kanjiBloc.kanji,
+              stream: KanjiBloc.instance.kanji,
               builder: (_, AsyncSnapshot<Kanji> snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
                   var kanji =
@@ -304,9 +304,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                   isFaved = !isFaved;
                 });
                 if (isFaved) {
-                  kanjiBloc.addFav(kanjiStr);
+                  KanjiBloc.instance.addFav(kanjiStr);
                 } else {
-                  kanjiBloc.removeFav(kanjiStr);
+                  KanjiBloc.instance.removeFav(kanjiStr);
                 }
               },
             ),
@@ -324,9 +324,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                     isStared = !isStared;
                   });
                   if (isStared) {
-                    kanjiBloc.addStar(kanjiStr);
+                    KanjiBloc.instance.addStar(kanjiStr);
                   } else {
-                    kanjiBloc.removeStar(kanjiStr);
+                    KanjiBloc.instance.removeStar(kanjiStr);
                   }
                 }),
           ],
@@ -387,7 +387,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                 },
               ),
               StreamBuilder(
-                stream: kanjiBloc.kanji,
+                stream: KanjiBloc.instance.kanji,
                 builder: (_, AsyncSnapshot<Kanji> snapshot) {
                   if (snapshot.hasData || widget.kanji != null) {
                     var kanji =
@@ -732,7 +732,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                       title: Text('Delete from $onyomi'),
                       onTap: () {
                         kanji.onyomiWords.remove(word);
-                        kanjiBloc.updateKanji(kanji, isDeleted: true);
+                        KanjiBloc.instance.updateKanji(kanji, isDeleted: true);
                         Navigator.pop(context);
                       },
                     ));
@@ -853,7 +853,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                       title: Text('Delete from $kunyomi'),
                       onTap: () {
                         kanji.kunyomiWords.remove(word);
-                        kanjiBloc.updateKanji(kanji, isDeleted: true);
+                        KanjiBloc.instance.updateKanji(kanji, isDeleted: true);
                         Navigator.pop(context);
                       },
                     ));
@@ -959,7 +959,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
 
   Widget buildKanjiInfoColumn() {
     return StreamBuilder(
-      stream: kanjiBloc.kanji,
+      stream: KanjiBloc.instance.kanji,
       builder: (_, AsyncSnapshot<Kanji> snapshot) {
         if (snapshot.hasData || widget.kanji != null) {
           var kanji = widget.kanji == null ? snapshot.data : widget.kanji;
@@ -1212,7 +1212,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                             meaningTextEditingController.text));
                                   }
                                 }
-                                kanjiBloc.updateKanji(kanji);
+                                KanjiBloc.instance.updateKanji(kanji);
                                 Navigator.pop(context);
                                 setState(() {});
                               })),

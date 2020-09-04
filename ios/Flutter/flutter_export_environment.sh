@@ -1,12 +1,12 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/jfeng/Development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/jfeng/Development/Manji"
-export "FLUTTER_TARGET=/Users/jfeng/Development/Manji/lib/main.dart"
+export "FLUTTER_ROOT=/Users/george/Development/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/george/Development/manji/Manji"
+export "FLUTTER_TARGET=/Users/george/Development/manji/Manji/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "OTHER_LDFLAGS=$(inherited) -framework Flutter"
-export "FLUTTER_FRAMEWORK_DIR=/Users/jfeng/Development/flutter/bin/cache/artifacts/engine/ios"
+export "FLUTTER_FRAMEWORK_DIR=/Users/george/Development/flutter/bin/cache/artifacts/engine/ios"
 export "FLUTTER_BUILD_NAME=1.11.1"
 export "FLUTTER_BUILD_NUMBER=1.11.1"
 export "DART_DEFINES=flutter.inspector.structuredErrors%3Dtrue"

@@ -43,7 +43,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   @override
   void initState() {
     KanjiListBloc.instance.init();
-    kanjiBloc.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
     super.initState();
 
     gridViewScrollController.addListener(() {
@@ -85,7 +85,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
           title: Text(widget.kanjiList.name),
           actions: <Widget>[
             StreamBuilder(
-              stream: kanjiBloc.kanjis,
+              stream: KanjiBloc.instance.kanjis,
               builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                 return IconButton(
                     icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
@@ -152,7 +152,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
           ],
         ),
         body: StreamBuilder(
-          stream: kanjiBloc.kanjis,
+          stream: KanjiBloc.instance.kanjis,
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
             if (snapshot.hasData) {
               var kanjis = snapshot.data;
@@ -203,7 +203,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                     scaffoldKey.currentState.hideCurrentSnackBar();
 
                     widget.kanjiList.kanjiStrs.remove(kanjiStr);
-                    kanjiBloc.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+                    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
                     KanjiListBloc.instance.removeKanji(widget.kanjiList, kanjiStr);
                   }),
             ));
@@ -304,7 +304,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   void onDismissed(Kanji kanji) {
     String dismissedKanji = kanji.kanji;
     widget.kanjiList.kanjiStrs.remove(kanji.kanji);
-    kanjiBloc.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
     KanjiListBloc.instance.removeKanji(widget.kanjiList, dismissedKanji);
   }
 }

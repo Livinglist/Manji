@@ -84,7 +84,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
               ),
               for (var kanji in widget.sentence.text
                   .getKanjis()
-                  .map((e) => kanjiBloc.allKanjisMap[e])
+                  .map((e) => KanjiBloc.instance.allKanjisMap[e])
                   .toList())
                 KanjiListTile(kanji: kanji)
             ],
@@ -113,7 +113,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
         if (token.text.codeUnitAt(i) > 12543 &&
             !kanjiStrs.contains(currentStr)) {
           kanjiStrs.add(currentStr);
-          var kanjiInfo = kanjiBloc.getKanjiInfo(currentStr);
+          var kanjiInfo = KanjiBloc.instance.getKanjiInfo(currentStr);
           if (kanjiInfo != null) kanjis.add(kanjiInfo);
         }
       }

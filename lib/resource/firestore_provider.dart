@@ -144,8 +144,8 @@ class FirestoreProvider {
 
   ///Upload all local data to FirebaseFirestore if user is the first time user.
   void uploadAll() {
-    var allFav = kanjiBloc.getAllFavKanjis;
-    var allMarked = kanjiBloc.getAllMarkedKanjis;
+    var allFav = KanjiBloc.instance.getAllFavKanjis;
+    var allMarked = KanjiBloc.instance.getAllMarkedKanjis;
     var allLists = KanjiListBloc.instance.allKanjiLists;
 
     uploadFavKanjis(allFav);
@@ -162,11 +162,11 @@ class FirestoreProvider {
     var allLists = await fetchKanjiLists().toList();
 
     for (var kanji in allFav) {
-      kanjiBloc.addFav(kanji);
+      KanjiBloc.instance.addFav(kanji);
     }
 
     for (var kanji in allMarked) {
-      kanjiBloc.addStar(kanji);
+      KanjiBloc.instance.addStar(kanji);
     }
 
     KanjiListBloc.instance.clearThenAddKanjiLists(allLists);

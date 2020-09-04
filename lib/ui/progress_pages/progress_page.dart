@@ -134,7 +134,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                       );
                     }
                     var kanjiList = kanjiLists[index - 5];
-                    var kanjis = kanjiList.kanjiStrs.map((str) => kanjiBloc.allKanjisMap[str]).toList();
+                    var kanjis = kanjiList.kanjiStrs.map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
                     return ProgressListTile(
                         title: kanjiList.name,
                         progress: computeListProgress(kanjis),
@@ -167,7 +167,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
     double progress = 0.0;
     int total = 0;
     int iterated = 0;
-    var kanjis = await compute<List<dynamic>, List<Kanji>>(getTargetedKanjis, [jlpt, kanjiBloc.allKanjisList]);
+    var kanjis = await compute<List<dynamic>, List<Kanji>>(getTargetedKanjis, [jlpt, KanjiBloc.instance.allKanjisList]);
     jlptToKanjisMap[jlpt] = kanjis;
     total = kanjis.length;
     for (var kanji in kanjis) {

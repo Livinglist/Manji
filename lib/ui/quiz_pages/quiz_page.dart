@@ -136,7 +136,7 @@ class _QuizPageState extends State<QuizPage> {
         subtitle: Text('${kanjiList.kanjiStrs.length} Kanji'),
         onTap: () {
           if (kanjiList.kanjiStrs.isNotEmpty)
-            showAmountDialog(kanjiList.kanjiStrs.map((str) => kanjiBloc.allKanjisMap[str]).toList(), kanjiList.name);
+            showAmountDialog(kanjiList.kanjiStrs.map((str) => KanjiBloc.instance.allKanjisMap[str]).toList(), kanjiList.name);
           else
             scaffoldKey.currentState.showSnackBar(WarningSnackBar(message: "List is empty."));
         },

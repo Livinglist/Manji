@@ -182,7 +182,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                                   for (var i in widget.kanjis) {
                                     i.timeStamp = timeStamp;
                                   }
-                                  kanjiBloc.updateTimeStampsForKanjis(widget.kanjis);
+                                  KanjiBloc.instance.updateTimeStampsForKanjis(widget.kanjis);
                                 } else {
                                   mainCard = GestureDetector(
                                     child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),

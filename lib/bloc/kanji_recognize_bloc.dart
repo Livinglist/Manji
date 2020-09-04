@@ -17,8 +17,8 @@ class KanjiRecognizeBloc {
     _brain.processCanvasPoints(points, canvasSize).then((predicts) {
       var temp = <Kanji>[];
       for (var p in predicts) {
-        if (kanjiBloc.allKanjisMap.containsKey(p['label'])) {
-          temp.add(kanjiBloc.allKanjisMap[p['label']]);
+        if (KanjiBloc.instance.allKanjisMap.containsKey(p['label'])) {
+          temp.add(KanjiBloc.instance.allKanjisMap[p['label']]);
         }
       }
       _predictedKanjiFetcher.sink.add(temp);

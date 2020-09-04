@@ -19,7 +19,7 @@ class QuizBloc {
   }
 
   List<Kanji> generateQuizFromJLPT(int jlpt, {int amount = 0}) {
-    var kanjis = kanjiBloc.allKanjisList.where((kanji) => kanji.jlpt == jlpt).toList();
+    var kanjis = KanjiBloc.instance.allKanjisList.where((kanji) => kanji.jlpt == jlpt).toList();
     print(amount);
     if (amount != 0 && amount <= kanjis.length) {
       var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);

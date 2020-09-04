@@ -340,9 +340,9 @@ PODS:
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 5.0)
-  - GoogleAPIClientForREST/Core (1.4.3):
+  - GoogleAPIClientForREST/Core (1.4.2):
     - GTMSessionFetcher (>= 1.1.7)
-  - GoogleAPIClientForREST/Vision (1.4.3):
+  - GoogleAPIClientForREST/Vision (1.4.2):
     - GoogleAPIClientForREST/Core
     - GTMSessionFetcher (>= 1.1.7)
   - GoogleAppMeasurement (6.6.0):
@@ -583,7 +583,7 @@ SPEC CHECKSUMS:
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
-  GoogleAPIClientForREST: e2d95a611ac06a90d143c93bfd8597719f8b0938
+  GoogleAPIClientForREST: 9f49df9fac7867b459187e687fed3066b2be049a
   GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185
   GoogleDataTransport: 672fb0ce96fe7f7f31d43672fca62ad2c9c86f7b
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
@@ -612,4 +612,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.10.0.beta.2
+COCOAPODS: 1.9.1
