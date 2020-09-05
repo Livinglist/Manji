@@ -621,7 +621,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
-                              showShadow: true,
+                              markTarget: true,
+                              target: kanji.kanji,
                               text: sentence.text,
                               tokens: sentence.tokens,
                               style: TextStyle(fontSize: 20),
@@ -785,11 +786,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
       }
     }
 
-    //children.add(SizedBox(height: 12));
-
     var kunyomiWords = Set<Word>.from(kanji.kunyomiWords).toList();
-
-    print(kunyomiWords);
 
     kunyomis.sort((a, b) => b.length.compareTo(a.length));
 

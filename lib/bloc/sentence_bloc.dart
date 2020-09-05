@@ -14,12 +14,13 @@ export 'package:kanji_dictionary/models/word.dart';
 
 class SentenceBloc {
   final _sentencesFetcher = BehaviorSubject<List<Sentence>>();
-  final _wordsFetcher = BehaviorSubject<List<Word>>();
+  final _isFetchingFetcher = BehaviorSubject<bool>();
 
   List<Sentence> _sentences = <Sentence>[];
   List<String> _unloadedSentencesStr = List<String>();
 
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
+  Stream<bool> get isFetching => _isFetchingFetcher.stream;
 
   bool _isFetching;
 
@@ -42,28 +43,37 @@ class SentenceBloc {
   void fetchSentencesByWords(String str) {
     _sentences.clear();
     _isFetching = true;
+    _isFetchingFetcher.sink.add(_isFetching);
+
     repo.fetchSentencesByKanji(str).listen((sentence) {
+      print('${sentence.text}');
       if (!_sentencesFetcher.isClosed) {
         _sentences.add(sentence);
         _sentencesFetcher.sink.add(_sentences);
       }
     }).onDone(() {
       _isFetching = false;
+      _isFetchingFetcher.sink.add(_isFetching);
+
       _currentPage++;
     });
   }
 
   ///Fetch sentences from Jisho.org by a word.
-  void fetchMoreSentencesByWords(String str) {
-    if (!_isFetching) {
+  void fetchMoreSentencesByWordFromJisho(String str) {
+    if (_isFetching != null && !_isFetching) {
       _isFetching = true;
+      _isFetchingFetcher.sink.add(_isFetching);
       repo.fetchSentencesByKanji(str, currentPage: _currentPage).listen((sentence) {
         if (!_sentencesFetcher.isClosed) {
           _sentences.add(sentence);
           _sentencesFetcher.sink.add(_sentences);
         }
       }).onDone(() {
-        _isFetching = false;
+        print("========Done=======");
+        _isFetching = null;
+        _isFetchingFetcher.sink.add(_isFetching);
+
         _currentPage++;
       });
     }
@@ -206,6 +216,6 @@ class SentenceBloc {
 
   void dispose() {
     _sentencesFetcher.close();
-    _wordsFetcher.close();
+    _isFetchingFetcher.close();
   }
 }

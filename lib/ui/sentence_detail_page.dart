@@ -69,7 +69,6 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: FuriganaText(
-                  showShadow: true,
                   text: widget.sentence.text,
                   tokens: widget.sentence.tokens,
                   style: TextStyle(fontSize: 24),

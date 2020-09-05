@@ -14,7 +14,8 @@ class JishoApiProvider {
 
   Stream<Sentence> fetchSentencesByKanji(String kanji, {int currentPage = 0}) async* {
     //get the html from
-    Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=$currentPage');
+
+    Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=${currentPage + 1}');
     var doc = parse(response.body);
 
     int index = 0;
@@ -64,6 +65,8 @@ class JishoApiProvider {
         if (token.furigana == null) continue;
         japSentence = japSentence.replaceAll(token.furigana, '');
       }
+
+      print(japSentence.trim());
 
       var sentence = Sentence(tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
       yield sentence;
