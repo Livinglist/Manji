@@ -6,9 +6,9 @@ import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
 import 'package:kanji_dictionary/ui/components/furigana_text.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
-import '../models/kanji_card_content.dart';
+import '../../../models/kanji_card_content.dart';
 
-export '../models/kanji_card_content.dart';
+export '../../../models/kanji_card_content.dart';
 
 class KanjiCard extends StatefulWidget {
   final KanjiCardContent kanjiCardContent;
@@ -117,7 +117,8 @@ class KanjiCardState extends State<KanjiCard> {
                                                 Padding(
                                                     padding: EdgeInsets.symmetric(vertical: 4),
                                                     child: FuriganaText(
-                                                      showShadow: true,
+                                                      markTarget: true,
+                                                      target: kanji.kanji,
                                                       text: sentence.text,
                                                       tokens: sentence.tokens,
                                                       style: TextStyle(fontSize: sentence.text.length > 50 ? 18 : 22),
@@ -136,7 +137,8 @@ class KanjiCardState extends State<KanjiCard> {
                                               title: Padding(
                                                   padding: EdgeInsets.symmetric(vertical: 4),
                                                   child: FuriganaText(
-                                                    showShadow: true,
+                                                    markTarget: true,
+                                                    target: kanji.kanji,
                                                     text: sentence.text,
                                                     tokens: sentence.tokens,
                                                     style: TextStyle(fontSize: sentence.text.length > 50 ? 14 : 16),

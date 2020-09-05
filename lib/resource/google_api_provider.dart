@@ -12,8 +12,6 @@ class GoogleApiProvider {
     return clientViaServiceAccount(credentials, _SCOPES).then((httpClient) {
       var vision = VisionApi(httpClient);
 
-      print("after vision before requestion ");
-
       BatchAnnotateImagesRequest r = BatchAnnotateImagesRequest();
       r.requests = [
         AnnotateImageRequest.fromJson({

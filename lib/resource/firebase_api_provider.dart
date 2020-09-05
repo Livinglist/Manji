@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -10,7 +11,7 @@ import 'db_provider.dart';
 import 'jisho_api_provider.dart';
 
 class FirebaseApiProvider {
-  final firestore = Firestore.instance;
+  final firestore = FirebaseFirestore.instance;
 
   void uploadKanjis(List<Kanji> kanjis, {bool overwrite = false}) {
     debugPrint("Uploading kanjis to Firebase. overwrite is $overwrite");
@@ -22,10 +23,10 @@ class FirebaseApiProvider {
   }
 
   Future uploadKanji(Kanji kanji, {bool overwrite = false}) async {
-    var docRef = firestore.collection('kanjis').document(kanji.kanji);
+    var docRef = firestore.collection('kanjis').doc(kanji.kanji);
     var snapshot = await docRef.get();
     if (!snapshot.exists || overwrite) {
-      docRef.setData({
+      docRef.set({
         'grade': kanji.grade,
         'jlpt': kanji.jlpt,
         'kanji': kanji.kanji,
@@ -41,7 +42,7 @@ class FirebaseApiProvider {
         'kunyomiWords': kanji.kunyomiWords.map((word) => word.toMap()).toList()
       });
     } else {
-      docRef.updateData({
+      docRef.update({
         'parts': kanji.parts,
         'onyomiWords': kanji.onyomiWords.map((word) => word.toMap()).toList(),
         'kunyomiWords': kanji.kunyomiWords.map((word) => word.toMap()).toList()
@@ -56,21 +57,39 @@ class FirebaseApiProvider {
     });
   }
 
-  ///fetch from jisho.org then upload to firestrore
-  Future fetchAllSentencesFromJishoByAllKanjis() async {
-    List<String> kanjiStrs = <String>[];
-    var querySnapshots = await firestore.collection('kanjis').getDocuments();
-    for (var snap in querySnapshots.documents) {
-      kanjiStrs.add(snap.documentID);
-    }
+  ///fetch from jisho.org then upload to firestore
+  @Deprecated('Use this only for scripting. Do not use this in the released app.')
+  void fetchAllSentencesFromJishoByAllKanjis() async {
+    List<String> kanjiStrs = KanjiBloc.instance.allKanjisList
+        .expand((element) => [
+              ...element.kunyomiWords.where((element) => element.wordText.length > 1).map((e) => e.wordText),
+              ...element.onyomiWords.where((element) => element.wordText.length > 1).map((e) => e.wordText)
+            ])
+        .toList();
+    // for (var kanji in KanjiBloc.instance.allKanjisList) {
+    //   firestore.collection('kanjis').doc(kanji.kanji).update({
+    //     'kunyomiWords': kanji.kunyomiWords.map((e) => e.toMap()).toList(),
+    //     'onyomiWords': kanji.onyomiWords.map((e) => e.toMap()).toList(),
+    //   });
+    // }
+    //var querySnapshots = await firestore.collection('kanjis').get();
+    // for (var snap in querySnapshots.docs) {
+    //   var kWords = (snap.data()['kunyomiWords'] as List).map((e) {
+    //     print(e);
+    //     return Word.fromMap(e as Map);
+    //   });
+    //   var oWords = (snap.data()['onyomiWords'] as List)
+    //       .map((e) => Word.fromMap(e as Map));
+    //
+    //   //print(kWords.map((e) => e['wordText']));
+    //
+    //   if (kWords.isNotEmpty)
+    //     kanjiStrs.addAll(kWords.map((e) => e.wordText).toList());
+    //   if (oWords.isNotEmpty)
+    //     kanjiStrs.addAll(oWords.map((e) => e.wordText).toList());
+    // }
 
-    JishoApiProvider().fetchAllSentencesByKanjis(kanjiStrs).listen((lis) async {
-      var kanjiStr = lis[0];
-      Sentence sentence = lis[1];
-      //print('I am listening: ${sentence.text}');
-      firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
-          {'text': sentence.text, 'englishText': sentence.englishText, 'tokens': sentence.tokens.map((token) => jsonEncode(token.toMap())).toList()});
-    });
+    JishoApiProvider().fetchAllSentencesByKanjis(kanjiStrs);
   }
 
   ///fetch from Jisho, save to firestore and local database
@@ -87,9 +106,13 @@ class FirebaseApiProvider {
         } else {
           if (sentences[kanjiStr] != null && sentences[kanjiStr].isNotEmpty) {
             for (var sen in sentences[kanjiStr]) {
-              await firestore.collection('sentences').document(kanjiStr).setData({'dummy': 0});
-              await firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sen.text).setData(
-                  {'text': sen.text, 'englishText': sen.englishText, 'tokens': sen.tokens.map((token) => jsonEncode(token.toMap())).toList()});
+              await firestore.collection('sentences').doc(kanjiStr).set({'dummy': 0});
+              await firestore
+                  .collection('sentences')
+                  .doc(kanjiStr)
+                  .collection('sentences')
+                  .doc(sen.text)
+                  .set({'text': sen.text, 'englishText': sen.englishText, 'tokens': sen.tokens.map((token) => jsonEncode(token.toMap())).toList()});
             }
             await DBProvider.db.addSentences(sentences[kanjiStr]);
           } else {
@@ -101,13 +124,13 @@ class FirebaseApiProvider {
   }
 
   Stream<Sentence> fetchAllSentencesFromFirestore() async* {
-    var kanjiQuerySnapshot = await firestore.collection('sentences').getDocuments();
-    for (var kanjiDoc in kanjiQuerySnapshot.documents) {
-      String kanjiStr = kanjiDoc.documentID;
+    var kanjiQuerySnapshot = await firestore.collection('sentences').get();
+    for (var kanjiDoc in kanjiQuerySnapshot.docs) {
+      String kanjiStr = kanjiDoc.id;
       print("the kanji is $kanjiStr");
-      var sentenceQuerySnapshot = await kanjiDoc.reference.collection('sentences').getDocuments();
-      for (var sentenceDoc in sentenceQuerySnapshot.documents) {
-        var map = sentenceDoc.data;
+      var sentenceQuerySnapshot = await kanjiDoc.reference.collection('sentences').get();
+      for (var sentenceDoc in sentenceQuerySnapshot.docs) {
+        var map = sentenceDoc.data();
         Sentence sentence = Sentence.fromMap(map);
         sentence.kanji = kanjiStr;
         yield sentence;
@@ -122,7 +145,7 @@ class FirebaseApiProvider {
       var kanjiStr = lis[0];
       var sentence = lis[1];
       //print('I am listening: ${sentence.text}');
-      firestore.collection('sentences').document(kanjiStr).collection('sentences').document(sentence.text).setData(
+      firestore.collection('sentences').doc(kanjiStr).collection('sentences').doc(sentence.text).set(
           {'text': sentence.text, 'englishText': sentence.englishText, 'tokens': sentence.tokens.map((token) => jsonEncode(token.toMap())).toList()});
       await DBProvider.db.addSentence(sentence);
     });
@@ -130,9 +153,9 @@ class FirebaseApiProvider {
 
   ///Used to fetch kanjis that has been loaded to firebase and local db
   Future checkForUpdate(Map<String, Kanji> allLocalKanjis) async {
-    var querySnapshot = await firestore.collection('update').getDocuments();
+    var querySnapshot = await firestore.collection('update').get();
     var updateKanjis = <String>[];
-    for (var id in querySnapshot.documents.map((doc) => doc.documentID).toList()) {
+    for (var id in querySnapshot.docs.map((doc) => doc.id).toList()) {
       if (!allLocalKanjis.containsKey(id) || id == '伺') {
         updateKanjis.add(id);
       }
@@ -157,9 +180,9 @@ class FirebaseApiProvider {
   @Deprecated('Used for scripting')
   Future downloadAllKanjis() async {
     var kanjis = <Kanji>[];
-    firestore.collection('kanjis').getDocuments().then((querySnapshot) {
-      for (var snap in querySnapshot.documents) {
-        var kanji = Kanji.fromMap(snap.data);
+    firestore.collection('kanjis').get().then((querySnapshot) {
+      for (var snap in querySnapshot.docs) {
+        var kanji = Kanji.fromMap(snap.data());
         print(kanji.kanji);
         kanjis.add(kanji);
       }
@@ -169,10 +192,10 @@ class FirebaseApiProvider {
 
   ///TODO: need to test whether the old and new list merge
   Future uploadUserModifiedKanji(Kanji kanji) async {
-    var snap = await firestore.collection('userUpdates').document(kanji.kanji).get();
+    var snap = await firestore.collection('userUpdates').doc(kanji.kanji).get();
 
     if (snap.exists) {
-      firestore.collection('userUpdates').document(kanji.kanji).updateData({
+      firestore.collection('userUpdates').doc(kanji.kanji).update({
         'kanji': kanji.kanji,
         'onyomi': FieldValue.arrayUnion(kanji.onyomi),
         'kunyomi': FieldValue.arrayUnion(kanji.kunyomi),
@@ -180,7 +203,7 @@ class FirebaseApiProvider {
         'kunyomiWords': FieldValue.arrayUnion(kanji.kunyomiWords.map((word) => word.toString()).toList())
       });
     } else {
-      firestore.collection('userUpdates').document(kanji.kanji).setData({
+      firestore.collection('userUpdates').doc(kanji.kanji).set({
         'kanji': kanji.kanji,
         'onyomi': FieldValue.arrayUnion(kanji.onyomi),
         'kunyomi': FieldValue.arrayUnion(kanji.kunyomi),
@@ -202,16 +225,16 @@ class FirebaseApiProvider {
     //To store the kanji that has already been updated
     List<String> updatedKanjiStrs = <String>[];
 
-    var snap = await firestore.collection('updates').document('version').get();
-    var versionNum = snap.data['versionNum'];
+    var snap = await firestore.collection('updates').doc('version').get();
+    var versionNum = snap.data()['versionNum'];
     if (versionNum > localVersionNum) {
       for (int i = localVersionNum + 1; i <= versionNum; i++) {
-        snap = await firestore.collection('updates').document(i.toString()).get();
-        var kanjis = snap.data['kanjis'] as List;
+        snap = await firestore.collection('updates').doc(i.toString()).get();
+        var kanjis = snap.data()['kanjis'] as List;
         for (var kanjiStr in kanjis) {
           if (updatedKanjiStrs.contains(kanjiStr)) continue;
           var localKanji = await DBProvider.db.getSingleKanji(kanjiStr);
-          var firestoreKanji = Kanji.fromMap((await firestore.collection('kanjis').document(kanjiStr).get()).data);
+          var firestoreKanji = Kanji.fromMap((await firestore.collection('kanjis').doc(kanjiStr).get()).data());
           localKanji.kunyomiWords.addAll(firestoreKanji.kunyomiWords);
           localKanji.onyomiWords.addAll(firestoreKanji.onyomiWords);
           DBProvider.db.updateKanji(localKanji);
@@ -230,7 +253,9 @@ class FirebaseApiProvider {
     return localVersionNum ?? 0;
   }
 
-  Future<int> getFirebaseVersion() async => (await firestore.collection('updates').document('version').get()).data['versionNum'];
+  Future<int> getFirebaseVersion() async => (await firestore.collection('updates').doc('version').get()).data()['versionNum'];
+
+  //void uploadSentence() => firestore.collection('sentences')
 }
 
 const String versionKey = 'version';

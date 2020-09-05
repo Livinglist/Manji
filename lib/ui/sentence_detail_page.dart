@@ -5,6 +5,7 @@ import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
+import 'package:kanji_dictionary/utils/string_extension.dart';
 
 class SentenceDetailPage extends StatefulWidget {
   final Sentence sentence;
@@ -68,7 +69,6 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: FuriganaText(
-                  showShadow: true,
                   text: widget.sentence.text,
                   tokens: widget.sentence.tokens,
                   style: TextStyle(fontSize: 24),
@@ -81,7 +81,11 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
-              for (var kanji in getKanjiInfos(widget.sentence.tokens)) KanjiListTile(kanji: kanji)
+              for (var kanji in widget.sentence.text
+                  .getKanjis()
+                  .map((e) => KanjiBloc.instance.allKanjisMap[e])
+                  .toList())
+                KanjiListTile(kanji: kanji)
             ],
           ),
         ));
@@ -105,9 +109,10 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
     for (var token in tokens) {
       for (int i = 0; i < token.text.length; i++) {
         var currentStr = token.text[i];
-        if (token.text.codeUnitAt(i) > 12543 && !kanjiStrs.contains(currentStr)) {
+        if (token.text.codeUnitAt(i) > 12543 &&
+            !kanjiStrs.contains(currentStr)) {
           kanjiStrs.add(currentStr);
-          var kanjiInfo = kanjiBloc.getKanjiInfo(currentStr);
+          var kanjiInfo = KanjiBloc.instance.getKanjiInfo(currentStr);
           if (kanjiInfo != null) kanjis.add(kanjiInfo);
         }
       }

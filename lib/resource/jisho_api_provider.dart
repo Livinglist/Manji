@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
@@ -11,9 +12,10 @@ import 'db_provider.dart';
 class JishoApiProvider {
   final client = Client();
 
-  Stream<Sentence> fetchSentencesByKanji(String kanji) async* {
+  Stream<Sentence> fetchSentencesByKanji(String kanji, {int currentPage = 0}) async* {
     //get the html from
-    Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences');
+
+    Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=${currentPage + 1}');
     var doc = parse(response.body);
 
     int index = 0;
@@ -64,11 +66,15 @@ class JishoApiProvider {
         japSentence = japSentence.replaceAll(token.furigana, '');
       }
 
+      print(japSentence.trim());
+
       var sentence = Sentence(tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
       yield sentence;
 
       index++;
     }
+
+    return;
   }
 
   Stream<Word> fetchWordsByKanji(String kanji) async* {
@@ -131,11 +137,11 @@ class JishoApiProvider {
 //    return words
 //  }
 
-  Stream<List> fetchAllWordsByKanjis(List<String> kanjis) async*{
+  Stream<List> fetchAllWordsByKanjis(List<String> kanjis) async* {
     var types = [WordType.noun, WordType.verb, WordType.adjective];
 
-    for(var kanji in kanjis){
-      for(var type in types){
+    for (var kanji in kanjis) {
+      for (var type in types) {
         int pageNum = 1;
         var response = await client.get('https://jisho.org/search/$kanji%20%23words%20%23${wordTypeToString(type)}?page=$pageNum');
         var doc = parse(response.body);
@@ -143,13 +149,11 @@ class JishoApiProvider {
         //Each wordDiv contains a section for one word
         var wordDivs = doc.querySelectorAll('#primary > div > div');
 
-        while(wordDivs!=null && wordDivs.isNotEmpty) {
+        while (wordDivs != null && wordDivs.isNotEmpty) {
           for (int i = 0; i < wordDivs.length; i++) {
             var furiganaSpan = wordDivs.elementAt(i).querySelector(
                 'div.concept_light-wrapper.columns.zero-padding > div.concept_light-readings.japanese.japanese_gothic > div > span.furigana');
-            var textSpan = wordDivs
-                .elementAt(i)
-                .querySelector(
+            var textSpan = wordDivs.elementAt(i).querySelector(
                 'div.concept_light-wrapper.columns.zero-padding > div.concept_light-readings.japanese.japanese_gothic > div > span.text');
 
             var meaningDivs = wordDivs.elementAt(i).getElementsByClassName('meaning-meaning');
@@ -179,8 +183,21 @@ class JishoApiProvider {
   //Used for scrapping.
   Stream<List> fetchAllSentencesByKanjis(List<String> kanjis) async* {
     //const alreadyScrappedKanjis = <String>['一','二'];
-    for(var kanji in kanjis){
+    var mainCollc = 'wordSentences';
+    var firebase = FirebaseFirestore.instance;
+    for (var kanji in kanjis) {
       print('now fetching for $kanji');
+
+      var ref = firebase.collection(mainCollc).doc(kanji);
+      var snap = await ref.get();
+      bool completed = snap.data() != null && snap.data().containsKey('length');
+
+      if (completed) continue;
+
+      print("Deleting $kanji");
+      await ref.delete();
+
+      await ref.set({'kanji': kanji});
       //if(alreadyScrappedKanjis.contains(kanji)) continue;
       //get the html from
       int pageNum = 1;
@@ -199,7 +216,7 @@ class JishoApiProvider {
       //however it contains both furigana and kanji in its text so we will get rid of them in the end by excluding all
       //the furigana we fetched from elements
       List uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
-      while (elements.isNotEmpty && elements != null && sentenceCount <240) {
+      while (elements.isNotEmpty && elements != null) {
         for (var ele in elements) {
           int childIndex = 1;
           List<Token> tokens = [];
@@ -233,10 +250,17 @@ class JishoApiProvider {
             japSentence = japSentence.replaceAll(token.furigana, '');
           }
 
-          print('$kanji $sentenceCount: ${japSentence.trim()}');
-          var sentence = Sentence(kanji: kanji,tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
-          yield [kanji, sentence];
           sentenceCount++;
+
+          print('$kanji $sentenceCount: ${japSentence.trim()} ${japSentence.trim().hashCode}');
+          var sentence = Sentence(kanji: kanji, tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
+
+          await ref
+              .collection('sentences')
+              .doc(sentence.text.hashCode.toString())
+              .set({'text': sentence.text, 'englishText': sentence.englishText, 'tokens': sentence.tokens.map((token) => token.toMap()).toList()});
+
+          yield [kanji, sentence];
 
           index++;
         }
@@ -254,16 +278,16 @@ class JishoApiProvider {
 
         uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
       }
-      print("$kanji has ${sentenceCount+1} sentences fetched.");
+      print("$kanji has $sentenceCount sentences fetched.");
+      await ref.set({'length': sentenceCount}, SetOptions(merge: true));
     }
-    yield null;
   }
 
   @Deprecated('Used for scrapping')
   Future<List<Sentence>> fetchAllSentencesByKanjisAsync(List<String> kanjis) async {
     //const alreadyScrappedKanjis = <String>['一','二'];
     var sentences = <Sentence>[];
-    for(var kanji in kanjis){
+    for (var kanji in kanjis) {
       print('now fetching for $kanji');
       //if(alreadyScrappedKanjis.contains(kanji)) continue;
       //get the html from
@@ -283,7 +307,7 @@ class JishoApiProvider {
       //however it contains both furigana and kanji in its text so we will get rid of them in the end by excluding all
       //the furigana we fetched from elements
       List uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
-      while (elements.isNotEmpty && elements != null && sentenceCount <240) {
+      while (elements.isNotEmpty && elements != null && sentenceCount < 240) {
         for (var ele in elements) {
           int childIndex = 1;
           List<Token> tokens = [];
@@ -318,7 +342,7 @@ class JishoApiProvider {
           }
 
           print('$kanji $sentenceCount: ${japSentence.trim()}');
-          var sentence = Sentence(kanji: kanji,tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
+          var sentence = Sentence(kanji: kanji, tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
           sentences.add(sentence);
           sentenceCount++;
 
@@ -338,7 +362,7 @@ class JishoApiProvider {
 
         uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
       }
-      print("$kanji has ${sentenceCount+1} sentences fetched.");
+      print("$kanji has ${sentenceCount + 1} sentences fetched.");
     }
     return sentences;
   }
@@ -347,7 +371,8 @@ class JishoApiProvider {
   Stream<Sentence> fetchAllSentencesByKanji(String kanji) async* {
     //get the html from
     int pageNum = 1;
-    Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=$pageNum');
+    var c = Client();
+    Response response = await c.get('https://jisho.org/search/$kanji%20%23sentences?page=$pageNum');
     var doc = parse(response.body);
 
     int index = 0;
@@ -398,14 +423,14 @@ class JishoApiProvider {
           japSentence = japSentence.replaceAll(token.furigana, '');
         }
 
-        var sentence = Sentence(kanji:kanji, tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
+        var sentence = Sentence(kanji: kanji, tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
         yield sentence;
 
         index++;
       }
 
       pageNum++;
-      response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=$pageNum');
+      response = await c.get('https://jisho.org/search/$kanji%20%23sentences?page=$pageNum');
       doc = parse(response.body);
 
       index = 0;
@@ -416,9 +441,9 @@ class JishoApiProvider {
       engEles = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > div > span.english');
 
       uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
-
     }
-    yield null;
+    c.close();
+    return;
   }
 
   @Deprecated('Used for scrapping')
@@ -440,7 +465,7 @@ class JishoApiProvider {
     //however it contains both furigana and kanji in its text so we will get rid of them in the end by excluding all
     //the furigana we fetched from elements
     List uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
-     while (elements.isNotEmpty && elements != null) {
+    while (elements.isNotEmpty && elements != null) {
       for (var ele in elements) {
         int childIndex = 1;
         List<Token> tokens = [];
@@ -535,7 +560,6 @@ class JishoApiProvider {
     throw Exception('unmatched JLPTLevel, in _jlptLevelToSearchString');
   }
 
-
   Stream<Kanji> fetchKanjisByJLPTLevel(JLPTLevel jlptLevel) async* {
     //var url = Uri.encodeFull('https://jisho.org/search/${_jlptLevelToSearchString(jlptLevel)} #kanji');
     int pageNum = 1;
@@ -591,7 +615,7 @@ class JishoApiProvider {
     var allKanjiEles = doc.querySelectorAll('#secondary > div > div > div > div.literal_block > span > a');
 
     int index = 1;
-    while (grade>=1) {
+    while (grade >= 1) {
       pageNum = 1;
       url = 'https://jisho.org/search/%23grade%3A$grade%20%23kanji?page=$pageNum';
       response = await client.get(url);
@@ -605,7 +629,7 @@ class JishoApiProvider {
         }
         kanjiStrs.forEach(print);
         for (var kanjiStr in kanjiStrs) {
-          if(!((await firebaseApiProvider.firestore.collection('kanjis').document(kanjiStr).get()).exists)) {
+          if (!((await firebaseApiProvider.firestore.collection('kanjis').doc(kanjiStr).get()).exists)) {
             Kanji kanji = await fetchKanjiInfo(kanjiStr);
             print(kanji.kanji);
             firebaseApiProvider.uploadKanji(kanji);
@@ -779,4 +803,3 @@ class JishoApiProvider {
 }
 
 final jishoApiProvider = JishoApiProvider();
-

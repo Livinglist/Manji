@@ -1,24 +1,24 @@
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import '../resource/brain.dart';
+import '../ui/kanji_recognize_page/resource/brain.dart';
 
-class KanjiRecogBloc {
+class KanjiRecognizeBloc {
   final _predictedKanjiFetcher = PublishSubject<List<Kanji>>();
-  final brain = AppBrain();
+  final _brain = AppBrain();
 
   Stream<List<Kanji>> get predictedKanji => _predictedKanjiFetcher.stream;
 
-  KanjiRecogBloc() {
-    brain.loadModel();
+  KanjiRecognizeBloc() {
+    _brain.loadModel();
   }
 
   void predict(List<Offset> points, double canvasSize) {
-    brain.processCanvasPoints(points, canvasSize).then((predicts) {
+    _brain.processCanvasPoints(points, canvasSize).then((predicts) {
       var temp = <Kanji>[];
       for (var p in predicts) {
-        if (kanjiBloc.allKanjisMap.containsKey(p['label'])) {
-          temp.add(kanjiBloc.allKanjisMap[p['label']]);
+        if (KanjiBloc.instance.allKanjisMap.containsKey(p['label'])) {
+          temp.add(KanjiBloc.instance.allKanjisMap[p['label']]);
         }
       }
       _predictedKanjiFetcher.sink.add(temp);
@@ -30,4 +30,4 @@ class KanjiRecogBloc {
   }
 }
 
-final kanjiRecogBloc = KanjiRecogBloc();
+final kanjiRecognizeBloc = KanjiRecognizeBloc();

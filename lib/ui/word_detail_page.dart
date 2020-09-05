@@ -49,6 +49,14 @@ class WordDetailPageState extends State<WordDetailPage> {
       }
     });
 
+    scrollController.addListener(() {
+      if (this.mounted) {
+        if (scrollController.offset >= scrollController.position.maxScrollExtent) {
+          sentenceBloc.fetchMoreSentencesByWordFromJisho(widget.word.wordText);
+        }
+      }
+    });
+
     super.initState();
   }
 
@@ -151,7 +159,8 @@ class WordDetailPageState extends State<WordDetailPage> {
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
-                              showShadow: true,
+                              markTarget: true,
+                              target: widget.word.wordText,
                               text: sentence.text,
                               tokens: sentence.tokens,
                               style: TextStyle(fontSize: 20),
@@ -174,8 +183,28 @@ class WordDetailPageState extends State<WordDetailPage> {
                       ));
                       children.add(Divider(height: 0));
                     }
-                    return Column(
-                      children: children,
+                    return StreamBuilder(
+                      stream: sentenceBloc.isFetching,
+                      initialData: false,
+                      builder: (_, AsyncSnapshot<bool> isFetchingSnapshot) {
+                        if(isFetchingSnapshot.data == null){
+                          children.add(Container(
+                            height: 48,
+                          ));
+                        }else {
+                          if (isFetchingSnapshot.data) {
+                            children.add(Container(
+                              height: 96,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ));
+                          }
+                        }
+                        return Column(
+                          children: children,
+                        );
+                      },
                     );
                   } else {
                     return Container();

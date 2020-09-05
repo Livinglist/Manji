@@ -1,3 +1,9 @@
+const String kanjiKey = 'kanji';
+const String sentencesKey = 'sentences';
+const String textKey = 'text';
+
+///Todo: more keys
+
 const Set<String> allVideoFiles = {
   "一",
   "丁",

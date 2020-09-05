@@ -35,7 +35,7 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
   void initState() {
     super.initState();
 
-    for (var kanji in kanjiBloc.allKanjisList) {
+    for (var kanji in KanjiBloc.instance.allKanjisList) {
       if (kanji.jlpt == 0) continue;
       jlptToKanjisMap[kanji.jlptLevel].add(kanji);
     }

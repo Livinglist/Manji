@@ -120,7 +120,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                         return Container();
                       }
 
-                      kanjis = text.getKanjis().map((str) => kanjiBloc.allKanjisMap[str]).toList();
+                      kanjis = text.getKanjis().map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
 
                       if (kanjis.isEmpty) {
                         return Container();
@@ -174,7 +174,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                     return Center(child: Text("No kanji was found in the image.", style: TextStyle(color: Colors.white70)));
                   }
 
-                  kanjis = text.getKanjis().map((str) => kanjiBloc.allKanjisMap[str]).toList();
+                  kanjis = text.getKanjis().map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
 
                   if (kanjis.isEmpty) {
                     return Center(child: Text("No kanji was found in the image.", style: TextStyle(color: Colors.white70)));

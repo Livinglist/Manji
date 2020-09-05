@@ -32,7 +32,7 @@ class KanaDetailPageState extends State<KanaDetailPage> {
     ]);
     flutterTts.setLanguage("ja");
 
-    kanjiBloc.findKanjiByKana(widget.kana, widget.yomikata).listen((kanji) {
+    KanjiBloc.instance.findKanjiByKana(widget.kana, widget.yomikata).listen((kanji) {
       this.setState(() {
         kanjis.add(kanji);
       });

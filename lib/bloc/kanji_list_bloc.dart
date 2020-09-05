@@ -22,7 +22,8 @@ class KanjiListBloc {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
 
-      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+      if (!_kanjiListsFetcher.isClosed)
+        _kanjiListsFetcher.sink.add(_kanjiLists);
 
       return _kanjiLists;
     }
@@ -33,7 +34,8 @@ class KanjiListBloc {
   void init() {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
-      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+      if (!_kanjiListsFetcher.isClosed)
+        _kanjiListsFetcher.sink.add(_kanjiLists);
     }
   }
 
@@ -41,11 +43,9 @@ class KanjiListBloc {
     var temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
     temp.name = newName;
     repo.updateKanjiListName(temp);
-    FirebaseAuth.instance.currentUser().then((value) {
-      if (value != null) {
-        repo.uploadKanjiList(kanjiList);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
   }
 
   void addKanji(KanjiList kanjiList, String kanjiStr) {
@@ -53,11 +53,9 @@ class KanjiListBloc {
     temp.kanjiStrs.add(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    FirebaseAuth.instance.currentUser().then((value) {
-      if (value != null) {
-        repo.uploadKanjiList(kanjiList);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
   }
 
   void removeKanji(KanjiList kanjiList, String kanjiStr) {
@@ -65,11 +63,9 @@ class KanjiListBloc {
     temp.kanjiStrs.remove(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    FirebaseAuth.instance.currentUser().then((value) {
-      if (value != null) {
-        repo.uploadKanjiList(kanjiList);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
   }
 
   void addKanjiList(String listName) {
@@ -78,7 +74,8 @@ class KanjiListBloc {
       var match = regex.firstMatch(listName);
       if (regex.hasMatch(listName)) {
         var num = int.parse(match.group(0)) + 1;
-        listName = listName.replaceRange(listName.length - 1, listName.length, num.toString());
+        listName = listName.replaceRange(
+            listName.length - 1, listName.length, num.toString());
       } else {
         listName = listName.trim() + " 1";
       }
@@ -87,26 +84,25 @@ class KanjiListBloc {
     _kanjiLists.add(temp);
     repo.addKanjiList(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    FirebaseAuth.instance.currentUser().then((value) {
-      if (value != null) {
-        repo.uploadKanjiList(temp);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(temp);
+    }
   }
 
   void deleteKanjiList(KanjiList kanjiList) {
     _kanjiLists.remove(kanjiList);
     repo.deleteKanjiList(kanjiList);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    FirebaseAuth.instance.currentUser().then((value) {
-      if (value != null) {
-        repo.deleteKanjiListFromCloud(kanjiList);
-      }
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
   }
 
   bool isInList(KanjiList list, String kanjiStr) {
-    return _kanjiLists.singleWhere((li) => li == list).kanjiStrs.contains(kanjiStr);
+    return _kanjiLists
+        .singleWhere((li) => li == list)
+        .kanjiStrs
+        .contains(kanjiStr);
   }
 
   void clearThenAddKanjiLists(List<KanjiList> kanjiLists) {

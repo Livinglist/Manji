@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import 'package:kanji_dictionary/bloc/search_bloc.dart';
+import 'package:kanji_dictionary/ui/components/kanji_list_tile.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
@@ -28,7 +30,7 @@ import 'search_result_page.dart';
 import 'custom_list_page.dart';
 import 'quiz_pages/quiz_page.dart';
 import 'text_recognize_page/text_recognize_page.dart';
-import 'kanji_recognize_page/kanji_recog_page.dart';
+import 'kanji_recognize_page/kanji_recognize_page.dart';
 import 'progress_pages/progress_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,7 +64,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
     SiriSuggestionBloc.instance.siriSuggestion.listen((kanjiStr) {
       if (kanjiStr != null) {
-        var kanji = kanjiBloc.allKanjisMap[kanjiStr];
+        var kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
         Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
       }
     });
@@ -300,6 +302,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                                     isEntering = false;
                                   });
                                 },
+                                onChanged: (text) {
+                                  if (text.isEmpty) {
+                                    SearchBloc.instance.clear();
+                                  } else {
+                                    SearchBloc.instance.search(text);
+                                  }
+                                },
                               ),
                             ),
                             Material(
@@ -322,7 +331,35 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                           child: DailyKanjiCard(),
                           builder: (_, child) {
                             return Opacity(opacity: tween.animate(animationController).value, child: child);
-                          })))
+                          }))),
+              Positioned(
+                  top: 122,
+                  left: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
+                  right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
+                  child: Center(
+                      child: StreamBuilder(
+                    stream: SearchBloc.instance.results,
+                    builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                        var kanjis = snapshot.data;
+                        return Container(
+                            decoration: BoxDecoration(
+                                boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                                shape: BoxShape.rectangle,
+                                color: Theme.of(context).primaryColor),
+                            height: 480,
+                            //width: MediaQuery.of(context).size.width * 0.9,
+                            child: ListView(
+                                children: kanjis
+                                    .map((e) => KanjiListTile(
+                                          kanji: e,
+                                        ))
+                                    .toList()));
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ))),
             ],
           ),
         ));

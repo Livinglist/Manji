@@ -14,13 +14,14 @@ export 'package:firebase_auth/firebase_auth.dart';
 enum SignInMethod { Apple, Google }
 
 class FirebaseAuthProvider {
-  Future<FirebaseUser> get firebaseUser => FirebaseAuth.instance.currentUser();
+  User get firebaseUser => FirebaseAuth.instance.currentUser;
 
   static final instance = FirebaseAuthProvider._();
 
   FirebaseAuthProvider._();
 
-  static final Stream<FirebaseUser> onAuthStateChanged = FirebaseAuth.instance.onAuthStateChanged;
+  static final Stream<User> onAuthStateChanged =
+      FirebaseAuth.instance.authStateChanges();
 
   GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: <String>[
@@ -29,7 +30,7 @@ class FirebaseAuthProvider {
   );
 
   Future checkForUpdates() async {
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
         if (isUpgradable) {
@@ -39,31 +40,41 @@ class FirebaseAuthProvider {
     }
   }
 
-  Future uploadUser(FirebaseUser firebaseUser) async {
-    return Firestore.instance.collection('users').document(firebaseUser.uid).setData({
+  Future uploadUser(User firebaseUser) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .set({
       'email': firebaseUser.email,
     });
   }
 
-  Future<FirebaseUser> registerNewUser(String email, String password) async {
-    return FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) {
+  Future<User> registerNewUser(String email, String password) async {
+    return FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((UserCredential cred) {
       //verify email address
-      authResult.user.sendEmailVerification();
+      cred.user.sendEmailVerification();
 
       saveEmailAndPassword(email, password);
 
-      Firestore.instance.collection(usersKey).document(authResult.user.uid).setData({}).whenComplete(FirestoreProvider.instance.uploadAll);
-      return authResult.user;
+      FirebaseFirestore.instance
+          .collection(usersKey)
+          .doc(cred.user.uid)
+          .set({}).whenComplete(FirestoreProvider.instance.uploadAll);
+      return cred.user;
     });
   }
 
-  Future<FirebaseUser> signInUser(String email, String password) async {
-    return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) async {
-      if (authResult.user.isEmailVerified || true) {
-        var firebaseUser = authResult.user;
+  Future<User> signInUser(String email, String password) async {
+    return FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((UserCredential cred) async {
+      if (cred.user.emailVerified || true) {
+        var firebaseUser = cred.user;
         return firebaseUser;
       } else {
-        var firebaseUser = authResult.user;
+        var firebaseUser = cred.user;
         return firebaseUser;
         // return Future.value(null);
       }
@@ -74,21 +85,24 @@ class FirebaseAuthProvider {
   }
 
   @Deprecated("FirebaseAuth will automatically sign in the user.")
+
   ///Sign in user silently if previously signed in.
-  Future<FirebaseUser> signInUserSilently() async {
+  Future<User> signInUserSilently() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     String email = sharedPrefs.getString('email');
     String password = sharedPrefs.getString('password');
     print(email);
     if (email != null && password != null) {
       print(email);
-      return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((AuthResult authResult) {
+      return FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((UserCredential cred) {
         FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
           if (isUpgradable) {
             FirestoreProvider.instance.fetchAll();
           }
         });
-        return authResult.user;
+        return cred.user;
       }).catchError((_) {});
     } else {
       return Future.value(null);
@@ -106,7 +120,7 @@ class FirebaseAuthProvider {
     FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  Future<FirebaseUser> signInApple() async {
+  Future<User> signInApple() async {
     var firebaseAuth = FirebaseAuth.instance;
     var sharedPrefs = await SharedPreferences.getInstance();
 
@@ -123,28 +137,37 @@ class FirebaseAuthProvider {
         var email = appleIdCredential.email;
         var password = appleIdCredential.email;
 
-        if (appleIdCredential.email == null || (result.credential.fullName.familyName == null && result.credential.fullName.givenName == null)) {
+        if (appleIdCredential.email == null ||
+            (result.credential.fullName.familyName == null &&
+                result.credential.fullName.givenName == null)) {
           email = sharedPrefs.getString(emailKey);
           password = sharedPrefs.getString(passwordKey);
 
           if (email == null) {
-            var snapshot = await Firestore.instance.collection('appleIdToEmail').document(userId).get();
-            email = snapshot.data[emailKey];
-            password = snapshot.data[passwordKey];
+            var snapshot = await FirebaseFirestore.instance
+                .collection('appleIdToEmail')
+                .doc(userId)
+                .get();
+            email = snapshot.data()[emailKey];
+            password = snapshot.data()[passwordKey];
           }
 
-          return firebaseAuth.signInWithEmailAndPassword(email: email, password: password).then((authResult) {
+          return firebaseAuth
+              .signInWithEmailAndPassword(email: email, password: password)
+              .then((cred) {
             FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
               if (isUpgradable) {
                 FirestoreProvider.instance.fetchAll();
               }
             });
 
-            return authResult.user;
+            return cred.user;
           }, onError: (PlatformException error) {
             ///TODO: The problem is that if names are null, email is going to be null as well.
             if (error.code == 'ERROR_USER_NOT_FOUND') {
-              return registerNewUser(appleIdCredential.email, appleIdCredential.email).then((value) {
+              return registerNewUser(
+                      appleIdCredential.email, appleIdCredential.email)
+                  .then((value) {
                 saveEmailAndPassword(email, password);
 
                 return value;
@@ -153,18 +176,25 @@ class FirebaseAuthProvider {
             return null;
           });
         } else {
-          return firebaseAuth.signInWithEmailAndPassword(email: email, password: password).then((authResult) {
-            return authResult.user;
+          return firebaseAuth
+              .signInWithEmailAndPassword(email: email, password: password)
+              .then((cred) {
+            return cred.user;
           }, onError: (Object error) {
             ///TODO: The problem is that if names are null, email is going to be null as well.
             if (error is PlatformException) {
               if (error.code == 'ERROR_USER_NOT_FOUND') {
-                return registerNewUser(appleIdCredential.email, appleIdCredential.email).then((firebaseUser) async {
+                return registerNewUser(
+                        appleIdCredential.email, appleIdCredential.email)
+                    .then((firebaseUser) async {
                   saveEmailAndPassword(email, password);
 
                   return firebaseUser;
                 }).whenComplete(() {
-                  Firestore.instance.collection('appleIdToEmail').document(userId).setData({
+                  FirebaseFirestore.instance
+                      .collection('appleIdToEmail')
+                      .doc(userId)
+                      .set({
                     'email': email,
                     'password': password,
                   });
@@ -183,7 +213,7 @@ class FirebaseAuthProvider {
     }
   }
 
-  Future<FirebaseUser> signInGoogle() async {
+  Future<User> signInGoogle() async {
     var firebaseAuth = FirebaseAuth.instance;
 
     var googleUser = await googleSignIn.signIn().then((value) {
@@ -197,15 +227,16 @@ class FirebaseAuthProvider {
     var email = googleUser.email;
     var password = email;
 
-    return firebaseAuth.signInWithEmailAndPassword(email: email, password: email).then((authResult) {
-
+    return firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: email)
+        .then((cred) {
       FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
         if (isUpgradable) {
           FirestoreProvider.instance.fetchAll();
         }
       });
 
-      return authResult.user;
+      return cred.user;
     }, onError: (Object error) {
       if (error is PlatformException) {
         if (error.code == "ERROR_USER_NOT_FOUND") {

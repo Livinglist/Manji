@@ -73,7 +73,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
         ),
         body: TabBarView(children: [
           StreamBuilder(
-            stream: kanjiBloc.allStarKanjis,
+            stream: KanjiBloc.instance.allStarKanjis,
             builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
               if (snapshot.hasData) {
                 var kanjis = snapshot.data;
@@ -102,7 +102,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
             },
           ),
           StreamBuilder(
-            stream: kanjiBloc.allFavKanjis,
+            stream: KanjiBloc.instance.allFavKanjis,
             builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
               if (snapshot.hasData) {
                 var kanjis = snapshot.data;

@@ -16,7 +16,7 @@ class ActivityPanel extends StatelessWidget {
   Widget buildView(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 40;
     return FutureBuilder(
-      future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(convertTimeStampsToDateTimeMap, kanjiBloc.allKanjisList),
+      future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(convertTimeStampsToDateTimeMap, KanjiBloc.instance.allKanjisList),
       builder: (_, AsyncSnapshot<Map<DateTime, List<Kanji>>> snapshot) {
         if (snapshot.hasData) {
           var map = snapshot.data;

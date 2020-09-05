@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import 'package:kanji_dictionary/bloc/search_bloc.dart';
 import 'package:kanji_dictionary/ui/radicals_page.dart';
 
 import 'components/kanji_list_tile.dart';
@@ -60,11 +61,11 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
 
     radicalsMap = radicalsToMeaning.map((key, value) => MapEntry(key, false));
 
-    if (widget.text != null) kanjiBloc.searchKanjiInfosByStr(widget.text);
+    if (widget.text != null) SearchBloc.instance.search(widget.text);
 
     if (widget.radicals != null) {
       radicalsMap[widget.radicals] = true;
-      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
     }
 
     super.initState();
@@ -86,7 +87,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
             Padding(
               padding: EdgeInsets.all(12),
               child: StreamBuilder(
-                stream: kanjiBloc.searchResults,
+                stream: SearchBloc.instance.results,
                 builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                   if (snapshot.hasData) {
                     var kanjis = snapshot.data;
@@ -103,7 +104,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
           children: <Widget>[
             Positioned.fill(
               child: StreamBuilder(
-                stream: kanjiBloc.searchResults,
+                stream: SearchBloc.instance.results,
                 builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                   if (snapshot.hasData) {
                     var kanjis = snapshot.data;
@@ -147,7 +148,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       setState(() {
                                         jlptMap[n] = !jlptMap[n];
                                       });
-                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                     })
                             ],
                           ),
@@ -168,7 +169,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       setState(() {
                                         gradeMap[g] = !gradeMap[g];
                                       });
-                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                     })
                             ],
                           ),
@@ -189,7 +190,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       setState(() {
                                         radicalsMap[r] = !radicalsMap[r];
                                       });
-                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                     }),
                               for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
                                 FilterChip(
@@ -200,7 +201,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       setState(() {
                                         radicalsMap[r] = !radicalsMap[r];
                                       });
-                                      kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                     }),
                               Hero(
                                 tag: 'hero',
@@ -237,7 +238,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
         setState(() {
           radicalsMap = value;
         });
-        kanjiBloc.filterKanji(jlptMap, gradeMap, radicalsMap);
+        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
       }
     });
   }

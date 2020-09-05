@@ -36,7 +36,7 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
   void initState() {
     super.initState();
 
-    for (var kanji in kanjiBloc.allKanjisList) {
+    for (var kanji in KanjiBloc.instance.allKanjisList) {
       gradeToKanjisMap[kanji.grade].add(kanji);
     }
   }
@@ -44,7 +44,7 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: kanjiBloc.allKanjis,
+      stream: KanjiBloc.instance.allKanjis,
       builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
         return DefaultTabController(
           length: 7,
