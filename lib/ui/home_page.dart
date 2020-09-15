@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:googleapis/customsearch/v1.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -43,6 +44,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   final textEditingController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final backgroundKey = GlobalKey<HomePageBackgroundState>();
+  final focusNode = FocusNode();
   double mainPageScale = 1.0;
   double opacity = 0;
   AnimationController animationController;
@@ -66,6 +68,18 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       if (kanjiStr != null) {
         var kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
         Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+      }
+    });
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        setState(() {
+          isEntering = true;
+        });
+      } else {
+        setState(() {
+          isEntering = false;
+        });
       }
     });
   }
@@ -144,13 +158,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
             IconButton(
                 icon: Transform.translate(offset: Offset(0, -1.5), child: Icon(FontAwesomeIcons.edit, size: 20)),
                 onPressed: () {
-                  FocusScope.of(context).unfocus();
+                  focusNode.unfocus();
                   Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()));
                 }),
             IconButton(
               icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
               onPressed: () {
-                FocusScope.of(context).unfocus();
+                focusNode.unfocus();
                 Connectivity().checkConnectivity().then((val) {
                   if (val == ConnectivityResult.none) {
                     scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -263,6 +277,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                           animationController: animationController,
                           callback: (String kanji) {
                             if (textEditingController.text.isEmpty || textEditingController.text.length == 1) {
+                              focusNode.unfocus();
                               textEditingController.text = kanji;
                             }
                           },
@@ -286,17 +301,18 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                             IconButton(icon: Icon(Icons.search)),
                             Expanded(
                               child: TextField(
+                                autofocus: false,
                                 controller: textEditingController,
                                 cursorWidth: 1,
                                 cursorColor: Theme.of(context).primaryColor,
                                 cursorRadius: Radius.circular(1),
                                 decoration: InputDecoration(hintText: 'Find'),
+                                focusNode: focusNode,
                                 onTap: () {
                                   setState(() {
                                     isEntering = true;
                                   });
                                 },
-//                                onEditingComplete: (){},
                                 onSubmitted: (_) {
                                   setState(() {
                                     isEntering = false;
@@ -340,7 +356,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                       child: StreamBuilder(
                     stream: SearchBloc.instance.results,
                     builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                      if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                      if (isEntering && snapshot.hasData && snapshot.data.isNotEmpty) {
                         var kanjis = snapshot.data;
                         return Container(
                             decoration: BoxDecoration(
@@ -351,8 +367,11 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                             //width: MediaQuery.of(context).size.width * 0.9,
                             child: ListView(
                                 children: kanjis
-                                    .map((e) => KanjiListTile(
-                                          kanji: e,
+                                    .map((e) => Material(
+                                          color: Theme.of(context).primaryColor,
+                                          child: KanjiListTile(
+                                            kanji: e,
+                                          ),
                                         ))
                                     .toList()));
                       } else {

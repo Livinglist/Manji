@@ -81,11 +81,10 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
-              for (var kanji in widget.sentence.text
-                  .getKanjis()
-                  .map((e) => KanjiBloc.instance.allKanjisMap[e])
-                  .toList())
-                KanjiListTile(kanji: kanji)
+              for (var kanji in widget.sentence.text.getKanjis().map((e) => KanjiBloc.instance.allKanjisMap[e]).toList()) KanjiListTile(kanji: kanji),
+              SizedBox(
+                height: 24,
+              )
             ],
           ),
         ));
@@ -109,8 +108,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
     for (var token in tokens) {
       for (int i = 0; i < token.text.length; i++) {
         var currentStr = token.text[i];
-        if (token.text.codeUnitAt(i) > 12543 &&
-            !kanjiStrs.contains(currentStr)) {
+        if (token.text.codeUnitAt(i) > 12543 && !kanjiStrs.contains(currentStr)) {
           kanjiStrs.add(currentStr);
           var kanjiInfo = KanjiBloc.instance.getKanjiInfo(currentStr);
           if (kanjiInfo != null) kanjis.add(kanjiInfo);

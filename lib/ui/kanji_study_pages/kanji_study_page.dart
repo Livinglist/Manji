@@ -145,55 +145,54 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                 ...buildMockCards(),
                 if (contents.length >= 1)
                   Positioned(
-                      top: 80,
-                      child: Draggable(
-                          data: contents[0],
-                          childWhenDragging: contents.length > 1 ? KanjiCard(kanjiCardContent: contents[1]) : Container(),
-                          feedback: AnimatedBuilder(
-                            animation: animationController,
-                            builder: (_, __) {
-                              return Transform.rotate(angle: animationController.drive(angleTween).value, child: mainCard);
-                            },
-                          ),
-                          onDragStarted: onDragStarted,
-                          onDragCompleted: () {},
-                          onDragEnd: (dragDetails) {
-                            //Swipe right.
-                            if (dragDetails.offset.dx > 230 || dragDetails.velocity.pixelsPerSecond.dx > 1600) {
-                              setState(() {
-                                contents.add(contents[0]);
-                                contents.removeAt(0);
-                                mainCardKey = GlobalKey<KanjiCardState>();
+                    top: 80,
+                    child: Draggable(
+                        data: contents[0],
+                        childWhenDragging: Container(),
+                        feedback: AnimatedBuilder(
+                          animation: animationController,
+                          builder: (_, __) {
+                            return Transform.rotate(angle: animationController.drive(angleTween).value, child: mainCard);
+                          },
+                        ),
+                        onDragEnd: (dragDetails) {
+                          //Swipe right.
+                          if (dragDetails.offset.dx > 230 || dragDetails.velocity.pixelsPerSecond.dx > 1600) {
+                            setState(() {
+                              contents.add(contents[0]);
+                              contents.removeAt(0);
+                              mainCardKey = GlobalKey<KanjiCardState>();
+                              mainCard = GestureDetector(
+                                child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                              );
+                              cardsProgress = cardsProgress == 1 ? 1 : cardsProgress + 1.0 / cardsCount;
+                            });
+
+                            //Swipe left.
+                          } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
+                            setState(() {
+                              index++;
+                              contents.removeAt(0);
+                              mainCardKey = GlobalKey<KanjiCardState>();
+                              if (contents.isEmpty) {
+                                mainCard = Container();
+                                var timeStamp = DateTime.now().millisecondsSinceEpoch;
+                                for (var i in widget.kanjis) {
+                                  i.timeStamp = timeStamp;
+                                }
+                                KanjiBloc.instance.updateTimeStampsForKanjis(widget.kanjis);
+                              } else {
                                 mainCard = GestureDetector(
                                   child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
                                 );
-                                cardsProgress = cardsProgress == 1 ? 1 : cardsProgress + 1.0 / cardsCount;
-                              });
+                              }
 
-                              //Swipe left.
-                            } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
-                              setState(() {
-                                index++;
-                                contents.removeAt(0);
-                                mainCardKey = GlobalKey<KanjiCardState>();
-                                if (contents.isEmpty) {
-                                  mainCard = Container();
-                                  var timeStamp = DateTime.now().millisecondsSinceEpoch;
-                                  for (var i in widget.kanjis) {
-                                    i.timeStamp = timeStamp;
-                                  }
-                                  KanjiBloc.instance.updateTimeStampsForKanjis(widget.kanjis);
-                                } else {
-                                  mainCard = GestureDetector(
-                                    child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
-                                  );
-                                }
-
-                                studyProgress = studyProgress == 1 ? 1 : studyProgress + 1.0 / cardsCount;
-                              });
-                            }
-                          },
-                          child: mainCard)),
+                              studyProgress = studyProgress == 1 ? 1 : studyProgress + 1.0 / cardsCount;
+                            });
+                          }
+                        },
+                        child: mainCard),
+                  ),
                 if (contents.isEmpty)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
@@ -214,21 +213,32 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
     var children = <Widget>[];
     if (contents.length > 1) {
       for (int i = min(contents.length - 1, 10); i >= 1; i--) {
-        children.add(Positioned(
-          top: 80 - i * 15.0 + i * i,
-          child: Transform.scale(
-              alignment: Alignment.topCenter,
-              scale: 0.6 + (0.4 / 10) * (10 - i),
-              child: KanjiCard(
-                color: Colors.grey[700].withAlpha(200 + ((55 / 10) * (10 - i)).toInt()),
-                kanjiCardContent: contents.elementAt(i),
-              )),
+        print(i);
+        children.add(AnimatedBuilder(
+          animation: animationController,
+          child: KanjiCard(
+            color: Colors.grey[700].withAlpha(200 + ((55 / 10) * (10 - i)).toInt()),
+            kanjiCardContent: contents.elementAt(i),
+          ),
+          builder: (_, child) {
+            print(animationController.value);
+
+            double beginTop = 80 - i * 15.0 + i * i,
+                endTop = 80 - (i - 1) * 15.0 + (i - 1) * (i - 1),
+                beginScale = 0.6 + (0.4 / 10) * (10 - i),
+                endScale = 0.6 + (0.4 / 10) * (10 - i + 1);
+            double top = beginTop + animationController.value.abs() * (endTop - beginTop).abs(),
+                scale = beginScale + animationController.value.abs() * (endScale - beginScale).abs();
+
+            return Positioned(
+              top: top,
+              child: Transform.scale(alignment: Alignment.topCenter, scale: scale, child: child),
+            );
+          },
         ));
       }
     }
 
     return children;
   }
-
-  void onDragStarted() {}
 }

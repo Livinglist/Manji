@@ -14,7 +14,6 @@ class JishoApiProvider {
 
   Stream<Sentence> fetchSentencesByKanji(String kanji, {int currentPage = 0}) async* {
     //get the html from
-
     Response response = await client.get('https://jisho.org/search/$kanji%20%23sentences?page=${currentPage + 1}');
     var doc = parse(response.body);
 
@@ -29,6 +28,10 @@ class JishoApiProvider {
     //however it contains both furigana and kanji in its text so we will get rid of them in the end by excluding all
     //the furigana we fetched from elements
     List uls = doc.querySelectorAll('#secondary > div > ul > li > div.sentence_content > ul');
+
+    if (elements.isEmpty) {
+      yield null;
+    }
 
     for (var ele in elements) {
       int childIndex = 1;
@@ -51,13 +54,10 @@ class JishoApiProvider {
           tokens.add(Token(text: japText));
         } else {
           String furigana = element.text;
-          print(japText);
           tokens.add(Token(text: japText, furigana: furigana));
         }
         childIndex++;
       }
-
-      print(uls[index].text);
 
       String japSentence = uls[index].text;
 
@@ -65,8 +65,6 @@ class JishoApiProvider {
         if (token.furigana == null) continue;
         japSentence = japSentence.replaceAll(token.furigana, '');
       }
-
-      print(japSentence.trim());
 
       var sentence = Sentence(tokens: tokens, text: japSentence.trim(), englishText: engEles[index].text);
       yield sentence;
@@ -77,8 +75,8 @@ class JishoApiProvider {
     return;
   }
 
-  Stream<Word> fetchWordsByKanji(String kanji) async* {
-    var response = await client.get('https://jisho.org/search/$kanji%20%23words');
+  Stream<Word> fetchWordsByKanji(String kanji, {int currentPage = 0}) async* {
+    var response = await client.get('https://jisho.org/search/$kanji%20%23words?page=${currentPage + 1}');
     var doc = parse(response.body);
 
     //Each wordDiv contains a section for one word

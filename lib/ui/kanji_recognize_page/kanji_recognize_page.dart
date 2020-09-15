@@ -36,8 +36,7 @@ class KanjiRecognizePage extends StatefulWidget {
   _KanjiRecognizePageState createState() => _KanjiRecognizePageState();
 }
 
-class _KanjiRecognizePageState extends State<KanjiRecognizePage>
-    with SingleTickerProviderStateMixin {
+class _KanjiRecognizePageState extends State<KanjiRecognizePage> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
   AnimationController animationController;
   bool showShadow = false, canvasEnabled = true;
@@ -82,9 +81,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
 
         scrollController.addListener(() {
           if (this.mounted) {
-            animationController.value = scrollController.offset >= 120
-                ? 0
-                : 1 - scrollController.offset / 120;
+            animationController.value = scrollController.offset >= 120 ? 0 : 1 - scrollController.offset / 120;
           }
         });
       }
@@ -126,9 +123,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
       body: Stack(
         children: <Widget>[
           Positioned.fill(
-            child: Device.get().isTablet
-                ? buildTopForTablet()
-                : buildTopForPhone(),
+            child: Device.get().isTablet ? buildTopForTablet() : buildTopForPhone(),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -174,10 +169,8 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
   Widget buildTopForPhone() {
     return Container(
         color: Theme.of(context).primaryColor,
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
-        height: MediaQuery.of(context).size.width -
-            MediaQuery.of(context).padding.top,
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
+        height: MediaQuery.of(context).size.width - MediaQuery.of(context).padding.top,
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder(
           stream: kanjiRecognizeBloc.predictedKanji,
@@ -185,9 +178,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
             var kanjis = snapshot.data;
             if (kanjis.isEmpty) {
-              return Center(
-                  child: Text(r'Empty ¯\_(ツ)_/¯',
-                      style: TextStyle(color: Colors.white70)));
+              return Center(child: Text(r'Empty ¯\_(ツ)_/¯', style: TextStyle(color: Colors.white70)));
             }
 
             List<Widget> children = [];
@@ -205,11 +196,9 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
 
             children.add(SizedBox(height: 360));
 
-            return ListView.separated(
+            return ListView(
               controller: scrollController,
-              itemBuilder: (_, index) => children[index],
-              separatorBuilder: (_, __) => Divider(height: 0),
-              itemCount: children.length,
+              children: children,
             );
           },
         ));
@@ -227,9 +216,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
             var kanjis = snapshot.data;
             if (kanjis.isEmpty) {
-              return Center(
-                  child: Text(r'Empty ¯\_(ツ)_/¯',
-                      style: TextStyle(color: Colors.white70)));
+              return Center(child: Text(r'Empty ¯\_(ツ)_/¯', style: TextStyle(color: Colors.white70)));
             }
             for (var i in kanjis) {
               print(i.kanji);
@@ -237,9 +224,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
             return SingleChildScrollView(
               controller: scrollController,
               child: Column(
-                children: <Widget>[
-                  ...kanjis.map((k) => KanjiListTile(kanji: k))
-                ],
+                children: <Widget>[...kanjis.map((k) => KanjiListTile(kanji: k))],
               ),
             );
           },
@@ -272,16 +257,11 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
             onPanEnd: (details) {
               points.add(null);
 
-              kanjiRecognizeBloc.predict(
-                  points,
-                  (MediaQuery.of(context).size.width > 360)
-                      ? 360
-                      : MediaQuery.of(context).size.width);
+              kanjiRecognizeBloc.predict(points, (MediaQuery.of(context).size.width > 360) ? 360 : MediaQuery.of(context).size.width);
             },
             child: ClipRect(
               child: CustomPaint(
-                size: Size(MediaQuery.of(context).size.width,
-                    MediaQuery.of(context).size.width),
+                size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width),
                 painter: DrawingPainter(
                   offsetPoints: points,
                 ),
@@ -324,16 +304,11 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
             onPanEnd: (details) {
               points.add(null);
 
-              kanjiRecognizeBloc.predict(
-                  points,
-                  (MediaQuery.of(context).size.width > 360)
-                      ? 360
-                      : MediaQuery.of(context).size.width);
+              kanjiRecognizeBloc.predict(points, (MediaQuery.of(context).size.width > 360) ? 360 : MediaQuery.of(context).size.width);
             },
             child: ClipRect(
               child: CustomPaint(
-                size: Size(MediaQuery.of(context).size.width,
-                    MediaQuery.of(context).size.width),
+                size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width),
                 painter: DrawingPainter(
                   offsetPoints: points,
                 ),

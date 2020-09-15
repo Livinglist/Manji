@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
+import 'package:kanji_dictionary/resource/firebase_api_provider.dart';
 
 import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';

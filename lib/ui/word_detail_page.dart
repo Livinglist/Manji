@@ -181,30 +181,39 @@ class WordDetailPageState extends State<WordDetailPage> {
                                       )));
                         },
                       ));
-                      children.add(Divider(height: 0));
+                      children.add(Divider(
+                        height: 0,
+                        indent: 16,
+                        endIndent: 16,
+                      ));
                     }
-                    return StreamBuilder(
-                      stream: sentenceBloc.isFetching,
-                      initialData: false,
-                      builder: (_, AsyncSnapshot<bool> isFetchingSnapshot) {
-                        if(isFetchingSnapshot.data == null){
-                          children.add(Container(
-                            height: 48,
-                          ));
-                        }else {
-                          if (isFetchingSnapshot.data) {
-                            children.add(Container(
-                              height: 96,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ));
-                          }
-                        }
-                        return Column(
-                          children: children,
-                        );
-                      },
+                    return Column(
+                      children: [
+                        ...children,
+                        StreamBuilder(
+                          stream: sentenceBloc.isFetching,
+                          initialData: false,
+                          builder: (_, AsyncSnapshot<bool> isFetchingSnapshot) {
+                            if (isFetchingSnapshot.data == null) {
+                              return Container(
+                                height: 48,
+                              );
+                            } else if (isFetchingSnapshot.data) {
+                              return Container(
+                                key: Key('ProgressIndicator'),
+                                height: 96,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+
+                            return Container(
+                              height: 48,
+                            );
+                          },
+                        ),
+                      ],
                     );
                   } else {
                     return Container();

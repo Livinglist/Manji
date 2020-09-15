@@ -45,10 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     color: Colors.white,
                     size: 22,
                   ),
-                  title:
-                      Text('Sign out', style: TextStyle(color: Colors.white)),
-                  subtitle:
-                      Text(user.email, style: TextStyle(color: Colors.white)),
+                  title: Text('Sign out', style: TextStyle(color: Colors.white)),
+                  subtitle: Text(user.email, style: TextStyle(color: Colors.white)),
                   onTap: () => FirebaseAuthProvider.instance.signOut(),
                 );
               }
@@ -86,10 +84,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (isUpdated) {
                     return ListTile(
                       leading: Icon(Icons.wrap_text, color: Colors.white),
-                      title: Text('Update database',
-                          style: TextStyle(color: Colors.white)),
-                      subtitle: Text(
-                          'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
+                      title: Text('Update database', style: TextStyle(color: Colors.white)),
+                      subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
                           style: TextStyle(color: Colors.white54)),
                       onTap: () {
                         scaffoldKey.currentState.hideCurrentSnackBar();
@@ -101,8 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           backgroundColor: Theme.of(context).accentColor,
                           action: SnackBarAction(
                             label: 'Dismiss',
-                            onPressed: () =>
-                                scaffoldKey.currentState.hideCurrentSnackBar(),
+                            onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar(),
                             textColor: Colors.blueGrey,
                           ),
                         ));
@@ -111,8 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   } else {
                     return ListTile(
                         leading: Icon(Icons.wrap_text, color: Colors.white),
-                        title: Text('Update database',
-                            style: TextStyle(color: Colors.white)),
+                        title: Text('Update database', style: TextStyle(color: Colors.white)),
                         subtitle: Text(
                             'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database needs to be updated)',
                             style: TextStyle(color: Colors.white54)),
@@ -127,8 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               backgroundColor: Theme.of(context).accentColor,
                               action: SnackBarAction(
                                 label: 'Dismiss',
-                                onPressed: () => scaffoldKey.currentState
-                                    .hideCurrentSnackBar(),
+                                onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar(),
                                 textColor: Colors.blueGrey,
                               ),
                             ));
@@ -138,10 +131,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 } else {
                   return ListTile(
                     leading: Icon(Icons.wrap_text, color: Colors.white),
-                    title: Text('Update database',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text(
-                        'Keeping dictionary database up to date increases the accuracy and reliability',
+                    title: Text('Update database', style: TextStyle(color: Colors.white)),
+                    subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability',
                         style: TextStyle(color: Colors.white54)),
                   );
                 }
@@ -151,8 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Divider(height: 0),
           ListTile(
             leading: Icon(Icons.swap_horiz, color: Colors.white),
-            title:
-                Text('Transfer my data', style: TextStyle(color: Colors.white)),
+            title: Text('Transfer my data', style: TextStyle(color: Colors.white)),
             subtitle: Text(
               'Transfer your data to a another device',
               style: TextStyle(color: Colors.white54),
@@ -165,10 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.yellow,
-                action: SnackBarAction(
-                    label: 'Dismiss',
-                    onPressed: () =>
-                        scaffoldKey.currentState.hideCurrentSnackBar()),
+                action: SnackBarAction(label: 'Dismiss', onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar()),
               ));
             },
           ),
@@ -199,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 applicationName: "Manji",
-                applicationVersion: "v2.4.0",
+                applicationVersion: "v2.4.1",
                 aboutBoxChildren: <Widget>[
                   RaisedButton(
                     onPressed: () {
@@ -243,8 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ]);
       switch (result.status) {
         case AuthorizationStatus.authorized:
-          print(
-              result.credential.user ?? "null"); //All the required credentials
+          print(result.credential.user ?? "null"); //All the required credentials
           print(result.credential.fullName.familyName);
           break;
         case AuthorizationStatus.error:
@@ -273,13 +259,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               actions: <Widget>[
                 CupertinoActionSheetAction(
-                    child: Text('Apple', style: TextStyle(color: Colors.blue)),
-                    onPressed: () =>
-                        Navigator.pop(context, SignInMethod.Apple)),
+                    child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
                 CupertinoActionSheetAction(
-                    child: Text('Google', style: TextStyle(color: Colors.blue)),
-                    onPressed: () =>
-                        Navigator.pop(context, SignInMethod.Google)),
+                    child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
               ],
             )).then((value) => value ?? null);
   }

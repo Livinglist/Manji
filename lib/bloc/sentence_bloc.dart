@@ -22,7 +22,7 @@ class SentenceBloc {
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
   Stream<bool> get isFetching => _isFetchingFetcher.stream;
 
-  bool _isFetching;
+  bool _isFetching, _allFetched = false;
 
   ///Used for pagination.
   int _length;
@@ -46,8 +46,11 @@ class SentenceBloc {
     _isFetchingFetcher.sink.add(_isFetching);
 
     repo.fetchSentencesByKanji(str).listen((sentence) {
-      print('${sentence.text}');
-      if (!_sentencesFetcher.isClosed) {
+      if (sentence == null) {
+        _allFetched = true;
+        _isFetching = null;
+        _isFetchingFetcher.sink.add(_isFetching);
+      } else if (!_sentencesFetcher.isClosed) {
         _sentences.add(sentence);
         _sentencesFetcher.sink.add(_sentences);
       }
@@ -61,20 +64,29 @@ class SentenceBloc {
 
   ///Fetch sentences from Jisho.org by a word.
   void fetchMoreSentencesByWordFromJisho(String str) {
-    if (_isFetching != null && !_isFetching) {
+    print("Is fetching: $_isFetching");
+    print("Is all fetched: $_allFetched");
+    if (!_allFetched && !_isFetching) {
       _isFetching = true;
       _isFetchingFetcher.sink.add(_isFetching);
       repo.fetchSentencesByKanji(str, currentPage: _currentPage).listen((sentence) {
-        if (!_sentencesFetcher.isClosed) {
+        if (sentence == null) {
+          print('all fetched');
+          _allFetched = true;
+          _isFetching = null;
+          _isFetchingFetcher.sink.add(_isFetching);
+        } else if (!_sentencesFetcher.isClosed) {
           _sentences.add(sentence);
           _sentencesFetcher.sink.add(_sentences);
         }
       }).onDone(() {
-        print("========Done=======");
-        _isFetching = null;
-        _isFetchingFetcher.sink.add(_isFetching);
+        if (!_allFetched) {
+          print("========Done=======");
+          _isFetching = false;
+          _isFetchingFetcher.sink.add(_isFetching);
 
-        _currentPage++;
+          _currentPage++;
+        }
       });
     }
   }
