@@ -81,7 +81,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
-              for (var kanji in widget.sentence.text.getKanjis().map((e) => KanjiBloc.instance.allKanjisMap[e]).toList()) KanjiListTile(kanji: kanji),
+              for (var kanji in widget.sentence.text.getKanjis().map((e) => KanjiBloc.instance.allKanjisMap[e]).toList()..remove(null)) KanjiListTile(kanji: kanji),
               SizedBox(
                 height: 24,
               )
