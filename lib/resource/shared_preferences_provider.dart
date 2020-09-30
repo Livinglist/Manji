@@ -105,6 +105,12 @@ class SharedPreferencesProvider {
     return res;
   }
 
+  Future<bool> get isFirstTimeUser => SharedPreferences.getInstance().then((prefs) {
+        var res = !prefs.containsKey('mark');
+        prefs.setBool('mark', true);
+        return res;
+      });
+
   int get lastFetchedAt => _sharedPreferences.getInt(lastFetchedAtKey);
 
   set lastFetchedAt(int timestamp) => _sharedPreferences.setInt(lastFetchedAtKey, timestamp);

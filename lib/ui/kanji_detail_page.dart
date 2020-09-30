@@ -98,7 +98,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       });
     }
 
-    if (widget.kanji != null) addSuggestion(widget.kanji);
+    if (widget.kanji != null) KanjiBloc.instance.addSuggestion(widget.kanji);
   }
 
   @override
@@ -1045,11 +1045,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  Future addSuggestion(Kanji kanji) async {
-    return FlutterSiriSuggestions.instance.buildActivity(FlutterSiriActivity(kanji.kanji, kanji.kanji,
-        isEligibleForSearch: true, isEligibleForPrediction: true, contentDescription: kanji.meaning, suggestedInvocationPhrase: "open my app"));
   }
 
   static double computeScaleFactor(double width) {

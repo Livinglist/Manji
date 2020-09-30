@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
-import 'package:kanji_dictionary/resource/firebase_api_provider.dart';
 
 import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
@@ -44,6 +43,7 @@ class MyAppState extends State<MyApp> {
     //This is for Siri suggestion.
     FlutterSiriSuggestions.instance.configure(onLaunch: (Map<String, dynamic> message) async {
       String siriKanji = message['key'];
+      print("Siri suggestion kanji is $siriKanji");
       SiriSuggestionBloc.instance.suggest(siriKanji);
     });
   }

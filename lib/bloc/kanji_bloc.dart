@@ -141,8 +141,6 @@ class KanjiBloc {
         _allStarKanjisMap = Map.fromEntries(allStarKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
         _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
       }
-
-      Future.forEach(kanjis.takeRandomly(20), addSuggestion);
     });
   }
 

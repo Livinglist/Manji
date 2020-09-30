@@ -64,6 +64,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       });
     });
 
+
     SiriSuggestionBloc.instance.siriSuggestion.listen((kanjiStr) {
       if (kanjiStr != null) {
         var kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
