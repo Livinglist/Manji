@@ -34,7 +34,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator> with SingleTicker
 
       return Container(
         width: MediaQuery.of(context).size.width,
-        height: 6,
+        height: 4,
         color: Colors.white,
         child: Stack(children: children),
       );
