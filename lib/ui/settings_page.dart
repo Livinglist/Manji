@@ -151,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
               scaffoldKey.currentState.hideCurrentSnackBar();
               scaffoldKey.currentState.showSnackBar(SnackBar(
                 content: Text(
-                  'Data Transfer is not yet availible',
+                  'Data Transfer is not yet available',
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.yellow,
@@ -186,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 applicationName: "Manji",
-                applicationVersion: "v2.4.2",
+                applicationVersion: "v2.4.3",
                 aboutBoxChildren: <Widget>[
                   RaisedButton(
                     onPressed: () {

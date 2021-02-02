@@ -4,6 +4,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:kanji_dictionary/utils/string_extension.dart';
 import 'kanji_bloc.dart';
 
+enum SearchFor { meaning, pronunciation, kanji }
+
 class SearchBloc {
   static final instance = SearchBloc._();
 
@@ -22,17 +24,12 @@ class SearchBloc {
   }
 
   void search(String text) {
-    var comparison = (Kanji a, Kanji b) {
-      var aSimilarity = _findSimilarity(a, text);
-      var bSimilarity = _findSimilarity(b, text);
-    };
-    var queue = HeapPriorityQueue<Kanji>();
     if (text == null || text.isEmpty) {
       _resultsFetcher.sink.add(_allKanjisList);
       return;
     }
 
-    var list = <Kanji>[];
+    var kanjiSet = <Kanji>{};
     String hiraganaText = '';
     String katakanaText = '';
 
@@ -40,12 +37,20 @@ class SearchBloc {
       for (var i in Iterable.generate(text.length)) {
         var kanjiStr = text[i];
         if (_allKanjisMap.containsKey(kanjiStr)) {
-          list.add(_allKanjisMap[kanjiStr]);
+          kanjiSet.add(_allKanjisMap[kanjiStr]);
         }
       }
 
-      _resultsFetcher.add(list);
+      _resultsFetcher.add(kanjiSet.toList());
       return;
+    } else if (text.isAllLatin()) {
+      for (var kanji in _allKanjisList) {
+        if (kanji.meaning.contains(text)) {
+          kanjiSet.add(kanji);
+        }
+      }
+
+      _resultsFetcher.add(kanjiSet.toList());
     }
 
     if (text.codeUnitAt(0) >= 12353 && text.codeUnitAt(0) <= 12447) {
@@ -59,7 +64,7 @@ class SearchBloc {
     for (var kanji in _allKanjisList) {
       if (hiraganaText.isEmpty) {
         if (kanji.meaning.contains(text)) {
-          list.add(kanji);
+          kanjiSet.add(kanji);
           continue;
         }
 
@@ -67,7 +72,7 @@ class SearchBloc {
 
         for (var word in kanji.onyomiWords) {
           if (word.meanings.contains(text)) {
-            list.add(kanji);
+            kanjiSet.add(kanji);
             matched = true;
             break;
           }
@@ -77,7 +82,7 @@ class SearchBloc {
 
         for (var word in kanji.kunyomiWords) {
           if (word.meanings.contains(text)) {
-            list.add(kanji);
+            kanjiSet.add(kanji);
             matched = true;
             break;
           }
@@ -89,7 +94,7 @@ class SearchBloc {
       if (katakanaText.isNotEmpty) {
         var onyomiMatch = kanji.onyomi.where((str) => str == katakanaText);
         if (onyomiMatch.isNotEmpty) {
-          list.add(kanji);
+          kanjiSet.add(kanji);
           continue;
         }
       }
@@ -97,30 +102,32 @@ class SearchBloc {
       if (hiraganaText.isNotEmpty) {
         var kunyomiMatch = kanji.kunyomi.where((str) => str == hiraganaText);
         if (kunyomiMatch.isNotEmpty) {
-          list.add(kanji);
+          kanjiSet.add(kanji);
           continue;
         }
       }
 
       if (hiraganaText.isEmpty) {
-        var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        var onyomiWords = kanji.onyomiWords.where((word) =>
+            word.meanings.contains(text) || word.wordText.contains(text));
         if (onyomiWords.isNotEmpty) {
-          list.add(kanji);
+          kanjiSet.add(kanji);
           continue;
         }
-        var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
+        var kunyomiWords = kanji.kunyomiWords.where((word) =>
+            word.meanings.contains(text) || word.wordText.contains(text));
         if (kunyomiWords.isNotEmpty) {
-          list.add(kanji);
+          kanjiSet.add(kanji);
           continue;
         }
       }
     }
 
-    list.sort((a, b) => a.strokes.compareTo(b.strokes));
-    _resultsFetcher.sink.add(list);
+    _resultsFetcher.sink.add(kanjiSet.toList());
   }
 
-  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
+  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
+      Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
 
     _filterKanjiStream(jlptMap, gradeMap, radicalsMap).listen((kanji) {
@@ -131,13 +138,17 @@ class SearchBloc {
     });
   }
 
-  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
-    bool jlptIsEmpty = !jlptMap.containsValue(true), gradeIsEmpty = !gradeMap.containsValue(true), radicalIsEmpty = !radicalsMap.containsValue(true);
+  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap,
+      Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
+    bool jlptIsEmpty = !jlptMap.containsValue(true),
+        gradeIsEmpty = !gradeMap.containsValue(true),
+        radicalIsEmpty = !radicalsMap.containsValue(true);
 
     for (var kanji in _allKanjisList) {
       if (kanji.jlpt == 0) continue;
-      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) && (gradeIsEmpty || gradeMap[kanji.grade]) && (radicalIsEmpty || radicalsMap[kanji.radicals]))
-        yield kanji;
+      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
+          (gradeIsEmpty || gradeMap[kanji.grade]) &&
+          (radicalIsEmpty || radicalsMap[kanji.radicals])) yield kanji;
     }
   }
 

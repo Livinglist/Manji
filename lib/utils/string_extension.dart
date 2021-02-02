@@ -19,6 +19,15 @@ extension StringExtension on String {
     return true;
   }
 
+  bool isAllLatin() {
+    for (var i in Iterable.generate(this.length)) {
+      if (this.codeUnitAt(i) < 65 || this.codeUnitAt(i) > 122) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   ///Get all the kanjis in the string.
   List<String> getKanjis() {
     var kanjis = <String>[];
