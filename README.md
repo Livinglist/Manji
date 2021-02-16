@@ -1,4 +1,5 @@
-# Manji
+# Manji ![50](https://user-images.githubusercontent.com/7277662/108042074-33ff3a00-6ff4-11eb-91b6-713e33d57873.png)
+
 
 ![iOS](https://img.shields.io/badge/iOS-11%20-blue)
 [![App Store](https://img.shields.io/itunes/v/1464774967?label=App%20Store)](https://apps.apple.com/us/app/manji-learn-kanji/id1464774967)
