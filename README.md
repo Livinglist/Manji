@@ -29,13 +29,28 @@ Therotically, Manji is cross-platform since it is powered by Flutter, but since 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Because the dictionary file exceeds the size limit of Github, `git-lfs` is used for storing the dictionary file. So make sure you have installed `git-lfs`.
+2. Clone this project and run `git-lfs pull` in the project root folder.
+3. Fill up the credential as shown below and save it as `google_api_credentials.dart` and move to Manji/lib/resource/.
 
-A few resources to get you started if this is your first Flutter project:
+```dart
+import 'package:googleapis_auth/auth_io.dart';
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+final credentials = ServiceAccountCredentials.fromJson(r'''
+{
+  "type": "service_account",
+  "project_id": "",
+  "private_key_id": "",
+  "private_key": "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n",
+  "client_email": "",
+  "client_id": "",
+  "auth_uri": "",
+  "token_uri": "",
+  "auth_provider_x509_cert_url": "",
+  "client_x509_cert_url": ""
+}
+''');
+```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+4. Download your `GoogleService-Info.plist` and move it to under Manji/ios/Runner/. 
+5. Run the project using `flutter run`.
