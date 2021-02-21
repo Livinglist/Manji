@@ -332,6 +332,7 @@ class HomePageState extends State<HomePage>
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
                             Material(
+                              color: Colors.transparent,
                               child: textEditingController.text.isEmpty
                                   ? IconButton(icon: Icon(Icons.search))
                                   : IconButton(icon: Icon(Icons.close), onPressed: (){
