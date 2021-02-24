@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -59,6 +60,18 @@ class HomePageState extends State<HomePage>
     KanjiListBloc.instance.init();
     animationController = AnimationController(
         vsync: this, value: 1, duration: Duration(seconds: 1));
+
+    //FeatureDiscovery.clearPreferences(context, <String>{ 'kanji_recognition', 'kanji_extraction' });
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{
+          'kanji_recognition',
+          'kanji_extraction'
+        },
+      );
+    });
+
     super.initState();
 
     Timer(Duration(seconds: 2), () {
@@ -163,45 +176,75 @@ class HomePageState extends State<HomePage>
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           actions: <Widget>[
-            IconButton(
-                icon: Transform.translate(
-                    offset: Offset(0, -1.5),
-                    child: Icon(FontAwesomeIcons.edit, size: 20)),
-                onPressed: () {
-                  focusNode.unfocus();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => KanjiRecognizePage()));
-                }),
-            IconButton(
-              icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
-              onPressed: () {
-                focusNode.unfocus();
-                Connectivity().checkConnectivity().then((val) {
-                  if (val == ConnectivityResult.none) {
-                    scaffoldKey.currentState.showSnackBar(SnackBar(
-                      content: Text(
-                        'Text Recognition requires access to Internet',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                      action: SnackBarAction(
-                          label: 'Dismiss',
-                          onPressed: () =>
-                              scaffoldKey.currentState.hideCurrentSnackBar()),
-                    ));
-                  } else {
-                    getImageSource().then((val) {
-                      if (val != null)
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    TextRecognizePage(imageSource: val)));
+            DescribedFeatureOverlay(
+              featureId: 'kanji_recognition',
+              // Unique id that identifies this overlay.
+              tapTarget: IconButton(
+                  icon: Transform.translate(
+                      offset: Offset(0, -1.5),
+                      child: Icon(FontAwesomeIcons.edit, size: 20))),
+              // The widget that will be displayed as the tap target.
+              title: Text('Write it down'),
+              description: Text(
+                  'Write down the kanji and Manji will tell you what kanji it is.'),
+              backgroundColor: Theme.of(context).primaryColor,
+              targetColor: Colors.white,
+              textColor: Colors.white,
+              child: IconButton(
+                  icon: Transform.translate(
+                      offset: Offset(0, -1.5),
+                      child: Icon(FontAwesomeIcons.edit, size: 20)),
+                  onPressed: () {
+                    focusNode.unfocus();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => KanjiRecognizePage()));
+                  }),
+            ),
+            DescribedFeatureOverlay(
+                featureId: 'kanji_extraction',
+                // Unique id that identifies this overlay.
+                tapTarget: IconButton(
+                    icon: Transform.rotate(
+                        angle: pi / 2, child: Icon(Icons.flip))),
+                title: Text('Look it up'),
+                description: Text(
+                    'Upload a image and all the kanji on it will be extracted.'),
+                backgroundColor: Theme.of(context).primaryColor,
+                targetColor: Colors.white,
+                textColor: Colors.white,
+                child: IconButton(
+                  icon:
+                      Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
+                  onPressed: () {
+                    focusNode.unfocus();
+                    Connectivity().checkConnectivity().then((val) {
+                      if (val == ConnectivityResult.none) {
+                        scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text(
+                            'Text Recognition requires access to Internet',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
+                          action: SnackBarAction(
+                              label: 'Dismiss',
+                              onPressed: () => scaffoldKey.currentState
+                                  .hideCurrentSnackBar()),
+                        ));
+                      } else {
+                        getImageSource().then((val) {
+                          if (val != null)
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        TextRecognizePage(imageSource: val)));
+                        });
+                      }
                     });
-                  }
-                });
-              },
-            )
+                  },
+                )),
           ],
           title: Text('Manji'),
           elevation: 0,
@@ -335,12 +378,15 @@ class HomePageState extends State<HomePage>
                               color: Colors.transparent,
                               child: textEditingController.text.isEmpty
                                   ? IconButton(icon: Icon(Icons.search))
-                                  : IconButton(icon: Icon(Icons.close), onPressed: (){
-                                setState(() {
-                                  textEditingController.clear();
-                                  SearchBloc.instance.clear();
-                                });
-                              },),
+                                  : IconButton(
+                                      icon: Icon(Icons.close),
+                                      onPressed: () {
+                                        setState(() {
+                                          textEditingController.clear();
+                                          SearchBloc.instance.clear();
+                                        });
+                                      },
+                                    ),
                             ),
                             Expanded(
                               child: TextField(

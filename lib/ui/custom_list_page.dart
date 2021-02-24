@@ -166,7 +166,7 @@ class _MyListPageState extends State<MyListPage> {
               children: <Widget>[
                 SizedBox(height: 12),
                 CupertinoTextField(
-                  style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
+                  style: TextStyle(color: Colors.black),
                   controller: textEditingController,
                 )
               ],

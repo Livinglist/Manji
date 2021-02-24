@@ -101,7 +101,7 @@ class SharedPreferencesProvider {
 
   bool getIsFirstTimeUser() {
     var res = !_sharedPreferences.containsKey('mark');
-    _sharedPreferences.setBool('mark', true);
+    if(!res) _sharedPreferences.setBool('mark', true);
     return res;
   }
 
