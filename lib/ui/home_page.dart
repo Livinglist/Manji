@@ -442,7 +442,7 @@ class HomePageState extends State<HomePage>
 
   void onSearchPressed() {
     String text = textEditingController.text;
-    if (text.length == 1 && text.codeUnitAt(0) > 12543) {
+    if (text.length == 1 && KanjiBloc.instance.allKanjisMap.containsKey(text)) {
       Navigator.push(
           context,
           MaterialPageRoute(
