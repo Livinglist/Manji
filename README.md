@@ -4,6 +4,7 @@
 ![iOS](https://img.shields.io/badge/iOS-11%20-blue)
 [![App Store](https://img.shields.io/itunes/v/1464774967?label=App%20Store)](https://apps.apple.com/us/app/manji-learn-kanji/id1464774967)
 [![App Store](https://img.shields.io/badge/Price-Free-orange)](https://img.shields.io/badge/Price-Free-orange)
+[![Visits Badge](https://badges.pufler.dev/visits/livinglist/Manji)](https://badges.pufler.dev)
 [![GitHub](https://img.shields.io/github/stars/livinglist/Manji?style=social)](https://img.shields.io/github/stars/livinglist/Manji?style=social)
 
 
