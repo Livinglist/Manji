@@ -11,7 +11,6 @@ import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/word.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
-import 'package:kanji_dictionary/utils/list_extension.dart';
 
 export 'package:kanji_dictionary/models/kanji.dart';
 export 'package:kanji_dictionary/models/sentence.dart';
@@ -35,7 +34,7 @@ class KanjiBloc {
   final Queue<BehaviorSubject<Kanji>> _singleKanjiFetchers = Queue<BehaviorSubject<Kanji>>();
 
   List<Sentence> _sentences = <Sentence>[];
-  List<String> _unloadedSentencesStr = List<String>();
+  List<String> _unloadedSentencesStr = <String>[];
   List<Word> _words = <Word>[];
   List<Kanji> _kanjis = <Kanji>[];
   //List<Kanji> _allKanjis = <Kanji>[];
@@ -221,12 +220,6 @@ class KanjiBloc {
     _allKanjisFetcher.sink.add(_allKanjisMap.values.toList());
     _singleKanjiFetchers.last.sink.add(kanji);
     repo.updateKanji(kanji, isDeleted);
-  }
-
-  static Kanji _filterKanji(List list) {
-    var kanjis = list.elementAt(0);
-    var kanjiStr = list.elementAt(1);
-    return kanjis.singleWhere((kanji) => kanji.kanji == kanjiStr);
   }
 
   void addFav(String kanjiStr) {

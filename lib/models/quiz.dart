@@ -15,7 +15,7 @@ class Quiz {
   Question get currentQuestion => questions[_currentQuestionIndex];
 
   Quiz({this.targetedKanjis}) {
-    questions = List<Question>();
+    questions = <Question>[];
 
     for (int i = 0; i < questionsCount; i++) {
       questions[i] = Question(targetedKanji: targetedKanjis[i]);

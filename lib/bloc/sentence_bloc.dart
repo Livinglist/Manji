@@ -5,7 +5,6 @@ import 'package:kanji_dictionary/resource/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/word.dart';
 import 'package:kanji_dictionary/resource/repository.dart';
 
 export 'package:kanji_dictionary/models/kanji.dart';
@@ -17,7 +16,7 @@ class SentenceBloc {
   final _isFetchingFetcher = BehaviorSubject<bool>();
 
   List<Sentence> _sentences = <Sentence>[];
-  List<String> _unloadedSentencesStr = List<String>();
+  List<String> _unloadedSentencesStr = <String>[];
 
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
   Stream<bool> get isFetching => _isFetchingFetcher.stream;

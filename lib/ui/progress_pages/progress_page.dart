@@ -17,7 +17,7 @@ class ProgressPage extends StatefulWidget {
 }
 
 class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMixin {
-  final List<AnimationController> controllers = List<AnimationController>(5);
+  final List<AnimationController> controllers = <AnimationController>[];
   AnimationController panelAnimationController;
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();

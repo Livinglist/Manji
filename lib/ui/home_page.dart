@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:googleapis/customsearch/v1.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
@@ -180,6 +179,7 @@ class HomePageState extends State<HomePage>
               featureId: 'kanji_recognition',
               // Unique id that identifies this overlay.
               tapTarget: IconButton(
+                onPressed: null,
                   icon: Transform.translate(
                       offset: Offset(0, -1.5),
                       child: Icon(FontAwesomeIcons.edit, size: 20))),
@@ -206,6 +206,7 @@ class HomePageState extends State<HomePage>
                 featureId: 'kanji_extraction',
                 // Unique id that identifies this overlay.
                 tapTarget: IconButton(
+                  onPressed: null,
                     icon: Transform.rotate(
                         angle: pi / 2, child: Icon(Icons.flip))),
                 title: Text('Look it up'),
@@ -221,7 +222,7 @@ class HomePageState extends State<HomePage>
                     focusNode.unfocus();
                     Connectivity().checkConnectivity().then((val) {
                       if (val == ConnectivityResult.none) {
-                        scaffoldKey.currentState.showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             'Text Recognition requires access to Internet',
                             style: TextStyle(color: Colors.white),
@@ -229,7 +230,7 @@ class HomePageState extends State<HomePage>
                           backgroundColor: Colors.red,
                           action: SnackBarAction(
                               label: 'Dismiss',
-                              onPressed: () => scaffoldKey.currentState
+                              onPressed: () => ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar()),
                         ));
                       } else {
@@ -377,7 +378,7 @@ class HomePageState extends State<HomePage>
                             Material(
                               color: Colors.transparent,
                               child: textEditingController.text.isEmpty
-                                  ? IconButton(icon: Icon(Icons.search))
+                                  ? IconButton(icon: Icon(Icons.search),onPressed: null)
                                   : IconButton(
                                       icon: Icon(Icons.close),
                                       onPressed: () {

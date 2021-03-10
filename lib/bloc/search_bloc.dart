@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:kanji_dictionary/utils/string_extension.dart';
@@ -150,15 +149,6 @@ class SearchBloc {
           (gradeIsEmpty || gradeMap[kanji.grade]) &&
           (radicalIsEmpty || radicalsMap[kanji.radicals])) yield kanji;
     }
-  }
-
-  int _findSimilarity(Kanji kanji, String text) {
-    if (text == kanji.kanji) {
-      return -1;
-    }
-    return 0;
-
-    ///TODO:
   }
 
   dispose() {

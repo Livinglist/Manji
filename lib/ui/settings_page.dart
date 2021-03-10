@@ -88,8 +88,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
                           style: TextStyle(color: Colors.white54)),
                       onTap: () {
-                        scaffoldKey.currentState.hideCurrentSnackBar();
-                        scaffoldKey.currentState.showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             'Your database is up to date',
                             style: TextStyle(color: Colors.black),
@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           backgroundColor: Theme.of(context).accentColor,
                           action: SnackBarAction(
                             label: 'Dismiss',
-                            onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar(),
+                            onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                             textColor: Colors.blueGrey,
                           ),
                         ));
@@ -112,8 +112,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: TextStyle(color: Colors.white54)),
                         onTap: () {
                           repo.fetchUpdates().whenComplete(() {
-                            scaffoldKey.currentState.hideCurrentSnackBar();
-                            scaffoldKey.currentState.showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                 'Database has been updated successfully',
                                 style: TextStyle(color: Colors.black),
@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               backgroundColor: Theme.of(context).accentColor,
                               action: SnackBarAction(
                                 label: 'Dismiss',
-                                onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar(),
+                                onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                                 textColor: Colors.blueGrey,
                               ),
                             ));
@@ -148,14 +148,14 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextStyle(color: Colors.white54),
             ),
             onTap: () {
-              scaffoldKey.currentState.hideCurrentSnackBar();
-              scaffoldKey.currentState.showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   'Data Transfer is not yet available',
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.yellow,
-                action: SnackBarAction(label: 'Dismiss', onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar()),
+                action: SnackBarAction(label: 'Dismiss', onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
               ));
             },
           ),
@@ -186,9 +186,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 applicationName: "Manji",
-                applicationVersion: "v2.4.5",
+                applicationVersion: "v2.4.6",
                 aboutBoxChildren: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       launch("https://livinglist.github.io");
                     },
@@ -202,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                     ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       launch("https://github.com/Livinglist/Manji");
                     },

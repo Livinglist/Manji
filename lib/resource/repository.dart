@@ -31,9 +31,9 @@ class Repository {
 
   Future<List<Kanji>> getAllKanjisFromDB() => DBProvider.db.getAllKanjis();
 
-  Future<List<Sentence>> getSentencesByKanji(String kanjiStr) => DBProvider.db.getSentencesByKanji(kanjiStr);
+  //Future<List<Sentence>> getSentencesByKanji(String kanjiStr) => DBProvider.db.getSentencesByKanji(kanjiStr);
 
-  Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) => DBProvider.db.getSentencesByKanjiStream(kanjiStr);
+  //Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) => DBProvider.db.getSentencesByKanjiStream(kanjiStr);
 
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) => DBProvider.db.getSentencesJsonStringByKanji(kanjiStr);
 

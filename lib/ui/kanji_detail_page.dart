@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kanji_dictionary/ui/search_result_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -179,9 +178,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                 onTap: () {
                                   Navigator.pop(context);
                                   if (isInList) {
-                                    scaffoldKey.currentState
+                                    ScaffoldMessenger.of(context)
                                         .hideCurrentSnackBar();
-                                    scaffoldKey.currentState
+                                    ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: Text(
                                         'This kanji is already in ${kanjiList.name}',
@@ -191,8 +190,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                           Theme.of(context).accentColor,
                                       action: SnackBarAction(
                                         label: 'Dismiss',
-                                        onPressed: () => scaffoldKey
-                                            .currentState
+                                        onPressed: () => ScaffoldMessenger.of(context)
                                             .hideCurrentSnackBar(),
                                         textColor: Colors.blueGrey,
                                       ),
@@ -200,9 +198,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                   } else {
                                     KanjiListBloc.instance
                                         .addKanji(kanjiList, kanjiStr);
-                                    scaffoldKey.currentState
+                                    ScaffoldMessenger.of(context)
                                         .hideCurrentSnackBar();
-                                    scaffoldKey.currentState
+                                    ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: Text(
                                         '$kanjiStr has been added to ${kanjiList.name}',
@@ -212,8 +210,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                           Theme.of(context).accentColor,
                                       action: SnackBarAction(
                                         label: 'Dismiss',
-                                        onPressed: () => scaffoldKey
-                                            .currentState
+                                        onPressed: () => ScaffoldMessenger.of(context)
                                             .hideCurrentSnackBar(),
                                         textColor: Colors.blueGrey,
                                       ),
@@ -298,7 +295,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                   icon: Icon(
                 FontAwesomeIcons.wikipediaW,
                 size: 20,
-              )),
+              ), onPressed: null),
               // The widget that will be displayed as the tap target.
               title: Text('More info'),
               description: Text(
@@ -317,7 +314,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
             DescribedFeatureOverlay(
               featureId: 'add_item',
               // Unique id that identifies this overlay.
-              tapTarget: IconButton(icon: Icon(Icons.playlist_add, size: 28)),
+              tapTarget: IconButton(icon: Icon(Icons.playlist_add, size: 28), onPressed: null),
               // The widget that will be displayed as the tap target.
               title: Text('Add Kanji'),
               description:
@@ -1140,7 +1137,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                   color: Theme.of(context).primaryColor),
               child: Form(
                 key: formKey,
-                autovalidate: false,
+                autovalidateMode: AutovalidateMode.disabled,
                 child: Column(
                   children: <Widget>[
                     Padding(
@@ -1249,7 +1246,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(21))),
-                          child: RaisedButton(
+                          child: ElevatedButton(
                               child: Text('Add'),
                               onPressed: () {
                                 if (formKey.currentState.validate()) {

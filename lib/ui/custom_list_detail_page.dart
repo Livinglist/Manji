@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
@@ -44,6 +46,15 @@ class _ListDetailPageState extends State<ListDetailPage> {
   void initState() {
     KanjiListBloc.instance.init();
     KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{
+          'study_kanji',
+        },
+      );
+    });
+
     super.initState();
 
     gridViewScrollController.addListener(() {
@@ -87,30 +98,44 @@ class _ListDetailPageState extends State<ListDetailPage> {
             StreamBuilder(
               stream: KanjiBloc.instance.kanjis,
               builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                return IconButton(
-                    icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
-                    onPressed: () {
-                      if (snapshot.hasData) {
-                        if (snapshot.data.isEmpty) {
-                          setState(() {
-                            if (studyString.length > 50) {
-                              if (stupidStrings.isEmpty) {
-                                Navigator.pop(context);
+                return DescribedFeatureOverlay(
+                  featureId: 'study_kanji',
+                  // Unique id that identifies this overlay.
+                  tapTarget: IconButton(
+                      onPressed: null,
+                      icon: Icon(FontAwesomeIcons.bookOpen, size: 16)),
+                  // The widget that will be displayed as the tap target.
+                  title: Text('Study'),
+                  description: Text(
+                      'Study this list by flash cards.'),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  targetColor: Colors.white,
+                  textColor: Colors.white,
+                  child: IconButton(
+                      icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                      onPressed: () {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.isEmpty) {
+                            setState(() {
+                              if (studyString.length > 50) {
+                                if (stupidStrings.isEmpty) {
+                                  Navigator.pop(context);
+                                } else {
+                                  var index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(stupidStrings.length);
+                                  var str = stupidStrings[index];
+                                  stupidStrings.removeAt(index);
+                                  studyString = str;
+                                }
                               } else {
-                                var index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(stupidStrings.length);
-                                var str = stupidStrings[index];
-                                stupidStrings.removeAt(index);
-                                studyString = str;
+                                studyString += "!";
                               }
-                            } else {
-                              studyString += "!";
-                            }
-                          });
-                        } else {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: snapshot.data)));
+                            });
+                          } else {
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: snapshot.data)));
+                          }
                         }
-                      }
-                    });
+                      })
+                );
               },
             ),
             IconButton(
@@ -194,13 +219,13 @@ class _ListDetailPageState extends State<ListDetailPage> {
           title: Text('Remove $kanjiStr from ${widget.kanjiList.name}'),
           onTap: () {
             Navigator.pop(context);
-            scaffoldKey.currentState.showSnackBar(SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Colors.red,
               content: Text('Are you sure you want to remove $kanjiStr from ${widget.kanjiList.name}'),
               action: SnackBarAction(
                   label: 'Yes',
                   onPressed: () {
-                    scaffoldKey.currentState.hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                     widget.kanjiList.kanjiStrs.remove(kanjiStr);
                     KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);

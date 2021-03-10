@@ -40,12 +40,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage> with SingleTick
   final scrollController = ScrollController();
   AnimationController animationController;
   bool showShadow = false, canvasEnabled = true;
-  List<Offset> points = List();
+  List<Offset> points = [];
   Uint8List bytesData;
 
   void _cleanDrawing() {
     setState(() {
-      points = List();
+      points = [];
     });
   }
 

@@ -37,7 +37,7 @@ class QuizBloc {
 }
 
 Quiz generate(List<Kanji> kanjis) {
-  var questions = List<Question>();
+  var questions = <Question>[];
 
   if (kanjis.length < 4) {
     for (int i = 0; i < kanjis.length; i++) {
