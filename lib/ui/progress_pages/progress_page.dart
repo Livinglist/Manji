@@ -38,7 +38,7 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
     panelAnimationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 3)..value = 1;
 
     for (var index in [0, 1, 2, 3, 4]) {
-      controllers[index] = AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+      controllers.add(AnimationController(vsync: this, duration: Duration(milliseconds: 600)));
 
       computeJLPTProgress(5 - index).listen((progress) {
         controllers[index].animateTo(progress);

@@ -576,8 +576,8 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 8c158bdde010fa397386333a74570eaef033e62d
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   FirebaseInstanceID: cef67c4967c7cecb56ea65d8acbb4834825c587b
-  FirebaseMLCommon: 5e1184cfdddbd097f55cad75b598881d348d900f
-  FirebaseMLVision: 485358b97d3332669ecc4fed55ee360aaef2813d
+  FirebaseMLCommon: 850f595135e066b989f90323c970499a4d8afbf9
+  FirebaseMLVision: 535159f5ebcbe847368935548af45e79bfcdad47
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_siri_suggestions: 2c0bc235516b5b51a86a641d0f39dba3cd336ac3
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
