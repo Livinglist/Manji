@@ -211,7 +211,7 @@ class HomePageState extends State<HomePage>
                         angle: pi / 2, child: Icon(Icons.flip))),
                 title: Text('Look it up'),
                 description: Text(
-                    'Upload a image and all the kanji on it will be extracted.'),
+                    'Upload an image and all the kanji on it will be extracted.'),
                 backgroundColor: Theme.of(context).primaryColor,
                 targetColor: Colors.white,
                 textColor: Colors.white,
