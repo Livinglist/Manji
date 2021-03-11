@@ -37,6 +37,11 @@ android {
         disable 'InvalidPackage'
     }
 
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "jiaqifeng.kanji_dictionary"
