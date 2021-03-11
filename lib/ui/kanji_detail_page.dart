@@ -460,7 +460,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                         child: Text("${kanji.meaning}",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.bold)),
+                                                fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                                       )
                                     ],
                                   ),
