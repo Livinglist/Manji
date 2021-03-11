@@ -439,9 +439,9 @@ PODS:
   - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
-  - sqflite (0.0.1):
+  - sqflite (0.0.2):
     - Flutter
-    - FMDB (~> 2.7.2)
+    - FMDB (>= 2.7.5)
   - TensorFlowLite (1.13.1)
   - tflite (1.0.5):
     - Flutter
@@ -576,9 +576,9 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 8c158bdde010fa397386333a74570eaef033e62d
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   FirebaseInstanceID: cef67c4967c7cecb56ea65d8acbb4834825c587b
-  FirebaseMLCommon: 5e1184cfdddbd097f55cad75b598881d348d900f
-  FirebaseMLVision: 485358b97d3332669ecc4fed55ee360aaef2813d
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  FirebaseMLCommon: 850f595135e066b989f90323c970499a4d8afbf9
+  FirebaseMLVision: 535159f5ebcbe847368935548af45e79bfcdad47
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_siri_suggestions: 2c0bc235516b5b51a86a641d0f39dba3cd336ac3
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -603,7 +603,7 @@ SPEC CHECKSUMS:
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TensorFlowLite: 8b9dc4eb32eac0f8cb660c66bca7604da56dcc5a
   tflite: e3f7d0e4086e061e785777ef90e8b958f35ed56b
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
