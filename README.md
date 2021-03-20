@@ -2,7 +2,7 @@
 
 
 ![iOS](https://img.shields.io/badge/iOS-11%20-blue)
-[![App Store](https://img.shields.io/itunes/v/1464774967?label=App%20Store)](https://apps.apple.com/us/app/manji-learn-kanji/id1464774967)
+[![App Store](https://apps.apple.com/us/app/manji-learn-kanji/id1464774967#?platform=iphone)
 [![App Store](https://img.shields.io/badge/Price-Free-orange)](https://img.shields.io/badge/Price-Free-orange)
 [![Play Store](https://img.shields.io/badge/Play%20Store--yellow)](https://play.google.com/store/apps/details?id=jiaqifeng.kanji_dictionary)
 [![Visits Badge](https://badges.pufler.dev/visits/livinglist/Manji)](https://badges.pufler.dev)
