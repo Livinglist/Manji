@@ -85,7 +85,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     return ListTile(
                       leading: Icon(Icons.wrap_text, color: Colors.white),
                       title: Text('Update database', style: TextStyle(color: Colors.white)),
-                      subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
+                      subtitle: Text(
+                          'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
                           style: TextStyle(color: Colors.white54)),
                       onTap: () {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -259,9 +260,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               actions: <Widget>[
                 CupertinoActionSheetAction(
-                    child: Text('Apple', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+                    child: Text('Apple', style: TextStyle(color: Colors.blue)),
+                    onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
                 CupertinoActionSheetAction(
-                    child: Text('Google', style: TextStyle(color: Colors.blue)), onPressed: () => Navigator.pop(context, SignInMethod.Google)),
+                    child: Text('Google', style: TextStyle(color: Colors.blue)),
+                    onPressed: () => Navigator.pop(context, SignInMethod.Google)),
               ],
             )).then((value) => value ?? null);
   }

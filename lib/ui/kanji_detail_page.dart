@@ -402,7 +402,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                               ]))),
                                       Padding(
                                         padding: EdgeInsets.all(12),
-                                        child: Text("${kanji.meaning}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                                        child: Text("${kanji.meaning}",
+                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center),
                                       )
                                     ],
                                   ),

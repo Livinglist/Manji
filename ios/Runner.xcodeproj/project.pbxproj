@@ -461,7 +461,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 2.4.6;
+=======
+				MARKETING_VERSION = 2.4.7;
+>>>>>>> 1a977cebd562c0f313cb4ff46c5db686d23414a0
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -601,7 +605,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 2.4.6;
+=======
+				MARKETING_VERSION = 2.4.7;
+>>>>>>> 1a977cebd562c0f313cb4ff46c5db686d23414a0
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -643,7 +651,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 2.4.6;
+=======
+				MARKETING_VERSION = 2.4.7;
+>>>>>>> 1a977cebd562c0f313cb4ff46c5db686d23414a0
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",

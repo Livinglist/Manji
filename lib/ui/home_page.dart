@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/search_bloc.dart';
-import 'package:kanji_dictionary/ui/components/kanji_list_tile.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
