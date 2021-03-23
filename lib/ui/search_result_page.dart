@@ -79,155 +79,161 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          elevation: showShadow ? 8 : 0,
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: StreamBuilder(
-                stream: SearchBloc.instance.results,
-                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                  if (snapshot.hasData) {
-                    var kanjis = snapshot.data;
+    return WillPopScope(
+      onWillPop: (){
+        SearchBloc.instance.clear();
+        return Future.value(true);
+      },
+      child: Scaffold(
+          backgroundColor: Theme.of(context).primaryColor,
+          appBar: AppBar(
+            elevation: showShadow ? 8 : 0,
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: StreamBuilder(
+                  stream: SearchBloc.instance.results,
+                  builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                    if (snapshot.hasData) {
+                      var kanjis = snapshot.data;
 
-                    return Center(child: Text('${kanjis.length} kanji found'));
-                  }
-                  return Container();
-                },
-              ),
-            )
-          ],
-        ),
-        body: Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: StreamBuilder(
-                stream: SearchBloc.instance.results,
-                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                  if (snapshot.hasData) {
-                    var kanjis = snapshot.data;
-
-                    return kanjis.isNotEmpty
-                        ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
-                        : Center(
-                            child: Text(
-                              'No results found _(┐「ε:)_',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
-            ),
-            Align(
-                alignment: Alignment.topCenter,
-                child: AnimatedBuilder(
-                  animation: animationController,
-                  child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            runSpacing: 12,
-                            spacing: 12,
-                            children: <Widget>[
-                              SizedBox(width: 12),
-                              for (var n in jlptMap.keys)
-                                FilterChip(
-                                    selected: jlptMap[n],
-                                    elevation: 4,
-                                    label: Text("N$n"),
-                                    onSelected: (val) {
-                                      setState(() {
-                                        jlptMap[n] = !jlptMap[n];
-                                      });
-                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                    })
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            spacing: 8,
-                            children: <Widget>[
-                              SizedBox(width: 12),
-                              for (var g in gradeMap.keys)
-                                FilterChip(
-                                    selected: gradeMap[g],
-                                    elevation: 4,
-                                    label: Text(getGradeStr(g)),
-                                    onSelected: (val) {
-                                      setState(() {
-                                        gradeMap[g] = !gradeMap[g];
-                                      });
-                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                    })
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            spacing: 8,
-                            children: <Widget>[
-                              SizedBox(width: 12),
-                              for (var r in radicalsMap.keys.toList().sublist(0, 4))
-                                FilterChip(
-                                    selected: radicalsMap[r],
-                                    elevation: 4,
-                                    label: Text(r),
-                                    onSelected: (val) {
-                                      setState(() {
-                                        radicalsMap[r] = !radicalsMap[r];
-                                      });
-                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                    }),
-                              for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
-                                FilterChip(
-                                    selected: true,
-                                    elevation: 4,
-                                    label: Text(r),
-                                    onSelected: (val) {
-                                      setState(() {
-                                        radicalsMap[r] = !radicalsMap[r];
-                                      });
-                                      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                    }),
-                              Hero(
-                                tag: 'hero',
-                                child: MaterialButton(
-                                  onPressed: showRadicalsDialog,
-                                  child: Text('More Radicals'),
-                                  shape: StadiumBorder(),
-                                  color: Colors.grey,
-                                  height: 32,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  builder: (_, child) {
-                    return Opacity(
-                      opacity: animationController.value,
-                      child: animationController.value <= 0 ? Container() : child,
-                    );
+                      return Center(child: Text('${kanjis.length} kanji found'));
+                    }
+                    return Container();
                   },
-                )),
-          ],
-        ));
+                ),
+              )
+            ],
+          ),
+          body: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: StreamBuilder(
+                  stream: SearchBloc.instance.results,
+                  builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                    if (snapshot.hasData) {
+                      var kanjis = snapshot.data;
+
+                      return kanjis.isNotEmpty
+                          ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
+                          : Center(
+                        child: Text(
+                          'No results found _(┐「ε:)_',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: AnimatedBuilder(
+                    animation: animationController,
+                    child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              runSpacing: 12,
+                              spacing: 12,
+                              children: <Widget>[
+                                SizedBox(width: 12),
+                                for (var n in jlptMap.keys)
+                                  FilterChip(
+                                      selected: jlptMap[n],
+                                      elevation: 4,
+                                      label: Text("N$n"),
+                                      onSelected: (val) {
+                                        setState(() {
+                                          jlptMap[n] = !jlptMap[n];
+                                        });
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+                                      })
+                              ],
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              spacing: 8,
+                              children: <Widget>[
+                                SizedBox(width: 12),
+                                for (var g in gradeMap.keys)
+                                  FilterChip(
+                                      selected: gradeMap[g],
+                                      elevation: 4,
+                                      label: Text(getGradeStr(g)),
+                                      onSelected: (val) {
+                                        setState(() {
+                                          gradeMap[g] = !gradeMap[g];
+                                        });
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+                                      })
+                              ],
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              spacing: 8,
+                              children: <Widget>[
+                                SizedBox(width: 12),
+                                for (var r in radicalsMap.keys.toList().sublist(0, 4))
+                                  FilterChip(
+                                      selected: radicalsMap[r],
+                                      elevation: 4,
+                                      label: Text(r),
+                                      onSelected: (val) {
+                                        setState(() {
+                                          radicalsMap[r] = !radicalsMap[r];
+                                        });
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+                                      }),
+                                for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
+                                  FilterChip(
+                                      selected: true,
+                                      elevation: 4,
+                                      label: Text(r),
+                                      onSelected: (val) {
+                                        setState(() {
+                                          radicalsMap[r] = !radicalsMap[r];
+                                        });
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+                                      }),
+                                Hero(
+                                  tag: 'hero',
+                                  child: MaterialButton(
+                                    onPressed: showRadicalsDialog,
+                                    child: Text('More Radicals'),
+                                    shape: StadiumBorder(),
+                                    color: Colors.grey,
+                                    height: 32,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    builder: (_, child) {
+                      return Opacity(
+                        opacity: animationController.value,
+                        child: animationController.value <= 0 ? Container() : child,
+                      );
+                    },
+                  )),
+            ],
+          )),
+    );
   }
 
   showRadicalsDialog() {

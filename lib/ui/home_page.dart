@@ -19,6 +19,7 @@ import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/bloc/kana_bloc.dart';
 import 'package:kanji_dictionary/bloc/siri_suggestion_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'components/compact_kanji_list_tile.dart';
 import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';
 import 'kanji_detail_page.dart';
@@ -454,7 +455,7 @@ class HomePageState extends State<HomePage>
                       child: StreamBuilder(
                     stream: SearchBloc.instance.results,
                     builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                      if (isEntering &&
+                      if (
                           snapshot.hasData &&
                           snapshot.data.isNotEmpty) {
                         var kanjis = snapshot.data;
@@ -472,7 +473,7 @@ class HomePageState extends State<HomePage>
                                 children: kanjis
                                     .map((e) => Material(
                                           color: Theme.of(context).primaryColor,
-                                          child: KanjiListTile(
+                                          child: CompactKanjiListTile(
                                             kanji: e,
                                           ),
                                         ))

@@ -50,14 +50,12 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
         appBar: AppBar(
           //title: Text('日本語能力試験漢字'),
           title: FuriganaText(
-            text: '日本語能力試験漢字',
+            text: '日能試漢字',
             tokens: [
-              Token(text: '日本語', furigana: 'にほんご'),
-              Token(text: '能力', furigana: 'のうりょく'),
-              Token(text: '試験', furigana: 'しけん'),
+              Token(text: '日能試', furigana: 'にのうし'),
               Token(text: '漢字', furigana: 'かんじ')
             ],
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             IconButton(

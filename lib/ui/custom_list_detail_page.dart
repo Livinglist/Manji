@@ -276,6 +276,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
 
   Widget buildListView(List<Kanji> kanjis) {
     return ListView.separated(
+      shrinkWrap: true,
         controller: listViewScrollController,
         itemBuilder: (_, index) {
           var kanji = kanjis[index];

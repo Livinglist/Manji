@@ -55,27 +55,23 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 24,
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width / 13,
-                      ),
-                      ...['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                          .map((e) => Container(
-                              width: MediaQuery.of(context).size.width / 13,
+                  child: GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 13,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    children: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                        .map(
+                          (e) => Container(
                               child: Center(
-                                child: Text(
-                                  e,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )))
-                          .toList()
-                    ],
+                            child: Text(
+                              e,
+                              style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                        )
+                        .toList(),
                   ),
                 ))),
         body: ActivityGridView(scrollController: scrollController, scaffoldKey: scaffoldKey, dateToKanjisMap: dateToKanjisMap));
@@ -115,7 +111,15 @@ class ActivityGridView extends StatelessWidget {
     for (var i in kanjisByYears.keys.isEmpty ? [DateTime.now().year] : kanjisByYears.keys.toList()
       ..sort((a, b) => a.compareTo(b))) {
       for (var d in Iterable.generate(31)) {
-        children.add(Container(height: 12, width: 12, child: Center(child: Text((d + 1).toString(), style: TextStyle(color: Colors.white)))));
+        children.add(Container(
+            height: 12,
+            width: 12,
+            child: Center(
+                child: Text(
+              (d + 1).toString(),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ))));
         for (var m in Iterable.generate(12)) {
           var date = DateTime(i, m + 1, d + 1);
           if (dateToKanjisMap.containsKey(date)) {
@@ -146,8 +150,8 @@ class ActivityGridView extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         color: Theme.of(context).primaryColor,
         child: Container(
-          decoration:
-              BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+          decoration: BoxDecoration(
+              color: Colors.transparent, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           height: 500,
           child: Column(
             children: [
@@ -160,7 +164,8 @@ class ActivityGridView extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.all(2),
                         child: Center(
-                            child: Text("${months[date.month]} ${toDayString(date.day)} ${date.year}", style: TextStyle(color: Colors.white70)))),
+                            child: Text("${months[date.month]} ${toDayString(date.day)} ${date.year}",
+                                style: TextStyle(color: Colors.white70)))),
                     ...kanjis.map((kanji) => KanjiListTile(kanji: kanji)).toList(),
                     SizedBox(height: 12)
                   ],
@@ -170,7 +175,9 @@ class ActivityGridView extends StatelessWidget {
           ),
         ),
       );
-    }, shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))), elevation: 8);
+    },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+        elevation: 8);
   }
 
   String toDayString(int day) {

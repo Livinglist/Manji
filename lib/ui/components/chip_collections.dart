@@ -53,8 +53,11 @@ class StrokeChip extends StatelessWidget {
   final Color color;
   final int stokeCount;
   final String label;
+  final bool isCompact;
 
-  StrokeChip({this.color = Colors.white, this.stokeCount}) : label = "$stokeCount stroke" + (stokeCount == 1 ? "" : "s");
+  StrokeChip({this.color = Colors.white, this.stokeCount}) : isCompact = false, label = "$stokeCount stroke" + (stokeCount == 1 ? "" : "s");
+
+  StrokeChip.compact({this.color = Colors.white, this.stokeCount}) : isCompact = true, label = "$stokeCount stroke" + (stokeCount == 1 ? "" : "s");
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class StrokeChip extends StatelessWidget {
             padding: EdgeInsets.all(4),
             child: Text(
               label,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: isCompact ? 12 : 18, fontWeight: FontWeight.bold),
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
@@ -82,8 +85,11 @@ class JLPTChip extends StatelessWidget {
   final Color color;
   final int jlpt;
   final String label;
+  final bool isCompact;
 
-  JLPTChip({this.color = Colors.white, this.jlpt}) : label = "N$jlpt";
+  JLPTChip({this.color = Colors.white, this.jlpt}) : isCompact = false, label = "N$jlpt";
+
+  JLPTChip.compact({this.color = Colors.white, this.jlpt}): isCompact = true, label = "N$jlpt";
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +101,7 @@ class JLPTChip extends StatelessWidget {
             padding: EdgeInsets.all(4),
             child: Text(
               label,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: isCompact ? 12 : 18, fontWeight: FontWeight.bold),
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],

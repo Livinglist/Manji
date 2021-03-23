@@ -156,28 +156,27 @@ class _MyListPageState extends State<MyListPage> {
 
   void showNameChangingDialog(KanjiList kanjiList) {
     textEditingController.text = kanjiList.name;
-    showCupertinoDialog(
+    showDialog(
         context: context,
         builder: (_) {
-          return CupertinoAlertDialog(
+          return AlertDialog(
             title: Text('Edit name of ${kanjiList.name}'),
-            content: Flex(
-              direction: Axis.vertical,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 SizedBox(height: 12),
-                CupertinoTextField(
-                  style: TextStyle(color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black : Colors.white),
+                TextField(
                   controller: textEditingController,
                 )
               ],
             ),
             actions: <Widget>[
-              CupertinoActionSheetAction(
+              TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: Text("Cancel")),
-              CupertinoActionSheetAction(
+              TextButton(
                   onPressed: () {
                     var name = textEditingController.text;
                     if (name.isNotEmpty) {
@@ -186,8 +185,7 @@ class _MyListPageState extends State<MyListPage> {
                       KanjiListBloc.instance.changeName(kanjiList, name);
                     }
                   },
-                  child: Text("Confirm"),
-                  isDefaultAction: true),
+                  child: Text("Confirm")),
             ],
           );
         }).whenComplete(() {
@@ -196,28 +194,27 @@ class _MyListPageState extends State<MyListPage> {
     });
   }
 
-  void showCreatingDialog() => showCupertinoDialog(
+  void showCreatingDialog() => showDialog(
       context: context,
       builder: (_) {
-        return CupertinoAlertDialog(
+        return AlertDialog(
           title: Text("Create a list"),
-          content: Flex(
-            direction: Axis.vertical,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 12),
-              CupertinoTextField(
-                style: TextStyle(color: Colors.black),
+              TextField(
+                decoration: InputDecoration(labelText: "Enter the name of this list"),
                 controller: textEditingController,
               )
             ],
           ),
           actions: <Widget>[
-            CupertinoActionSheetAction(
+            TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: Text("Cancel", style: actionTextStyle)),
-            CupertinoActionSheetAction(
+            TextButton(
                 onPressed: () {
                   var name = textEditingController.text;
                   if (name.isNotEmpty) {
@@ -226,8 +223,7 @@ class _MyListPageState extends State<MyListPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text("Confirm", style: actionTextStyle),
-                isDefaultAction: true),
+                child: Text("Confirm", style: actionTextStyle)),
           ],
         );
       });
