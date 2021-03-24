@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,9 +50,53 @@ class KanjiListBloc {
     }
   }
 
+  void addWord(KanjiList kanjiList, Word word){
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    var jsonStr = jsonEncode(word.toMap());
+    temp.kanjiStrs.add(jsonStr);
+    repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
+  }
+
+  void addSentence(KanjiList kanjiList, Sentence sentence){
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    var jsonStr = jsonEncode(sentence.toMap());
+    temp.kanjiStrs.add(jsonStr);
+    repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
+  }
+
   void addKanji(KanjiList kanjiList, String kanjiStr) {
     var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     temp.kanjiStrs.add(kanjiStr);
+    repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
+  }
+
+  void removeWord(KanjiList kanjiList, Word word) {
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    var jsonStr = jsonEncode(word.toMap());
+    temp.kanjiStrs.remove(jsonStr);
+    repo.updateKanjiListKanjis(temp);
+    if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
+    if (FirebaseAuth.instance.currentUser != null) {
+      repo.uploadKanjiList(kanjiList);
+    }
+  }
+
+  void removeSentence(KanjiList kanjiList, Sentence sentence) {
+    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    var jsonStr = jsonEncode(sentence.toMap());
+    temp.kanjiStrs.remove(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
     if (FirebaseAuth.instance.currentUser != null) {

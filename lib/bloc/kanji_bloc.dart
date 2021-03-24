@@ -107,21 +107,9 @@ class KanjiBloc {
     });
   }
 
-//  void fetchKanjisByGrade(int grade) {
-//    Future<List<Kanji>>(() {
-//      var targetKanjis = _allKanjisMap.values.where((kanji) => kanji.grade == grade).toList();
-//      return targetKanjis;
-//    }).then((kanjis) {
-//      _kanjis = kanjis;
-//      if (!_kanjisFetcher.isClosed) {
-//        _kanjisFetcher.add(_kanjis);
-//      }
-//    });
-//  }
-
   void fetchKanjisByKanjiStrs(List<String> kanjiStrs) {
     if (!_kanjisFetcher.isClosed) {
-      _kanjisFetcher.add(kanjiStrs.map((str) => _allKanjisMap[str]).toList());
+      _kanjisFetcher.add(kanjiStrs.map((str) => str.length == 1 ? _allKanjisMap[str] : null).toList()..removeWhere((e) => e == null));
     }
   }
 

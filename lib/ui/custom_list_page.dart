@@ -82,6 +82,25 @@ class _MyListPageState extends State<MyListPage> {
                   controller: scrollController,
                   itemBuilder: (_, index) {
                     var kanjiList = kanjiLists[index];
+
+                    var subtitle = '';
+
+                    if(kanjiList.kanjiCount > 0){
+                      subtitle += '${kanjiList.kanjiCount} Kanji';
+                    }
+
+                    if(kanjiList.wordCount > 0){
+                      subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
+                    }
+
+                    if(kanjiList.sentenceCount > 0){
+                      subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
+                    }
+
+                    if(subtitle.isEmpty){
+                      subtitle = 'Empty';
+                    }
+
                     return Dismissible(
                         key: ObjectKey(kanjiList),
                         onDismissed: (_) => onDismissed(kanjiList),
@@ -100,7 +119,7 @@ class _MyListPageState extends State<MyListPage> {
                             kanjiList.name,
                             style: TextStyle(color: Colors.white),
                           ),
-                          subtitle: Text('${kanjiList.kanjiStrs.length} Kanji'),
+                          subtitle: Text(subtitle),
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (_) => ListDetailPage(kanjiList: kanjiList)));
                           },

@@ -6,7 +6,34 @@ class KanjiList {
   String name;
   List<String> kanjiStrs;
 
+  int get kanjiCount {
+    return kanjiStrs.where((e) => e.length == 1).length;
+  }
+
+  int get wordCount {
+    var count = 0;
+
+    for(var item in kanjiStrs.where((e) => e.length > 1)){
+      Map json = jsonDecode(item);
+      if(json.containsKey('meanings')) count++;
+    }
+
+    return count;
+  }
+
+  int get sentenceCount {
+    var count = 0;
+
+    for(var item in kanjiStrs.where((e) => e.length > 1)){
+      Map json = jsonDecode(item);
+      if(!json.containsKey('meanings')) count++;
+    }
+
+    return count;
+  }
+
   KanjiList({this.name, this.kanjiStrs}) : uid = Uuid().v1();
+
   KanjiList.from({this.name, this.kanjiStrs, this.uid});
 
   KanjiList.fromMap(Map map) {

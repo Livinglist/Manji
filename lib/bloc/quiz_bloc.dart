@@ -13,9 +13,8 @@ class QuizBloc {
   Stream<Quiz> get quiz => _quizFetcher.stream;
 
   void generateQuiz(List<Kanji> kanjis) {
-    compute<List<Kanji>, Quiz>(generate, kanjis).then((quiz) {
-      if (_quizFetcher.isClosed == false) _quizFetcher.sink.add(quiz);
-    });
+    var quiz = generate(kanjis);
+    if (_quizFetcher.isClosed == false) _quizFetcher.sink.add(quiz);
   }
 
   List<Kanji> generateQuizFromJLPT(int jlpt, {int amount = 0}) {
@@ -50,7 +49,7 @@ Quiz generate(List<Kanji> kanjis) {
 
       //KanjiToMeaning
       var random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
-      while (random == i || (i - random <= 2 && i - random > 0)) {
+      while (random == i) {
         random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
       }
       var a = kanjis[random].meaning;
@@ -61,7 +60,7 @@ Quiz generate(List<Kanji> kanjis) {
 
       //KanjiToHiragana
       random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
-      while (random == i || (i - random <= 2 && i - random > 0)) {
+      while (random == i) {
         print('i: $i random: $random');
         random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
       }

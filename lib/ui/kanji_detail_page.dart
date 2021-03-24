@@ -155,9 +155,27 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                               var kanjiList = kanjiLists[index];
                               var isInList = KanjiListBloc.instance.isInList(kanjiList, kanjiStr);
 
+                              var subtitle = '';
+
+                              if(kanjiList.kanjiCount > 0){
+                                subtitle += '${kanjiList.kanjiCount} Kanji';
+                              }
+
+                              if(kanjiList.wordCount > 0){
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
+                              }
+
+                              if(kanjiList.sentenceCount > 0){
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
+                              }
+
+                              if(subtitle.isEmpty){
+                                subtitle = 'Empty';
+                              }
+
                               return ListTile(
                                 title: Text(kanjiLists[index].name, style: TextStyle(color: isInList ? Colors.black54 : Colors.black)),
-                                subtitle: Text('${kanjiLists[index].kanjiStrs.length} Kanji'),
+                                subtitle: Text(subtitle),
                                 onTap: () {
                                   Navigator.pop(context);
                                   if (isInList) {
@@ -670,15 +688,15 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       }
 
       if (words.isEmpty) {
-        tileChildren.add(Container(
-          height: 100,
-          child: Center(
-            child: Text(
-              'No compound words found _(┐「ε:)_',
-              style: TextStyle(color: Colors.white54),
-            ),
-          ),
-        ));
+        // tileChildren.add(Container(
+        //   height: 100,
+        //   child: Center(
+        //     child: Text(
+        //       'No compound words found _(┐「ε:)_',
+        //       style: TextStyle(color: Colors.white54),
+        //     ),
+        //   ),
+        // ));
       } else {
         tileChildren.removeLast();
       }
@@ -781,15 +799,15 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
       }
 
       if (words.isEmpty) {
-        tileChildren.add(Container(
-          height: 100,
-          child: Center(
-            child: Text(
-              'No compound words found _(┐「ε:)_',
-              style: TextStyle(color: Colors.white54),
-            ),
-          ),
-        ));
+        // tileChildren.add(Container(
+        //   height: 100,
+        //   child: Center(
+        //     child: Text(
+        //       'No compound words found _(┐「ε:)_',
+        //       style: TextStyle(color: Colors.white54),
+        //     ),
+        //   ),
+        // ));
       } else {
         tileChildren.removeLast();
       }

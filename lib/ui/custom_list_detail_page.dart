@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:feature_discovery/feature_discovery.dart';
@@ -9,6 +10,9 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 
 import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import 'package:kanji_dictionary/ui/sentence_detail_page.dart';
+import 'package:kanji_dictionary/ui/word_detail_page.dart';
+import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
 import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
@@ -98,6 +102,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
             StreamBuilder(
               stream: KanjiBloc.instance.kanjis,
               builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+
+                print("snapshot: ${snapshot.data}");
+
                 return DescribedFeatureOverlay(
                   featureId: 'study_kanji',
                   // Unique id that identifies this overlay.
@@ -181,15 +188,28 @@ class _ListDetailPageState extends State<ListDetailPage> {
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
             if (snapshot.hasData) {
               var kanjis = snapshot.data;
-              //kanjis.sort((kanjiLeft, kanjiRight)=>kanjiLeft.strokes.compareTo(kanjiRight.strokes));
-              //return KanjiGridView(kanjis: kanjis);
+
+              var words = <Word>[];
+              var sentences = <Sentence>[];
+
+              for(var item in widget.kanjiList.kanjiStrs.where((e) => e.length > 1)){
+                Map json = jsonDecode(item);
+                if(json.containsKey('meanings')){
+                  var word = Word.fromMap(json);
+                  words.add(word);
+                }else{
+                  var sentence = Sentence.fromMap(json);
+                  sentences.add(sentence);
+                }
+              }
+
               if (sortByStrokes) {
                 kanjis.sort((a, b) => a.strokes.compareTo(b.strokes));
               } else {
                 kanjis = snapshot.data;
               }
 
-              if (kanjis.isEmpty) {
+              if (kanjis.isEmpty && words.isEmpty && sentences.isEmpty) {
                 return Container(
                   height: 200,
                   width: MediaQuery.of(context).size.width,
@@ -204,7 +224,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
 
               return AnimatedCrossFade(
                   firstChild: buildGridView(kanjis),
-                  secondChild: buildListView(kanjis),
+                  secondChild: buildListView(kanjis, words, sentences),
                   crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                   duration: Duration(milliseconds: 200));
             } else {
@@ -237,6 +257,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   }
 
   Widget buildGridView(List<Kanji> kanjis) {
+    print("Gridview: $kanjis");
     return GridView.count(
         controller: gridViewScrollController,
         scrollDirection: Axis.vertical,
@@ -274,31 +295,106 @@ class _ListDetailPageState extends State<ListDetailPage> {
         }));
   }
 
-  Widget buildListView(List<Kanji> kanjis) {
+  Widget buildListView(List<Kanji> kanjis, List<Word> words, List<Sentence> sentences) {
     return ListView.separated(
       shrinkWrap: true,
         controller: listViewScrollController,
         itemBuilder: (_, index) {
-          var kanji = kanjis[index];
+          if(index < kanjis.length) {
+            var kanji = kanjis[index];
 
-          return Dismissible(
-              direction: DismissDirection.endToStart,
-              key: ObjectKey(kanji),
-              onDismissed: (_) => onDismissed(kanji),
-              confirmDismiss: (_) => confirmDismiss(kanji),
-              background: Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 20.0),
-                color: Colors.red,
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
+            return Dismissible(
+                direction: DismissDirection.endToStart,
+                key: ObjectKey(kanji),
+                onDismissed: (_) => onDismissed(kanji),
+                confirmDismiss: (_) => confirmDismiss(kanji),
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.red,
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              child: KanjiListTile(kanji: kanji));
+                child: KanjiListTile(kanji: kanji));
+          }else if(index < (kanjis.length + words.length)){
+            index = index - kanjis.length;
+            var word = words[index];
+
+            return Dismissible(
+                direction: DismissDirection.endToStart,
+                key: UniqueKey(),
+                onDismissed: (_) => onWordDismissed(word),
+                //confirmDismiss: (_) => confirmDismiss(kanji),
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.red,
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+                  },
+                  onLongPress: () {
+
+                  },
+                  title: FuriganaText(
+                    text: word.wordText,
+                    tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+                ));
+          }else{
+            index = index - kanjis.length - words.length;
+            var sentence = sentences[index];
+
+            return Dismissible(
+                direction: DismissDirection.endToStart,
+                key: UniqueKey(),
+                onDismissed: (_) => onSentenceDismissed(sentence),
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.red,
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+                child: ListTile(
+                  title: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: FuriganaText(
+                        text: sentence.text,
+                        tokens: sentence.tokens,
+                        style: TextStyle(fontSize: 20),
+                      )),
+                  subtitle: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      sentence.englishText,
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => SentenceDetailPage(
+                              sentence: sentence,
+                            )));
+                  },
+                ));
+          }
         },
         separatorBuilder: (_, __) => Divider(height: 0),
-        itemCount: kanjis.length);
+        itemCount: kanjis.length + words.length + sentences.length);
   }
 
   Future<bool> confirmDismiss(Kanji kanji) async {
@@ -332,5 +428,17 @@ class _ListDetailPageState extends State<ListDetailPage> {
     widget.kanjiList.kanjiStrs.remove(kanji.kanji);
     KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
     KanjiListBloc.instance.removeKanji(widget.kanjiList, dismissedKanji);
+  }
+
+  void onWordDismissed(Word word) {
+    widget.kanjiList.kanjiStrs.remove(jsonEncode(word.toMap()));
+    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+    KanjiListBloc.instance.removeWord(widget.kanjiList, word);
+  }
+
+  void onSentenceDismissed(Sentence sentence){
+    widget.kanjiList.kanjiStrs.remove(jsonEncode(sentence.toMap()));
+    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+    KanjiListBloc.instance.removeSentence(widget.kanjiList, sentence);
   }
 }

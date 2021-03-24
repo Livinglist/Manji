@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 
 import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/word.dart';
@@ -71,7 +72,11 @@ class WordDetailPageState extends State<WordDetailPage> {
             IconButton(
               icon: Icon(Icons.volume_up),
               onPressed: () => flutterTts.speak(widget.word.wordText),
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.playlist_add, size: 28),
+              onPressed: onAddPressed,
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -154,10 +159,6 @@ class WordDetailPageState extends State<WordDetailPage> {
                     }
                     for (var sentence in sentences) {
                       children.add(ListTile(
-//                        title: Text(
-//                          sentence.text,
-//                          style: TextStyle(color: Colors.white),
-//                        ),
                         title: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
@@ -225,6 +226,91 @@ class WordDetailPageState extends State<WordDetailPage> {
             ],
           ),
         ));
+  }
+
+  void onAddPressed() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Material(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                child: StreamBuilder(
+                    stream: KanjiListBloc.instance.kanjiLists,
+                    builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+                      if (snapshot.hasData) {
+                        var kanjiLists = snapshot.data;
+
+                        if (kanjiLists.isEmpty) {
+                          return Container(
+                            height: 200,
+                            child: Center(
+                              child: Text(
+                                "You don't have any list yet.",
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (_, index) {
+                              var kanjiList = kanjiLists[index];
+                              //var isInList = KanjiListBloc.instance.isInList(kanjiList);
+
+                              var subtitle = '';
+
+                              if(kanjiList.kanjiCount > 0){
+                                subtitle += '${kanjiList.kanjiCount} Kanji';
+                              }
+
+                              if(kanjiList.wordCount > 0){
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
+                              }
+
+                              if(kanjiList.sentenceCount > 0){
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
+                              }
+
+                              if(subtitle.isEmpty){
+                                subtitle = 'Empty';
+                              }
+
+                              return ListTile(
+                                title: Text(kanjiLists[index].name, style: TextStyle(color: Colors.black)),
+                                subtitle: Text(subtitle),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  KanjiListBloc.instance.addWord(kanjiList, widget.word);
+                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                      '${widget.word.wordText} has been added to ${kanjiList.name}',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    backgroundColor: Theme.of(context).accentColor,
+                                    action: SnackBarAction(
+                                      label: 'Dismiss',
+                                      onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                                      textColor: Colors.blueGrey,
+                                    ),
+                                  ));
+                                },
+                              );
+                            },
+                            separatorBuilder: (_, index) => Divider(height: 0),
+                            itemCount: kanjiLists.length);
+                      } else {
+                        return Container();
+                      }
+                    }),
+              ),
+            ),
+          );
+        });
   }
 
   List<String> getKanjis(String str) {

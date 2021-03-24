@@ -1,12 +1,9 @@
 enum WordType { noun, verb, adjective }
 
 class Word {
-  //String kanji;
   String wordText;
   String wordFurigana;
   String meanings;
-//  bool containsKanji;
-//  bool containsFurigana;
 
   Word({this.wordText, this.wordFurigana, this.meanings});
 

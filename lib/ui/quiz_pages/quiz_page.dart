@@ -20,7 +20,6 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   static final actionTextStyle = TextStyle(color: Colors.blue);
-
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool showShadow = false;
@@ -133,10 +132,11 @@ class _QuizPageState extends State<QuizPage> {
           kanjiList.name,
           style: TextStyle(color: Colors.white),
         ),
-        subtitle: Text('${kanjiList.kanjiStrs.length} Kanji'),
+        subtitle: Text('${kanjiList.kanjiCount} Kanji'),
         onTap: () {
-          if (kanjiList.kanjiStrs.isNotEmpty)
-            showAmountDialog(kanjiList.kanjiStrs.map((str) => KanjiBloc.instance.allKanjisMap[str]).toList(), kanjiList.name);
+          if (kanjiList.kanjiCount != 0)
+            showAmountDialog(kanjiList.kanjiStrs.where((e) => e.length == 1).map((str) => KanjiBloc.instance.allKanjisMap[str]).toList(),
+                kanjiList.name);
           else
             ScaffoldMessenger.of(context).showSnackBar(WarningSnackBar(message: "List is empty."));
         },
