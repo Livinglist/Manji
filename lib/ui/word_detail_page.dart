@@ -91,6 +91,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                 child: Text(
                   widget.word.meanings,
                   style: TextStyle(color: Colors.white54, fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
               ),
               if (widget.word.wordText.length > 1)
