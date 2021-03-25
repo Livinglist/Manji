@@ -13,6 +13,7 @@ import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
 import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 import 'package:kanji_dictionary/ui/components/fancy_icon_button.dart';
+import 'components/spring_curve.dart';
 import 'kana_detail_page.dart';
 import 'sentence_detail_page.dart';
 import 'word_detail_page.dart';
@@ -157,19 +158,19 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
                               var subtitle = '';
 
-                              if(kanjiList.kanjiCount > 0){
+                              if (kanjiList.kanjiCount > 0) {
                                 subtitle += '${kanjiList.kanjiCount} Kanji';
                               }
 
-                              if(kanjiList.wordCount > 0){
+                              if (kanjiList.wordCount > 0) {
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
                               }
 
-                              if(kanjiList.sentenceCount > 0){
+                              if (kanjiList.sentenceCount > 0) {
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
                               }
 
-                              if(subtitle.isEmpty){
+                              if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
                               }
 
@@ -335,7 +336,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
             ),
             IconButton(
                 icon: AnimatedCrossFade(
-                    firstChild: Icon(FontAwesomeIcons.solidBookmark, color: Colors.teal),
+                    firstChild: Icon(FontAwesomeIcons.solidBookmark, color: Colors.teal, size: 24),
                     secondChild: Icon(FontAwesomeIcons.bookmark),
                     crossFadeState: isStared ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                     duration: Duration(microseconds: 200)),
@@ -358,7 +359,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               AnimatedBuilder(
                 animation: animationController,
                 child: Container(
-                  //constraints: BoxConstraints(minWidth: 100, maxWidth: 240, minHeight: 100, maxHeight: 240),
                   child: Flex(
                     direction: Axis.horizontal,
                     children: <Widget>[
@@ -375,9 +375,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                 child: Center(
                                     child: KanjiBlock(
                                         kanjiStr: widget.kanjiStr ?? widget.kanji.kanji,
-                                        scaleFactor: computeScaleFactor(kanjiBlockHeight > 360 ? 360 : kanjiBlockHeight))
-                                    //child: Text(widget.kanjiStr ?? widget.kanji.kanji, style: TextStyle(fontFamily: 'strokeOrders', fontSize: 148))
-                                    )),
+                                        scaleFactor: computeScaleFactor(kanjiBlockHeight > 360 ? 360 : kanjiBlockHeight)))),
                           ),
                           flex: 1),
                       Flexible(child: buildKanjiInfoColumn(), flex: 1),
@@ -984,18 +982,21 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
     yomiTextEditingController.text = yomi.replaceFirst('.', '');
 
-    CustomBottomSheet.showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return Container(
-            height: 360,
+    showGeneralDialog(
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 300),
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Material(
             color: Colors.transparent,
             child: Container(
               height: 360,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                  color: Theme.of(context).primaryColor),
+              margin: EdgeInsets.only(top: 48, left: 12, right: 12),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Theme.of(context).primaryColor),
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.disabled,
@@ -1040,10 +1041,14 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                           },
                           controller: yomiTextEditingController,
                           decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: isOnyomi ? 'Onyomi' : 'Kunyomi',
-                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                            focusColor: Colors.white,
+                            labelText: isOnyomi ? 'Onyomi' : 'Kunyomi',
+                            labelStyle: TextStyle(color: Colors.white70),
+                            border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                           minLines: 1,
                           maxLines: 1,
                         )),
@@ -1059,10 +1064,14 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                         },
                         controller: wordTextEditingController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Word',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                          focusColor: Colors.white,
+                          labelText: 'Word',
+                          labelStyle: TextStyle(color: Colors.white70),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                        ),
+                        style: TextStyle(color: Colors.white),
                         minLines: 1,
                         maxLines: 1,
                       ),
@@ -1079,25 +1088,32 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                         },
                         controller: meaningTextEditingController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Meaning',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25)))),
+                          focusColor: Colors.white,
+                          labelText: 'Meaning',
+                          labelStyle: TextStyle(color: Colors.white70),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                        ),
+                        style: TextStyle(color: Colors.white),
                         minLines: 1,
                         maxLines: 1,
                       ),
                     ),
                     SizedBox(
-                      height: 12,
+                      height: 24,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Container(
                           width: MediaQuery.of(context).size.width - 24,
                           height: 42,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21))),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
                           child: ElevatedButton(
-                              child: Text('Add'),
+                              child: Text(
+                                'Add',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               onPressed: () {
                                 if (formKey.currentState.validate()) {
                                   if (isOnyomi) {
@@ -1121,8 +1137,16 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return SlideTransition(
+          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
+          child: child,
+        );
+      },
+    );
   }
 
   launchURL(String targetKanji) async {
