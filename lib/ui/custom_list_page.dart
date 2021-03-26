@@ -93,9 +93,13 @@ class _MyListPageState extends State<MyListPage> {
                       subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
                     }
 
+                    if(kanjiList.wordCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+
                     if(kanjiList.sentenceCount > 0){
                       subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
                     }
+
+                    if(kanjiList.sentenceCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
 
                     if(subtitle.isEmpty){
                       subtitle = 'Empty';

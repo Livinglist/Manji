@@ -134,7 +134,8 @@ class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMix
                       );
                     }
                     var kanjiList = kanjiLists[index - 5];
-                    var kanjis = kanjiList.kanjiStrs.map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
+                    var kanjis = kanjiList.kanjiStrs.where((e) => e.length == 1).map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
+
                     return ProgressListTile(
                         title: kanjiList.name,
                         progress: computeListProgress(kanjis),

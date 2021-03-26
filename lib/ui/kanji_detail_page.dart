@@ -158,19 +158,23 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
                               var subtitle = '';
 
-                              if (kanjiList.kanjiCount > 0) {
+                              if(kanjiList.kanjiCount > 0){
                                 subtitle += '${kanjiList.kanjiCount} Kanji';
                               }
 
-                              if (kanjiList.wordCount > 0) {
+                              if(kanjiList.wordCount > 0){
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
                               }
 
-                              if (kanjiList.sentenceCount > 0) {
+                              if(kanjiList.wordCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+
+                              if(kanjiList.sentenceCount > 0){
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
                               }
 
-                              if (subtitle.isEmpty) {
+                              if(kanjiList.sentenceCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+
+                              if(subtitle.isEmpty){
                                 subtitle = 'Empty';
                               }
 
