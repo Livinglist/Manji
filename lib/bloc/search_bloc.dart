@@ -15,6 +15,7 @@ class SearchBloc {
   Stream<List<Kanji>> get results => _resultsFetcher.stream;
 
   List<Kanji> get _allKanjisList => KanjiBloc.instance.allKanjisList;
+
   Map<String, Kanji> get _allKanjisMap => KanjiBloc.instance.allKanjisMap;
 
   void clear() {
@@ -107,14 +108,12 @@ class SearchBloc {
       }
 
       if (hiraganaText.isEmpty) {
-        var onyomiWords = kanji.onyomiWords.where((word) =>
-            word.meanings.contains(text) || word.wordText.contains(text));
+        var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
         if (onyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
         }
-        var kunyomiWords = kanji.kunyomiWords.where((word) =>
-            word.meanings.contains(text) || word.wordText.contains(text));
+        var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
         if (kunyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
@@ -125,29 +124,39 @@ class SearchBloc {
     _resultsFetcher.sink.add(kanjiSet.toList());
   }
 
-  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
-      Map<String, bool> radicalsMap) {
+  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
 
+    this.clear();
+
     _filterKanjiStream(jlptMap, gradeMap, radicalsMap).listen((kanji) {
-      list.add(kanji);
-      if (list.isEmpty) list = List.from(_allKanjisList);
-      list.sort((a, b) => a.strokes.compareTo(b.strokes));
-      _resultsFetcher.sink.add(list);
+      if (kanji == null) {
+        _resultsFetcher.sink.add(_allKanjisList);
+      } else {
+        list.add(kanji);
+
+        list.sort((a, b) => a.strokes.compareTo(b.strokes));
+
+        _resultsFetcher.sink.add(list);
+      }
     });
   }
 
-  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap,
-      Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
+  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
     bool jlptIsEmpty = !jlptMap.containsValue(true),
         gradeIsEmpty = !gradeMap.containsValue(true),
         radicalIsEmpty = !radicalsMap.containsValue(true);
 
-    for (var kanji in _allKanjisList) {
-      if (kanji.jlpt == 0) continue;
-      if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
-          (gradeIsEmpty || gradeMap[kanji.grade]) &&
-          (radicalIsEmpty || radicalsMap[kanji.radicals])) yield kanji;
+    if (jlptIsEmpty && gradeIsEmpty && radicalIsEmpty) {
+      yield null;
+    } else {
+      for (var kanji in _allKanjisList) {
+        if (kanji.jlpt == 0) continue;
+
+        if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
+            (gradeIsEmpty || gradeMap[kanji.grade]) &&
+            (radicalIsEmpty || radicalsMap[kanji.radicals])) yield kanji;
+      }
     }
   }
 
