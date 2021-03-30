@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import '../bloc/kanji_bloc.dart';
 import '../ui/kanji_recognize_page/resource/brain.dart';
 
 class KanjiRecognizeBloc {

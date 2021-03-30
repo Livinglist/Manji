@@ -1,6 +1,6 @@
-import 'package:kanji_dictionary/models/kanji.dart';
+import '../models/kanji.dart';
 
-export 'package:kanji_dictionary/models/kanji.dart';
+export '../models/kanji.dart';
 
 enum ContentType { kanji, meaning, yomi }
 

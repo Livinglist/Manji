@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/resource/shared_preferences_provider.dart';
+
+import '../bloc/kanji_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../resource/shared_preferences_provider.dart';
 
 class FirestoreProvider {
   FirestoreProvider._();

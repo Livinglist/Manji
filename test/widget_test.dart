@@ -32,8 +32,7 @@ void main() {
   ///Todo: implement tests.
 
   testWidgets('Kanji detail page test', (WidgetTester tester) async {
-    await tester.pumpWidget(
-        KanjiDetailPage(kanji: Kanji(kanji: '一', grade: 1, jlpt: 1, strokes: 1, frequency: 1)));
-
+    await tester.pumpWidget(KanjiDetailPage(
+        kanji: Kanji(kanji: '一', grade: 1, jlpt: 1, strokes: 1, frequency: 1)));
   });
 }

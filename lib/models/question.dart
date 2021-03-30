@@ -2,8 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:kanji_dictionary/resource/constants.dart';
-
+import '../resource/constants.dart';
 import 'kanji.dart';
 
 enum QuestionType {

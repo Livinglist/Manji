@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
-import 'package:kanji_dictionary/ui/components/furigana_text.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-
+import '../../bloc/kanji_bloc.dart';
+import '../../ui/components/furigana_text.dart';
+import '../../bloc/kanji_list_bloc.dart';
 import 'components/progress_list_tile.dart';
 import 'components/activity_panel.dart';
 import 'progress_detail_page.dart';

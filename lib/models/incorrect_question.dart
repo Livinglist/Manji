@@ -1,6 +1,6 @@
-import 'question.dart';
-
 import 'package:flutter/material.dart' show UniqueKey;
+
+import 'question.dart';
 
 class IncorrectQuestion extends Question {
   UniqueKey uniqueKey;

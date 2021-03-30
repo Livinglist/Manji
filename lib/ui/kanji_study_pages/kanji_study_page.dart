@@ -1,8 +1,9 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
+import '../../bloc/kanji_bloc.dart';
 import 'components/kanji_card.dart';
 import 'kanji_study_help_page.dart';
 

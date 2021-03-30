@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/kanji.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 
-import 'package:kanji_dictionary/models/word.dart';
+import '../models/sentence.dart';
+import '../models/kanji.dart';
+import '../models/word.dart';
 import 'firebase_api_provider.dart';
 import 'db_provider.dart';
 

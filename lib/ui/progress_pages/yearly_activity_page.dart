@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/ui/components/kanji_list_tile.dart';
+import '../../bloc/kanji_bloc.dart';
+import '../../ui/components/kanji_list_tile.dart';
 
 class YearlyActivityPage extends StatefulWidget {
   final Map<DateTime, List<Kanji>> dateToKanjisMap;

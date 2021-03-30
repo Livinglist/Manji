@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/models/sentence.dart';
+import '../bloc/kanji_bloc.dart';
+import '../models/kanji.dart';
+import '../models/sentence.dart';
 import 'db_provider.dart';
 import 'jisho_api_provider.dart';
 
@@ -14,12 +13,12 @@ class FirebaseApiProvider {
   final firestore = FirebaseFirestore.instance;
 
   void uploadKanjis(List<Kanji> kanjis, {bool overwrite = false}) {
-    debugPrint("Uploading kanjis to Firebase. overwrite is $overwrite");
+    print("Uploading kanjis to Firebase. overwrite is $overwrite");
     for (var kanji in kanjis) {
-      debugPrint('Uploading ${kanji.kanji} to Firebase.');
+      print('Uploading ${kanji.kanji} to Firebase.');
       uploadKanji(kanji, overwrite: overwrite);
     }
-    debugPrint('Uploading completed.');
+    print('Uploading completed.');
   }
 
   Future uploadKanji(Kanji kanji, {bool overwrite = false}) async {

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_device_type/flutter_device_type.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
+import '../../models/kanji.dart';
+import '../../ui/kanji_detail_page.dart';
 
 typedef void StringCallback(String str);
 

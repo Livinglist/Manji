@@ -5,9 +5,10 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:kanji_dictionary/resource/firestore_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../resource/firestore_provider.dart';
 
 export 'package:firebase_auth/firebase_auth.dart';
 

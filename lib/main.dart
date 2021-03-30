@@ -8,10 +8,10 @@ import 'package:feature_discovery/feature_discovery.dart';
 
 import 'ui/home_page.dart';
 import 'ui/components/home_page_background.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import 'bloc/kanji_bloc.dart';
+import 'bloc/siri_suggestion_bloc.dart';
 import 'resource/db_provider.dart';
 import 'resource/firebase_auth_provider.dart';
-import 'bloc/siri_suggestion_bloc.dart';
 
 void main() {
   runApp(MyApp());

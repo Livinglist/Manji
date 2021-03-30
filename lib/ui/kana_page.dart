@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:kanji_dictionary/bloc/kana_bloc.dart';
+import '../bloc/kana_bloc.dart';
 import 'components/furigana_text.dart';
 
 class KanaPage extends StatefulWidget {

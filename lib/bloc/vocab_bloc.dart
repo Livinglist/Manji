@@ -1,11 +1,11 @@
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/models/word.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
+import '../models/word.dart';
+import '../resource/repository.dart';
 
-export 'package:kanji_dictionary/models/kanji.dart';
-export 'package:kanji_dictionary/models/sentence.dart';
-export 'package:kanji_dictionary/models/word.dart';
+export '../models/kanji.dart';
+export '../models/sentence.dart';
+export '../models/word.dart';
 
 class VocabBloc {
   final _wordsFetcher = BehaviorSubject<List<Word>>();

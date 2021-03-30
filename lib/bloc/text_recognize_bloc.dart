@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:kanji_dictionary/resource/google_api_provider.dart';
+
+import '../resource/google_api_provider.dart';
 
 class TextRecognizeBloc {
   final _textFetcher = PublishSubject<String>();

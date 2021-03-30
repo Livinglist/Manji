@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/word.dart';
-import 'package:kanji_dictionary/ui/components/furigana_text.dart';
+import '../../models/sentence.dart';
+import '../../models/word.dart';
+import '../../ui/components/furigana_text.dart';
 
 class WordCard extends StatefulWidget {
   final Word word;

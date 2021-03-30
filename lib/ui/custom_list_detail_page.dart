@@ -8,13 +8,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/ui/sentence_detail_page.dart';
-import 'package:kanji_dictionary/ui/word_detail_page.dart';
+import '../bloc/kanji_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../ui/sentence_detail_page.dart';
+import '../ui/word_detail_page.dart';
+import '../ui/kanji_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
 
 ///This is the page that displays the list created by the user

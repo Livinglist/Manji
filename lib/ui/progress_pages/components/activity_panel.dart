@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import '../../../bloc/kanji_bloc.dart';
 import '../yearly_activity_page.dart';
 
 class ActivityPanel extends StatelessWidget {

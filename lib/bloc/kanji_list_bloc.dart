@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/utils/list_extension.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
+import '../utils/list_extension.dart';
+import '../resource/repository.dart';
+import '../resource/firebase_auth_provider.dart';
+import '../models/kanji_list.dart';
 
-import 'package:kanji_dictionary/models/kanji_list.dart';
-
-export 'package:kanji_dictionary/models/kanji_list.dart';
-export 'package:kanji_dictionary/models/kanji.dart';
+export '../models/kanji_list.dart';
+export '../models/kanji.dart';
 
 class KanjiListBloc {
   static final instance = KanjiListBloc();

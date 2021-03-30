@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
 
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/word.dart';
-import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
-import 'package:kanji_dictionary/ui/sentence_detail_page.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../models/sentence.dart';
+import '../models/word.dart';
+import '../bloc/sentence_bloc.dart';
+import '../ui/sentence_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'kanji_detail_page.dart';
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
+import '../models/sentence.dart';
+import '../bloc/kanji_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../utils/string_extension.dart';
 import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
-import 'package:kanji_dictionary/utils/string_extension.dart';
 
 class SentenceDetailPage extends StatefulWidget {
   final Sentence sentence;

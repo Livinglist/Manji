@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
-import 'package:kanji_dictionary/ui/components/chip_collections.dart';
+import '../../models/kanji.dart';
+import '../../bloc/kanji_bloc.dart';
+import '../../ui/kanji_detail_page.dart';
+import '../../ui/components/chip_collections.dart';
 
 class DailyKanjiCard extends StatefulWidget {
   @override

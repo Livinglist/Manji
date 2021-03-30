@@ -4,17 +4,17 @@ import 'dart:convert';
 import 'dart:collection';
 
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
-import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/word.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
+import '../models/kanji.dart';
+import '../models/sentence.dart';
+import '../models/word.dart';
+import '../resource/repository.dart';
+import '../resource/firebase_auth_provider.dart';
 
-export 'package:kanji_dictionary/models/kanji.dart';
-export 'package:kanji_dictionary/models/sentence.dart';
-export 'package:kanji_dictionary/models/word.dart';
+export '../models/kanji.dart';
+export '../models/sentence.dart';
+export '../models/word.dart';
 
 class KanjiBloc {
   static final instance = KanjiBloc._();

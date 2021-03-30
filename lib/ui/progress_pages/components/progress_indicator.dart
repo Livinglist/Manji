@@ -1,4 +1,5 @@
 import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 
 class ProgressIndicator extends StatefulWidget {

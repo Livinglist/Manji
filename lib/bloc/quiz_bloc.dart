@@ -1,11 +1,11 @@
 import 'dart:math' show Random;
 
 import 'package:flutter/foundation.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/models/quiz.dart';
+import '../bloc/kanji_bloc.dart';
+import '../models/kanji.dart';
+import '../models/quiz.dart';
 
 class QuizBloc {
   final _quizFetcher = BehaviorSubject<Quiz>();

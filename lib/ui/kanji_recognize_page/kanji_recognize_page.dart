@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import '../components/kanji_list_tile.dart';
-
-import 'resource/constants.dart';
+import '../../bloc/kanji_bloc.dart';
 import '../../bloc/kanji_recognize_bloc.dart';
+import '../components/kanji_list_tile.dart';
+import 'resource/constants.dart';
 
 class DrawingPainter extends CustomPainter {
   DrawingPainter({this.offsetPoints});

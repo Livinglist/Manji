@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:kanji_dictionary/ui/components/furigana_text.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/ui/custom_list_detail_page.dart';
+import '../ui/components/furigana_text.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../ui/custom_list_detail_page.dart';
 
 const actionTextStyle = TextStyle(color: Colors.blue);
 

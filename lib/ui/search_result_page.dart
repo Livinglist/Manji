@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/search_bloc.dart';
-import 'package:kanji_dictionary/ui/radicals_page.dart';
-
+import '../bloc/kanji_bloc.dart';
+import '../bloc/search_bloc.dart';
+import '../ui/radicals_page.dart';
 import 'components/kanji_list_tile.dart';
 import 'kanji_detail_page.dart';
 

@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/resource/repository.dart';
+import '../resource/repository.dart';
 
-export 'package:kanji_dictionary/models/kana.dart';
+export '../models/kana.dart';
 
 class KanaBloc {
   final _hiraganaFetcher = BehaviorSubject<List<Hiragana>>();

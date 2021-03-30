@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
+import '../bloc/kanji_bloc.dart';
 import 'components/kanji_grid_view.dart';
 import 'components/kanji_list_view.dart';
 

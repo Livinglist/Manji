@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' hide Image;
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as im;
 import 'package:tflite/tflite.dart';
+
 import 'constants.dart';
 
 export 'package:flutter/material.dart' show Offset;
@@ -94,10 +96,6 @@ class AppBrain {
     for (var i = 0; i < inputSize; i++) {
       for (var j = 0; j < inputSize; j++) {
         var pixel = image.getPixel(j, i);
-        //buffer[pixelIndex++] = (im.getRed(pixel) + im.getGreen(pixel) + im.getBlue(pixel)) / 3 / 255.0;
-//        int r = (im.getRed(pixel) >> 16) & 0xFF;
-//        int g = (im.getGreen(pixel) >> 8) & 0xFF;
-//        int b = im.getBlue(pixel) & 0xFF;
         int r = im.getRed(pixel);
         int g = im.getGreen(pixel);
         int b = im.getBlue(pixel);

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_device_type/flutter_device_type.dart';
 
-import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
-import 'package:kanji_dictionary/ui/components/furigana_text.dart';
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
-
+import '../../../bloc/sentence_bloc.dart';
+import '../../../ui/components/furigana_text.dart';
+import '../../../ui/kanji_detail_page.dart';
 import '../../../models/kanji_card_content.dart';
 
 export '../../../models/kanji_card_content.dart';

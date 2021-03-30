@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:confetti/confetti.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
 
-import 'package:kanji_dictionary/models/kanji_list.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/models/quiz.dart';
-import 'package:kanji_dictionary/models/quiz_result.dart';
+import '../../bloc/incorrect_question_bloc.dart';
+import '../../models/kanji_list.dart';
+import '../../bloc/kanji_bloc.dart';
+import '../../models/quiz.dart';
+import '../../models/quiz_result.dart';
 import '../../bloc/quiz_bloc.dart';
 import 'components/incorrect_question_list_tile.dart';
 import 'components/correct_question_list_tile.dart';

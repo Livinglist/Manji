@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:vibration/vibration.dart';
 

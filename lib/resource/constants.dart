@@ -32,6 +32,17 @@ class Keys {
   static String wordTextKey = 'wordText';
   static String wordFuriganaKey = 'wordFurigana';
   static String wordMeaningsKey = 'meanings';
+
+  ///Reserved for [SharedPrefs]
+  static String favKanjiStrsKey = 'favKanjiStrs';
+  static String starKanjiStrsKey = 'starKanjiStrs';
+  static String kanjiListStrKey = 'kanjiListStr';
+  static String uidsKey = 'uids';
+  static String lastFetchedAtKey = 'lastFetchedAt';
+}
+
+class Fonts {
+  static String kazei = 'kazei';
 }
 
 const Set<String> allVideoFiles = {

@@ -7,11 +7,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/kana.dart';
-import 'package:kanji_dictionary/models/question.dart';
-
+import '../models/kanji.dart';
+import '../models/sentence.dart';
+import '../models/kana.dart';
+import '../models/question.dart';
 import 'constants.dart';
 
 class DBProvider {

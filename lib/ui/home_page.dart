@@ -9,15 +9,15 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/search_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
-
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/bloc/kana_bloc.dart';
-import 'package:kanji_dictionary/bloc/siri_suggestion_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../bloc/kanji_bloc.dart';
+import '../bloc/search_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../bloc/kana_bloc.dart';
+import '../bloc/siri_suggestion_bloc.dart';
 import 'components/compact_kanji_list_tile.dart';
 import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';

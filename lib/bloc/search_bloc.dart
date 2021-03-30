@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/utils/string_extension.dart';
+import '../utils/string_extension.dart';
 import 'kanji_bloc.dart';
 
 enum SearchFor { meaning, pronunciation, kanji }

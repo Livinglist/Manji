@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:kanji_dictionary/bloc/text_recognize_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/utils/string_extension.dart';
+import '../../bloc/text_recognize_bloc.dart';
+import '../../bloc/kanji_bloc.dart';
+import '../../utils/string_extension.dart';
 import '../components/kanji_list_view.dart';
 import '../components/kanji_grid_view.dart';
 import '../components/furigana_text.dart';

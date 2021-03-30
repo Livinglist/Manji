@@ -1,21 +1,21 @@
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/models/word.dart';
-import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/models/kana.dart';
-import 'package:kanji_dictionary/models/kanji_list.dart';
-import 'package:kanji_dictionary/models/question.dart';
+import '../models/sentence.dart';
+import '../models/word.dart';
+import '../models/kanji.dart';
+import '../models/kana.dart';
+import '../models/kanji_list.dart';
+import '../models/question.dart';
 import 'jisho_api_provider.dart';
 import 'db_provider.dart';
 import 'firebase_api_provider.dart';
 import 'shared_preferences_provider.dart';
 import 'firestore_provider.dart';
 
-export 'package:kanji_dictionary/models/kana.dart';
-export 'package:kanji_dictionary/models/kanji.dart';
-export 'package:kanji_dictionary/models/kanji_list.dart';
-export 'package:kanji_dictionary/models/sentence.dart';
-export 'package:kanji_dictionary/models/word.dart';
-export 'package:kanji_dictionary/models/question.dart';
+export '../models/kana.dart';
+export '../models/kanji.dart';
+export '../models/kanji_list.dart';
+export '../models/sentence.dart';
+export '../models/word.dart';
+export '../models/question.dart';
 
 class Repository {
   final _jishoApiProvider = JishoApiProvider();

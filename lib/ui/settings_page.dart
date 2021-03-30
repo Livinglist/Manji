@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
-import 'package:kanji_dictionary/resource/firebase_auth_provider.dart';
+import '../resource/repository.dart';
+import '../resource/firebase_auth_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

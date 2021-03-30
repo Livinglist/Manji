@@ -2,7 +2,7 @@ import 'package:googleapis/vision/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
 import 'google_api_credentials.dart';
-import 'package:kanji_dictionary/utils/string_extension.dart';
+import '../utils/string_extension.dart';
 
 const _SCOPES = const [VisionApi.CloudVisionScope];
 

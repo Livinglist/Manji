@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
-import 'package:kanji_dictionary/ui/components/chip_collections.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:kanji_dictionary/models/question.dart';
+import '../../../ui/kanji_detail_page.dart';
+import '../../../ui/components/chip_collections.dart';
+import '../../../models/question.dart';
 
 class IncorrectQuestionListTile extends StatelessWidget {
   final Question question;

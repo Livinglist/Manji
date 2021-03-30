@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kanji_dictionary/resource/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kanji_dictionary/models/sentence.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
+import '../models/sentence.dart';
+import '../resource/repository.dart';
+import '../resource/constants.dart';
 
-export 'package:kanji_dictionary/models/kanji.dart';
-export 'package:kanji_dictionary/models/sentence.dart';
-export 'package:kanji_dictionary/models/word.dart';
+export '../models/kanji.dart';
+export '../models/sentence.dart';
+export '../models/word.dart';
 
 class SentenceBloc {
   final _sentencesFetcher = BehaviorSubject<List<Sentence>>();

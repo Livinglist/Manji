@@ -4,15 +4,16 @@ import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kanji_dictionary/ui/search_result_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_review/app_review.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
-import 'package:kanji_dictionary/bloc/sentence_bloc.dart';
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/ui/components/fancy_icon_button.dart';
+import '../bloc/kanji_bloc.dart';
+import '../bloc/sentence_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../ui/search_result_page.dart';
+import '../ui/components/fancy_icon_button.dart';
+import '../resource/constants.dart';
 import 'components/spring_curve.dart';
 import 'kana_detail_page.dart';
 import 'sentence_detail_page.dart';
@@ -20,7 +21,6 @@ import 'word_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'components/chip_collections.dart';
 import 'components/label_divider.dart';
-import 'package:kanji_dictionary/resource/constants.dart';
 
 class KanjiDetailPage extends StatefulWidget {
   final Kanji kanji;

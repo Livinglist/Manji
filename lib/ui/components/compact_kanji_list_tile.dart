@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
-import 'package:kanji_dictionary/models/kanji.dart';
+import '../../ui/kanji_detail_page.dart';
+import '../../models/kanji.dart';
 import 'chip_collections.dart';
 
 class CompactKanjiListTile extends StatelessWidget {

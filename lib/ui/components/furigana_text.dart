@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/utils/string_extension.dart';
-import 'package:kanji_dictionary/models/sentence.dart';
-export 'package:kanji_dictionary/models/sentence.dart';
+import '../../utils/string_extension.dart';
+import '../../models/sentence.dart';
+export '../../models/sentence.dart';
 
 List<String> getKanjis(String text) {
   var kanjis = <String>[];

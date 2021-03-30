@@ -1,8 +1,9 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:kanji_dictionary/models/question.dart';
-import 'package:kanji_dictionary/resource/repository.dart';
 
-export 'package:kanji_dictionary/models/question.dart';
+import '../models/question.dart';
+import '../resource/repository.dart';
+
+export '../models/question.dart';
 
 class IqBloc {
   final _iqFetcher = BehaviorSubject<List<Question>>();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kanji_dictionary/models/kanji.dart';
+import '../models/kanji.dart';
 
 class RadicalsPage extends StatefulWidget {
   final List<String> selectedRadicals;

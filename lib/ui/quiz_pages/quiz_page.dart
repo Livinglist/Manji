@@ -2,13 +2,11 @@ import 'dart:math' show Random;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kanji_dictionary/bloc/kanji_bloc.dart';
 
-import 'package:kanji_dictionary/bloc/kanji_list_bloc.dart';
-import 'package:kanji_dictionary/bloc/incorrect_question_bloc.dart';
-
+import '../../bloc/kanji_bloc.dart';
+import '../../bloc/kanji_list_bloc.dart';
+import '../../bloc/incorrect_question_bloc.dart';
 import '../components/snack_bar_collections.dart';
 import 'quiz_detail_page.dart';
 import 'incorrect_question_page.dart';
