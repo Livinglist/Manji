@@ -18,7 +18,6 @@ import 'kana_detail_page.dart';
 import 'sentence_detail_page.dart';
 import 'word_detail_page.dart';
 import 'components/furigana_text.dart';
-import 'components/custom_bottom_sheet.dart' as CustomBottomSheet;
 import 'components/chip_collections.dart';
 import 'components/label_divider.dart';
 import 'package:kanji_dictionary/resource/constants.dart';
@@ -1198,15 +1197,12 @@ class _KanjiBlockState extends State<KanjiBlock> {
           })
           ..addListener(() async {
             if (videoController != null && this.mounted) {
-              if (await videoController.position >= videoController.value.duration + Duration(seconds: 1) && isPlaying) {
+              if (await videoController.position >= videoController.value.duration&& isPlaying) {
                 videoController.pause();
                 videoController.seekTo(Duration(seconds: 0));
 
-                print("paused vc is $videoController");
-
                 setState(() {
                   isPlaying = false;
-                  //loadVideo();
                 });
               }
             }
@@ -1217,14 +1213,12 @@ class _KanjiBlockState extends State<KanjiBlock> {
 
   @override
   void dispose() {
-    print("${widget.kanjiStr}.mp4 disposed");
     videoController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("isPlaying now is $isPlaying and vc is $videoController");
     return Stack(
       children: <Widget>[
         Positioned.fill(
@@ -1248,7 +1242,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       ),
                     ))),
           ),
-        if (videoController != null && videoController.value.initialized && isPlaying == true)
+        if (videoController != null && videoController.value.isInitialized && isPlaying == true)
           Positioned.fill(
               child: Center(
                   child: Padding(
@@ -1260,7 +1254,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
               child: Image.asset(
             'data/matts.png',
           )),
-        if (videoController != null && videoController.value.initialized && isPlaying == false)
+        if (videoController != null && videoController.value.isInitialized && isPlaying == false)
           Positioned.fill(
               child: Center(
                   child: Opacity(
@@ -1280,30 +1274,11 @@ class _KanjiBlockState extends State<KanjiBlock> {
   }
 }
 
-class StrokeAnimationPlayer extends StatefulWidget {
+class StrokeAnimationPlayer extends StatelessWidget {
   final String kanjiStr;
   final VideoPlayerController videoController;
 
   StrokeAnimationPlayer({this.kanjiStr, this.videoController}) : assert(kanjiStr != null && kanjiStr.length == 1);
-
-  @override
-  _StrokeAnimationPlayerState createState() => _StrokeAnimationPlayerState();
-}
-
-class _StrokeAnimationPlayerState extends State<StrokeAnimationPlayer> {
-  VideoPlayerController videoController;
-
-  @override
-  void initState() {
-    videoController = widget.videoController;
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1329,3 +1304,54 @@ class _StrokeAnimationPlayerState extends State<StrokeAnimationPlayer> {
     );
   }
 }
+
+
+// class StrokeAnimationPlayer extends StatefulWidget {
+//   final String kanjiStr;
+//   final VideoPlayerController videoController;
+//
+//   StrokeAnimationPlayer({this.kanjiStr, this.videoController}) : assert(kanjiStr != null && kanjiStr.length == 1);
+//
+//   @override
+//   _StrokeAnimationPlayerState createState() => _StrokeAnimationPlayerState();
+// }
+//
+// class _StrokeAnimationPlayerState extends State<StrokeAnimationPlayer> {
+//   VideoPlayerController videoController;
+//
+//   @override
+//   void initState() {
+//     videoController = widget.videoController;
+//
+//     super.initState();
+//   }
+//
+//   @override
+//   void dispose() {
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (videoController == null) return Container();
+// //    return AspectRatio(
+// //      aspectRatio: videoController.value.aspectRatio,
+// //      // Use the VideoPlayer widget to display the video.
+// //      child: VideoPlayer(videoController),
+// //    );
+//     return FutureBuilder(
+//       future: videoController.initialize(),
+//       builder: (_, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.done) {
+//           return AspectRatio(
+//             aspectRatio: videoController.value.aspectRatio,
+//             // Use the VideoPlayer widget to display the video.
+//             child: VideoPlayer(videoController),
+//           );
+//         } else {
+//           return Container();
+//         }
+//       },
+//     );
+//   }
+// }

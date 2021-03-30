@@ -47,7 +47,7 @@ dependencies:
   connectivity: 0.4.8+2
   permission_handler: 5.0.0+hotfix.3
   tflite: 1.0.5
-  video_player:
+  video_player: 2.1.0
   uuid: 2.0.4
   flutter_device_type: 0.2.0
   flutter_siri_suggestions: 1.0.2+hotfix1

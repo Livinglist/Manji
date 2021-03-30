@@ -140,10 +140,9 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                             scrollDirection: Axis.horizontal,
                             child: Wrap(
                               alignment: WrapAlignment.start,
-                              runSpacing: 12,
-                              spacing: 12,
+                              spacing: 8,
                               children: <Widget>[
-                                SizedBox(width: 12),
+                                SizedBox(width: 4),
                                 for (var n in jlptMap.keys)
                                   FilterChip(
                                       selected: jlptMap[n],
@@ -164,7 +163,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                               alignment: WrapAlignment.start,
                               spacing: 8,
                               children: <Widget>[
-                                SizedBox(width: 12),
+                                SizedBox(width: 4),
                                 for (var g in gradeMap.keys)
                                   FilterChip(
                                       selected: gradeMap[g],
@@ -185,7 +184,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                               alignment: WrapAlignment.start,
                               spacing: 8,
                               children: <Widget>[
-                                SizedBox(width: 12),
+                                SizedBox(width: 4),
                                 for (var r in radicalsMap.keys.toList().sublist(0, 4))
                                   FilterChip(
                                       selected: radicalsMap[r],
