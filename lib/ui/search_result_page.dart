@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 
 import '../bloc/kanji_bloc.dart';
 import '../bloc/search_bloc.dart';
@@ -12,23 +13,15 @@ class SearchResultPage extends StatefulWidget {
   final String text;
   final String radicals;
 
-  SearchResultPage({this.text, this.radicals})
-      : assert(text != null || radicals != null);
+  SearchResultPage({this.text, this.radicals}) : assert(text != null || radicals != null);
 
   @override
   State<StatefulWidget> createState() => _SearchResultPageState();
 }
 
-class _SearchResultPageState extends State<SearchResultPage>
-    with SingleTickerProviderStateMixin {
+class _SearchResultPageState extends State<SearchResultPage> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
-  final Map<int, bool> jlptMap = {
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false
-  };
+  final Map<int, bool> jlptMap = {1: false, 2: false, 3: false, 4: false, 5: false};
   final Map<int, bool> gradeMap = {
     0: false, //Junior High
     1: false,
@@ -40,7 +33,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   };
   AnimationController animationController;
   Map<String, bool> radicalsMap = {};
-  bool showShadow = false;
+  bool showShadow = false, shouldVibrate = false;
 
   @override
   void initState() {
@@ -60,10 +53,7 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     scrollController.addListener(() {
       if (this.mounted) {
-        animationController.value =
-            scrollController.offset >= _filterPanelHeight
-                ? 0
-                : 1 - scrollController.offset / _filterPanelHeight;
+        animationController.value = scrollController.offset >= _filterPanelHeight ? 0 : 1 - scrollController.offset / _filterPanelHeight;
       }
     });
 
@@ -77,6 +67,12 @@ class _SearchResultPageState extends State<SearchResultPage>
       radicalsMap[widget.radicals] = true;
       SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
     }
+
+    Vibration.hasCustomVibrationsSupport().then((hasCoreHaptics) {
+      setState(() {
+        shouldVibrate = hasCoreHaptics;
+      });
+    });
 
     super.initState();
   }
@@ -107,8 +103,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                     if (snapshot.hasData) {
                       var kanjis = snapshot.data;
 
-                      return Center(
-                          child: Text('${kanjis.length} kanji found'));
+                      return Center(child: Text('${kanjis.length} kanji found'));
                     }
                     return Container();
                   },
@@ -126,9 +121,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                       var kanjis = snapshot.data;
 
                       return kanjis.isNotEmpty
-                          ? _KanjiListView(
-                              kanjis: kanjis,
-                              scrollController: scrollController)
+                          ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
                           : Center(
                               child: Text(
                                 'No results found _(┐「ε:)_',
@@ -162,11 +155,17 @@ class _SearchResultPageState extends State<SearchResultPage>
                                       elevation: 4,
                                       label: Text("N$n"),
                                       onSelected: (val) {
+                                        if (shouldVibrate) {
+                                          Vibration.cancel().then((_) {
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                          });
+                                        }
+
                                         setState(() {
                                           jlptMap[n] = !jlptMap[n];
                                         });
-                                        SearchBloc.instance.filter(
-                                            jlptMap, gradeMap, radicalsMap);
+
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                       })
                               ],
                             ),
@@ -184,11 +183,17 @@ class _SearchResultPageState extends State<SearchResultPage>
                                       elevation: 4,
                                       label: Text(getGradeStr(g)),
                                       onSelected: (val) {
+                                        if (shouldVibrate) {
+                                          Vibration.cancel().then((_) {
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                          });
+                                        }
+
                                         setState(() {
                                           gradeMap[g] = !gradeMap[g];
                                         });
-                                        SearchBloc.instance.filter(
-                                            jlptMap, gradeMap, radicalsMap);
+
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                       })
                               ],
                             ),
@@ -200,33 +205,41 @@ class _SearchResultPageState extends State<SearchResultPage>
                               spacing: 8,
                               children: <Widget>[
                                 SizedBox(width: 4),
-                                for (var r
-                                    in radicalsMap.keys.toList().sublist(0, 4))
+                                for (var r in radicalsMap.keys.toList().sublist(0, 4))
                                   FilterChip(
                                       selected: radicalsMap[r],
                                       elevation: 4,
                                       label: Text(r),
                                       onSelected: (val) {
+                                        if (shouldVibrate) {
+                                          Vibration.cancel().then((_) {
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                          });
+                                        }
+
                                         setState(() {
                                           radicalsMap[r] = !radicalsMap[r];
                                         });
-                                        SearchBloc.instance.filter(
-                                            jlptMap, gradeMap, radicalsMap);
+
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                       }),
-                                for (var r in radicalsMap.keys
-                                    .toList()
-                                    .sublist(4)
-                                    .where((element) => radicalsMap[element]))
+                                for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
                                   FilterChip(
                                       selected: true,
                                       elevation: 4,
                                       label: Text(r),
                                       onSelected: (val) {
+                                        if (shouldVibrate) {
+                                          Vibration.cancel().then((_) {
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                          });
+                                        }
+
                                         setState(() {
                                           radicalsMap[r] = !radicalsMap[r];
                                         });
-                                        SearchBloc.instance.filter(
-                                            jlptMap, gradeMap, radicalsMap);
+
+                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
                                       }),
                                 Hero(
                                   tag: 'hero',
@@ -247,9 +260,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                     builder: (_, child) {
                       return Opacity(
                         opacity: animationController.value,
-                        child: animationController.value <= 0
-                            ? Container()
-                            : child,
+                        child: animationController.value <= 0 ? Container() : child,
                       );
                     },
                   )),
@@ -260,12 +271,10 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   showRadicalsDialog() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => RadicalsPage(
-                selectedRadicals: radicalsMap.keys
-                    .where((element) => radicalsMap[element])
-                    .toList()))).then((value) {
+            context,
+            MaterialPageRoute(
+                builder: (_) => RadicalsPage(selectedRadicals: radicalsMap.keys.where((element) => radicalsMap[element]).toList())))
+        .then((value) {
       if (value != null) {
         setState(() {
           radicalsMap = value;
@@ -325,8 +334,7 @@ class _KanjiListView extends StatelessWidget {
         child: KanjiListTile(
           kanji: kanji,
           onLongPressed: onLongPressed,
-          onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
         ),
       ));
       children.add(Divider(height: 0));

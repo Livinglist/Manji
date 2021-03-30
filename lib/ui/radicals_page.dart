@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 
 import '../models/kanji.dart';
 
@@ -14,12 +15,11 @@ class RadicalsPage extends StatefulWidget {
 class _RadicalsPageState extends State<RadicalsPage> {
   final scrollController = ScrollController();
   final Map<String, bool> radicalsMap = {};
-  bool showShadow = false;
+  bool showShadow = false, shouldVibrate = false;
 
   @override
   void initState() {
-    radicalsMap
-        .addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
+    radicalsMap.addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
 
     for (var selected in widget.selectedRadicals) {
       radicalsMap[selected] = true;
@@ -37,6 +37,12 @@ class _RadicalsPageState extends State<RadicalsPage> {
           });
         }
       }
+    });
+
+    Vibration.hasCustomVibrationsSupport().then((hasCoreHaptics) {
+      setState(() {
+        shouldVibrate = hasCoreHaptics;
+      });
     });
 
     super.initState();
@@ -68,8 +74,7 @@ class _RadicalsPageState extends State<RadicalsPage> {
                         label: Text('Clear'),
                         onPressed: () {
                           setState(() {
-                            radicalsMap.updateAll(
-                                (key, value) => radicalsMap[key] = false);
+                            radicalsMap.updateAll((key, value) => radicalsMap[key] = false);
                           });
                         },
                       ),
@@ -79,6 +84,12 @@ class _RadicalsPageState extends State<RadicalsPage> {
                             elevation: radicalsMap[r] ? 4 : 0,
                             label: Text(r),
                             onSelected: (val) {
+                              if (shouldVibrate) {
+                                Vibration.cancel().then((_) {
+                                  Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                });
+                              }
+
                               setState(() {
                                 radicalsMap[r] = !radicalsMap[r];
                               });
