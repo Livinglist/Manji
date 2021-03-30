@@ -38,6 +38,8 @@ class QuizBloc {
 Quiz generate(List<Kanji> kanjis) {
   var questions = <Question>[];
 
+  kanjis.shuffle();
+
   if (kanjis.length < 4) {
     for (int i = 0; i < kanjis.length; i++) {
       questions.add(Question(targetedKanji: kanjis[i]));
@@ -48,27 +50,32 @@ Quiz generate(List<Kanji> kanjis) {
       questions.add(Question(targetedKanji: kanjis[i]));
 
       //KanjiToMeaning
-      var random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
-      while (random == i) {
-        random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      var random = Random(DateTime.now().millisecondsSinceEpoch + i);
+      var set = Set<int>();
+      while (set.length != 3) {
+        var index = random.nextInt(kanjis.length);
+        if (index != i) set.add(index);
       }
-      var a = kanjis[random].meaning;
-      var b = kanjis[random + 1].meaning;
-      var c = kanjis[random + 2].meaning;
+
+      var indexes = set.toList();
+      var a = kanjis[indexes[0]].meaning;
+      var b = kanjis[indexes[1]].meaning;
+      var c = kanjis[indexes[2]].meaning;
 
       questions.add(Question(targetedKanji: kanjis[i], mockChoices: [a, b, c], questionType: QuestionType.KanjiToMeaning));
 
       //KanjiToHiragana
-      random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
-      while (random == i) {
-        print('i: $i random: $random');
-        random = Random(DateTime.now().millisecondsSinceEpoch + i).nextInt(kanjis.length - 2);
+      set.clear();
+      while (set.length != 3) {
+        var index = random.nextInt(kanjis.length);
+        if (index != i) set.add(index);
       }
-      a = kanjis[random].kunyomi.isEmpty ? '[すき]' : kanjis[random].kunyomi.toString();
+      indexes = set.toList();
+      a = kanjis[indexes[0]].kunyomi.isEmpty ? '[すき]' : kanjis[indexes[0]].kunyomi.toString();
       a = a.substring(1, a.length - 1);
-      b = kanjis[random + 1].kunyomi.isEmpty ? '[すき]' : kanjis[random + 1].kunyomi.toString();
+      b = kanjis[indexes[1]].kunyomi.isEmpty ? '[すき]' : kanjis[indexes[1]].kunyomi.toString();
       b = b.substring(1, b.length - 1);
-      c = kanjis[random + 2].kunyomi.isEmpty ? '[すき]' : kanjis[random + 2].kunyomi.toString();
+      c = kanjis[indexes[2]].kunyomi.isEmpty ? '[すき]' : kanjis[indexes[2]].kunyomi.toString();
       c = c.substring(1, c.length - 1);
 
       questions.add(Question(targetedKanji: kanjis[i], mockChoices: [a, b, c], questionType: QuestionType.KanjiToHiragana));
