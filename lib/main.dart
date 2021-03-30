@@ -42,7 +42,8 @@ class MyAppState extends State<MyApp> {
     super.initState();
 
     //This is for Siri suggestion.
-    FlutterSiriSuggestions.instance.configure(onLaunch: (Map<String, dynamic> message) async {
+    FlutterSiriSuggestions.instance.configure(
+        onLaunch: (Map<String, dynamic> message) async {
       String siriKanji = message['key'];
       print("Siri suggestion kanji is $siriKanji");
       SiriSuggestionBloc.instance.suggest(siriKanji);
@@ -52,10 +53,11 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return FeatureDiscovery(
-      child:  MaterialApp(
+      child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Manji',
-          theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
+          theme: ThemeData(
+              primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
           home: AnimatedContainer(
             duration: Duration(milliseconds: 300),
             child: FutureBuilder(
@@ -76,20 +78,21 @@ class MyAppState extends State<MyApp> {
                             DBProvider.db
                                 .initDB(refresh: true)
                                 .whenComplete(KanjiBloc.instance.getAllKanjis)
-                                .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
+                                .whenComplete(FirebaseAuthProvider
+                                    .instance.checkForUpdates);
                           }
                           return Platform.isAndroid
                               ? Scaffold(
-                            body: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
+                                  body: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
                               : Scaffold(
-                              appBar: AppBar(
-                                elevation: 0,
-                                title: Text('Manji'),
-                              ),
-                              body: HomePageBackground());
+                                  appBar: AppBar(
+                                    elevation: 0,
+                                    title: Text('Manji'),
+                                  ),
+                                  body: HomePageBackground());
                         }
                       });
                 } else

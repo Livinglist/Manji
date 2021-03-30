@@ -28,10 +28,14 @@ extension ListExtension<E> on List<E> {
     var visited = <int>[];
 
     for (int i = 0; i < amount; i++) {
-      index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(this.length - 1) + 1;
+      index = Random(DateTime.now().millisecondsSinceEpoch)
+              .nextInt(this.length - 1) +
+          1;
 
       while (visited.contains(index)) {
-        index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(this.length - 1) + 1;
+        index = Random(DateTime.now().millisecondsSinceEpoch)
+                .nextInt(this.length - 1) +
+            1;
       }
 
       visited.add(index);

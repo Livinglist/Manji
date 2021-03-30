@@ -13,7 +13,8 @@ class ProgressDetailPage extends StatefulWidget {
 
   ProgressDetailPage({this.kanjis, this.title = '', int totalStudied})
       : assert(kanjis != null),
-        totalStudied = totalStudied ?? kanjis.where((kanji) => kanji.timeStamps.isNotEmpty).length {
+        totalStudied = totalStudied ??
+            kanjis.where((kanji) => kanji.timeStamps.isNotEmpty).length {
     kanjis.sort((a, b) => b.timeStamps.length.compareTo(a.timeStamps.length));
   }
 
@@ -57,15 +58,22 @@ class _ProgressDetailPageState extends State<ProgressDetailPage> {
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(elevation: showShadow ? 8 : 0, title: Text(widget.title), actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(12),
-              child: Center(child: Text('${widget.totalStudied}/${widget.kanjis.length}', style: TextStyle(fontSize: 18))))
-        ]),
+        appBar: AppBar(
+            elevation: showShadow ? 8 : 0,
+            title: Text(widget.title),
+            actions: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Center(
+                      child: Text(
+                          '${widget.totalStudied}/${widget.kanjis.length}',
+                          style: TextStyle(fontSize: 18))))
+            ]),
         body: ListView.separated(
             controller: scrollController,
             itemBuilder: (_, index) {
-              return KanjiProgressListTile(kanji: widget.kanjis.elementAt(index));
+              return KanjiProgressListTile(
+                  kanji: widget.kanjis.elementAt(index));
             },
             separatorBuilder: (_, index) => Divider(height: 0),
             itemCount: widget.kanjis.length));

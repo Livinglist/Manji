@@ -43,10 +43,8 @@ class IconDataLight extends IconData {
 class IconDataDuotone extends IconData {
   const IconDataDuotone(int codePoint)
       : super(
-    codePoint,
-    fontFamily: 'FontAwesomeDuotone',
-    fontPackage: 'font_awesome_flutter',
-  );
+          codePoint,
+          fontFamily: 'FontAwesomeDuotone',
+          fontPackage: 'font_awesome_flutter',
+        );
 }
-
-

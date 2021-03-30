@@ -35,7 +35,8 @@ class KanjiDetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _KanjiDetailPageState();
 }
 
-class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProviderStateMixin {
+class _KanjiDetailPageState extends State<KanjiDetailPage>
+    with SingleTickerProviderStateMixin {
   AnimationController animationController;
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -49,7 +50,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 1.1)..value = 1;
+    animationController =
+        AnimationController(vsync: this, lowerBound: 0, upperBound: 1.1)
+          ..value = 1;
     kanjiStr = widget.kanjiStr ?? widget.kanji.kanji;
     isFaved = KanjiBloc.instance.getIsFaved(kanjiStr);
     isStared = KanjiBloc.instance.getIsStared(kanjiStr);
@@ -64,7 +67,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted && scrollController.offset == scrollController.position.maxScrollExtent) {
+      if (this.mounted &&
+          scrollController.offset ==
+              scrollController.position.maxScrollExtent) {
         sentenceBloc.getMoreSentencesByKanji();
       }
     });
@@ -95,7 +100,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
 
     sentenceBloc.getSentencesByKanji(kanjiStr);
 
-    if (widget.kanjiStr != null) KanjiBloc.instance.getKanjiInfoByKanjiStr(widget.kanjiStr);
+    if (widget.kanjiStr != null)
+      KanjiBloc.instance.getKanjiInfoByKanjiStr(widget.kanjiStr);
 
     if (Random(DateTime.now().millisecondsSinceEpoch).nextBool()) {
       AppReview.isRequestReviewAvailable.then((isAvailable) {
@@ -128,7 +134,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Material(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
                     builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
@@ -151,7 +158,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                             shrinkWrap: true,
                             itemBuilder: (_, index) {
                               var kanjiList = kanjiLists[index];
-                              var isInList = KanjiListBloc.instance.isInList(kanjiList, kanjiStr);
+                              var isInList = KanjiListBloc.instance
+                                  .isInList(kanjiList, kanjiStr);
 
                               var subtitle = '';
 
@@ -160,52 +168,73 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                               }
 
                               if (kanjiList.wordCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
+                                subtitle += (subtitle.isEmpty ? '' : ', ') +
+                                    '${kanjiList.wordCount} Words';
                               }
 
-                              if (kanjiList.wordCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.wordCount <= 1)
+                                subtitle =
+                                    subtitle.substring(0, subtitle.length - 1);
 
                               if (kanjiList.sentenceCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
+                                subtitle += (subtitle.isEmpty ? '' : ', ') +
+                                    '${kanjiList.sentenceCount} Sentences';
                               }
 
-                              if (kanjiList.sentenceCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.sentenceCount <= 1)
+                                subtitle =
+                                    subtitle.substring(0, subtitle.length - 1);
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
                               }
 
                               return ListTile(
-                                title: Text(kanjiLists[index].name, style: TextStyle(color: isInList ? Colors.black54 : Colors.black)),
+                                title: Text(kanjiLists[index].name,
+                                    style: TextStyle(
+                                        color: isInList
+                                            ? Colors.black54
+                                            : Colors.black)),
                                 subtitle: Text(subtitle),
                                 onTap: () {
                                   Navigator.pop(context);
                                   if (isInList) {
-                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
                                       content: Text(
                                         'This kanji is already in ${kanjiList.name}',
                                         style: TextStyle(color: Colors.black),
                                       ),
-                                      backgroundColor: Theme.of(context).accentColor,
+                                      backgroundColor:
+                                          Theme.of(context).accentColor,
                                       action: SnackBarAction(
                                         label: 'Dismiss',
-                                        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                                        onPressed: () =>
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar(),
                                         textColor: Colors.blueGrey,
                                       ),
                                     ));
                                   } else {
-                                    KanjiListBloc.instance.addKanji(kanjiList, kanjiStr);
-                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    KanjiListBloc.instance
+                                        .addKanji(kanjiList, kanjiStr);
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
                                       content: Text(
                                         '$kanjiStr has been added to ${kanjiList.name}',
                                         style: TextStyle(color: Colors.black),
                                       ),
-                                      backgroundColor: Theme.of(context).accentColor,
+                                      backgroundColor:
+                                          Theme.of(context).accentColor,
                                       action: SnackBarAction(
                                         label: 'Dismiss',
-                                        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                                        onPressed: () =>
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar(),
                                         textColor: Colors.blueGrey,
                                       ),
                                     ));
@@ -271,7 +300,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               stream: KanjiBloc.instance.kanji,
               builder: (_, AsyncSnapshot<Kanji> snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
-                  var kanji = widget.kanji == null ? snapshot.data : widget.kanji;
+                  var kanji =
+                      widget.kanji == null ? snapshot.data : widget.kanji;
                   this.kanji = kanji;
                   return Text(kanji.kanji ?? '');
                 } else {
@@ -292,7 +322,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                   onPressed: null),
               // The widget that will be displayed as the tap target.
               title: Text('More info'),
-              description: Text('If you want more info on this kanji, Wikitionary is a good place to visit!'),
+              description: Text(
+                  'If you want more info on this kanji, Wikitionary is a good place to visit!'),
               backgroundColor: Theme.of(context).primaryColor,
               targetColor: Colors.white,
               textColor: Colors.white,
@@ -307,7 +338,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
             DescribedFeatureOverlay(
               featureId: 'add_item',
               // Unique id that identifies this overlay.
-              tapTarget: IconButton(icon: Icon(Icons.playlist_add, size: 28), onPressed: null),
+              tapTarget: IconButton(
+                  icon: Icon(Icons.playlist_add, size: 28), onPressed: null),
               // The widget that will be displayed as the tap target.
               title: Text('Add Kanji'),
               description: Text('You can add kanji into list you created.'),
@@ -337,9 +369,12 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
             ),
             IconButton(
                 icon: AnimatedCrossFade(
-                    firstChild: Icon(FontAwesomeIcons.solidBookmark, color: Colors.teal, size: 24),
+                    firstChild: Icon(FontAwesomeIcons.solidBookmark,
+                        color: Colors.teal, size: 24),
                     secondChild: Icon(FontAwesomeIcons.bookmark),
-                    crossFadeState: isStared ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    crossFadeState: isStared
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
                     duration: Duration(microseconds: 200)),
                 onPressed: () {
                   setState(() {
@@ -367,27 +402,42 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                         child: Padding(
                           padding: EdgeInsets.all(12),
                           child: Container(
-                              constraints: BoxConstraints(maxWidth: 360, maxHeight: 360),
+                              constraints:
+                                  BoxConstraints(maxWidth: 360, maxHeight: 360),
                               decoration: BoxDecoration(
-                                  boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black54, blurRadius: 8)
+                                  ],
                                   shape: BoxShape.rectangle,
                                   color: Colors.white),
                               height: kanjiBlockHeight,
                               child: Center(
                                   child: KanjiBlock(
-                                      kanjiStr: widget.kanjiStr ?? widget.kanji.kanji,
-                                      scaleFactor: computeScaleFactor(kanjiBlockHeight > 360 ? 360 : kanjiBlockHeight)))),
+                                      kanjiStr:
+                                          widget.kanjiStr ?? widget.kanji.kanji,
+                                      scaleFactor: computeScaleFactor(
+                                          kanjiBlockHeight > 360
+                                              ? 360
+                                              : kanjiBlockHeight)))),
                         ),
                         flex: 1),
-                    Flexible(child: KanjiInfoColumn(kanji: widget.kanji), flex: 1),
+                    Flexible(
+                        child: KanjiInfoColumn(kanji: widget.kanji), flex: 1),
                   ],
                 ),
               ),
               builder: (_, child) {
                 var scale = 0.5 + 0.5 * animationController.value;
                 return Opacity(
-                  opacity: animationController.value <= 1 ? animationController.value : 1,
-                  child: Transform.scale(scale: scale, alignment: scale > 1 ? Alignment.centerLeft : Alignment.center, child: child),
+                  opacity: animationController.value <= 1
+                      ? animationController.value
+                      : 1,
+                  child: Transform.scale(
+                      scale: scale,
+                      alignment:
+                          scale > 1 ? Alignment.centerLeft : Alignment.center,
+                      child: child),
                 );
               },
             ),
@@ -396,7 +446,8 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               stream: KanjiBloc.instance.kanji,
               builder: (_, AsyncSnapshot<Kanji> snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
-                  var kanji = widget.kanji == null ? snapshot.data : widget.kanji;
+                  var kanji =
+                      widget.kanji == null ? snapshot.data : widget.kanji;
                   this.kanji = kanji;
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -415,13 +466,24 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                         child: RichText(
                                             textAlign: TextAlign.center,
                                             text: TextSpan(children: [
-                                              TextSpan(text: 'いみ' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                                              TextSpan(text: '意味', style: TextStyle(fontSize: 18, color: Colors.white))
+                                              TextSpan(
+                                                  text: 'いみ' + '\n',
+                                                  style: TextStyle(
+                                                      fontSize: 9,
+                                                      color: Colors.white)),
+                                              TextSpan(
+                                                  text: '意味',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.white))
                                             ]))),
                                     Padding(
                                       padding: EdgeInsets.all(12),
                                       child: Text("${kanji.meaning}",
-                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center),
                                     )
                                   ],
                                 ),
@@ -429,8 +491,16 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                     child: RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(children: [
-                                          TextSpan(text: 'よみ      かた' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                                          TextSpan(text: '読み方', style: TextStyle(fontSize: 18, color: Colors.white))
+                                          TextSpan(
+                                              text: 'よみ      かた' + '\n',
+                                              style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white)),
+                                          TextSpan(
+                                              text: '読み方',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white))
                                         ]))),
                                 Wrap(
                                   alignment: WrapAlignment.start,
@@ -440,18 +510,28 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                       padding: EdgeInsets.all(4),
                                       child: FuriganaText(
                                         text: '音読み',
-                                        tokens: [Token(text: '音読み', furigana: 'おんよみ')],
+                                        tokens: [
+                                          Token(text: '音読み', furigana: 'おんよみ')
+                                        ],
                                         style: TextStyle(fontSize: 18),
                                       ),
                                     ),
-                                    for (var onyomi in kanji.onyomi.where((s) => s.contains(r'-') == false))
+                                    for (var onyomi in kanji.onyomi.where(
+                                        (s) => s.contains(r'-') == false))
                                       Padding(
                                           padding: EdgeInsets.all(4),
                                           child: GestureDetector(
                                             onTap: () {
-                                              if (!onyomi.contains(RegExp(r'\.|-'))) {
+                                              if (!onyomi
+                                                  .contains(RegExp(r'\.|-'))) {
                                                 Navigator.push(
-                                                    context, MaterialPageRoute(builder: (_) => KanaDetailPage(onyomi, Yomikata.onyomi)));
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            KanaDetailPage(
+                                                                onyomi,
+                                                                Yomikata
+                                                                    .onyomi)));
                                               }
                                             },
                                             child: Container(
@@ -459,69 +539,109 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                                   padding: EdgeInsets.all(4),
                                                   child: Text(
                                                     onyomi,
-                                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   )),
                                               decoration: BoxDecoration(
                                                 //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                                 color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                                        ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(
+                                                        5.0) //                 <--- border radius here
+                                                    ),
                                               ),
                                             ),
                                           ))
                                   ],
                                 ),
                                 Divider(),
-                                Wrap(alignment: WrapAlignment.start, direction: Axis.horizontal, children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: FuriganaText(
-                                      text: '訓読み',
-                                      tokens: [Token(text: '訓読み', furigana: 'くんよみ')],
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  for (var kunyomi in kanji.kunyomi.where((s) => s.contains(r'-') == false))
-                                    Padding(
+                                Wrap(
+                                    alignment: WrapAlignment.start,
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      Padding(
                                         padding: EdgeInsets.all(4),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (!kunyomi.contains(RegExp(r'\.|-'))) {
-                                              Navigator.push(
-                                                  context, MaterialPageRoute(builder: (_) => KanaDetailPage(kunyomi, Yomikata.kunyomi)));
-                                            }
-                                          },
-                                          child: Container(
-                                            child: Padding(
-                                                padding: EdgeInsets.all(4),
-                                                child: Text(
-                                                  kunyomi,
-                                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                                )),
-                                            decoration: BoxDecoration(
-                                              //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                                  ),
-                                            ),
-                                          ),
-                                        )),
-                                ]),
+                                        child: FuriganaText(
+                                          text: '訓読み',
+                                          tokens: [
+                                            Token(text: '訓読み', furigana: 'くんよみ')
+                                          ],
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ),
+                                      for (var kunyomi in kanji.kunyomi.where(
+                                          (s) => s.contains(r'-') == false))
+                                        Padding(
+                                            padding: EdgeInsets.all(4),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (!kunyomi.contains(
+                                                    RegExp(r'\.|-'))) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              KanaDetailPage(
+                                                                  kunyomi,
+                                                                  Yomikata
+                                                                      .kunyomi)));
+                                                }
+                                              },
+                                              child: Container(
+                                                child: Padding(
+                                                    padding: EdgeInsets.all(4),
+                                                    child: Text(
+                                                      kunyomi,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    )),
+                                                decoration: BoxDecoration(
+                                                  //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(
+                                                          5.0) //                 <--- border radius here
+                                                      ),
+                                                ),
+                                              ),
+                                            )),
+                                    ]),
                                 LabelDivider(
                                     child: RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(children: [
-                                          TextSpan(text: 'たんご' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                                          TextSpan(text: '単語', style: TextStyle(fontSize: 18, color: Colors.white))
+                                          TextSpan(
+                                              text: 'たんご' + '\n',
+                                              style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white)),
+                                          TextSpan(
+                                              text: '単語',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white))
                                         ]))),
-                                CompoundWordColumn(scaffoldContext: scaffoldKey.currentContext,kanji: kanji),
+                                CompoundWordColumn(
+                                    scaffoldContext: scaffoldKey.currentContext,
+                                    kanji: kanji),
                                 LabelDivider(
                                     child: RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(children: [
-                                          TextSpan(text: 'れいぶん' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                                          TextSpan(text: '例文', style: TextStyle(fontSize: 18, color: Colors.white))
+                                          TextSpan(
+                                              text: 'れいぶん' + '\n',
+                                              style: TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.white)),
+                                          TextSpan(
+                                              text: '例文',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white))
                                         ]))),
                               ],
                             ),
@@ -638,13 +758,16 @@ class _KanjiBlockState extends State<KanjiBlock> {
   loadVideo() async {
     if (allVideoFiles.contains(widget.kanjiStr)) {
       setState(() {
-        videoController = VideoPlayerController.asset(Uri.encodeFull('video/${widget.kanjiStr}.mp4'))
+        videoController = VideoPlayerController.asset(
+            Uri.encodeFull('video/${widget.kanjiStr}.mp4'))
           ..initialize().then((_) {
             setState(() {});
           })
           ..addListener(() async {
             if (videoController != null && this.mounted) {
-              if (await videoController.position >= videoController.value.duration && isPlaying) {
+              if (await videoController.position >=
+                      videoController.value.duration &&
+                  isPlaying) {
                 videoController.pause();
                 videoController.seekTo(Duration(seconds: 0));
 
@@ -683,13 +806,16 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       color: Colors.transparent,
                       child: Text(
                         widget.kanjiStr,
-                        style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                        style: TextStyle(
+                            fontFamily: 'strokeOrders', fontSize: 128),
                         textScaleFactor: widget.scaleFactor,
                         textAlign: TextAlign.center,
                       ),
                     ))),
           ),
-        if (videoController != null && videoController.value.isInitialized && isPlaying == true)
+        if (videoController != null &&
+            videoController.value.isInitialized &&
+            isPlaying == true)
           Positioned.fill(
               child: Center(
                   child: Padding(
@@ -714,7 +840,9 @@ class _KanjiBlockState extends State<KanjiBlock> {
               child: Image.asset(
             'data/matts.png',
           )),
-        if (videoController != null && videoController.value.isInitialized && isPlaying == false)
+        if (videoController != null &&
+            videoController.value.isInitialized &&
+            isPlaying == false)
           Positioned.fill(
               child: Center(
                   child: Opacity(
@@ -738,7 +866,8 @@ class StrokeAnimationPlayer extends StatelessWidget {
   final String kanjiStr;
   final VideoPlayerController videoController;
 
-  StrokeAnimationPlayer({this.kanjiStr, this.videoController}) : assert(kanjiStr != null && kanjiStr.length == 1);
+  StrokeAnimationPlayer({this.kanjiStr, this.videoController})
+      : assert(kanjiStr != null && kanjiStr.length == 1);
 
   @override
   Widget build(BuildContext context) {
@@ -780,7 +909,11 @@ class KanjiInfoColumn extends StatelessWidget {
               splashColor: Theme.of(context).primaryColor,
               highlightColor: Theme.of(context).primaryColor,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => SearchResultPage(radicals: kanji.radicals)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            SearchResultPage(radicals: kanji.radicals)));
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -789,16 +922,26 @@ class KanjiInfoColumn extends StatelessWidget {
                       child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(children: [
-                            TextSpan(text: 'ぶしゅ' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                            TextSpan(text: '部首', style: TextStyle(fontSize: 18, color: Colors.white))
+                            TextSpan(
+                                text: 'ぶしゅ' + '\n',
+                                style: TextStyle(
+                                    fontSize: 9, color: Colors.white)),
+                            TextSpan(
+                                text: '部首',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white))
                           ]))),
                   Padding(
                     padding: EdgeInsets.all(0),
-                    child: Text("${kanji.radicals}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Text("${kanji.radicals}",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   Padding(
                     padding: EdgeInsets.all(0),
-                    child: Text("${kanji.radicalsMeaning}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Text("${kanji.radicalsMeaning}",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   )
                 ],
               ),
@@ -818,12 +961,15 @@ class KanjiInfoColumn extends StatelessWidget {
                                 padding: EdgeInsets.all(4),
                                 child: Text(
                                   'N${kanji.jlpt}',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 )),
                             decoration: BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                      5.0) //                 <--- border radius here
                                   ),
                             ),
                           ),
@@ -838,7 +984,8 @@ class KanjiInfoColumn extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                   child: Text(
                     "${kanji.strokes} strokes",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   )),
               if (kanji.radicals != null && kanji.radicals.isNotEmpty)
                 DescribedFeatureOverlay(
@@ -847,7 +994,8 @@ class KanjiInfoColumn extends StatelessWidget {
                     tapTarget: Text('部首', style: TextStyle(fontSize: 18)),
                     // The widget that will be displayed as the tap target.
                     title: Text('Radicals'),
-                    description: Text('Tap here if you want to see more kanji with this radical.'),
+                    description: Text(
+                        'Tap here if you want to see more kanji with this radical.'),
                     backgroundColor: Theme.of(context).primaryColor,
                     targetColor: Colors.white,
                     textColor: Colors.white,
@@ -866,7 +1014,8 @@ class CompoundWordColumn extends StatelessWidget {
   final Kanji kanji;
   final BuildContext scaffoldContext;
 
-  CompoundWordColumn({this.scaffoldContext,this.kanji}) : super(key: UniqueKey());
+  CompoundWordColumn({this.scaffoldContext, this.kanji})
+      : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -880,16 +1029,18 @@ class CompoundWordColumn extends StatelessWidget {
     var kunyomiVerbGroup = <Widget>[];
 
     var onyomis = kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
-    var kunyomis = kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
+    var kunyomis =
+        kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
 //
 
-    List<Word> onyomiWords =
-        Set<Word>.from(kanji.onyomiWords).toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
+    List<Word> onyomiWords = Set<Word>.from(kanji.onyomiWords)
+        .toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
     onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
-      var words =
-          List.from(onyomiWords.where((onyomiWord) => onyomiWord.wordFurigana.contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
+      var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord
+          .wordFurigana
+          .contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       onyomiWords.removeWhere((word) => words.contains(word));
       var tileTitle = Stack(
@@ -905,12 +1056,14 @@ class CompoundWordColumn extends StatelessWidget {
                       padding: EdgeInsets.all(4),
                       child: Text(
                         onyomi,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
                         ),
                   ),
                 ),
@@ -921,7 +1074,8 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
+              onPressed: () =>
+                  showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
             ),
           )
         ],
@@ -932,7 +1086,8 @@ class CompoundWordColumn extends StatelessWidget {
       for (var word in words) {
         tileChildren.add(ListTile(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
           },
           onLongPress: () {
             showModalBottomSheet(
@@ -951,7 +1106,8 @@ class CompoundWordColumn extends StatelessWidget {
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
             style: TextStyle(fontSize: 24),
           ),
-          subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle:
+              Text(word.meanings, style: TextStyle(color: Colors.white54)),
         ));
         tileChildren.add(Divider(
           height: 0,
@@ -993,8 +1149,9 @@ class CompoundWordColumn extends StatelessWidget {
     kunyomis.sort((a, b) => b.length.compareTo(a.length));
 
     for (var kunyomi in kunyomis) {
-      var words = List.from(
-          kunyomiWords.where((kunyomiWord) => kunyomiWord.wordFurigana.contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
+      var words = List.from(kunyomiWords.where((kunyomiWord) => kunyomiWord
+          .wordFurigana
+          .contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       kunyomiWords.removeWhere((word) => words.contains(word));
 
@@ -1011,12 +1168,14 @@ class CompoundWordColumn extends StatelessWidget {
                       padding: EdgeInsets.all(4),
                       child: Text(
                         kunyomi,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
                         ),
                   ),
                 ),
@@ -1027,7 +1186,8 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
+              onPressed: () =>
+                  showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
             ),
           )
         ],
@@ -1038,7 +1198,8 @@ class CompoundWordColumn extends StatelessWidget {
       for (var word in words) {
         tileChildren.add(ListTile(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
           },
           onLongPress: () {
             showModalBottomSheet(
@@ -1057,7 +1218,8 @@ class CompoundWordColumn extends StatelessWidget {
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
             style: TextStyle(fontSize: 24),
           ),
-          subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle:
+              Text(word.meanings, style: TextStyle(color: Colors.white54)),
         ));
         tileChildren.add(Divider(height: 0, indent: 8, endIndent: 8));
       }
@@ -1118,8 +1280,14 @@ class CompoundWordColumn extends StatelessWidget {
                         child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(children: [
-                              TextSpan(text: 'どうし　　　　けいようし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                              TextSpan(text: '動詞 と 形容詞', style: TextStyle(fontSize: 18, color: Colors.white)),
+                              TextSpan(
+                                  text: 'どうし　　　　けいようし' + '\n',
+                                  style: TextStyle(
+                                      fontSize: 9, color: Colors.white)),
+                              TextSpan(
+                                  text: '動詞 と 形容詞',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white)),
                             ]))),
                   )),
               Flexible(
@@ -1167,7 +1335,9 @@ class CompoundWordColumn extends StatelessWidget {
             child: Container(
               height: 368,
               margin: EdgeInsets.only(top: 48, left: 12, right: 12),
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Theme.of(scaffoldContext).primaryColor),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Theme.of(scaffoldContext).primaryColor),
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.disabled,
@@ -1189,12 +1359,15 @@ class CompoundWordColumn extends StatelessWidget {
                                 padding: EdgeInsets.all(4),
                                 child: Text(
                                   yomi,
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 )),
                             decoration: BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                      5.0) //                 <--- border radius here
                                   ),
                             ),
                           ),
@@ -1215,11 +1388,15 @@ class CompoundWordColumn extends StatelessWidget {
                             focusColor: Colors.white,
                             labelText: isOnyomi ? 'Onyomi' : 'Kunyomi',
                             labelStyle: TextStyle(color: Colors.white70),
-                            border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white70)),
                           ),
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
                           minLines: 1,
                           maxLines: 1,
                         )),
@@ -1238,9 +1415,12 @@ class CompoundWordColumn extends StatelessWidget {
                           focusColor: Colors.white,
                           labelText: 'Word',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
                         ),
                         style: TextStyle(color: Colors.white),
                         minLines: 1,
@@ -1262,9 +1442,12 @@ class CompoundWordColumn extends StatelessWidget {
                           focusColor: Colors.white,
                           labelText: 'Meaning',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
                         ),
                         style: TextStyle(color: Colors.white),
                         minLines: 1,
@@ -1279,7 +1462,9 @@ class CompoundWordColumn extends StatelessWidget {
                       child: Container(
                           width: MediaQuery.of(scaffoldContext).size.width - 24,
                           height: 42,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
                           child: ElevatedButton(
                               child: Text(
                                 'Add',
@@ -1289,14 +1474,20 @@ class CompoundWordColumn extends StatelessWidget {
                                 if (formKey.currentState.validate()) {
                                   if (isOnyomi) {
                                     kanji.onyomiWords.add(Word(
-                                        wordText: wordTextEditingController.text,
-                                        wordFurigana: yomiTextEditingController.text,
-                                        meanings: meaningTextEditingController.text));
+                                        wordText:
+                                            wordTextEditingController.text,
+                                        wordFurigana:
+                                            yomiTextEditingController.text,
+                                        meanings:
+                                            meaningTextEditingController.text));
                                   } else {
                                     kanji.kunyomiWords.add(Word(
-                                        wordText: wordTextEditingController.text,
-                                        wordFurigana: yomiTextEditingController.text,
-                                        meanings: meaningTextEditingController.text));
+                                        wordText:
+                                            wordTextEditingController.text,
+                                        wordFurigana:
+                                            yomiTextEditingController.text,
+                                        meanings:
+                                            meaningTextEditingController.text));
                                   }
                                 }
                                 Navigator.pop(scaffoldContext);
@@ -1312,7 +1503,8 @@ class CompoundWordColumn extends StatelessWidget {
       },
       transitionBuilder: (_, anim, __, child) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
+          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(
+              CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
           child: child,
         );
       },

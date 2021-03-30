@@ -50,7 +50,7 @@ class KanjiListBloc {
     }
   }
 
-  void addWord(KanjiList kanjiList, Word word){
+  void addWord(KanjiList kanjiList, Word word) {
     var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     var jsonStr = jsonEncode(word.toMap());
     temp.kanjiStrs.add(jsonStr);
@@ -61,7 +61,7 @@ class KanjiListBloc {
     }
   }
 
-  void addSentence(KanjiList kanjiList, Sentence sentence){
+  void addSentence(KanjiList kanjiList, Sentence sentence) {
     var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     var jsonStr = jsonEncode(sentence.toMap());
     temp.kanjiStrs.add(jsonStr);

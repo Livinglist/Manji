@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum IconType {star, fav}
+enum IconType { star, fav }
 
 class FancyIconButton extends StatefulWidget {
   final bool isFaved;
@@ -11,13 +11,19 @@ class FancyIconButton extends StatefulWidget {
   final IconData iconBorder;
   final Color color;
 
-  FancyIconButton({@required this.isFaved, this.onTapped, this.icon, this.iconBorder, this.color});
+  FancyIconButton(
+      {@required this.isFaved,
+      this.onTapped,
+      this.icon,
+      this.iconBorder,
+      this.color});
 
   @override
   State<StatefulWidget> createState() => FancyIconButtonState();
 }
 
-class FancyIconButtonState extends State<FancyIconButton> with SingleTickerProviderStateMixin {
+class FancyIconButtonState extends State<FancyIconButton>
+    with SingleTickerProviderStateMixin {
   AnimationController animationController;
   Tween<double> tween = Tween(begin: 0.0, end: 6 * pi);
   Icon icon;
@@ -29,16 +35,19 @@ class FancyIconButtonState extends State<FancyIconButton> with SingleTickerProvi
     isFaved = widget.isFaved;
 
     icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
-    colorTween = isFaved? ColorTween(begin: widget.color, end: Colors.white):ColorTween(begin: Colors.white, end: widget.color);
+    colorTween = isFaved
+        ? ColorTween(begin: widget.color, end: Colors.white)
+        : ColorTween(begin: Colors.white, end: widget.color);
 
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-      ..addListener(() {
-        if (animationController.isAnimating) {
-          setState(() {
-            icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+          ..addListener(() {
+            if (animationController.isAnimating) {
+              setState(() {
+                icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
+              });
+            }
           });
-        }
-      });
     //animationController.forward();
     super.initState();
   }

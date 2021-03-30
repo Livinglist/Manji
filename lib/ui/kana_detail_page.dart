@@ -32,7 +32,9 @@ class KanaDetailPageState extends State<KanaDetailPage> {
     ]);
     flutterTts.setLanguage("ja");
 
-    KanjiBloc.instance.findKanjiByKana(widget.kana, widget.yomikata).listen((kanji) {
+    KanjiBloc.instance
+        .findKanjiByKana(widget.kana, widget.yomikata)
+        .listen((kanji) {
       this.setState(() {
         kanjis.add(kanji);
       });
@@ -98,7 +100,9 @@ class KanaDetailPageState extends State<KanaDetailPage> {
                     Icons.view_comfy,
                     color: Colors.white,
                   ),
-                  crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  crossFadeState: showGrid
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
                   duration: Duration(milliseconds: 200)),
               onPressed: () {
                 setState(() {

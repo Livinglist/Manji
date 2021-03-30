@@ -8,7 +8,8 @@ class KanjiProgressListTile extends StatelessWidget {
   final ValueChanged<String> onLongPressed;
   final VoidCallback onTap;
 
-  KanjiProgressListTile({this.kanji, this.onLongPressed, this.onTap}) : assert(kanji != null);
+  KanjiProgressListTile({this.kanji, this.onLongPressed, this.onTap})
+      : assert(kanji != null);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,8 @@ class KanjiProgressListTile extends StatelessWidget {
         if (onTap != null)
           this.onTap();
         else {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
         }
       },
       onLongPress: () {
@@ -33,12 +35,19 @@ class KanjiProgressListTile extends StatelessWidget {
             tag: kanji.kanji,
             child: Material(
               color: Colors.transparent,
-              child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei', fontFamilyFallback: ['Ai'])),
+              child: Text(kanji.kanji,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontFamily: 'kazei',
+                      fontFamilyFallback: ['Ai'])),
             ),
           ),
         ),
       ),
-      title: Text('Studied ${kanji.timeStamps.length} ${kanji.timeStamps.length <= 1 ? 'time' : 'times'}', style: TextStyle(color: Colors.white)),
+      title: Text(
+          'Studied ${kanji.timeStamps.length} ${kanji.timeStamps.length <= 1 ? 'time' : 'times'}',
+          style: TextStyle(color: Colors.white)),
       subtitle: Text(
         kanji.meaning,
         style: TextStyle(color: Colors.grey),

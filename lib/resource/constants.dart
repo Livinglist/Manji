@@ -1,8 +1,38 @@
-const String kanjiKey = 'kanji';
-const String sentencesKey = 'sentences';
-const String textKey = 'text';
+class Keys {
+  ///Reserved for [Kanji]
+  static String kanjiKey = 'kanji';
+  static String sentencesKey = 'sentences';
+  static String textKey = 'text';
+  static String idKey = 'id';
+  static String meaningKey = 'meaning';
+  static String radicalKey = 'radicals';
+  static String radicalsMeaningKey = 'radicalsMeaning';
+  static String strokesKey = 'strokes';
+  static String gradeKey = 'grade';
+  static String jlptKey = 'jlpt';
+  static String frequencyKey = 'frequency';
+  static String partsKey = 'parts';
+  static String kunyomiKey = 'kunyomi';
+  static String onyomiKey = 'onyomi';
+  static String kunyomiWordsKey = 'kunyomiWords';
+  static String onyomiWordsKey = 'onyomiWords';
+  static String studiedTimeStampsKey = 'studiedTimeStamps';
 
-///Todo: more keys
+  ///Reserved for [Sentence]
+  static String kanjiIdKey = "kanjiId";
+  static String rightAnswerKey = "rightAnswer";
+  static String choicesKey = "choices";
+  static String selectedIndexKey = "selectedIndex";
+  static String questionTypeKey = "questionType";
+  static String furiganaKey = 'furigana';
+  static String englishTextKey = 'englishText';
+  static String tokensKey = 'tokens';
+
+  ///Reserved for [Word]
+  static String wordTextKey = 'wordText';
+  static String wordFuriganaKey = 'wordFurigana';
+  static String wordMeaningsKey = 'meanings';
+}
 
 const Set<String> allVideoFiles = {
   "一",

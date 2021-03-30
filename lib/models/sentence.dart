@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../resource/constants.dart';
+
 class Token {
   String text;
   String furigana;
@@ -10,13 +12,13 @@ class Token {
         containsKanji = furigana != null;
 
   Map toMap() => {
-        'text': text,
-        'furigana': furigana,
+        Keys.textKey: text,
+        Keys.furiganaKey: furigana,
       };
 
   Token.fromMap(Map map) {
-    text = map['text'];
-    furigana = map['furigana'];
+    text = map[Keys.textKey];
+    furigana = map[Keys.furiganaKey];
     containsKanji = furigana != null;
   }
 }
@@ -31,42 +33,43 @@ class Sentence {
   Sentence({this.id, this.kanji, this.tokens, this.text, this.englishText});
 
   Sentence.fromMap(Map<String, dynamic> map) {
-    text = map['text'];
-    englishText = map['englishText'];
-    tokens = (map['tokens'] as List)
+    text = map[Keys.textKey];
+    englishText = map[Keys.englishTextKey];
+    tokens = (map[Keys.tokensKey] as List)
         .map((map) => Token.fromMap(jsonDecode(map)))
         .toList();
   }
 
   Map toMap() => {
-        'text': text,
-        'englishText': englishText,
-        'tokens': tokens.map((token) => jsonEncode(token.toMap())).toList()
+        Keys.textKey: text,
+        Keys.englishTextKey: englishText,
+        Keys.tokensKey:
+            tokens.map((token) => jsonEncode(token.toMap())).toList()
       };
 
   Map toDBMap() => {
-        'id': id,
-        'text': text,
-        'englishText': englishText,
-        'tokens': jsonEncode(
+        Keys.idKey: id,
+        Keys.textKey: text,
+        Keys.englishTextKey: englishText,
+        Keys.tokensKey: jsonEncode(
             tokens.map((token) => jsonEncode(token.toMap())).toList())
       };
 
   Sentence.fromDBMap(Map map) {
-    id = map['id'];
-    text = map['text'];
-    englishText = map['englishText'];
-    tokens = (jsonDecode(map['tokens']) as List)
+    id = map[Keys.idKey];
+    text = map[Keys.textKey];
+    englishText = map[Keys.englishTextKey];
+    tokens = (jsonDecode(map[Keys.tokensKey]) as List)
         .map((map) => Token.fromMap(jsonDecode(map)))
         .toList();
   }
 
   Sentence.fromJsonString(String str) {
     var map = jsonDecode(str);
-    id = map['id'];
-    text = map['text'];
-    englishText = map['englishText'];
-    tokens = (jsonDecode(map['tokens']) as List)
+    id = map[Keys.idKey];
+    text = map[Keys.textKey];
+    englishText = map[Keys.englishTextKey];
+    tokens = (jsonDecode(map[Keys.tokensKey]) as List)
         .map((map) => Token.fromMap(jsonDecode(map)))
         .toList();
   }

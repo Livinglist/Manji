@@ -10,7 +10,8 @@ class SpringCurve extends Curve {
   /// Provides a critically damped spring by default, with an easily overrideable damping value.
   ///
   /// See also: [SpringCurve.custom], [SpringCurve.underDamped], [SpringCurve.criticallyDamped], [SpringCurve.overDamped]
-  factory SpringCurve([double damping = 20]) => SpringCurve.custom(damping: damping);
+  factory SpringCurve([double damping = 20]) =>
+      SpringCurve.custom(damping: damping);
 
   /// Provides a critically damped spring by default, with an easily overrideable damping, stiffness and mass value.
   SpringCurve.custom({
@@ -18,15 +19,15 @@ class SpringCurve extends Curve {
     double stiffness = 180,
     double mass = 1.0,
   }) : this._sim = SpringSimulation(
-    SpringDescription(
-      damping: damping,
-      mass: mass,
-      stiffness: stiffness,
-    ),
-    0.0,
-    1.0,
-    0.0,
-  );
+          SpringDescription(
+            damping: damping,
+            mass: mass,
+            stiffness: stiffness,
+          ),
+          0.0,
+          1.0,
+          0.0,
+        );
 
   /// Provides an **under damped** spring, which wobbles loosely at the end.
   static Curve get underDamped => SpringCurve(12);

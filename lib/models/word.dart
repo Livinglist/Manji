@@ -1,3 +1,5 @@
+import '../resource/constants.dart';
+
 enum WordType { noun, verb, adjective }
 
 class Word {
@@ -19,17 +21,23 @@ class Word {
     meanings = subStrs[2];
   }
 
-  Map toMap() => {'wordText': wordText, 'wordFurigana': wordFurigana, 'meanings': meanings};
+  Map toMap() => {
+        Keys.wordTextKey: wordText,
+        Keys.wordFuriganaKey: wordFurigana,
+        Keys.wordMeaningsKey: meanings
+      };
 
   Word.fromMap(Map map) {
-    wordText = map['wordText'];
-    wordFurigana = map['wordFurigana'];
-    meanings = map['meanings'];
+    wordText = map[Keys.wordTextKey];
+    wordFurigana = map[Keys.wordFuriganaKey];
+    meanings = map[Keys.wordMeaningsKey];
   }
 
   @override
   bool operator ==(Object other) {
-    if (other is Word && other.wordText == this.wordText && other.meanings == this.meanings) return true;
+    if (other is Word &&
+        other.wordText == this.wordText &&
+        other.meanings == this.meanings) return true;
     return false;
   }
 

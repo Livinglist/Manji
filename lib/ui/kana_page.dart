@@ -48,8 +48,11 @@ class KanaPageState extends State<KanaPage> {
           ]),
           actions: [
             IconButton(
-              icon: Icon(showHandwritten ? FontAwesomeIcons.book : FontAwesomeIcons.signature),
-              onPressed: () => setState(() => showHandwritten = !showHandwritten),
+              icon: Icon(showHandwritten
+                  ? FontAwesomeIcons.book
+                  : FontAwesomeIcons.signature),
+              onPressed: () =>
+                  setState(() => showHandwritten = !showHandwritten),
             )
           ],
         ),
@@ -95,7 +98,8 @@ class KanaGridView extends StatelessWidget {
   final bool showHandwritten;
   final ValueChanged<String> onTap;
 
-  KanaGridView({this.kanas, this.showHandwritten, this.onTap}) : assert(kanas != null);
+  KanaGridView({this.kanas, this.showHandwritten, this.onTap})
+      : assert(kanas != null);
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +124,21 @@ class KanaGridView extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               kanas[index].kana ?? '',
-                              style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'Ai'),
-                              textScaleFactor: MediaQuery.of(context).size.width / 375,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontFamily: 'Ai'),
+                              textScaleFactor:
+                                  MediaQuery.of(context).size.width / 375,
                             ),
                           ),
                           Align(
                               alignment: Alignment.bottomCenter,
                               child: Text(kanas[index].pron ?? '',
-                                  style: TextStyle(color: Colors.white70, fontSize: 12), textScaleFactor: MediaQuery.of(context).size.width / 375))
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                  textScaleFactor:
+                                      MediaQuery.of(context).size.width / 375))
                         ],
                       ),
                     ))
@@ -140,12 +151,18 @@ class KanaGridView extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: Text(kanas[index].kana ?? '',
-                                style: TextStyle(color: Colors.white, fontSize: 36), textScaleFactor: MediaQuery.of(context).size.width / 375),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 36),
+                                textScaleFactor:
+                                    MediaQuery.of(context).size.width / 375),
                           ),
                           Align(
                               alignment: Alignment.bottomCenter,
                               child: Text(kanas[index].pron ?? '',
-                                  style: TextStyle(color: Colors.white70, fontSize: 12), textScaleFactor: MediaQuery.of(context).size.width / 375))
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                  textScaleFactor:
+                                      MediaQuery.of(context).size.width / 375))
                         ],
                       ),
                     )),

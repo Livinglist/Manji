@@ -21,4 +21,3 @@ final Paint kWhitePaint = Paint()
   ..isAntiAlias = kIsAntiAlias
   ..color = kBrushWhite
   ..strokeWidth = kStrokeWidth;
-

@@ -43,15 +43,17 @@ class KanjiGridView extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Align(
-                      alignment: Alignment.center,
-                      child: Hero(
-                        tag: kanji.kanji,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
-                        )
-                      )
-                    ),
+                        alignment: Alignment.center,
+                        child: Hero(
+                            tag: kanji.kanji,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Text(kanji.kanji,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 48,
+                                      fontFamily: fallBackFont ?? 'kazei')),
+                            ))),
                     Positioned(
                       left: 4,
                       top: 4,
@@ -63,7 +65,10 @@ class KanjiGridView extends StatelessWidget {
                   ],
                 )),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => KanjiDetailPage(kanji: kanji)));
             },
             onLongPress: () {
               if (onLongPressed != null) {

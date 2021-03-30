@@ -46,16 +46,21 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(12),
-                child: Text('Tap on the card to reveal more information about the kanji.', style: TextStyle(color: Colors.white)),
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: Text('Tip: You can double tap on the card to check out detailed information about the kanji.',
+                child: Text(
+                    'Tap on the card to reveal more information about the kanji.',
                     style: TextStyle(color: Colors.white)),
               ),
               Padding(
                 padding: EdgeInsets.all(12),
-                child: Text('Swipe right if you want to keep studying the current card.', style: TextStyle(color: Colors.white)),
+                child: Text(
+                    'Tip: You can double tap on the card to check out detailed information about the kanji.',
+                    style: TextStyle(color: Colors.white)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Text(
+                    'Swipe right if you want to keep studying the current card.',
+                    style: TextStyle(color: Colors.white)),
               ),
               Material(
                 elevation: 8,
@@ -65,7 +70,8 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
               ),
               Padding(
                 padding: EdgeInsets.all(12),
-                child: Text('Swipe left if you have memorized the current card. (This card will then be removed from the deck)',
+                child: Text(
+                    'Swipe left if you have memorized the current card. (This card will then be removed from the deck)',
                     style: TextStyle(color: Colors.white)),
               ),
               Material(

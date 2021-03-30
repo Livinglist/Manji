@@ -10,7 +10,8 @@ class DailyKanjiCard extends StatefulWidget {
   State<StatefulWidget> createState() => DailyKanjiCardState();
 }
 
-class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProviderStateMixin {
+class DailyKanjiCardState extends State<DailyKanjiCard>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -59,7 +60,10 @@ class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProvide
                                                 tag: '',
                                                 child: Text(
                                                   kanji.kanji,
-                                                  style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                                                  style: TextStyle(
+                                                      fontFamily:
+                                                          'strokeOrders',
+                                                      fontSize: 128),
                                                   textAlign: TextAlign.center,
                                                 ))),
                                       )
@@ -83,15 +87,22 @@ class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProvide
                                                 padding: EdgeInsets.all(4),
                                                 child: Container(
                                                   child: Padding(
-                                                      padding: EdgeInsets.all(4),
+                                                      padding:
+                                                          EdgeInsets.all(4),
                                                       child: Text(
                                                         'N${kanji.jlpt}',
-                                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       )),
                                                   decoration: BoxDecoration(
                                                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                                     color: Colors.grey,
-                                                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(
+                                                            5.0) //                 <--- border radius here
                                                         ),
                                                   ),
                                                 ),
@@ -105,14 +116,30 @@ class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProvide
                                     ),
                                     RichText(
                                       text: TextSpan(children: [
-                                        TextSpan(text: '意味 ', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
-                                        TextSpan(text: kanji.meaning, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600))
+                                        TextSpan(
+                                            text: '意味 ',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w600)),
+                                        TextSpan(
+                                            text: kanji.meaning,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600))
                                       ]),
                                     ),
                                     RichText(
                                       text: TextSpan(children: [
-                                        TextSpan(text: '使用頻度 ', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
-                                        TextSpan(text: kanji.frequency.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600))
+                                        TextSpan(
+                                            text: '使用頻度 ',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w600)),
+                                        TextSpan(
+                                            text: kanji.frequency.toString(),
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600))
                                       ]),
                                     ),
                                   ],
@@ -123,7 +150,10 @@ class DailyKanjiCardState extends State<DailyKanjiCard> with SingleTickerProvide
                   ),
                   splashColor: Colors.grey,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => KanjiDetailPage(kanji: kanji)));
                   },
                 ),
               ),

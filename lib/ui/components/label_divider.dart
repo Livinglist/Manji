@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LabelDivider extends StatelessWidget{
+class LabelDivider extends StatelessWidget {
   final Widget child;
 
   LabelDivider({@required this.child});
@@ -19,9 +19,7 @@ class LabelDivider extends StatelessWidget{
             Flexible(
                 flex: 3,
                 child: Container(
-                  child: Center(
-                    child: child
-                  ),
+                  child: Center(child: child),
                 )),
             Flexible(
               flex: 4,

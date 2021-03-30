@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:kanji_dictionary/main.dart';
+import 'package:kanji_dictionary/models/kanji.dart';
+import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -26,5 +28,11 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+  });
+
+  testWidgets('Kanji detail page test', (WidgetTester tester) async {
+    tester.pumpWidget(
+        KanjiDetailPage(kanji: Kanji(kanji: '一', grade: 1, jlpt: 1)));
+    expect(find.widgetWithText(Text, '一'), findsWidgets);
   });
 }

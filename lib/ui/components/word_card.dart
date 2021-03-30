@@ -9,19 +9,22 @@ class WordCard extends StatefulWidget {
   final String wordText;
   final String wordFurigana;
 
-  WordCard({this.word,this.wordText, this.wordFurigana}) : assert(wordText != null || word !=null);
+  WordCard({this.word, this.wordText, this.wordFurigana})
+      : assert(wordText != null || word != null);
 
   @override
   State<StatefulWidget> createState() => WordCardState();
 }
 
-class WordCardState extends State<WordCard> with SingleTickerProviderStateMixin {
+class WordCardState extends State<WordCard>
+    with SingleTickerProviderStateMixin {
   AnimationController animationController;
   Tween<double> tween = Tween(begin: 0, end: 1);
 
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    animationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
     //Future.doWhile(startAnimation);
     super.initState();
     animationController.forward();
@@ -47,26 +50,32 @@ class WordCardState extends State<WordCard> with SingleTickerProviderStateMixin 
       animation: animationController,
       builder: (_, __) {
         return Opacity(
-          opacity: tween.animate(animationController).value,
-          child: InkWell(
-            onTap: (){
-              //Navigator.push(context, MaterialPageRoute(builder: (_)=>WordDetailPage(word: )));
-            },
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          child: FuriganaText(
-                            text: widget.wordText,
-                            tokens: [Token(text: widget.wordText, furigana: widget.wordFurigana)],
-                            style: TextStyle(color: Colors.black, fontSize: 28),
-                          ),
+            opacity: tween.animate(animationController).value,
+            child: InkWell(
+              onTap: () {
+                //Navigator.push(context, MaterialPageRoute(builder: (_)=>WordDetailPage(word: )));
+              },
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: FuriganaText(
+                              text: widget.wordText,
+                              tokens: [
+                                Token(
+                                    text: widget.wordText,
+                                    furigana: widget.wordFurigana)
+                              ],
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 28),
+                            ),
 //                            child: RichText(
 //                                textAlign: TextAlign.left,
 //                                maxLines: 2,
@@ -74,15 +83,14 @@ class WordCardState extends State<WordCard> with SingleTickerProviderStateMixin 
 //                                  TextSpan(style: TextStyle(fontSize: 15), text: widget.wordFurigana + '\n'),
 //                                  TextSpan(style: TextStyle(fontSize: 28), text: widget.wordText)
 //                                ]))
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
-        );
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ));
       },
     );
   }

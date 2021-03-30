@@ -54,13 +54,18 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
               //title: Text('日本語能力試験漢字'),
               title: FuriganaText(
                 text: '教育漢字',
-                tokens: [Token(text: '教育', furigana: 'きょういく'), Token(text: '漢字', furigana: 'かんじ')],
+                tokens: [
+                  Token(text: '教育', furigana: 'きょういく'),
+                  Token(text: '漢字', furigana: 'かんじ')
+                ],
                 style: TextStyle(fontSize: 20),
               ),
               actions: <Widget>[
                 IconButton(
                     icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
-                    onPressed: () => showAmountDialog(gradeToKanjisMap[currentGrade], 'Study ${toGradeString(currentGrade)}')),
+                    onPressed: () => showAmountDialog(
+                        gradeToKanjisMap[currentGrade],
+                        'Study ${toGradeString(currentGrade)}')),
                 IconButton(
                     icon: AnimatedCrossFade(
                       firstChild: Icon(
@@ -71,7 +76,9 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
                         FontAwesomeIcons.sortNumericDownAlt,
                         color: Colors.white,
                       ),
-                      crossFadeState: altSorted ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                      crossFadeState: altSorted
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
                       duration: Duration(milliseconds: 200),
                     ),
                     color: Colors.white,
@@ -90,7 +97,9 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
                       Icons.view_comfy,
                       color: Colors.white,
                     ),
-                    crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    crossFadeState: showGrid
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
                     duration: Duration(milliseconds: 200),
                   ),
                   onPressed: () {
@@ -169,7 +178,8 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
 
   void showAmountDialog(List<Kanji> kanjis, String title) {
     if (kanjis.length <= 20) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
       return;
     }
 
@@ -182,15 +192,27 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
               CupertinoActionSheetAction(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => KanjiStudyPage(kanjis: kanjis)));
                   },
-                  child: Text("All of ${kanjis.length} kanji", style: actionTextStyle)),
+                  child: Text("All of ${kanjis.length} kanji",
+                      style: actionTextStyle)),
               if (kanjis.length >= 100)
-                CupertinoActionSheetAction(onPressed: () => onAmountPressed(100, kanjis), child: Text("100 kanji", style: actionTextStyle)),
+                CupertinoActionSheetAction(
+                    onPressed: () => onAmountPressed(100, kanjis),
+                    child: Text("100 kanji", style: actionTextStyle)),
               if (kanjis.length >= 50)
-                CupertinoActionSheetAction(onPressed: () => onAmountPressed(50, kanjis), child: Text("50 kanji", style: actionTextStyle)),
-              CupertinoActionSheetAction(onPressed: () => onAmountPressed(20, kanjis), child: Text("20 kanji", style: actionTextStyle)),
-              CupertinoActionSheetAction(onPressed: () => onAmountPressed(10, kanjis), child: Text("10 kanji", style: actionTextStyle)),
+                CupertinoActionSheetAction(
+                    onPressed: () => onAmountPressed(50, kanjis),
+                    child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(
+                  onPressed: () => onAmountPressed(20, kanjis),
+                  child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(
+                  onPressed: () => onAmountPressed(10, kanjis),
+                  child: Text("10 kanji", style: actionTextStyle)),
             ],
             cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -204,9 +226,11 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
 
   void onAmountPressed(int amount, List<Kanji> kanjis) {
     Navigator.pop(context);
-    var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+    var start = Random(DateTime.now().millisecondsSinceEpoch)
+        .nextInt(kanjis.length - amount);
     var temp = kanjis.sublist(start, start + amount);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
   }
 
   String toGradeString(int grade) {

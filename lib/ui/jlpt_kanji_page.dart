@@ -60,7 +60,8 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
-                onPressed: () => showAmountDialog(jlptToKanjisMap[currentLevel], 'Study N${currentLevel.index + 1}')),
+                onPressed: () => showAmountDialog(jlptToKanjisMap[currentLevel],
+                    'Study N${currentLevel.index + 1}')),
             IconButton(
                 icon: AnimatedCrossFade(
                   firstChild: Icon(
@@ -71,7 +72,9 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
                     FontAwesomeIcons.sortNumericDownAlt,
                     color: Colors.white,
                   ),
-                  crossFadeState: altSorted ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  crossFadeState: altSorted
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
                   duration: Duration(milliseconds: 200),
                 ),
                 color: Colors.white,
@@ -90,7 +93,9 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
-                crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                crossFadeState: showGrid
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
                 duration: Duration(milliseconds: 200),
               ),
               onPressed: () {
@@ -154,20 +159,23 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
   Widget buildTabBarViewChildren(JLPTLevel jlptLevel) {
     if (sorted) {
       if (altSorted) {
-        jlptToKanjisMap[jlptLevel].sort((l, r) => r.strokes.compareTo(l.strokes));
+        jlptToKanjisMap[jlptLevel]
+            .sort((l, r) => r.strokes.compareTo(l.strokes));
       } else {
-        jlptToKanjisMap[jlptLevel].sort((l, r) => l.strokes.compareTo(r.strokes));
+        jlptToKanjisMap[jlptLevel]
+            .sort((l, r) => l.strokes.compareTo(r.strokes));
       }
     }
 
-    if(showGrid) return KanjiGridView(kanjis: jlptToKanjisMap[jlptLevel]);
+    if (showGrid) return KanjiGridView(kanjis: jlptToKanjisMap[jlptLevel]);
 
     return KanjiListView(kanjis: jlptToKanjisMap[jlptLevel]);
   }
 
   void showAmountDialog(List<Kanji> kanjis, String title) {
     if (kanjis.length <= 20) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
       return;
     }
 
@@ -180,15 +188,27 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
               CupertinoActionSheetAction(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: kanjis)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => KanjiStudyPage(kanjis: kanjis)));
                   },
-                  child: Text("All of ${kanjis.length} kanji", style: actionTextStyle)),
+                  child: Text("All of ${kanjis.length} kanji",
+                      style: actionTextStyle)),
               if (kanjis.length >= 100)
-                CupertinoActionSheetAction(onPressed: () => onAmountPressed(100, kanjis), child: Text("100 kanji", style: actionTextStyle)),
+                CupertinoActionSheetAction(
+                    onPressed: () => onAmountPressed(100, kanjis),
+                    child: Text("100 kanji", style: actionTextStyle)),
               if (kanjis.length >= 50)
-                CupertinoActionSheetAction(onPressed: () => onAmountPressed(50, kanjis), child: Text("50 kanji", style: actionTextStyle)),
-              CupertinoActionSheetAction(onPressed: () => onAmountPressed(20, kanjis), child: Text("20 kanji", style: actionTextStyle)),
-              CupertinoActionSheetAction(onPressed: () => onAmountPressed(10, kanjis), child: Text("10 kanji", style: actionTextStyle)),
+                CupertinoActionSheetAction(
+                    onPressed: () => onAmountPressed(50, kanjis),
+                    child: Text("50 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(
+                  onPressed: () => onAmountPressed(20, kanjis),
+                  child: Text("20 kanji", style: actionTextStyle)),
+              CupertinoActionSheetAction(
+                  onPressed: () => onAmountPressed(10, kanjis),
+                  child: Text("10 kanji", style: actionTextStyle)),
             ],
             cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -202,8 +222,10 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
 
   void onAmountPressed(int amount, List<Kanji> kanjis) {
     Navigator.pop(context);
-    var start = Random(DateTime.now().millisecondsSinceEpoch).nextInt(kanjis.length - amount);
+    var start = Random(DateTime.now().millisecondsSinceEpoch)
+        .nextInt(kanjis.length - amount);
     var temp = kanjis.sublist(start, start + amount);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
   }
 }

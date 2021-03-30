@@ -51,7 +51,11 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
                   return IconButton(
                       icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: iqBloc.kanjisContainedInQuiz)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => KanjiStudyPage(
+                                    kanjis: iqBloc.kanjisContainedInQuiz)));
                       });
                 }
                 return Container();
@@ -71,8 +75,10 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
             if (snapshot.hasData) {
               if (snapshot.data.isEmpty) {
                 return Center(
-                  child: Text("Questions you got wrong\nwill appear here for you to study.",
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+                  child: Text(
+                      "Questions you got wrong\nwill appear here for you to study.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70)),
                 );
               }
               return ListView(

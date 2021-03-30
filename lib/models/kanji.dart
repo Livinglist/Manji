@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../resource/constants.dart';
 import 'word.dart';
 
 enum JLPTLevel { n1, n2, n3, n4, n5 }
@@ -221,7 +222,6 @@ class Kanji {
   String radicals;
   String radicalsMeaning;
   int strokes;
-  //bool isJinmeiyo;
   bool isFaved;
   List<int> timeStamps = [];
 
@@ -256,8 +256,6 @@ class Kanji {
       this.onyomi,
       this.kunyomi,
       this.meaning,
-      //this.isJinmeiyo = false,
-      //this.isFaved = false,
       this.grade,
       this.jlpt,
       this.strokes,
@@ -272,87 +270,83 @@ class Kanji {
         assert(frequency >= 0);
 
   Map toMap() => {
-        'grade': this.grade,
-        'jlpt': this.jlpt,
-        'kanji': this.kanji,
-        'frequency': this.frequency,
-        'onyomi': this.onyomi,
-        'kunyomi': this.kunyomi,
-        'strokes': this.strokes,
-        'parts': this.parts,
-        'meaning': this.meaning,
-        'kunyomiWords': this.kunyomiWords,
-        'onyomiWords': this.onyomiWords
+        Keys.gradeKey: this.grade,
+        Keys.jlptKey: this.jlpt,
+        Keys.kanjiKey: this.kanji,
+        Keys.frequencyKey: this.frequency,
+        Keys.onyomiKey: this.onyomi,
+        Keys.kunyomiKey: this.kunyomi,
+        Keys.strokesKey: this.strokes,
+        Keys.partsKey: this.parts,
+        Keys.meaningKey: this.meaning,
+        Keys.onyomiWordsKey: this.kunyomiWords,
+        Keys.onyomiWordsKey: this.onyomiWords
       };
 
   Kanji.fromMap(Map map) {
-    kanji = map['kanji'];
-    meaning = map['meaning'];
-    strokes = map['strokes'];
-    grade = map['grade'];
-    jlpt = map['jlpt'];
-    frequency = map['frequency'];
-    parts = ((map['pars'] as List) ?? []).cast<String>();
-    kunyomi = (map['kunyomi'] as List ?? []).cast<String>();
-    kunyomiWords = (map['kunyomiWords'] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
-    onyomi = (map['onyomi'] as List ?? []).cast<String>();
-    onyomiWords = (map['onyomiWords'] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
+    kanji = map[Keys.kanjiKey];
+    meaning = map[Keys.meaningKey];
+    strokes = map[Keys.strokesKey];
+    grade = map[Keys.gradeKey];
+    jlpt = map[Keys.jlptKey];
+    frequency = map[Keys.frequencyKey];
+    parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
+    kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
+    kunyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
+        .cast<String>()
+        .map((str) => Word.fromString(str))
+        .toList();
+    onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
+    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
+        .cast<String>()
+        .map((str) => Word.fromString(str))
+        .toList();
   }
 
   Map<String, dynamic> toDBMap() => {
-        'id': id,
-        'grade': this.grade,
-        'jlpt': this.jlpt,
-        'kanji': this.kanji,
-        'frequency': this.frequency,
-        'onyomi': jsonEncode(this.onyomi),
-        'kunyomi': jsonEncode(this.kunyomi),
-        'strokes': this.strokes,
-        'parts': jsonEncode(this.parts),
-        'meaning': this.meaning,
-        'radicals': this.radicals,
-        'radicalsMeaning': this.radicalsMeaning,
-        'kunyomiWords': jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
-        'onyomiWords': jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
-        'studiedTimeStamps': jsonEncode(this.timeStamps)
+        Keys.idKey: Keys.idKey,
+        Keys.gradeKey: this.grade,
+        Keys.jlptKey: this.jlpt,
+        Keys.kanjiKey: this.kanji,
+        Keys.frequencyKey: this.frequency,
+        Keys.onyomiKey: jsonEncode(this.onyomi),
+        Keys.kunyomiKey: jsonEncode(this.kunyomi),
+        Keys.strokesKey: this.strokes,
+        Keys.partsKey: jsonEncode(this.parts),
+        Keys.meaningKey: this.meaning,
+        Keys.radicalKey: this.radicals,
+        Keys.radicalsMeaningKey: this.radicalsMeaning,
+        Keys.onyomiWordsKey:
+            jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
+        Keys.onyomiWordsKey:
+            jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
+        Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
       };
 
   Kanji.fromDBMap(Map map) {
-    id = map['id'];
-    kanji = map['kanji'];
-    meaning = map['meaning'];
-    radicals = map['radicals'];
-    radicalsMeaning = map['radicalsMeaning'];
-    strokes = map['strokes'];
-    grade = map['grade'];
-    jlpt = map['jlpt'];
-    frequency = map['frequency'];
-    parts = (jsonDecode(map['parts']) as List).cast<String>();
-    kunyomi = (jsonDecode(map['kunyomi']) as List).cast<String>();
-    //print(jsonDecode(map['kunyomiWords']));
-    kunyomiWords = (jsonDecode(map['kunyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
-    onyomi = (jsonDecode(map['onyomi']) as List).cast<String>();
-    onyomiWords = (jsonDecode(map['onyomiWords']) as List).map((str) => Word.fromMap(str)).toList();
-    timeStamps = (jsonDecode(map['studiedTimeStamps'] ?? '[]') as List).cast<int>();
+    id = map[Keys.idKey];
+    kanji = map[Keys.kanjiKey];
+    meaning = map[Keys.meaningKey];
+    radicals = map[Keys.radicalKey];
+    radicalsMeaning = map[Keys.radicalsMeaningKey];
+    strokes = map[Keys.strokesKey];
+    grade = map[Keys.gradeKey];
+    jlpt = map[Keys.jlptKey];
+    frequency = map[Keys.frequencyKey];
+    parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
+    kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
+    kunyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
+        .map((str) => Word.fromMap(str))
+        .toList();
+    onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
+    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
+        .map((str) => Word.fromMap(str))
+        .toList();
+    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List)
+        .cast<int>();
   }
 
   String toString() {
     return 'Instance of Kanji: $kanji, meaning: $meaning';
   }
-}
-
-int jlptToIntConverter(JLPTLevel jlpt) {
-  switch (jlpt) {
-    case JLPTLevel.n1:
-      return 1;
-    case JLPTLevel.n2:
-      return 2;
-    case JLPTLevel.n3:
-      return 3;
-    case JLPTLevel.n4:
-      return 4;
-    case JLPTLevel.n5:
-      return 5;
-  }
-  return 0;
 }

@@ -10,7 +10,8 @@ class YearlyActivityPage extends StatefulWidget {
   YearlyActivityPage({this.dateToKanjisMap});
 
   @override
-  _YearlyActivityPageState createState() => _YearlyActivityPageState(dateToKanjisMap: dateToKanjisMap);
+  _YearlyActivityPageState createState() =>
+      _YearlyActivityPageState(dateToKanjisMap: dateToKanjisMap);
 }
 
 class _YearlyActivityPageState extends State<YearlyActivityPage> {
@@ -60,13 +61,30 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
                     crossAxisCount: 13,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
-                    children: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    children: [
+                      '',
+                      'Jan',
+                      'Feb',
+                      'Mar',
+                      'Apr',
+                      'May',
+                      'Jun',
+                      'Jul',
+                      'Aug',
+                      'Sep',
+                      'Oct',
+                      'Nov',
+                      'Dec'
+                    ]
                         .map(
                           (e) => Container(
                               child: Center(
                             child: Text(
                               e,
-                              style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           )),
@@ -74,7 +92,10 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
                         .toList(),
                   ),
                 ))),
-        body: ActivityGridView(scrollController: scrollController, scaffoldKey: scaffoldKey, dateToKanjisMap: dateToKanjisMap));
+        body: ActivityGridView(
+            scrollController: scrollController,
+            scaffoldKey: scaffoldKey,
+            dateToKanjisMap: dateToKanjisMap));
   }
 }
 
@@ -83,7 +104,8 @@ class ActivityGridView extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Map<DateTime, List<Kanji>> dateToKanjisMap;
 
-  ActivityGridView({this.scrollController, this.dateToKanjisMap, this.scaffoldKey});
+  ActivityGridView(
+      {this.scrollController, this.dateToKanjisMap, this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +130,9 @@ class ActivityGridView extends StatelessWidget {
       }
     }
 
-    for (var i in kanjisByYears.keys.isEmpty ? [DateTime.now().year] : kanjisByYears.keys.toList()
+    for (var i in kanjisByYears.keys.isEmpty
+        ? [DateTime.now().year]
+        : kanjisByYears.keys.toList()
       ..sort((a, b) => a.compareTo(b))) {
       for (var d in Iterable.generate(31)) {
         children.add(Container(
@@ -117,7 +141,8 @@ class ActivityGridView extends StatelessWidget {
             child: Center(
                 child: Text(
               (d + 1).toString(),
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ))));
         for (var m in Iterable.generate(12)) {
@@ -126,8 +151,10 @@ class ActivityGridView extends StatelessWidget {
             children.add(Material(
                 elevation: 8,
                 child: InkWell(
-                  onTap: () => showModalBottomSheet(context, date, dateToKanjisMap[date]),
-                  child: Container(height: 12, width: 12, color: Colors.redAccent),
+                  onTap: () => showModalBottomSheet(
+                      context, date, dateToKanjisMap[date]),
+                  child:
+                      Container(height: 12, width: 12, color: Colors.redAccent),
                 )));
           } else {
             children.add(Material(
@@ -142,20 +169,42 @@ class ActivityGridView extends StatelessWidget {
     return children;
   }
 
-  void showModalBottomSheet(BuildContext context, DateTime date, List<Kanji> kanjis) {
-    var months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+  void showModalBottomSheet(
+      BuildContext context, DateTime date, List<Kanji> kanjis) {
+    var months = [
+      'Jan.',
+      'Feb.',
+      'Mar.',
+      'Apr.',
+      'May',
+      'Jun.',
+      'Jul.',
+      'Aug.',
+      'Sep.',
+      'Oct.',
+      'Nov.',
+      'Dec.'
+    ];
     scaffoldKey.currentState.showBottomSheet((context) {
       return Material(
         elevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         color: Theme.of(context).primaryColor,
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.transparent, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+              color: Colors.transparent,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           height: 500,
           child: Column(
             children: [
-              SizedBox(height: 36, child: Center(child: Icon(FontAwesomeIcons.horizontalRule, size: 36, color: Colors.white70))),
+              SizedBox(
+                  height: 36,
+                  child: Center(
+                      child: Icon(FontAwesomeIcons.horizontalRule,
+                          size: 36, color: Colors.white70))),
               Container(
                 height: 464,
                 child: SingleChildScrollView(
@@ -164,9 +213,12 @@ class ActivityGridView extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.all(2),
                         child: Center(
-                            child: Text("${months[date.month]} ${toDayString(date.day)} ${date.year}",
+                            child: Text(
+                                "${months[date.month]} ${toDayString(date.day)} ${date.year}",
                                 style: TextStyle(color: Colors.white70)))),
-                    ...kanjis.map((kanji) => KanjiListTile(kanji: kanji)).toList(),
+                    ...kanjis
+                        .map((kanji) => KanjiListTile(kanji: kanji))
+                        .toList(),
                     SizedBox(height: 12)
                   ],
                 )),
@@ -176,7 +228,9 @@ class ActivityGridView extends StatelessWidget {
         ),
       );
     },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         elevation: 8);
   }
 

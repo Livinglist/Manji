@@ -22,7 +22,8 @@ class Quiz {
     }
   }
 
-  Quiz.from(List<Question> questions) : this.targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
+  Quiz.from(List<Question> questions)
+      : this.targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
     this.questions = questions..shuffle();
   }
 

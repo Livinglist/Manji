@@ -64,10 +64,7 @@ class HomePageState extends State<HomePage>
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(
         context,
-        const <String>{
-          'kanji_recognition',
-          'kanji_extraction'
-        },
+        const <String>{'kanji_recognition', 'kanji_extraction'},
       );
     });
 
@@ -179,7 +176,7 @@ class HomePageState extends State<HomePage>
               featureId: 'kanji_recognition',
               // Unique id that identifies this overlay.
               tapTarget: IconButton(
-                onPressed: null,
+                  onPressed: null,
                   icon: Transform.translate(
                       offset: Offset(0, -1.5),
                       child: Icon(FontAwesomeIcons.edit, size: 20))),
@@ -206,7 +203,7 @@ class HomePageState extends State<HomePage>
                 featureId: 'kanji_extraction',
                 // Unique id that identifies this overlay.
                 tapTarget: IconButton(
-                  onPressed: null,
+                    onPressed: null,
                     icon: Transform.rotate(
                         angle: pi / 2, child: Icon(Icons.flip))),
                 title: Text('Look it up'),
@@ -378,7 +375,8 @@ class HomePageState extends State<HomePage>
                             Material(
                               color: Colors.transparent,
                               child: textEditingController.text.isEmpty
-                                  ? IconButton(icon: Icon(Icons.search),onPressed: null)
+                                  ? IconButton(
+                                      icon: Icon(Icons.search), onPressed: null)
                                   : IconButton(
                                       icon: Icon(Icons.close),
                                       onPressed: () {
@@ -454,9 +452,7 @@ class HomePageState extends State<HomePage>
                       child: StreamBuilder(
                     stream: SearchBloc.instance.results,
                     builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                      if (
-                          snapshot.hasData &&
-                          snapshot.data.isNotEmpty) {
+                      if (snapshot.hasData && snapshot.data.isNotEmpty) {
                         var kanjis = snapshot.data;
                         return Container(
                             decoration: BoxDecoration(

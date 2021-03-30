@@ -16,14 +16,18 @@ class ActivityPanel extends StatelessWidget {
   Widget buildView(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 40;
     return FutureBuilder(
-      future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(convertTimeStampsToDateTimeMap, KanjiBloc.instance.allKanjisList),
+      future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(
+          convertTimeStampsToDateTimeMap, KanjiBloc.instance.allKanjisList),
       builder: (_, AsyncSnapshot<Map<DateTime, List<Kanji>>> snapshot) {
         if (snapshot.hasData) {
           var map = snapshot.data;
           ActivityPanel.data = map;
           return Material(
               child: InkWell(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => YearlyActivityPage(dateToKanjisMap: map))),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => YearlyActivityPage(dateToKanjisMap: map))),
             child: Container(
               height: 120,
               child: GridView.count(
@@ -35,7 +39,8 @@ class ActivityPanel extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   crossAxisCount: 10,
                   children: Iterable.generate(316, (index) {
-                    var d = DateTime.now().subtract(Duration(days: 315 - index));
+                    var d =
+                        DateTime.now().subtract(Duration(days: 315 - index));
                     var date = DateTime(d.year, d.month, d.day);
                     if (map.containsKey(date)) {
                       return Material(

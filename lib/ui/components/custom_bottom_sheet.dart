@@ -48,7 +48,11 @@ class CustomBottomSheet extends StatefulWidget {
   /// Typically, bottom sheets are created implicitly by
   /// [ScaffoldState.showBottomSheet], for persistent bottom sheets, or by
   /// [showModalBottomSheet], for modal bottom sheets.
-  const CustomBottomSheet({Key key, this.animationController, @required this.onClosing, @required this.builder})
+  const CustomBottomSheet(
+      {Key key,
+      this.animationController,
+      @required this.onClosing,
+      @required this.builder})
       : assert(onClosing != null),
         assert(builder != null),
         super(key: key);
@@ -93,21 +97,26 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     return renderBox.size.height;
   }
 
-  bool get _dismissUnderway => widget.animationController.status == AnimationStatus.reverse;
+  bool get _dismissUnderway =>
+      widget.animationController.status == AnimationStatus.reverse;
 
   void _handleDragUpdate(DragUpdateDetails details) {
     if (_dismissUnderway) return;
-    widget.animationController.value -= details.primaryDelta / (_childHeight ?? details.primaryDelta);
+    widget.animationController.value -=
+        details.primaryDelta / (_childHeight ?? details.primaryDelta);
   }
 
   void _handleDragEnd(DragEndDetails details) {
     if (_dismissUnderway) return;
     if (details.velocity.pixelsPerSecond.dy > _kMinFlingVelocity) {
-      final double flingVelocity = -details.velocity.pixelsPerSecond.dy / _childHeight;
-      if (widget.animationController.value > 0.0) widget.animationController.fling(velocity: flingVelocity);
+      final double flingVelocity =
+          -details.velocity.pixelsPerSecond.dy / _childHeight;
+      if (widget.animationController.value > 0.0)
+        widget.animationController.fling(velocity: flingVelocity);
       if (flingVelocity < 0.0) widget.onClosing();
     } else if (widget.animationController.value < _kCloseProgressThreshold) {
-      if (widget.animationController.value > 0.0) widget.animationController.fling(velocity: -1.0);
+      if (widget.animationController.value > 0.0)
+        widget.animationController.fling(velocity: -1.0);
       widget.onClosing();
     } else {
       widget.animationController.forward();
@@ -141,17 +150,22 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     return new BoxConstraints(
-        minWidth: constraints.maxWidth, maxWidth: constraints.maxWidth, minHeight: 0.0, maxHeight: constraints.maxHeight * 9.0 / 16.0);
+        minWidth: constraints.maxWidth,
+        maxWidth: constraints.maxWidth,
+        minHeight: 0.0,
+        maxHeight: constraints.maxHeight * 9.0 / 16.0);
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    return new Offset(0.0, size.height - bottomInset - childSize.height * progress);
+    return new Offset(
+        0.0, size.height - bottomInset - childSize.height * progress);
   }
 
   @override
   bool shouldRelayout(_ModalBottomSheetLayout oldDelegate) {
-    return progress != oldDelegate.progress || bottomInset != oldDelegate.bottomInset;
+    return progress != oldDelegate.progress ||
+        bottomInset != oldDelegate.bottomInset;
   }
 }
 
@@ -172,12 +186,16 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         child: new AnimatedBuilder(
             animation: widget.route.animation,
             builder: (BuildContext context, Widget child) {
-              double bottomInset = widget.route.resizeToAvoidBottomPadding ? MediaQuery.of(context).viewInsets.bottom : 0.0;
+              double bottomInset = widget.route.resizeToAvoidBottomPadding
+                  ? MediaQuery.of(context).viewInsets.bottom
+                  : 0.0;
               return new ClipRect(
                   child: new CustomSingleChildLayout(
-                      delegate: new _ModalBottomSheetLayout(widget.route.animation.value, bottomInset),
+                      delegate: new _ModalBottomSheetLayout(
+                          widget.route.animation.value, bottomInset),
                       child: new CustomBottomSheet(
-                          animationController: widget.route._animationController,
+                          animationController:
+                              widget.route._animationController,
                           onClosing: () => Navigator.pop(context),
                           builder: widget.route.builder)));
             }));
@@ -216,12 +234,14 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
-    _animationController = CustomBottomSheet.createAnimationController(navigator.overlay);
+    _animationController =
+        CustomBottomSheet.createAnimationController(navigator.overlay);
     return _animationController;
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
     Widget bottomSheet = new MediaQuery.removePadding(
@@ -273,7 +293,8 @@ Future<T> showModalBottomSheet<T>({
       new _ModalBottomSheetRoute<T>(
         builder: builder,
         theme: Theme.of(context),
-        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
         dismissOnTap: dismissOnTap,
       ));

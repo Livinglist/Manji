@@ -2,15 +2,9 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
-import 'kanji.dart';
+import 'package:kanji_dictionary/resource/constants.dart';
 
-const String idKey = "id";
-const String kanjiKey = "kanji";
-const String kanjiIdKey = "kanjiId";
-const String rightAnswerKey = "rightAnswer";
-const String choicesKey = "choices";
-const String selectedIndexKey = "selectedIndex";
-const String questionTypeKey = "questionType";
+import 'kanji.dart';
 
 enum QuestionType {
   KanjiToKatakana, //choose the correct katakana for the kanji
@@ -46,10 +40,16 @@ class Question {
 
   final QuestionType questionType;
 
-  Question({this.targetedKanji, QuestionType questionType = QuestionType.KanjiToKatakana, List<String> mockChoices})
+  Question(
+      {this.targetedKanji,
+      QuestionType questionType = QuestionType.KanjiToKatakana,
+      List<String> mockChoices})
       : this.questionType = questionType,
         assert(questionType != QuestionType.KanjiToMeaning ||
-            (questionType == QuestionType.KanjiToMeaning && mockChoices != null && mockChoices.isNotEmpty && mockChoices.length == 3)) {
+            (questionType == QuestionType.KanjiToMeaning &&
+                mockChoices != null &&
+                mockChoices.isNotEmpty &&
+                mockChoices.length == 3)) {
     switch (questionType) {
       case QuestionType.KanjiToKatakana:
         generateKanjiToKatakanaChoices();
@@ -80,17 +80,21 @@ class Question {
   }
 
   Question.fromMap(Map map)
-      : id = map[idKey],
-        targetedKanji = map[kanjiKey],
-        _choices = (jsonDecode(map[choicesKey]) as List).cast<String>(),
-        rightAnswer = map[rightAnswerKey],
-        _selected = map[selectedIndexKey],
-        questionType = QuestionType.values.elementAt(map[questionTypeKey] ?? 0);
+      : id = map[Keys.idKey],
+        targetedKanji = map[Keys.kanjiKey],
+        _choices = (jsonDecode(map[Keys.choicesKey]) as List).cast<String>(),
+        rightAnswer = map[Keys.rightAnswerKey],
+        _selected = map[Keys.selectedIndexKey],
+        questionType =
+            QuestionType.values.elementAt(map[Keys.questionTypeKey] ?? 0);
 
   void generateKanjiToKatakanaChoices() {
     String targetedKana;
     if (targetedKanji.onyomi.isNotEmpty) {
-      var candidates = targetedKanji.onyomi.where((e) => e.contains(RegExp(r'[.-]')) == false)?.toList() ?? [];
+      var candidates = targetedKanji.onyomi
+              .where((e) => e.contains(RegExp(r'[.-]')) == false)
+              ?.toList() ??
+          [];
       candidates.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
       targetedKana = candidates.first;
     } else {
@@ -99,15 +103,18 @@ class Question {
     rightAnswer = targetedKana;
     var firstKana = targetedKana[0];
     if (kanaShiftMap.containsKey(firstKana)) {
-      List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])..remove(firstKana);
+      List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])
+        ..remove(firstKana);
       List<String> tempKanas = [];
       int pos = -1;
       for (int i = 0; i < 3; i++) {
         while (pos == -1 || tempKanas.contains(shiftableKanas[pos])) {
-          pos = Random(DateTime.now().millisecondsSinceEpoch).nextInt(shiftableKanas.length);
+          pos = Random(DateTime.now().millisecondsSinceEpoch)
+              .nextInt(shiftableKanas.length);
         }
         tempKanas.add(shiftableKanas.elementAt(pos));
-        wrongAnswers.add(rightAnswer.replaceFirst(firstKana, shiftableKanas.elementAt(pos)));
+        wrongAnswers.add(
+            rightAnswer.replaceFirst(firstKana, shiftableKanas.elementAt(pos)));
       }
     }
 
@@ -125,7 +132,9 @@ class Question {
 
   void generateKanjiToHiraganaChoices(List<String> mockChoices) {
     String targetedHiragana = targetedKanji.kunyomi.toString();
-    targetedHiragana = targetedKanji.kunyomi.toString().substring(1, targetedHiragana.length - 1);
+    targetedHiragana = targetedKanji.kunyomi
+        .toString()
+        .substring(1, targetedHiragana.length - 1);
     rightAnswer = targetedHiragana;
 
     wrongAnswers.addAll(mockChoices);
@@ -138,27 +147,174 @@ class Question {
   }
 
   Map<String, dynamic> toMap() => {
-        kanjiIdKey: targetedKanji.id,
-        choicesKey: jsonEncode(_choices),
-        rightAnswerKey: rightAnswer,
-        selectedIndexKey: _selected,
-        questionTypeKey: questionType.index
+        Keys.kanjiIdKey: targetedKanji.id,
+        Keys.choicesKey: jsonEncode(_choices),
+        Keys.rightAnswerKey: rightAnswer,
+        Keys.selectedIndexKey: _selected,
+        Keys.questionTypeKey: questionType.index
       };
 
-  String toString() => "kanji: ${this.targetedKanji}, choices: ${this._choices}, selected: ${this._selected}";
+  String toString() =>
+      "kanji: ${this.targetedKanji}, choices: ${this._choices}, selected: ${this._selected}";
 }
 
-const List<String> hiraganaA = const ["あ", "か", "が", "さ", "ざ", "た", "だ", "な", "は", "ぱ", "ば", "ま", "や", "ら", "わ"];
-const List<String> hiraganaI = const ["い", "き", "ぎ", "し", "じ", "ち", "に", "ひ", "び", "ぴ", "み", "り"];
-const List<String> hiraganaU = const ["う", "ぐ", "く", "す", "ず", "ぬ", "ふ", "ぶ", "ぷ", "む", "ゆ", "る", "つ"];
-const List<String> hiraganaE = const ["え", "け", "げ", "せ", "ぜ", "て", "で", "ね", "へ", "べ", "ぺ", "れ", "め"];
-const List<String> hiraganaO = const ["お", "こ", "ご", "そ", "ぞ", "と", "ど", "の", "ほ", "ぼ", "ぽ", "も", "よ", "ろ", "を"];
+const List<String> hiraganaA = const [
+  "あ",
+  "か",
+  "が",
+  "さ",
+  "ざ",
+  "た",
+  "だ",
+  "な",
+  "は",
+  "ぱ",
+  "ば",
+  "ま",
+  "や",
+  "ら",
+  "わ"
+];
+const List<String> hiraganaI = const [
+  "い",
+  "き",
+  "ぎ",
+  "し",
+  "じ",
+  "ち",
+  "に",
+  "ひ",
+  "び",
+  "ぴ",
+  "み",
+  "り"
+];
+const List<String> hiraganaU = const [
+  "う",
+  "ぐ",
+  "く",
+  "す",
+  "ず",
+  "ぬ",
+  "ふ",
+  "ぶ",
+  "ぷ",
+  "む",
+  "ゆ",
+  "る",
+  "つ"
+];
+const List<String> hiraganaE = const [
+  "え",
+  "け",
+  "げ",
+  "せ",
+  "ぜ",
+  "て",
+  "で",
+  "ね",
+  "へ",
+  "べ",
+  "ぺ",
+  "れ",
+  "め"
+];
+const List<String> hiraganaO = const [
+  "お",
+  "こ",
+  "ご",
+  "そ",
+  "ぞ",
+  "と",
+  "ど",
+  "の",
+  "ほ",
+  "ぼ",
+  "ぽ",
+  "も",
+  "よ",
+  "ろ",
+  "を"
+];
 
-const List<String> katakanaA = const ["ア", "カ", "ガ", "サ", "ザ", "タ", "ダ", "ナ", "ハ", "パ", "バ", "マ", "ヤ", "ラ", "ワ"];
-const List<String> katakanaI = const ["イ", "キ", "ギ", "シ", "ジ", "チ", "ニ", "ヒ", "ビ", "ピ", "ミ", "リ"];
-const List<String> katakanaU = const ["ウ", "グ", "ク", "ス", "ズ", "ヌ", "フ", "ブ", "プ", "ム", "ユ", "ル", "ツ"];
-const List<String> katakanaE = const ["エ", "ケ", "ゲ", "セ", "ゼ", "テ", "デ", "ネ", "ヘ", "ベ", "ペ", "レ", "メ"];
-const List<String> katakanaO = const ["オ", "コ", "ゴ", "ソ", "ゾ", "ト", "ド", "ノ", "ホ", "ボ", "ポ", "モ", "ヨ", "ロ", "ヲ"];
+const List<String> katakanaA = const [
+  "ア",
+  "カ",
+  "ガ",
+  "サ",
+  "ザ",
+  "タ",
+  "ダ",
+  "ナ",
+  "ハ",
+  "パ",
+  "バ",
+  "マ",
+  "ヤ",
+  "ラ",
+  "ワ"
+];
+const List<String> katakanaI = const [
+  "イ",
+  "キ",
+  "ギ",
+  "シ",
+  "ジ",
+  "チ",
+  "ニ",
+  "ヒ",
+  "ビ",
+  "ピ",
+  "ミ",
+  "リ"
+];
+const List<String> katakanaU = const [
+  "ウ",
+  "グ",
+  "ク",
+  "ス",
+  "ズ",
+  "ヌ",
+  "フ",
+  "ブ",
+  "プ",
+  "ム",
+  "ユ",
+  "ル",
+  "ツ"
+];
+const List<String> katakanaE = const [
+  "エ",
+  "ケ",
+  "ゲ",
+  "セ",
+  "ゼ",
+  "テ",
+  "デ",
+  "ネ",
+  "ヘ",
+  "ベ",
+  "ペ",
+  "レ",
+  "メ"
+];
+const List<String> katakanaO = const [
+  "オ",
+  "コ",
+  "ゴ",
+  "ソ",
+  "ゾ",
+  "ト",
+  "ド",
+  "ノ",
+  "ホ",
+  "ボ",
+  "ポ",
+  "モ",
+  "ヨ",
+  "ロ",
+  "ヲ"
+];
 
 final HashMap<String, List<String>> kanaShiftMap = HashMap.fromEntries([
   ...hiraganaA.map((kana) => MapEntry<String, List<String>>(kana, hiraganaA)),

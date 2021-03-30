@@ -31,7 +31,8 @@ class SharedPreferencesProvider {
     }
   }
 
-  List<String> getAllFavKanjiStrs() => _sharedPreferences.getStringList(favKanjiStrsKey);
+  List<String> getAllFavKanjiStrs() =>
+      _sharedPreferences.getStringList(favKanjiStrsKey);
 
   List<String> uids = [];
 
@@ -47,7 +48,8 @@ class SharedPreferencesProvider {
     _sharedPreferences.setStringList(favKanjiStrsKey, favKanjiStrs);
   }
 
-  List<String> getAllStarKanjiStrs() => _sharedPreferences.getStringList(starKanjiStrsKey);
+  List<String> getAllStarKanjiStrs() =>
+      _sharedPreferences.getStringList(starKanjiStrsKey);
 
   void addStar(String kanjiStr) {
     var starKanjiStrs = _sharedPreferences.getStringList(starKanjiStrsKey);
@@ -73,12 +75,14 @@ class SharedPreferencesProvider {
   void addKanjiList(KanjiList kanjiList) {
     uids.add(kanjiList.uid);
     _sharedPreferences.setStringList(uidsKey, uids);
-    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(
+        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
     _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
   }
 
   void updateKanjiListKanjis(KanjiList kanjiList) {
-    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(
+        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
   }
 
   void updateKanjiListName(KanjiList kanjiList) {
@@ -101,11 +105,12 @@ class SharedPreferencesProvider {
 
   bool getIsFirstTimeUser() {
     var res = !_sharedPreferences.containsKey('mark');
-    if(!res) _sharedPreferences.setBool('mark', true);
+    if (!res) _sharedPreferences.setBool('mark', true);
     return res;
   }
 
-  Future<bool> get isFirstTimeUser => SharedPreferences.getInstance().then((prefs) {
+  Future<bool> get isFirstTimeUser =>
+      SharedPreferences.getInstance().then((prefs) {
         var res = !prefs.containsKey('mark');
         prefs.setBool('mark', true);
         return res;
@@ -113,7 +118,8 @@ class SharedPreferencesProvider {
 
   int get lastFetchedAt => _sharedPreferences.getInt(lastFetchedAtKey);
 
-  set lastFetchedAt(int timestamp) => _sharedPreferences.setInt(lastFetchedAtKey, timestamp);
+  set lastFetchedAt(int timestamp) =>
+      _sharedPreferences.setInt(lastFetchedAtKey, timestamp);
 
   //List<KanjiList> getAllKanjiLists() => kanjiListsFromJsonStr(_sharedPreferences.getString(kanjiListStrKey));
 

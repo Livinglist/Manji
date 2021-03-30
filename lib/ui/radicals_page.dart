@@ -18,7 +18,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
 
   @override
   void initState() {
-    radicalsMap.addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
+    radicalsMap
+        .addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
 
     for (var selected in widget.selectedRadicals) {
       radicalsMap[selected] = true;
@@ -67,7 +68,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
                         label: Text('Clear'),
                         onPressed: () {
                           setState(() {
-                            radicalsMap.updateAll((key, value) => radicalsMap[key] = false);
+                            radicalsMap.updateAll(
+                                (key, value) => radicalsMap[key] = false);
                           });
                         },
                       ),

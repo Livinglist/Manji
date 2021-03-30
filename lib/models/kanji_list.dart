@@ -13,9 +13,9 @@ class KanjiList {
   int get wordCount {
     var count = 0;
 
-    for(var item in kanjiStrs.where((e) => e.length > 1)){
+    for (var item in kanjiStrs.where((e) => e.length > 1)) {
       Map json = jsonDecode(item);
-      if(json.containsKey('meanings')) count++;
+      if (json.containsKey('meanings')) count++;
     }
 
     return count;
@@ -24,9 +24,9 @@ class KanjiList {
   int get sentenceCount {
     var count = 0;
 
-    for(var item in kanjiStrs.where((e) => e.length > 1)){
+    for (var item in kanjiStrs.where((e) => e.length > 1)) {
       Map json = jsonDecode(item);
-      if(!json.containsKey('meanings')) count++;
+      if (!json.containsKey('meanings')) count++;
     }
 
     return count;

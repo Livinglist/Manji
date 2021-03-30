@@ -12,6 +12,8 @@ import 'package:kanji_dictionary/models/sentence.dart';
 import 'package:kanji_dictionary/models/kana.dart';
 import 'package:kanji_dictionary/models/question.dart';
 
+import 'constants.dart';
+
 class DBProvider {
   DBProvider._();
 
@@ -124,13 +126,13 @@ class DBProvider {
   }
 
   static List<Kanji> kanjis = <Kanji>[];
+
   Future<List<Kanji>> getAllKanjis() async {
     final db = await database;
     var res = await db.query('Kanji');
 
     return res.isNotEmpty
         ? res.map((r) {
-            //print(r.toString());
             return Kanji.fromDBMap(r);
           }).toList()
         : [];
@@ -140,8 +142,6 @@ class DBProvider {
       'Use this only for scripting. Do not use this in the released app.')
   Future<List<Sentence>> getSentencesByKanji(String kanjiStr) async {
     final db = await database;
-    //print(await db.query("sqlite_master"));
-    //var res = await db.query('Sentence', where: '"kanji" = ?',whereArgs: [kanjiStr] );
     var res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     var sentences = await jsonStringToSentences(res.single['text']);
@@ -154,7 +154,6 @@ class DBProvider {
   Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) async* {
     final db = await database;
     print(await db.query("sqlite_master"));
-    //var res = await db.query('Sentence', where: '"kanji" = ?',whereArgs: [kanjiStr] );
     var res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     jsonToSentencesStream(res.single['text']).listen((sentence) async* {
@@ -164,8 +163,6 @@ class DBProvider {
 
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) async {
     final db = await database;
-    //print(await db.query("sqlite_master"));
-    //var res = await db.query('Sentence', where: '"kanji" = ?',whereArgs: [kanjiStr] );
     var res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     if (res.isNotEmpty)
@@ -184,12 +181,7 @@ class DBProvider {
   ///Used for fetching from Firestore and loading to local database
   Future<int> addSentence(Sentence sentence) async {
     final db = await database;
-    //var table = await db.rawQuery('SELECT MAX(id)+1 as id FROM Sentence');
-    //int id = table.first['id'];
-    //sentence.id = id;
     var map = sentence.toDBMap();
-    //print("the id is $id");
-    //await db.insert('Sentence', map);
     var raw =
         await db.rawInsert('INSERT Into Sentence (kanji, text) VALUES (?,?)', [
       sentence.kanji,
@@ -231,7 +223,6 @@ class DBProvider {
 
     return res.isNotEmpty
         ? res.map((r) {
-            //print(r.toString());
             return Hiragana.fromMap(r);
           }).toList()
         : [];
@@ -243,7 +234,6 @@ class DBProvider {
 
     return res.isNotEmpty
         ? res.map((r) {
-            //print(r.toString());
             return Katakana.fromMap(r);
           }).toList()
         : [];
@@ -291,15 +281,13 @@ class DBProvider {
     var db = await database;
     var query = await db.query("IncorrectQuestions");
 
-    //print(await db.rawQuery("SELECT * FROM IncorrectQuestions INNER JOIN Kanji on Kanji.id = IncorrectQuestions.kanjiId"));
-
     print("The query is $query");
     List<Question> qs = [];
     for (var i in query) {
-      query = await db.query("Kanji", where: "id = ${i[kanjiIdKey]}");
+      query = await db.query("Kanji", where: "id = ${i[Keys.kanjiIdKey]}");
       var kanji = Kanji.fromDBMap(query.single);
       i = Map.from(i);
-      i[kanjiKey] = kanji;
+      i[Keys.kanjiKey] = kanji;
       qs.add(Question.fromMap(i));
     }
 
@@ -326,5 +314,3 @@ void setDatabaseStatus(bool dbStatus) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('databaseStatus', dbStatus);
 }
-
-//final dbProvider = DBProvider._();

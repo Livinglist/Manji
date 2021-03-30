@@ -24,7 +24,8 @@ class AppBrain {
     }
   }
 
-  Future<List> processCanvasPoints(List<Offset> points, double canvasSize) async {
+  Future<List> processCanvasPoints(
+      List<Offset> points, double canvasSize) async {
     // We create an empty canvas 280x280 pixels
     final canvasSizeWithPadding = canvasSize;
     //final canvasOffset = Offset(kCanvasInnerOffset, kCanvasInnerOffset);
@@ -40,14 +41,15 @@ class AppBrain {
     // Our image is expected to have a black background and a white drawing trace,
     // quite the opposite of the visual representation of our canvas on the screen
 
-    canvas.drawRect(Rect.fromLTWH(0, 0, canvasSizeWithPadding, canvasSizeWithPadding), kBackgroundPaint);
+    canvas.drawRect(
+        Rect.fromLTWH(0, 0, canvasSizeWithPadding, canvasSizeWithPadding),
+        kBackgroundPaint);
 
     // Now we draw our list of points on white paint
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null) {
         //canvas.drawLine(points[i] + canvasOffset, points[i + 1] + canvasOffset, kWhitePaint);
         canvas.drawLine(points[i], points[i + 1], kWhitePaint);
-
       }
     }
 
@@ -72,7 +74,7 @@ class AppBrain {
 
     // Finally, we can return our the prediction we will perform over that
     // resized image
-    return predictImage(resizedImage).then((val){
+    return predictImage(resizedImage).then((val) {
       print(val);
       return val;
     });
@@ -80,10 +82,9 @@ class AppBrain {
 
   Future<List> predictImage(im.Image image) async {
     return Tflite.runModelOnBinary(
-      binary: imageToByteListFloat32(image, kModelInputSize),
-      threshold: 0,
-      numResults: 10
-    );
+        binary: imageToByteListFloat32(image, kModelInputSize),
+        threshold: 0,
+        numResults: 10);
   }
 
   Uint8List imageToByteListFloat32(im.Image image, int inputSize) {
@@ -108,6 +109,10 @@ class AppBrain {
   }
 
   double convertPixel(int color) {
-    return (255 - (((color >> 16) & 0xFF) * 0.299 + ((color >> 8) & 0xFF) * 0.587 + (color & 0xFF) * 0.114)) / 255.0;
+    return (255 -
+            (((color >> 16) & 0xFF) * 0.299 +
+                ((color >> 8) & 0xFF) * 0.587 +
+                (color & 0xFF) * 0.114)) /
+        255.0;
   }
 }

@@ -30,7 +30,8 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   Future getImage() async {
     if (imageSource == null) return;
 
-    var image = await ImagePicker.pickImage(source: imageSource, imageQuality: 85);
+    var image =
+        await ImagePicker.pickImage(source: imageSource, imageQuality: 85);
 
     if (image == null) {
       return;
@@ -130,7 +131,9 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
         } else if (!snapshot.hasData) {
           body = Center(child: CircularProgressIndicator());
         } else if (text.isEmpty || kanjis.isEmpty) {
-          body = Center(child: Text("No kanji was found in the image.", style: TextStyle(color: Colors.white70)));
+          body = Center(
+              child: Text("No kanji was found in the image.",
+                  style: TextStyle(color: Colors.white70)));
         } else {
           body = SingleChildScrollView(
             controller: scrollController,
@@ -152,8 +155,12 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                   ),
                 ),
                 showGrid
-                    ? KanjiGridView(kanjis: kanjis, scrollPhysics: NeverScrollableScrollPhysics())
-                    : KanjiListView(kanjis: kanjis, scrollPhysics: NeverScrollableScrollPhysics())
+                    ? KanjiGridView(
+                        kanjis: kanjis,
+                        scrollPhysics: NeverScrollableScrollPhysics())
+                    : KanjiListView(
+                        kanjis: kanjis,
+                        scrollPhysics: NeverScrollableScrollPhysics())
               ],
             ),
           );
@@ -174,7 +181,9 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                       Icons.view_comfy,
                       color: Colors.white,
                     ),
-                    crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    crossFadeState: showGrid
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
                     duration: Duration(milliseconds: 200),
                   ),
                   onPressed: () {
