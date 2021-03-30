@@ -515,7 +515,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                           TextSpan(text: 'たんご' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
                                           TextSpan(text: '単語', style: TextStyle(fontSize: 18, color: Colors.white))
                                         ]))),
-                                CompoundWordColumn(kanji: kanji),
+                                CompoundWordColumn(scaffoldContext: scaffoldKey.currentContext,kanji: kanji),
                                 LabelDivider(
                                     child: RichText(
                                         textAlign: TextAlign.center,
@@ -864,8 +864,9 @@ class KanjiInfoColumn extends StatelessWidget {
 
 class CompoundWordColumn extends StatelessWidget {
   final Kanji kanji;
+  final BuildContext scaffoldContext;
 
-  CompoundWordColumn({this.kanji}) : super(key: UniqueKey());
+  CompoundWordColumn({this.scaffoldContext,this.kanji}) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -920,7 +921,7 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: onyomi, isOnyomi: true, context: context),
+              onPressed: () => showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
             ),
           )
         ],
@@ -1026,7 +1027,7 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: kunyomi, isOnyomi: false, context: context),
+              onPressed: () => showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
             ),
           )
         ],
@@ -1144,7 +1145,7 @@ class CompoundWordColumn extends StatelessWidget {
   }
 
   ///show modal bottom sheet where user can add words to onyomi or kunyomi
-  void showCustomBottomSheet({String yomi, bool isOnyomi, BuildContext context}) {
+  void showCustomBottomSheet({String yomi, bool isOnyomi}) {
     var yomiTextEditingController = TextEditingController();
     var wordTextEditingController = TextEditingController();
     var meaningTextEditingController = TextEditingController();
@@ -1157,16 +1158,16 @@ class CompoundWordColumn extends StatelessWidget {
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: Duration(milliseconds: 300),
-      context: context,
+      context: scaffoldContext,
       pageBuilder: (_, __, ___) {
         return Align(
           alignment: Alignment.topCenter,
           child: Material(
             color: Colors.transparent,
             child: Container(
-              height: 360,
+              height: 368,
               margin: EdgeInsets.only(top: 48, left: 12, right: 12),
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Theme.of(context).primaryColor),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Theme.of(scaffoldContext).primaryColor),
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.disabled,
@@ -1276,7 +1277,7 @@ class CompoundWordColumn extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Container(
-                          width: MediaQuery.of(context).size.width - 24,
+                          width: MediaQuery.of(scaffoldContext).size.width - 24,
                           height: 42,
                           decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
                           child: ElevatedButton(
@@ -1298,9 +1299,8 @@ class CompoundWordColumn extends StatelessWidget {
                                         meanings: meaningTextEditingController.text));
                                   }
                                 }
+                                Navigator.pop(scaffoldContext);
                                 KanjiBloc.instance.updateKanji(kanji);
-                                Navigator.pop(context);
-                                //setState(() {});
                               })),
                     ),
                   ],
