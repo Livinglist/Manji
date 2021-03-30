@@ -157,7 +157,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       onSelected: (val) {
                                         if (shouldVibrate) {
                                           Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                           });
                                         }
 
@@ -185,7 +185,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       onSelected: (val) {
                                         if (shouldVibrate) {
                                           Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                           });
                                         }
 
@@ -213,7 +213,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       onSelected: (val) {
                                         if (shouldVibrate) {
                                           Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                           });
                                         }
 
@@ -231,7 +231,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
                                       onSelected: (val) {
                                         if (shouldVibrate) {
                                           Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [255]);
+                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                           });
                                         }
 
