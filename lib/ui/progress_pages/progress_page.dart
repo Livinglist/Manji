@@ -15,21 +15,14 @@ class ProgressPage extends StatefulWidget {
   _ProgressPageState createState() => _ProgressPageState();
 }
 
-class _ProgressPageState extends State<ProgressPage>
-    with TickerProviderStateMixin {
+class _ProgressPageState extends State<ProgressPage> with TickerProviderStateMixin {
   final List<AnimationController> controllers = <AnimationController>[];
   AnimationController panelAnimationController;
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final textEditingController = TextEditingController();
   final Map<int, List<Kanji>> jlptToKanjisMap = {};
-  final Map<int, Map<int, double>> jlptToValuesMap = {
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-    5: {}
-  };
+  final Map<int, Map<int, double>> jlptToValuesMap = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}};
 
   bool showPanel = false;
 
@@ -41,13 +34,10 @@ class _ProgressPageState extends State<ProgressPage>
   void initState() {
     super.initState();
 
-    panelAnimationController =
-        AnimationController(vsync: this, lowerBound: 0, upperBound: 3)
-          ..value = 1;
+    panelAnimationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 3)..value = 1;
 
     for (var index in [0, 1, 2, 3, 4]) {
-      controllers.add(AnimationController(
-          vsync: this, duration: Duration(milliseconds: 600)));
+      controllers.add(AnimationController(vsync: this, duration: Duration(milliseconds: 600)));
 
       computeJLPTProgress(5 - index).listen((progress) {
         controllers[index].animateTo(progress);
@@ -127,45 +117,32 @@ class _ProgressPageState extends State<ProgressPage>
                               title: 'N$jlpt',
                               progress: controllers[index].value,
                               studiedTimes: jlptToValuesMap[jlpt],
-                              totalStudiedPercentage:
-                                  jlptToKanjisMap[jlpt] == null
-                                      ? 0
-                                      : jlptToKanjisMap[jlpt]
-                                              .where((kanji) =>
-                                                  kanji.timeStamps.isNotEmpty)
-                                              .length /
-                                          jlptToKanjisMap[jlpt].length *
-                                          100,
+                              totalStudiedPercentage: jlptToKanjisMap[jlpt] == null
+                                  ? 0
+                                  : jlptToKanjisMap[jlpt].where((kanji) => kanji.timeStamps.isNotEmpty).length /
+                                      jlptToKanjisMap[jlpt].length *
+                                      100,
                               onTap: () {
+                                var totalStudied = jlptToKanjisMap[jlpt].where((kanji) => kanji.timeStamps.isNotEmpty).length;
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => ProgressDetailPage(
-                                            kanjis: jlptToKanjisMap[jlpt],
-                                            title: 'N$jlpt',
-                                            totalStudied: jlptToKanjisMap[jlpt]
-                                                .where((kanji) =>
-                                                    kanji.timeStamps.isNotEmpty)
-                                                .length)));
+                                            kanjis: jlptToKanjisMap[jlpt], title: 'N$jlpt', totalStudied: totalStudied)));
                               });
                         },
                       );
                     }
                     var kanjiList = kanjiLists[index - 5];
-                    var kanjis = kanjiList.kanjiStrs
-                        .where((e) => e.length == 1)
-                        .map((str) => KanjiBloc.instance.allKanjisMap[str])
-                        .toList();
+                    var kanjis =
+                        kanjiList.kanjiStrs.where((e) => e.length == 1).map((str) => KanjiBloc.instance.allKanjisMap[str]).toList();
 
                     return ProgressListTile(
                         title: kanjiList.name,
                         progress: computeListProgress(kanjis),
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => ProgressDetailPage(
-                                      kanjis: kanjis, title: kanjiList.name)));
+                              context, MaterialPageRoute(builder: (_) => ProgressDetailPage(kanjis: kanjis, title: kanjiList.name)));
                         });
                   },
                   separatorBuilder: (_, index) => Divider(height: 0),
@@ -193,8 +170,7 @@ class _ProgressPageState extends State<ProgressPage>
     double progress = 0.0;
     int total = 0;
     int iterated = 0;
-    var kanjis = await compute<List<dynamic>, List<Kanji>>(
-        getTargetedKanjis, [jlpt, KanjiBloc.instance.allKanjisList]);
+    var kanjis = await compute<List<dynamic>, List<Kanji>>(getTargetedKanjis, [jlpt, KanjiBloc.instance.allKanjisList]);
     jlptToKanjisMap[jlpt] = kanjis;
     total = kanjis.length;
     for (var kanji in kanjis) {
@@ -206,8 +182,7 @@ class _ProgressPageState extends State<ProgressPage>
           if (jlptToValuesMap[jlpt].containsKey(timeCount + 1) == false) {
             jlptToValuesMap[jlpt][timeCount + 1] = 1 / total;
           } else {
-            jlptToValuesMap[jlpt][timeCount + 1] =
-                (jlptToValuesMap[jlpt][timeCount + 1] * total + 1) / total;
+            jlptToValuesMap[jlpt][timeCount + 1] = (jlptToValuesMap[jlpt][timeCount + 1] * total + 1) / total;
           }
         }
       }

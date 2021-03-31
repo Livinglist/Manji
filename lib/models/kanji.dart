@@ -279,7 +279,7 @@ class Kanji {
         Keys.strokesKey: this.strokes,
         Keys.partsKey: this.parts,
         Keys.meaningKey: this.meaning,
-        Keys.onyomiWordsKey: this.kunyomiWords,
+        Keys.kunyomiWordsKey: this.kunyomiWords,
         Keys.onyomiWordsKey: this.onyomiWords
       };
 
@@ -292,15 +292,9 @@ class Kanji {
     frequency = map[Keys.frequencyKey];
     parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
     kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
-    kunyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
-        .cast<String>()
-        .map((str) => Word.fromString(str))
-        .toList();
+    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
     onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
-    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
-        .cast<String>()
-        .map((str) => Word.fromString(str))
-        .toList();
+    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
   }
 
   Map<String, dynamic> toDBMap() => {
@@ -316,10 +310,8 @@ class Kanji {
         Keys.meaningKey: this.meaning,
         Keys.radicalKey: this.radicals,
         Keys.radicalsMeaningKey: this.radicalsMeaning,
-        Keys.onyomiWordsKey:
-            jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
-        Keys.onyomiWordsKey:
-            jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
+        Keys.kunyomiWordsKey: jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
+        Keys.onyomiWordsKey: jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
         Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
       };
 
@@ -335,15 +327,10 @@ class Kanji {
     frequency = map[Keys.frequencyKey];
     parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
     kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
-    kunyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
-        .map((str) => Word.fromMap(str))
-        .toList();
+    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
     onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
-    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
-        .map((str) => Word.fromMap(str))
-        .toList();
-    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List)
-        .cast<int>();
+    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
+    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List).cast<int>();
   }
 
   String toString() {
