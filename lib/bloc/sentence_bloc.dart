@@ -128,6 +128,9 @@ class SentenceBloc {
       if (snapshot.docs.isNotEmpty) {
         var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
 
+        //Remove duplicates.
+        sentences.removeWhere((e) => _sentences.singleWhere((s) => e.text == s.text, orElse: () => null) != null);
+
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
         lastDoc = snapshot.docs.last;
