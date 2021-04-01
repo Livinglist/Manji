@@ -19,6 +19,7 @@ class SentenceBloc {
   List<String> _unloadedSentencesStr = <String>[];
 
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
+
   Stream<bool> get isFetching => _isFetchingFetcher.stream;
 
   bool _isFetching, _allFetched = false;
@@ -31,6 +32,9 @@ class SentenceBloc {
 
   ///Used as a start point for a range of sentences.
   DocumentSnapshot lastDoc;
+
+  ///Kanji for which example sentences are being fetched.
+  String _kanjiStr;
 
   ///Initialize [SentenceBloc] with [length] which defaults to 10 and is used for pagination.
   SentenceBloc({int length = 10})
@@ -68,9 +72,7 @@ class SentenceBloc {
     if (!_allFetched && !_isFetching) {
       _isFetching = true;
       _isFetchingFetcher.sink.add(_isFetching);
-      repo
-          .fetchSentencesByKanji(str, currentPage: _currentPage)
-          .listen((sentence) {
+      repo.fetchSentencesByKanji(str, currentPage: _currentPage).listen((sentence) {
         if (sentence == null) {
           print('all fetched');
           _allFetched = true;
@@ -104,19 +106,21 @@ class SentenceBloc {
   }
 
   ///Fetch sentences from Firebase.
-  void fetchSentencesByKanjiFromFirebase(String kanji) {
+  void fetchSentencesByKanjiFromFirebase(String kanji, {bool shouldClear = true}) {
     assert(kanji.length == 1);
-    _sentences.clear();
-    var ref = FirebaseFirestore.instance
-        .collection('sentences2')
-        .doc(kanji)
-        .collection(Keys.sentencesKey)
-        .orderBy(Keys.textKey)
-        .limit(_length);
+    if (shouldClear) _sentences.clear();
+    Query ref;
+    if (lastDoc == null) {
+      ref =
+          FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey).limit(_length);
+    } else {
+      ref = FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey)
+        ..startAfterDocument(lastDoc).limit(_length);
+    }
+
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences =
-            snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+        var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
         lastDoc = snapshot.docs.last;
@@ -126,17 +130,12 @@ class SentenceBloc {
 
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByKanji(String kanji) {
-    var ref = FirebaseFirestore.instance
-        .collection('sentences2')
-        .doc(kanji)
-        .collection(Keys.sentencesKey)
-        .orderBy(Keys.textKey)
-          ..startAfterDocument(lastDoc).limit(_length);
+    var ref = FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey)
+      ..startAfterDocument(lastDoc).limit(_length);
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences =
-            snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+        var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
         lastDoc = snapshot.docs.last;
@@ -156,8 +155,7 @@ class SentenceBloc {
           .limit(_length);
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences =
-              snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+          var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
           lastDoc = snapshot.docs.last;
@@ -171,17 +169,12 @@ class SentenceBloc {
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByWord(String word) {
     if (word.length > 1) {
-      var ref = FirebaseFirestore.instance
-          .collection('wordSentences')
-          .doc(word)
-          .collection(Keys.sentencesKey)
-          .orderBy(Keys.textKey)
-            ..startAfterDocument(lastDoc).limit(_length);
+      var ref = FirebaseFirestore.instance.collection('wordSentences').doc(word).collection(Keys.sentencesKey).orderBy(Keys.textKey)
+        ..startAfterDocument(lastDoc).limit(_length);
 
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences =
-              snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+          var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
           lastDoc = snapshot.docs.last;
@@ -211,12 +204,11 @@ class SentenceBloc {
 
   ///Get sentences from the local database.
   void getSentencesByKanji(String kanjiStr) async {
+    this._kanjiStr = kanjiStr;
     var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
       var list = (jsonDecode(jsonStr) as List).cast<String>();
-      //var sentences = list.sublist(0 + 10 * currentPortion, 10 + 10 * currentPortion).map((str) => Sentence.fromJsonString(str)).toList();
-      var sentences = await jsonToSentences(
-          list.sublist(0, list.length < 5 ? list.length : 5));
+      var sentences = await jsonToSentences(list.sublist(0, list.length < 5 ? list.length : 5));
 
       list.removeRange(0, list.length < 5 ? list.length : 5);
 
@@ -227,16 +219,20 @@ class SentenceBloc {
       if (sentences != null && !_sentencesFetcher.isClosed) {
         _sentencesFetcher.sink.add(_sentences);
       }
-    } else {}
+    }
   }
 
   ///Get more sentences from the local database.
   void getMoreSentencesByKanji() async {
-    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
-        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
+    var sentences =
+        await jsonToSentences(_unloadedSentencesStr.sublist(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
 
-    _unloadedSentencesStr.removeRange(0,
-        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
+    if (sentences.isEmpty) {
+      fetchSentencesByKanjiFromFirebase(_kanjiStr, shouldClear: false);
+      return;
+    }
+
+    _unloadedSentencesStr.removeRange(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
 
     _sentences.addAll(sentences);
 

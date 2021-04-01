@@ -159,8 +159,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     double width = MediaQuery.of(context).size.width;
     final subtitleStyle = TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54);
 
-    print(Theme.of(context).brightness);
-
     return Scaffold(
         drawerEdgeDragWidth: 50,
         key: scaffoldKey,

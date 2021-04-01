@@ -35,33 +35,24 @@ class Sentence {
   Sentence.fromMap(Map<String, dynamic> map) {
     text = map[Keys.textKey];
     englishText = map[Keys.englishTextKey];
-    tokens = (map[Keys.tokensKey] as List)
-        .map((map) => Token.fromMap(jsonDecode(map)))
-        .toList();
+    tokens = (map[Keys.tokensKey] as List).map((map) => Token.fromMap(map is String ? jsonDecode(map) : map)).toList();
   }
 
-  Map toMap() => {
-        Keys.textKey: text,
-        Keys.englishTextKey: englishText,
-        Keys.tokensKey:
-            tokens.map((token) => jsonEncode(token.toMap())).toList()
-      };
+  Map toMap() =>
+      {Keys.textKey: text, Keys.englishTextKey: englishText, Keys.tokensKey: tokens.map((token) => jsonEncode(token.toMap())).toList()};
 
   Map toDBMap() => {
         Keys.idKey: id,
         Keys.textKey: text,
         Keys.englishTextKey: englishText,
-        Keys.tokensKey: jsonEncode(
-            tokens.map((token) => jsonEncode(token.toMap())).toList())
+        Keys.tokensKey: jsonEncode(tokens.map((token) => jsonEncode(token.toMap())).toList())
       };
 
   Sentence.fromDBMap(Map map) {
     id = map[Keys.idKey];
     text = map[Keys.textKey];
     englishText = map[Keys.englishTextKey];
-    tokens = (jsonDecode(map[Keys.tokensKey]) as List)
-        .map((map) => Token.fromMap(jsonDecode(map)))
-        .toList();
+    tokens = (jsonDecode(map[Keys.tokensKey]) as List).map((map) => Token.fromMap(jsonDecode(map))).toList();
   }
 
   Sentence.fromJsonString(String str) {
@@ -69,9 +60,7 @@ class Sentence {
     id = map[Keys.idKey];
     text = map[Keys.textKey];
     englishText = map[Keys.englishTextKey];
-    tokens = (jsonDecode(map[Keys.tokensKey]) as List)
-        .map((map) => Token.fromMap(jsonDecode(map)))
-        .toList();
+    tokens = (jsonDecode(map[Keys.tokensKey]) as List).map((map) => Token.fromMap(jsonDecode(map))).toList();
   }
 
   String toJsonString() {
