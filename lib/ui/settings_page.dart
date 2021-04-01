@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'components/furigana_text.dart';
 import '../resource/repository.dart';
 import '../resource/firebase_auth_provider.dart';
+import '../bloc/settings_bloc.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -157,6 +158,78 @@ class _SettingsPageState extends State<SettingsPage> {
                 backgroundColor: Colors.yellow,
                 action: SnackBarAction(label: 'Dismiss', onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
               ));
+            },
+          ),
+          Divider(height: 0),
+          StreamBuilder(
+            stream: SettingsBloc.instance.themeMode,
+            builder: (_, snapshot) {
+              var subtitle = '';
+
+              if (snapshot.hasData) {
+                switch (snapshot.data) {
+                  case ThemeMode.system:
+                    subtitle = 'System';
+                    break;
+                  case ThemeMode.light:
+                    subtitle = 'Light';
+                    break;
+                  case ThemeMode.dark:
+                    subtitle = 'Dark';
+                    break;
+                }
+              }
+
+              return ListTile(
+                leading: Icon(Icons.stream, color: Colors.white),
+                title: Text('Theme', style: TextStyle(color: Colors.white)),
+                subtitle: Text(
+                  subtitle,
+                  style: TextStyle(color: Colors.white54),
+                ),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return StreamBuilder(
+                          stream: SettingsBloc.instance.themeMode,
+                          builder: (_, snapshot) {
+                            if (snapshot.hasData) {
+                              final mode = snapshot.data;
+
+                              return AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    RadioListTile(
+                                      value: ThemeMode.light,
+                                      groupValue: mode,
+                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
+                                      title: Text('Light', style: TextStyle(color: Colors.black)),
+                                    ),
+                                    RadioListTile(
+                                      value: ThemeMode.dark,
+                                      groupValue: mode,
+                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
+                                      title: Text('Dark', style: TextStyle(color: Colors.black)),
+                                    ),
+                                    RadioListTile(
+                                      value: ThemeMode.system,
+                                      groupValue: mode,
+                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
+                                      title: Text('System', style: TextStyle(color: Colors.black)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            return Container();
+                          },
+                        );
+                      });
+                },
+              );
             },
           ),
           Divider(height: 0),

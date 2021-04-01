@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/kanji_list.dart';
@@ -26,8 +27,7 @@ class SharedPreferencesProvider {
     }
   }
 
-  List<String> getAllFavKanjiStrs() =>
-      _sharedPreferences.getStringList(Keys.favKanjiStrsKey);
+  List<String> getAllFavKanjiStrs() => _sharedPreferences.getStringList(Keys.favKanjiStrsKey);
 
   List<String> uids = [];
 
@@ -43,8 +43,7 @@ class SharedPreferencesProvider {
     _sharedPreferences.setStringList(Keys.favKanjiStrsKey, favKanjiStrs);
   }
 
-  List<String> getAllStarKanjiStrs() =>
-      _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
+  List<String> getAllStarKanjiStrs() => _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
 
   void addStar(String kanjiStr) {
     var starKanjiStrs = _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
@@ -70,14 +69,12 @@ class SharedPreferencesProvider {
   void addKanjiList(KanjiList kanjiList) {
     uids.add(kanjiList.uid);
     _sharedPreferences.setStringList(Keys.uidsKey, uids);
-    _sharedPreferences.setStringList(
-        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
     _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
   }
 
   void updateKanjiListKanjis(KanjiList kanjiList) {
-    _sharedPreferences.setStringList(
-        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
   }
 
   void updateKanjiListName(KanjiList kanjiList) {
@@ -90,6 +87,20 @@ class SharedPreferencesProvider {
     _sharedPreferences.remove(kanjiList.uid + 'kanjis');
     _sharedPreferences.remove(kanjiList.uid + 'name');
   }
+
+  void setThemeMode(ThemeMode themeMode) {
+    _sharedPreferences.setInt(Keys.themeModeKey, themeMode.index);
+  }
+
+  Future<ThemeMode> get themeMode => SharedPreferences.getInstance().then((prefs) {
+        final set = prefs.containsKey(Keys.themeModeKey);
+        if (set) {
+          final index = prefs.getInt(Keys.themeModeKey);
+          return ThemeMode.values.elementAt(index);
+        } else {
+          return ThemeMode.system;
+        }
+      });
 
   KanjiList getKanjiListByUid(String uid) {
     var kanjiStrs = _sharedPreferences.getStringList(uid + 'kanjis');
@@ -104,8 +115,7 @@ class SharedPreferencesProvider {
     return res;
   }
 
-  Future<bool> get isFirstTimeUser =>
-      SharedPreferences.getInstance().then((prefs) {
+  Future<bool> get isFirstTimeUser => SharedPreferences.getInstance().then((prefs) {
         var res = !prefs.containsKey('mark');
         prefs.setBool('mark', true);
         return res;
@@ -113,6 +123,5 @@ class SharedPreferencesProvider {
 
   int get lastFetchedAt => _sharedPreferences.getInt(Keys.lastFetchedAtKey);
 
-  set lastFetchedAt(int timestamp) =>
-      _sharedPreferences.setInt(Keys.lastFetchedAtKey, timestamp);
+  set lastFetchedAt(int timestamp) => _sharedPreferences.setInt(Keys.lastFetchedAtKey, timestamp);
 }

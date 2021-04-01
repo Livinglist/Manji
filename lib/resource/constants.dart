@@ -39,6 +39,7 @@ class Keys {
   static String kanjiListStrKey = 'kanjiListStr';
   static String uidsKey = 'uids';
   static String lastFetchedAtKey = 'lastFetchedAt';
+  static String themeModeKey = 'themeMode';
 }
 
 class Fonts {

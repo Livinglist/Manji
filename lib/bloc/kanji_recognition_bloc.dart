@@ -3,13 +3,13 @@ import 'package:rxdart/rxdart.dart';
 import '../bloc/kanji_bloc.dart';
 import '../ui/kanji_recognize_page/resource/brain.dart';
 
-class KanjiRecognizeBloc {
+class KanjiRecognitionBloc {
   final _predictedKanjiFetcher = PublishSubject<List<Kanji>>();
   final _brain = AppBrain();
 
   Stream<List<Kanji>> get predictedKanji => _predictedKanjiFetcher.stream;
 
-  KanjiRecognizeBloc() {
+  KanjiRecognitionBloc() {
     _brain.loadModel();
   }
 
@@ -30,4 +30,4 @@ class KanjiRecognizeBloc {
   }
 }
 
-final kanjiRecognizeBloc = KanjiRecognizeBloc();
+final kanjiRecognizeBloc = KanjiRecognitionBloc();

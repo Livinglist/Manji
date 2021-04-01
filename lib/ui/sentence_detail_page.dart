@@ -140,13 +140,13 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
                               }
 
-                              if (kanjiList.wordCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.wordCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
 
                               if (kanjiList.sentenceCount > 0) {
                                 subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
                               }
 
-                              if (kanjiList.sentenceCount <= 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.sentenceCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
@@ -154,7 +154,10 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
 
                               return ListTile(
                                 title: Text(kanjiLists[index].name, style: TextStyle(color: Colors.black)),
-                                subtitle: Text(subtitle),
+                                subtitle: Text(
+                                  subtitle,
+                                  style: TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
                                   KanjiListBloc.instance.addSentence(kanjiList, widget.sentence);

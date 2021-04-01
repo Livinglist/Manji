@@ -52,8 +52,7 @@ class WordDetailPageState extends State<WordDetailPage> {
 
     scrollController.addListener(() {
       if (this.mounted) {
-        if (scrollController.offset >=
-            scrollController.position.maxScrollExtent) {
+        if (scrollController.offset >= scrollController.position.maxScrollExtent) {
           sentenceBloc.fetchMoreSentencesByWordFromJisho(widget.word.wordText);
         }
       }
@@ -88,11 +87,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: FuriganaText(
                   text: widget.word.wordText,
-                  tokens: [
-                    Token(
-                        text: widget.word.wordText,
-                        furigana: widget.word.wordFurigana)
-                  ],
+                  tokens: [Token(text: widget.word.wordText, furigana: widget.word.wordFurigana)],
                   style: TextStyle(fontSize: 24),
                 ),
               ),
@@ -123,11 +118,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                                     child: InkWell(
                                       splashColor: Colors.tealAccent,
                                       onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) => KanjiDetailPage(
-                                                    kanjiStr: kanji)));
+                                        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanjiStr: kanji)));
                                       },
                                       child: Container(
                                         width: 60,
@@ -136,17 +127,13 @@ class WordDetailPageState extends State<WordDetailPage> {
                                         child: Center(
                                             child: Text(
                                           getSingleKanji(kanji) ?? "",
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white,
-                                              fontFamily: 'kazei'),
+                                          style: TextStyle(fontSize: 24, color: Colors.white, fontFamily: 'kazei'),
                                         )),
                                       ),
                                     ),
                                   ),
                                 ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
                               ),
                             )
                         ],
@@ -249,8 +236,7 @@ class WordDetailPageState extends State<WordDetailPage> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Material(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4))),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
                     builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
@@ -282,50 +268,40 @@ class WordDetailPageState extends State<WordDetailPage> {
                               }
 
                               if (kanjiList.wordCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.wordCount} Words';
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
                               }
 
-                              if (kanjiList.wordCount <= 1)
-                                subtitle =
-                                    subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.wordCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
 
                               if (kanjiList.sentenceCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.sentenceCount} Sentences';
+                                subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
                               }
 
-                              if (kanjiList.sentenceCount <= 1)
-                                subtitle =
-                                    subtitle.substring(0, subtitle.length - 1);
+                              if (kanjiList.sentenceCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
                               }
 
                               return ListTile(
-                                title: Text(kanjiLists[index].name,
-                                    style: TextStyle(color: Colors.black)),
-                                subtitle: Text(subtitle),
+                                title: Text(kanjiLists[index].name, style: TextStyle(color: Colors.black)),
+                                subtitle: Text(
+                                  subtitle,
+                                  style: TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  KanjiListBloc.instance
-                                      .addWord(kanjiList, widget.word);
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
+                                  KanjiListBloc.instance.addWord(kanjiList, widget.word);
+                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                     content: Text(
                                       '${widget.word.wordText} has been added to ${kanjiList.name}',
                                       style: TextStyle(color: Colors.black),
                                     ),
-                                    backgroundColor:
-                                        Theme.of(context).accentColor,
+                                    backgroundColor: Theme.of(context).accentColor,
                                     action: SnackBarAction(
                                       label: 'Dismiss',
-                                      onPressed: () =>
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar(),
+                                      onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                                       textColor: Colors.blueGrey,
                                     ),
                                   ));

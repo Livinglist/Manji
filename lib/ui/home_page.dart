@@ -39,10 +39,8 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  final TextRecognizer textRecognizer =
-      FirebaseVision.instance.textRecognizer();
+class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
   final textEditingController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final backgroundKey = GlobalKey<HomePageBackgroundState>();
@@ -57,8 +55,7 @@ class HomePageState extends State<HomePage>
   void initState() {
     kanaBloc.init();
     KanjiListBloc.instance.init();
-    animationController = AnimationController(
-        vsync: this, value: 1, duration: Duration(seconds: 1));
+    animationController = AnimationController(vsync: this, value: 1, duration: Duration(seconds: 1));
 
     //FeatureDiscovery.clearPreferences(context, <String>{ 'kanji_recognition', 'kanji_extraction' });
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
@@ -79,8 +76,7 @@ class HomePageState extends State<HomePage>
     SiriSuggestionBloc.instance.siriSuggestion.listen((kanjiStr) {
       if (kanjiStr != null) {
         var kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
       }
     });
 
@@ -117,14 +113,12 @@ class HomePageState extends State<HomePage>
                       if (status == PermissionStatus.granted) {
                         Navigator.pop(context, ImageSource.camera);
                         return ImageSource.camera;
-                      } else if (status == PermissionStatus.permanentlyDenied ||
-                          status == PermissionStatus.denied) {
+                      } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
                         launch("app-settings:");
                         return null;
                       }
                       return [Permission.camera].request().then((val) {
-                        if (val[Permission.camera] ==
-                            PermissionStatus.granted) {
+                        if (val[Permission.camera] == PermissionStatus.granted) {
                           Navigator.pop(context, ImageSource.camera);
                           return ImageSource.camera;
                         } else {
@@ -141,14 +135,12 @@ class HomePageState extends State<HomePage>
                       if (status == PermissionStatus.granted) {
                         Navigator.pop(context, ImageSource.gallery);
                         return ImageSource.gallery;
-                      } else if (status == PermissionStatus.permanentlyDenied ||
-                          status == PermissionStatus.denied) {
+                      } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
                         launch("app-settings:");
                         return null;
                       }
                       return [Permission.photos].request().then((val) {
-                        if (val[Permission.photos] ==
-                            PermissionStatus.granted) {
+                        if (val[Permission.photos] == PermissionStatus.granted) {
                           Navigator.pop(context, ImageSource.gallery);
                           return ImageSource.gallery;
                         } else {
@@ -165,6 +157,9 @@ class HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final subtitleStyle = TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54);
+
+    print(Theme.of(context).brightness);
 
     return Scaffold(
         drawerEdgeDragWidth: 50,
@@ -176,45 +171,31 @@ class HomePageState extends State<HomePage>
               featureId: 'kanji_recognition',
               // Unique id that identifies this overlay.
               tapTarget: IconButton(
-                  onPressed: null,
-                  icon: Transform.translate(
-                      offset: Offset(0, -1.5),
-                      child: Icon(FontAwesomeIcons.edit, size: 20))),
+                  onPressed: null, icon: Transform.translate(offset: Offset(0, -1.5), child: Icon(FontAwesomeIcons.edit, size: 20))),
               // The widget that will be displayed as the tap target.
               title: Text('Write it down'),
-              description: Text(
-                  'Write down the kanji and Manji will tell you what kanji it is.'),
+              description: Text('Write down the kanji and Manji will tell you what kanji it is.'),
               backgroundColor: Theme.of(context).primaryColor,
               targetColor: Colors.white,
               textColor: Colors.white,
               child: IconButton(
-                  icon: Transform.translate(
-                      offset: Offset(0, -1.5),
-                      child: Icon(FontAwesomeIcons.edit, size: 20)),
+                  icon: Transform.translate(offset: Offset(0, -1.5), child: Icon(FontAwesomeIcons.edit, size: 20)),
                   onPressed: () {
                     focusNode.unfocus();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => KanjiRecognizePage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiRecognizePage()));
                   }),
             ),
             DescribedFeatureOverlay(
                 featureId: 'kanji_extraction',
                 // Unique id that identifies this overlay.
-                tapTarget: IconButton(
-                    onPressed: null,
-                    icon: Transform.rotate(
-                        angle: pi / 2, child: Icon(Icons.flip))),
+                tapTarget: IconButton(onPressed: null, icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip))),
                 title: Text('Look it up'),
-                description: Text(
-                    'Upload an image and all the kanji on it will be extracted.'),
+                description: Text('Upload an image and all the kanji on it will be extracted.'),
                 backgroundColor: Theme.of(context).primaryColor,
                 targetColor: Colors.white,
                 textColor: Colors.white,
                 child: IconButton(
-                  icon:
-                      Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
+                  icon: Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
                   onPressed: () {
                     focusNode.unfocus();
                     Connectivity().checkConnectivity().then((val) {
@@ -225,19 +206,11 @@ class HomePageState extends State<HomePage>
                             style: TextStyle(color: Colors.white),
                           ),
                           backgroundColor: Colors.red,
-                          action: SnackBarAction(
-                              label: 'Dismiss',
-                              onPressed: () => ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar()),
+                          action: SnackBarAction(label: 'Dismiss', onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
                         ));
                       } else {
                         getImageSource().then((val) {
-                          if (val != null)
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        TextRecognizePage(imageSource: val)));
+                          if (val != null) Navigator.push(context, MaterialPageRoute(builder: (_) => TextRecognizePage(imageSource: val)));
                         });
                       }
                     });
@@ -249,12 +222,11 @@ class HomePageState extends State<HomePage>
         ),
         drawer: DrawerListener(
           onPositionChange: (FractionalOffset offset) {
-            if (Device.get().isTablet == false)
-              animationController.value = offset.dx;
+            if (Device.get().isTablet == false) animationController.value = offset.dx;
           },
           child: Drawer(
               child: Material(
-            color: Colors.grey[600],
+            color: Theme.of(context).primaryColor == Colors.black ? Colors.black : Colors.grey[600],
             child: Column(
               children: <Widget>[
                 SizedBox(
@@ -262,45 +234,37 @@ class HomePageState extends State<HomePage>
                 ),
                 ListTile(
                   title: Text('仮名', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Kana'),
+                  subtitle: Text('Kana', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => KanaPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => KanaPage()));
                   },
                 ),
                 ListTile(
-                  title:
-                      Text('日本語能力試験漢字', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('JLPT Kanji'),
+                  title: Text('日本語能力試験漢字', style: TextStyle(color: Colors.white)),
+                  subtitle: Text('JLPT Kanji', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => JLPTKanjiPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => JLPTKanjiPage()));
                   },
                 ),
                 ListTile(
                   title: Text('教育漢字', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Kyōiku Kanji'),
+                  subtitle: Text('Kyōiku Kanji', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => EducationKanjiPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => EducationKanjiPage()));
                   },
                 ),
                 ListTile(
                   title: Text('収蔵した漢字', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Favorite Kanji'),
+                  subtitle: Text('Favorite Kanji', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => MyKanjiPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyKanjiPage()));
                   },
                 ),
                 ListTile(
                   title: Text('漢字リスト', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Kanji Lists'),
+                  subtitle: Text('Kanji Lists', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => MyListPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyListPage()));
                   },
                 ),
                 Padding(
@@ -309,26 +273,23 @@ class HomePageState extends State<HomePage>
                 ),
                 ListTile(
                   title: Text('進度', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Progress'),
+                  subtitle: Text('Progress', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => ProgressPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ProgressPage()));
                   },
                 ),
                 ListTile(
                   title: Text('クイズ', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Quiz'),
+                  subtitle: Text('Quiz', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => QuizPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizPage()));
                   },
                 ),
                 ListTile(
                   title: Text('設定', style: TextStyle(color: Colors.white)),
-                  subtitle: Text('Settings'),
+                  subtitle: Text('Settings', style: subtitleStyle),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => SettingsPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()));
                   },
                 ),
               ],
@@ -348,8 +309,7 @@ class HomePageState extends State<HomePage>
                           key: backgroundKey,
                           animationController: animationController,
                           callback: (String kanji) {
-                            if (textEditingController.text.isEmpty ||
-                                textEditingController.text.length == 1) {
+                            if (textEditingController.text.isEmpty || textEditingController.text.length == 1) {
                               focusNode.unfocus();
                               textEditingController.text = kanji;
                             }
@@ -362,9 +322,8 @@ class HomePageState extends State<HomePage>
                   right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
                   child: Center(
                     child: Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(color: Colors.black54, blurRadius: 8)
-                        ], shape: BoxShape.rectangle, color: Colors.white),
+                        decoration: BoxDecoration(
+                            boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)], shape: BoxShape.rectangle, color: Colors.white),
                         height: 42,
                         //width: MediaQuery.of(context).size.width * 0.9,
                         child: Flex(
@@ -375,8 +334,7 @@ class HomePageState extends State<HomePage>
                             Material(
                               color: Colors.transparent,
                               child: textEditingController.text.isEmpty
-                                  ? IconButton(
-                                      icon: Icon(Icons.search), onPressed: null)
+                                  ? IconButton(icon: Icon(Icons.search), onPressed: null)
                                   : IconButton(
                                       icon: Icon(Icons.close),
                                       onPressed: () {
@@ -421,10 +379,7 @@ class HomePageState extends State<HomePage>
                               color: Colors.transparent,
                               child: IconButton(
                                   splashColor: Colors.grey,
-                                  icon: Icon(Icons.arrow_forward,
-                                      color: isEntering
-                                          ? Colors.black
-                                          : Colors.grey),
+                                  icon: Icon(Icons.arrow_forward, color: isEntering ? Colors.black : Colors.grey),
                                   onPressed: onSearchPressed),
                             )
                           ],
@@ -439,10 +394,7 @@ class HomePageState extends State<HomePage>
                           animation: animationController,
                           child: DailyKanjiCard(),
                           builder: (_, child) {
-                            return Opacity(
-                                opacity:
-                                    tween.animate(animationController).value,
-                                child: child);
+                            return Opacity(opacity: tween.animate(animationController).value, child: child);
                           }))),
               Positioned(
                   top: 122,
@@ -456,10 +408,7 @@ class HomePageState extends State<HomePage>
                         var kanjis = snapshot.data;
                         return Container(
                             decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black54, blurRadius: 8)
-                                ],
+                                boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                 shape: BoxShape.rectangle,
                                 color: Theme.of(context).primaryColor),
                             height: 480,
