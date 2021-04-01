@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart' show ImageSource;
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/kanji_bloc.dart';
 import '../bloc/search_bloc.dart';
@@ -110,15 +109,15 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   child: Text('Camera', style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     return Permission.camera.status.then((status) {
-                      if (status == PermissionStatus.granted) {
+                      if (status.isGranted) {
                         Navigator.pop(context, ImageSource.camera);
                         return ImageSource.camera;
-                      } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
-                        launch("app-settings:");
+                      } else if (status == PermissionStatus.permanentlyDenied) {
+                        openAppSettings();
                         return null;
                       }
-                      return [Permission.camera].request().then((val) {
-                        if (val[Permission.camera] == PermissionStatus.granted) {
+                      return Permission.camera.request().then((val) {
+                        if (val.isGranted) {
                           Navigator.pop(context, ImageSource.camera);
                           return ImageSource.camera;
                         } else {
@@ -132,15 +131,16 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   child: Text('Gallery', style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     return Permission.photos.status.then((status) {
-                      if (status == PermissionStatus.granted) {
+                      if (status.isGranted) {
                         Navigator.pop(context, ImageSource.gallery);
                         return ImageSource.gallery;
                       } else if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
-                        launch("app-settings:");
+                        openAppSettings();
                         return null;
                       }
-                      return [Permission.photos].request().then((val) {
-                        if (val[Permission.photos] == PermissionStatus.granted) {
+
+                      return Permission.photos.request().then((val) {
+                        if (val.isGranted) {
                           Navigator.pop(context, ImageSource.gallery);
                           return ImageSource.gallery;
                         } else {

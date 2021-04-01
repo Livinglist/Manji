@@ -4,7 +4,7 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'google_api_credentials.dart';
 import '../utils/string_extension.dart';
 
-const _SCOPES = const [VisionApi.CloudVisionScope];
+const _SCOPES = const [VisionApi.cloudVisionScope];
 
 class GoogleApiProvider {
   static Future<String> extractTextFromImage(String imgStr) async {
@@ -28,9 +28,7 @@ class GoogleApiProvider {
       ];
 
       return vision.images.annotate(r).then((BatchAnnotateImagesResponse b) {
-        return b.responses.single.textAnnotations.isEmpty
-            ? ""
-            : b.responses.single.fullTextAnnotation.text;
+        return b.responses.single.textAnnotations.isEmpty ? "" : b.responses.single.fullTextAnnotation.text;
       });
     }, onError: (Object err) {
       print(err);
@@ -40,6 +38,5 @@ class GoogleApiProvider {
   }
 
   static Future<List<String>> extractKanjiFromImage(String imgStr) =>
-      extractTextFromImage(imgStr)
-          .then<List<String>>((text) => text.getKanjis());
+      extractTextFromImage(imgStr).then<List<String>>((text) => text.getKanjis());
 }

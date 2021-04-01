@@ -34,7 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           StreamBuilder(
-            stream: FirebaseAuthProvider.onAuthStateChanged,
+            stream: FirebaseAuthProvider.instance.onAuthStateChanged,
             builder: (_, AsyncSnapshot<User> snapshot) {
               var user = snapshot.data;
 
