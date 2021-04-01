@@ -107,20 +107,27 @@ class SentenceBloc {
 
   ///Fetch sentences from Firebase.
   void fetchSentencesByKanjiFromFirebase(String kanji, {bool shouldClear = true}) {
-    assert(kanji.length == 1);
     if (shouldClear) _sentences.clear();
+
     Query ref;
+
     if (lastDoc == null) {
       ref =
           FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey).limit(_length);
     } else {
-      ref = FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey)
-        ..startAfterDocument(lastDoc).limit(_length);
+      ref = FirebaseFirestore.instance
+          .collection('sentences2')
+          .doc(kanji)
+          .collection(Keys.sentencesKey)
+          .orderBy(Keys.textKey)
+          .startAfterDocument(lastDoc)
+          .limit(_length);
     }
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
         lastDoc = snapshot.docs.last;
@@ -130,8 +137,13 @@ class SentenceBloc {
 
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByKanji(String kanji) {
-    var ref = FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey)
-      ..startAfterDocument(lastDoc).limit(_length);
+    var ref = FirebaseFirestore.instance
+        .collection('sentences2')
+        .doc(kanji)
+        .collection(Keys.sentencesKey)
+        .orderBy(Keys.textKey)
+        .startAfterDocument(lastDoc)
+        .limit(_length);
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -169,8 +181,13 @@ class SentenceBloc {
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByWord(String word) {
     if (word.length > 1) {
-      var ref = FirebaseFirestore.instance.collection('wordSentences').doc(word).collection(Keys.sentencesKey).orderBy(Keys.textKey)
-        ..startAfterDocument(lastDoc).limit(_length);
+      var ref = FirebaseFirestore.instance
+          .collection('wordSentences')
+          .doc(word)
+          .collection(Keys.sentencesKey)
+          .orderBy(Keys.textKey)
+          .startAfterDocument(lastDoc)
+          .limit(_length);
 
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
