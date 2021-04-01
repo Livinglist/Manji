@@ -34,7 +34,6 @@ dependencies:
   sqflite: 2.0.0+2
   path_provider: 1.1.0
   shared_preferences:
-  firebase_ml_vision: 0.9.6+2
   image_picker: 0.6.5
   image: 3.0.2
   url_launcher: 6.0.3

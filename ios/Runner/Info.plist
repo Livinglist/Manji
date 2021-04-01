@@ -40,13 +40,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-
 	<key>NSCameraUsageDescription</key>
 	<string>Manji needs access to your camera for image text extraction.</string>
-
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Manji needs access to your photo library for image text extraction.</string>
-
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
