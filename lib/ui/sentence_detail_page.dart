@@ -154,10 +154,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
 
                               return ListTile(
                                 title: Text(kanjiLists[index].name, style: TextStyle(color: Colors.black)),
-                                subtitle: Text(
-                                  subtitle,
-                                  style: TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54),
-                                ),
+                                subtitle: Text(subtitle),
                                 onTap: () {
                                   Navigator.pop(context);
                                   KanjiListBloc.instance.addSentence(kanjiList, widget.sentence);
