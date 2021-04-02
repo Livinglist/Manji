@@ -355,7 +355,6 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
         ),
         body: ListView(
           controller: scrollController,
-          addAutomaticKeepAlives: true,
           children: <Widget>[
             AnimatedBuilder(
               animation: animationController,
@@ -379,7 +378,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                                       scaleFactor: computeScaleFactor(kanjiBlockHeight > 360 ? 360 : kanjiBlockHeight)))),
                         ),
                         flex: 1),
-                    Flexible(child: KanjiInfoColumn(kanji: widget.kanji), flex: 1),
+                    Flexible(child: KanjiInfoColumn(key: ObjectKey(widget.kanji ?? widget.kanjiStr), kanji: widget.kanji), flex: 1),
                   ],
                 ),
               ),
@@ -392,7 +391,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
               },
             ),
             StreamBuilder(
-              key: UniqueKey(),
+              key: ObjectKey(widget.kanji ?? widget.kanjiStr),
               stream: KanjiBloc.instance.kanji,
               builder: (_, AsyncSnapshot<Kanji> snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
@@ -763,14 +762,14 @@ class StrokeAnimationPlayer extends StatelessWidget {
 class KanjiInfoColumn extends StatelessWidget {
   final Kanji kanji;
 
-  KanjiInfoColumn({this.kanji}) : super(key: UniqueKey());
+  KanjiInfoColumn({Key key, this.kanji}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: KanjiBloc.instance.kanji,
       builder: (_, AsyncSnapshot<Kanji> snapshot) {
-        if (snapshot.hasData || kanji != null) {
+        if (snapshot.hasData || this.kanji != null) {
           var kanji = this.kanji == null ? snapshot.data : this.kanji;
 
           Widget radicalPanel;
