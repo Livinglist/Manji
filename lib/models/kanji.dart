@@ -7,7 +7,133 @@ enum JLPTLevel { n1, n2, n3, n4, n5 }
 enum Grade { g1, g2, g3, g4, g5, g6, g7, g8 }
 enum Yomikata { kunyomi, onyomi }
 
-Map<String, String> radicalsToMeaning = {
+class Kanji {
+  int id;
+  String kanji;
+  List<String> onyomi;
+  List<String> kunyomi;
+  String meaning;
+  String radicals;
+  String radicalsMeaning;
+  int strokes;
+  bool isFaved;
+  List<int> timeStamps = [];
+
+  set timeStamp(int timeStamp) => timeStamps.add(timeStamp);
+
+  JLPTLevel get jlptLevel {
+    switch (jlpt) {
+      case 1:
+        return JLPTLevel.n1;
+      case 2:
+        return JLPTLevel.n2;
+      case 3:
+        return JLPTLevel.n3;
+      case 4:
+        return JLPTLevel.n4;
+      case 5:
+        return JLPTLevel.n5;
+    }
+    return null;
+  }
+
+  int grade;
+  int jlpt;
+  int frequency;
+  List<String> parts;
+  List<Word> onyomiWords;
+  List<Word> kunyomiWords;
+
+  Kanji({this.id,
+    this.kanji,
+    this.onyomi,
+    this.kunyomi,
+    this.meaning,
+    this.grade,
+    this.jlpt,
+    this.strokes,
+    this.frequency,
+    this.parts,
+    this.onyomiWords,
+    this.kunyomiWords,
+    this.isFaved = false})
+      : assert((grade >= 0 && grade <= 7)),
+        assert(jlpt >= 0 && jlpt <= 5),
+        assert(strokes != 0),
+        assert(frequency >= 0);
+
+  Map toMap() =>
+      {
+        Keys.gradeKey: this.grade,
+        Keys.jlptKey: this.jlpt,
+        Keys.kanjiKey: this.kanji,
+        Keys.frequencyKey: this.frequency,
+        Keys.onyomiKey: this.onyomi,
+        Keys.kunyomiKey: this.kunyomi,
+        Keys.strokesKey: this.strokes,
+        Keys.partsKey: this.parts,
+        Keys.meaningKey: this.meaning,
+        Keys.kunyomiWordsKey: this.kunyomiWords,
+        Keys.onyomiWordsKey: this.onyomiWords
+      };
+
+  Kanji.fromMap(Map map) {
+    kanji = map[Keys.kanjiKey];
+    meaning = map[Keys.meaningKey];
+    strokes = map[Keys.strokesKey];
+    grade = map[Keys.gradeKey];
+    jlpt = map[Keys.jlptKey];
+    frequency = map[Keys.frequencyKey];
+    parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
+    kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
+    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
+    onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
+    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
+  }
+
+  Map<String, dynamic> toDBMap() =>
+      {
+        Keys.idKey: Keys.idKey,
+        Keys.gradeKey: this.grade,
+        Keys.jlptKey: this.jlpt,
+        Keys.kanjiKey: this.kanji,
+        Keys.frequencyKey: this.frequency,
+        Keys.onyomiKey: jsonEncode(this.onyomi),
+        Keys.kunyomiKey: jsonEncode(this.kunyomi),
+        Keys.strokesKey: this.strokes,
+        Keys.partsKey: jsonEncode(this.parts),
+        Keys.meaningKey: this.meaning,
+        Keys.radicalKey: this.radicals,
+        Keys.radicalsMeaningKey: this.radicalsMeaning,
+        Keys.kunyomiWordsKey: jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
+        Keys.onyomiWordsKey: jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
+        Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
+      };
+
+  Kanji.fromDBMap(Map map) {
+    id = map[Keys.idKey];
+    kanji = map[Keys.kanjiKey];
+    meaning = map[Keys.meaningKey];
+    radicals = map[Keys.radicalKey];
+    radicalsMeaning = map[Keys.radicalsMeaningKey];
+    strokes = map[Keys.strokesKey];
+    grade = map[Keys.gradeKey];
+    jlpt = map[Keys.jlptKey];
+    frequency = map[Keys.frequencyKey];
+    parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
+    kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
+    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
+    onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
+    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
+    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List).cast<int>();
+  }
+
+  String toString() {
+    return 'Instance of Kanji: $kanji, meaning: $meaning';
+  }
+}
+
+const Map<String, String> radicalsToMeaning = {
   '一': 'one',
   '丨': 'line',
   '丶': 'dot',
@@ -213,127 +339,353 @@ Map<String, String> radicalsToMeaning = {
   '鼻': 'nose'
 };
 
-class Kanji {
-  int id;
-  String kanji;
-  List<String> onyomi;
-  List<String> kunyomi;
-  String meaning;
-  String radicals;
-  String radicalsMeaning;
-  int strokes;
-  bool isFaved;
-  List<int> timeStamps = [];
+const Map<String, int> radicalsToStrokes = {
+  '一': 1,
+  '丨': 1,
+  '丶': 1,
+  '丿': 1,
+  '乛(乙,⺄,乚)': 1,
+  '亅': 1,
+  '爪(爫)': 4,
+  '二': 2,
+  '亠': 2,
+  '人(亻)': 2,
+  '儿': 2,
+  '入': 2,
+  '八': 2,
+  '冂': 2,
+  '目': 5,
+  '冖': 2,
+  '冫': 2,
+  '几': 3,
+  '夂': 3,
+  '凵': 3,
+  '刀(刂)': 2,
+  '力': 2,
+  '勹': 2,
+  '匕': 2,
+  '匚': 2,
+  '匸': 2,
+  '十': 2,
+  '卩': 2,
+  '厂': 2,
+  '小': 3,
+  '厶': 3,
+  '又': 2,
+  '口': 3,
+  '囗': 3,
+  '土': 3,
+  '士': 3,
+  '爿': 4,
+  '夊': 3,
+  '夕': 3,
+  '大': 3,
+  '女': 3,
+  '子': 3,
+  '宀': 3,
+  '寸': 3,
+  '尢(尣)': 3,
+  '尸': 3,
+  '屮': 3,
+  '山': 3,
+  '巛(川,巜)': 3,
+  '木': 4,
+  '工': 3,
+  '己(巳,已,㔾)': 3,
+  '巾': 3,
+  '干': 3,
+  '幺': 3,
+  '广': 3,
+  '廴': 2,
+  '廾': 3,
+  '弋': 3,
+  '弓': 3,
+  '彐(彑)': 3,
+  '彡': 3,
+  '彳': 3,
+  '心(忄,⺗)': 4,
+  '戈': 4,
+  '戶(户,戸)': 4,
+  '手(扌龵)': 4,
+  '支': 4,
+  '攴(攵)': 4,
+  '文': 4,
+  '齊': 14,
+  '斗': 4,
+  '斤': 4,
+  '方': 4,
+  '无': 4,
+  '日': 4,
+  '曰': 4,
+  '月': 4,
+  '肉(⺼)': 6,
+  '欠': 4,
+  '止': 4,
+  '歹(歺)': 4,
+  '殳': 4,
+  '毋(母,⺟)': 4,
+  '比': 4,
+  '毛': 4,
+  '氏': 4,
+  '气': 4,
+  '水(氵,氺)': 4,
+  '火(灬)': 4,
+  '父': 4,
+  '爻': 4,
+  '牛(牜)': 4,
+  '犬(犭)': 3,
+  '玄': 5,
+  '玉(王)': 5,
+  '甘': 5,
+  '生': 5,
+  '用(甩)': 5,
+  '田': 5,
+  '疋(⺪)': 5,
+  '疒': 5,
+  '癶': 5,
+  '白': 5,
+  '皿': 5,
+  '羊(⺶)': 6,
+  '矛': 5,
+  '矢': 5,
+  '石': 5,
+  '示(礻)': 4,
+  '禾': 5,
+  '穴': 5,
+  '立': 5,
+  '竹(⺮)': 6,
+  '米': 6,
+  '聿(⺻)': 6,
+  '糸(糹)': 6,
+  '网(罒,⺲,罓,⺳)': 5,
+  '羽': 6,
+  '老(耂)': 4,
+  '而': 6,
+  '耒': 6,
+  '耳': 6,
+  '臣': 6,
+  '自': 6,
+  '至': 6,
+  '臼': 6,
+  '舌': 6,
+  '舛': 7,
+  '舟': 6,
+  '艮': 6,
+  '色': 6,
+  '艸(艹)': 3,
+  '辵(辶,⻌,⻍)': 4,
+  '虍': 6,
+  '虫': 6,
+  '血': 6,
+  '行': 6,
+  '衣(衤)': 5,
+  '西(襾,覀)': 6,
+  '見': 7,
+  '角': 7,
+  '言(訁)': 7,
+  '谷': 7,
+  '豆': 7,
+  '豕': 7,
+  '貝': 7,
+  '赤': 7,
+  '走(赱)': 7,
+  '足(⻊)': 3,
+  '車': 7,
+  '辛': 7,
+  '辰': 7,
+  '邑(阝)': 3,
+  '牙': 4,
+  '酉': 7,
+  '釆': 7,
+  '里': 7,
+  '金(釒)': 8,
+  '長(镸)': 8,
+  '門': 8,
+  '阜(阝)': 3,
+  '隶': 8,
+  '隹': 8,
+  '雨': 8,
+  '青(靑)': 8,
+  '非': 8,
+  '面(靣)': 9,
+  '革': 9,
+  '音': 9,
+  '頁': 9,
+  '風': 9,
+  '飛': 9,
+  '食(飠)': 9,
+  '首': 9,
+  '香': 9,
+  '馬': 10,
+  '骨': 10,
+  '高(髙)': 10,
+  '髟': 10,
+  '鬼': 10,
+  '魚': 11,
+  '鳥': 11,
+  '鹿': 11,
+  '麻': 11,
+  '黃': 12,
+  '黍': 12,
+  '黑': 12,
+  '鼓': 13,
+  '龍': 16,
+  '瓜': 6,
+  '皮': 5,
+  '片': 4,
+  '卜': 2,
+  '禸': 5,
+  '瓦': 5,
+  '齒': 15,
+  '缶': 6,
+  '韋': 9,
+  '麥': 11,
+  '豸': 7,
+  '身': 7,
+  '鼻': 14
+};
 
-  set timeStamp(int timeStamp) => timeStamps.add(timeStamp);
-
-  JLPTLevel get jlptLevel {
-    switch (jlpt) {
-      case 1:
-        return JLPTLevel.n1;
-      case 2:
-        return JLPTLevel.n2;
-      case 3:
-        return JLPTLevel.n3;
-      case 4:
-        return JLPTLevel.n4;
-      case 5:
-        return JLPTLevel.n5;
-    }
-    return null;
-  }
-
-  int grade;
-  int jlpt;
-  int frequency;
-  List<String> parts;
-  List<Word> onyomiWords;
-  List<Word> kunyomiWords;
-
-  Kanji(
-      {this.id,
-      this.kanji,
-      this.onyomi,
-      this.kunyomi,
-      this.meaning,
-      this.grade,
-      this.jlpt,
-      this.strokes,
-      this.frequency,
-      this.parts,
-      this.onyomiWords,
-      this.kunyomiWords,
-      this.isFaved = false})
-      : assert((grade >= 0 && grade <= 7)),
-        assert(jlpt >= 0 && jlpt <= 5),
-        assert(strokes != 0),
-        assert(frequency >= 0);
-
-  Map toMap() => {
-        Keys.gradeKey: this.grade,
-        Keys.jlptKey: this.jlpt,
-        Keys.kanjiKey: this.kanji,
-        Keys.frequencyKey: this.frequency,
-        Keys.onyomiKey: this.onyomi,
-        Keys.kunyomiKey: this.kunyomi,
-        Keys.strokesKey: this.strokes,
-        Keys.partsKey: this.parts,
-        Keys.meaningKey: this.meaning,
-        Keys.kunyomiWordsKey: this.kunyomiWords,
-        Keys.onyomiWordsKey: this.onyomiWords
-      };
-
-  Kanji.fromMap(Map map) {
-    kanji = map[Keys.kanjiKey];
-    meaning = map[Keys.meaningKey];
-    strokes = map[Keys.strokesKey];
-    grade = map[Keys.gradeKey];
-    jlpt = map[Keys.jlptKey];
-    frequency = map[Keys.frequencyKey];
-    parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
-    kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
-    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
-    onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
-    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
-  }
-
-  Map<String, dynamic> toDBMap() => {
-        Keys.idKey: Keys.idKey,
-        Keys.gradeKey: this.grade,
-        Keys.jlptKey: this.jlpt,
-        Keys.kanjiKey: this.kanji,
-        Keys.frequencyKey: this.frequency,
-        Keys.onyomiKey: jsonEncode(this.onyomi),
-        Keys.kunyomiKey: jsonEncode(this.kunyomi),
-        Keys.strokesKey: this.strokes,
-        Keys.partsKey: jsonEncode(this.parts),
-        Keys.meaningKey: this.meaning,
-        Keys.radicalKey: this.radicals,
-        Keys.radicalsMeaningKey: this.radicalsMeaning,
-        Keys.kunyomiWordsKey: jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
-        Keys.onyomiWordsKey: jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
-        Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
-      };
-
-  Kanji.fromDBMap(Map map) {
-    id = map[Keys.idKey];
-    kanji = map[Keys.kanjiKey];
-    meaning = map[Keys.meaningKey];
-    radicals = map[Keys.radicalKey];
-    radicalsMeaning = map[Keys.radicalsMeaningKey];
-    strokes = map[Keys.strokesKey];
-    grade = map[Keys.gradeKey];
-    jlpt = map[Keys.jlptKey];
-    frequency = map[Keys.frequencyKey];
-    parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
-    kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
-    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
-    onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
-    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
-    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List).cast<int>();
-  }
-
-  String toString() {
-    return 'Instance of Kanji: $kanji, meaning: $meaning';
-  }
-}
+const Map<int, List<String>> strokesToRadicals = {
+  1: ['一', '丨', '丶', '丿', '乛(乙,⺄,乚)', '亅'],
+  4: [
+    '爪(爫)',
+    '爿',
+    '木',
+    '心(忄,⺗)',
+    '戈',
+    '戶(户,戸)',
+    '手(扌龵)',
+    '支',
+    '攴(攵)',
+    '文',
+    '斗',
+    '斤',
+    '方',
+    '无',
+    '日',
+    '曰',
+    '月',
+    '欠',
+    '止',
+    '歹(歺)',
+    '殳',
+    '毋(母,⺟)',
+    '比',
+    '毛',
+    '氏',
+    '气',
+    '水(氵,氺)',
+    '火(灬)',
+    '父',
+    '爻',
+    '牛(牜)',
+    '示(礻)',
+    '老(耂)',
+    '辵(辶,⻌,⻍)',
+    '牙',
+    '片'
+  ],
+  2: ['二', '亠', '人(亻)', '儿', '入', '八', '冂', '冖', '冫', '刀(刂)', '力', '勹', '匕', '匚', '匸', '十', '卩', '厂', '又', '廴', '卜'],
+  5: [
+    '目',
+    '玄',
+    '玉(王)',
+    '甘',
+    '生',
+    '用(甩)',
+    '田',
+    '疋(⺪)',
+    '疒',
+    '癶',
+    '白',
+    '皿',
+    '矛',
+    '矢',
+    '石',
+    '禾',
+    '穴',
+    '立',
+    '网(罒,⺲,罓,⺳)',
+    '衣(衤)',
+    '皮',
+    '禸',
+    '瓦'
+  ],
+  3: [
+    '几',
+    '夂',
+    '凵',
+    '小',
+    '厶',
+    '口',
+    '囗',
+    '土',
+    '士',
+    '夊',
+    '夕',
+    '大',
+    '女',
+    '子',
+    '宀',
+    '寸',
+    '尢(尣)',
+    '尸',
+    '屮',
+    '山',
+    '巛(川,巜)',
+    '工',
+    '己(巳,已,㔾)',
+    '巾',
+    '干',
+    '幺',
+    '广',
+    '廾',
+    '弋',
+    '弓',
+    '彐(彑)',
+    '彡',
+    '彳',
+    '犬(犭)',
+    '艸(艹)',
+    '足(⻊)',
+    '邑(阝)',
+    '阜(阝)'
+  ],
+  14: ['齊', '鼻'],
+  6: [
+    '肉(⺼)',
+    '羊(⺶)',
+    '竹(⺮)',
+    '米',
+    '聿(⺻)',
+    '糸(糹)',
+    '羽',
+    '而',
+    '耒',
+    '耳',
+    '臣',
+    '自',
+    '至',
+    '臼',
+    '舌',
+    '舟',
+    '艮',
+    '色',
+    '虍',
+    '虫',
+    '血',
+    '行',
+    '西(襾,覀)',
+    '瓜',
+    '缶'
+  ],
+  7: ['舛', '見', '角', '言(訁)', '谷', '豆', '豕', '貝', '赤', '走(赱)', '車', '辛', '辰', '酉', '釆', '里', '豸', '身'],
+  8: ['金(釒)', '長(镸)', '門', '隶', '隹', '雨', '青(靑)', '非'],
+  9: ['面(靣)', '革', '音', '頁', '風', '飛', '食(飠)', '首', '香', '韋'],
+  10: ['馬', '骨', '高(髙)', '髟', '鬼'],
+  11: ['魚', '鳥', '鹿', '麻', '麥'],
+  12: ['黃', '黍', '黑'],
+  13: ['鼓'],
+  16: ['龍'],
+  15: ['齒']
+};
