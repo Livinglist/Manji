@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../bloc/kanji_bloc.dart';
 import '../bloc/kanji_list_bloc.dart';
@@ -13,7 +14,7 @@ class FirestoreProvider {
   static String _uid;
 
   Future removeFavKanji(String kanji) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     return FirebaseFirestore.instance.collection(usersKey).doc(_uid).update({
       favKanjisKey: FieldValue.arrayRemove([kanji])
@@ -21,7 +22,7 @@ class FirestoreProvider {
   }
 
   Future removeMarkedKanji(String kanji) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     return FirebaseFirestore.instance.collection(usersKey).doc(_uid).update({
       markedKanjisKey: FieldValue.arrayRemove([kanji])
@@ -29,7 +30,7 @@ class FirestoreProvider {
   }
 
   Future uploadFavKanjis(List<String> kanjis) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     return FirebaseFirestore.instance
         .collection(usersKey)
@@ -38,7 +39,7 @@ class FirestoreProvider {
   }
 
   Future uploadMarkedKanjis(List<String> kanjis) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     return FirebaseFirestore.instance
         .collection(usersKey)
@@ -47,39 +48,41 @@ class FirestoreProvider {
   }
 
   Future uploadKanjiList(KanjiList kanjiList) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    if (FirebaseAuth.instance.currentUser != null) {
+      _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-    var snapshot = await FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).get();
-    if (snapshot.exists) {
-      return FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).update({
+      var snapshot = await FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).get();
+      if (snapshot.exists) {
+        return FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).update({
+          kanjiListUidKey: kanjiList.uid,
+          kanjiListNameKey: kanjiList.name,
+          kanjiListKanjisKey: kanjiList.kanjiStrs,
+        }).whenComplete(_updateTimestamp);
+      }
+      return FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).set({
         kanjiListUidKey: kanjiList.uid,
         kanjiListNameKey: kanjiList.name,
         kanjiListKanjisKey: kanjiList.kanjiStrs,
       }).whenComplete(_updateTimestamp);
     }
-    return FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).doc(kanjiList.uid).set({
-      kanjiListUidKey: kanjiList.uid,
-      kanjiListNameKey: kanjiList.name,
-      kanjiListKanjisKey: kanjiList.kanjiStrs,
-    }).whenComplete(_updateTimestamp);
   }
 
   Future<List<String>> fetchFavKanjis() async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     var snapshot = await FirebaseFirestore.instance.collection(usersKey).doc(_uid).get();
     return (snapshot.data()[favKanjisKey] as List).cast<String>();
   }
 
   Future<List<String>> fetchMarkedKanjis() async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     var snapshot = await FirebaseFirestore.instance.collection(usersKey).doc(_uid).get();
     return (snapshot.data()[markedKanjisKey] as List).cast<String>();
   }
 
   Stream<KanjiList> fetchKanjiLists() async* {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     var snapshots = await FirebaseFirestore.instance.collection(usersKey).doc(_uid).collection(kanjiListsKey).get();
     for (var snapshot in snapshots.docs) {
@@ -89,18 +92,20 @@ class FirestoreProvider {
   }
 
   Future deleteKanjiList(KanjiList kanjiList) async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
-    return FirebaseFirestore.instance
-        .collection(usersKey)
-        .doc(_uid)
-        .collection(kanjiListsKey)
-        .doc(kanjiList.uid)
-        .delete()
-        .whenComplete(_updateTimestamp);
+    if (FirebaseAuth.instance.currentUser != null) {
+      _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
+      return FirebaseFirestore.instance
+          .collection(usersKey)
+          .doc(_uid)
+          .collection(kanjiListsKey)
+          .doc(kanjiList.uid)
+          .delete()
+          .whenComplete(_updateTimestamp);
+    }
   }
 
   Future _updateTimestamp() async {
-    _uid = _uid ?? FirebaseAuth.instance.currentUser;
+    _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
     return FirebaseFirestore.instance
         .collection(usersKey)

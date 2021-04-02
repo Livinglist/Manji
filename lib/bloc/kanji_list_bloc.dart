@@ -4,7 +4,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../utils/list_extension.dart';
 import '../resource/repository.dart';
-import '../resource/firebase_auth_provider.dart';
 import '../models/kanji_list.dart';
 
 export '../models/kanji_list.dart';
@@ -23,8 +22,7 @@ class KanjiListBloc {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
 
-      if (!_kanjiListsFetcher.isClosed)
-        _kanjiListsFetcher.sink.add(_kanjiLists);
+      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
 
       return _kanjiLists;
     }
@@ -35,8 +33,7 @@ class KanjiListBloc {
   void init() {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
-      if (!_kanjiListsFetcher.isClosed)
-        _kanjiListsFetcher.sink.add(_kanjiLists);
+      if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
     }
   }
 
@@ -44,9 +41,7 @@ class KanjiListBloc {
     var temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
     temp.name = newName;
     repo.updateKanjiListName(temp);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void addWord(KanjiList kanjiList, Word word) {
@@ -55,9 +50,7 @@ class KanjiListBloc {
     temp.kanjiStrs.add(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void addSentence(KanjiList kanjiList, Sentence sentence) {
@@ -66,9 +59,7 @@ class KanjiListBloc {
     temp.kanjiStrs.add(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void addKanji(KanjiList kanjiList, String kanjiStr) {
@@ -76,9 +67,7 @@ class KanjiListBloc {
     temp.kanjiStrs.add(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void removeWord(KanjiList kanjiList, Word word) {
@@ -87,9 +76,7 @@ class KanjiListBloc {
     temp.kanjiStrs.remove(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void removeSentence(KanjiList kanjiList, Sentence sentence) {
@@ -98,9 +85,7 @@ class KanjiListBloc {
     temp.kanjiStrs.remove(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void removeKanji(KanjiList kanjiList, String kanjiStr) {
@@ -108,9 +93,7 @@ class KanjiListBloc {
     temp.kanjiStrs.remove(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.uploadKanjiList(kanjiList);
   }
 
   void addKanjiList(String listName) {
@@ -119,8 +102,7 @@ class KanjiListBloc {
       var match = regex.firstMatch(listName);
       if (regex.hasMatch(listName)) {
         var num = int.parse(match.group(0)) + 1;
-        listName = listName.replaceRange(
-            listName.length - 1, listName.length, num.toString());
+        listName = listName.replaceRange(listName.length - 1, listName.length, num.toString());
       } else {
         listName = listName.trim() + " 1";
       }
@@ -129,25 +111,18 @@ class KanjiListBloc {
     _kanjiLists.add(temp);
     repo.addKanjiList(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(temp);
-    }
+    repo.uploadKanjiList(temp);
   }
 
   void deleteKanjiList(KanjiList kanjiList) {
     _kanjiLists.remove(kanjiList);
     repo.deleteKanjiList(kanjiList);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
-    if (FirebaseAuth.instance.currentUser != null) {
-      repo.uploadKanjiList(kanjiList);
-    }
+    repo.deleteKanjiListFromFirebase(kanjiList);
   }
 
   bool isInList(KanjiList list, String kanjiStr) {
-    return _kanjiLists
-        .singleWhere((li) => li == list)
-        .kanjiStrs
-        .contains(kanjiStr);
+    return _kanjiLists.singleWhere((li) => li == list).kanjiStrs.contains(kanjiStr);
   }
 
   void clearThenAddKanjiLists(List<KanjiList> kanjiLists) {
