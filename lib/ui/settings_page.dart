@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
@@ -258,15 +256,14 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           Divider(height: 0),
-          if (Platform.isIOS)
-            ListTile(
-              leading: Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
-              title: Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
-              subtitle: Text('If you like this app', style: TextStyle(color: Colors.white54)),
-              onTap: () async {
-                InAppRepo().purchaseCoffee();
-              },
-            ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
+            title: Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
+            subtitle: Text('If you like this app', style: TextStyle(color: Colors.white54)),
+            onTap: () async {
+              InAppRepo().purchaseCoffee();
+            },
+          ),
           Divider(height: 0),
           ListTile(
             leading: Icon(Icons.person, color: Colors.white),
