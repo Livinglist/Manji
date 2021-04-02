@@ -324,6 +324,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.5"
+  in_app_purchase:
+    dependency: "direct main"
+    description:
+      name: in_app_purchase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1+1"
   intl:
     dependency: transitive
     description:
@@ -338,6 +345,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   matcher:
     dependency: transitive
     description:

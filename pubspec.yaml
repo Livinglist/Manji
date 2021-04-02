@@ -54,6 +54,7 @@ dependencies:
   confetti: 0.5.4
   flutter_tts: 1.2.6
   feature_discovery: 0.13.0+2
+  in_app_purchase: 0.5.1+1
 
 
 

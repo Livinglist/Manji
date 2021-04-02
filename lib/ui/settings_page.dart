@@ -1,12 +1,16 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/furigana_text.dart';
 import '../resource/repository.dart';
 import '../resource/firebase_auth_provider.dart';
+import '../resource/in_app_repo.dart';
 import '../bloc/settings_bloc.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -16,6 +20,27 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    InAppRepo().purchaseStream.listen((purchaseDetails) {
+      for (var p in purchaseDetails) {
+        print(p.error);
+        print(p.productID);
+        print(p.status);
+        print(p.transactionDate);
+      }
+      if (purchaseDetails != null && purchaseDetails.isNotEmpty) {
+        if (purchaseDetails.first.status != PurchaseStatus.pending) {
+          InAppRepo().completePurchase(purchaseDetails.first);
+        }
+        if (purchaseDetails.first.status == PurchaseStatus.purchased) {
+          showCoffeePurchasedDialog();
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,6 +258,16 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           Divider(height: 0),
+          if (Platform.isIOS)
+            ListTile(
+              leading: Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
+              title: Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
+              subtitle: Text('If you like this app', style: TextStyle(color: Colors.white54)),
+              onTap: () async {
+                InAppRepo().purchaseCoffee();
+              },
+            ),
+          Divider(height: 0),
           ListTile(
             leading: Icon(Icons.person, color: Colors.white),
             title: Text('About me', style: TextStyle(color: Colors.white)),
@@ -294,6 +329,24 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
+  }
+
+  void showCoffeePurchasedDialog() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('Thank You!'),
+            content: Text('You just fed the developer a cup of coffee.'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("You are welcome.")),
+            ],
+          );
+        });
   }
 
   void appleLogIn() async {
