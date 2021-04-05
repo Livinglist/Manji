@@ -6,10 +6,6 @@ import 'kanji_bloc.dart';
 enum SearchFor { meaning, pronunciation, kanji }
 
 class SearchBloc {
-  static final instance = SearchBloc._();
-git
-  SearchBloc._();
-
   final _resultsFetcher = BehaviorSubject<List<Kanji>>();
 
   Stream<List<Kanji>> get results => _resultsFetcher.stream;
@@ -108,14 +104,12 @@ git
       }
 
       if (hiraganaText.isEmpty) {
-        var onyomiWords = kanji.onyomiWords.where((word) =>
-            word.meanings.contains(text) || word.wordText.contains(text));
+        var onyomiWords = kanji.onyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
         if (onyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
         }
-        var kunyomiWords = kanji.kunyomiWords.where((word) =>
-            word.meanings.contains(text) || word.wordText.contains(text));
+        var kunyomiWords = kanji.kunyomiWords.where((word) => word.meanings.contains(text) || word.wordText.contains(text));
         if (kunyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
@@ -126,8 +120,7 @@ git
     _resultsFetcher.sink.add(kanjiSet.toList());
   }
 
-  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
-      Map<String, bool> radicalsMap) {
+  void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) {
     var list = <Kanji>[];
 
     this.clear();
@@ -145,8 +138,7 @@ git
     });
   }
 
-  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap,
-      Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
+  Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap, Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
     bool jlptIsEmpty = !jlptMap.containsValue(true),
         gradeIsEmpty = !gradeMap.containsValue(true),
         radicalIsEmpty = !radicalsMap.containsValue(true);

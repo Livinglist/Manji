@@ -53,6 +53,7 @@ class SentenceBloc {
         _allFetched = true;
         _isFetching = null;
         _isFetchingFetcher.sink.add(_isFetching);
+        _sentencesFetcher.sink.add([]);
       } else if (!_sentencesFetcher.isClosed) {
         _sentences.add(sentence);
         _sentencesFetcher.sink.add(_sentences);

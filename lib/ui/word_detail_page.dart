@@ -147,12 +147,11 @@ class WordDetailPageState extends State<WordDetailPage> {
                     var children = <Widget>[];
                     if (sentences.isEmpty) {
                       return Container(
-                        height: 200,
-                        width: MediaQuery.of(context).size.width,
+                        height: 360,
                         child: Center(
                           child: Text(
                             'No example sentences found _(┐「ε:)_',
-                            style: TextStyle(color: Colors.white70),
+                            style: TextStyle(color: Colors.white38),
                           ),
                         ),
                       );
@@ -219,7 +218,14 @@ class WordDetailPageState extends State<WordDetailPage> {
                       ],
                     );
                   } else {
-                    return Container();
+                    return Container(
+                      height: 360,
+                      child: Center(
+                          child: Text(
+                        '( ͡• ͜ʖ ͡•)',
+                        style: TextStyle(color: Colors.white38),
+                      )),
+                    );
                   }
                 },
               ),

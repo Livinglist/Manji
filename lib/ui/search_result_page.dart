@@ -21,6 +21,7 @@ class SearchResultPage extends StatefulWidget {
 
 class _SearchResultPageState extends State<SearchResultPage> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
+  final searchBloc = SearchBloc();
   final Map<int, bool> jlptMap = {1: false, 2: false, 3: false, 4: false, 5: false};
   final Map<int, bool> gradeMap = {
     0: false, //Junior High
@@ -61,11 +62,11 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
 
     radicalsMap = radicalsToMeaning.map((key, value) => MapEntry(key, false));
 
-    if (widget.text != null) SearchBloc.instance.search(widget.text);
+    if (widget.text != null) searchBloc.search(widget.text);
 
     if (widget.radicals != null) {
       radicalsMap[widget.radicals] = true;
-      SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+      searchBloc.filter(jlptMap, gradeMap, radicalsMap);
     }
 
     Vibration.hasCustomVibrationsSupport().then((hasCoreHaptics) {
@@ -85,188 +86,182 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        SearchBloc.instance.clear();
-        return Future.value(true);
-      },
-      child: Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
-          appBar: AppBar(
-            elevation: showShadow ? 8 : 0,
-            actions: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: StreamBuilder(
-                  stream: SearchBloc.instance.results,
-                  builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                    if (snapshot.hasData) {
-                      var kanjis = snapshot.data;
+    return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: AppBar(
+          elevation: showShadow ? 8 : 0,
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(12),
+              child: StreamBuilder(
+                stream: searchBloc.results,
+                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                  if (snapshot.hasData) {
+                    var kanjis = snapshot.data;
 
-                      return Center(child: Text('${kanjis.length} kanji found'));
-                    }
-                    return Container();
-                  },
-                ),
-              )
-            ],
-          ),
-          body: Stack(
-            children: <Widget>[
-              Positioned.fill(
-                child: StreamBuilder(
-                  stream: SearchBloc.instance.results,
-                  builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-                    if (snapshot.hasData) {
-                      var kanjis = snapshot.data;
-
-                      return kanjis.isNotEmpty
-                          ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
-                          : Center(
-                              child: Text(
-                                'No results found _(┐「ε:)_',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                ),
+                    return Center(child: Text('${kanjis.length} kanji found'));
+                  }
+                  return Container();
+                },
               ),
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: AnimatedBuilder(
-                    animation: animationController,
-                    child: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                              alignment: WrapAlignment.start,
-                              spacing: 8,
-                              children: <Widget>[
-                                SizedBox(width: 4),
-                                for (var n in jlptMap.keys)
-                                  FilterChip(
-                                      selected: jlptMap[n],
-                                      elevation: 4,
-                                      label: Text("N$n"),
-                                      onSelected: (val) {
-                                        if (shouldVibrate) {
-                                          Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
-                                          });
-                                        }
+            )
+          ],
+        ),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: StreamBuilder(
+                stream: searchBloc.results,
+                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                  if (snapshot.hasData) {
+                    var kanjis = snapshot.data;
 
-                                        setState(() {
-                                          jlptMap[n] = !jlptMap[n];
-                                        });
-
-                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                      })
-                              ],
+                    return kanjis.isNotEmpty
+                        ? _KanjiListView(kanjis: kanjis, scrollController: scrollController)
+                        : Center(
+                            child: Text(
+                              'No results found _(┐「ε:)_',
+                              style: TextStyle(color: Colors.white70),
                             ),
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                              alignment: WrapAlignment.start,
-                              spacing: 8,
-                              children: <Widget>[
-                                SizedBox(width: 4),
-                                for (var g in gradeMap.keys)
-                                  FilterChip(
-                                      selected: gradeMap[g],
-                                      elevation: 4,
-                                      label: Text(getGradeStr(g)),
-                                      onSelected: (val) {
-                                        if (shouldVibrate) {
-                                          Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
-                                          });
-                                        }
-
-                                        setState(() {
-                                          gradeMap[g] = !gradeMap[g];
+                          );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            ),
+            Align(
+                alignment: Alignment.topCenter,
+                child: AnimatedBuilder(
+                  animation: animationController,
+                  child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 8,
+                            children: <Widget>[
+                              SizedBox(width: 4),
+                              for (var n in jlptMap.keys)
+                                FilterChip(
+                                    selected: jlptMap[n],
+                                    elevation: 4,
+                                    label: Text("N$n"),
+                                    onSelected: (val) {
+                                      if (shouldVibrate) {
+                                        Vibration.cancel().then((_) {
+                                          Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                         });
+                                      }
 
-                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                      })
-                              ],
-                            ),
+                                      setState(() {
+                                        jlptMap[n] = !jlptMap[n];
+                                      });
+
+                                      searchBloc.filter(jlptMap, gradeMap, radicalsMap);
+                                    })
+                            ],
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                              alignment: WrapAlignment.start,
-                              spacing: 8,
-                              children: <Widget>[
-                                SizedBox(width: 4),
-                                for (var r in radicalsMap.keys.toList().sublist(0, 4))
-                                  FilterChip(
-                                      selected: radicalsMap[r],
-                                      elevation: 4,
-                                      label: Text(r),
-                                      onSelected: (val) {
-                                        if (shouldVibrate) {
-                                          Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
-                                          });
-                                        }
-
-                                        setState(() {
-                                          radicalsMap[r] = !radicalsMap[r];
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 8,
+                            children: <Widget>[
+                              SizedBox(width: 4),
+                              for (var g in gradeMap.keys)
+                                FilterChip(
+                                    selected: gradeMap[g],
+                                    elevation: 4,
+                                    label: Text(getGradeStr(g)),
+                                    onSelected: (val) {
+                                      if (shouldVibrate) {
+                                        Vibration.cancel().then((_) {
+                                          Vibration.vibrate(pattern: [0, 5], intensities: [200]);
                                         });
+                                      }
 
-                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                      }),
-                                for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
-                                  FilterChip(
-                                      selected: true,
-                                      elevation: 4,
-                                      label: Text(r),
-                                      onSelected: (val) {
-                                        if (shouldVibrate) {
-                                          Vibration.cancel().then((_) {
-                                            Vibration.vibrate(pattern: [0, 5], intensities: [200]);
-                                          });
-                                        }
+                                      setState(() {
+                                        gradeMap[g] = !gradeMap[g];
+                                      });
 
-                                        setState(() {
-                                          radicalsMap[r] = !radicalsMap[r];
-                                        });
-
-                                        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
-                                      }),
-                                Hero(
-                                  tag: 'hero',
-                                  child: MaterialButton(
-                                    onPressed: showRadicalsDialog,
-                                    child: Text('More Radicals'),
-                                    shape: StadiumBorder(),
-                                    color: Colors.grey,
-                                    height: 32,
-                                  ),
-                                )
-                              ],
-                            ),
+                                      searchBloc.filter(jlptMap, gradeMap, radicalsMap);
+                                    })
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 8,
+                            children: <Widget>[
+                              SizedBox(width: 4),
+                              for (var r in radicalsMap.keys.toList().sublist(0, 4))
+                                FilterChip(
+                                    selected: radicalsMap[r],
+                                    elevation: 4,
+                                    label: Text(r),
+                                    onSelected: (val) {
+                                      if (shouldVibrate) {
+                                        Vibration.cancel().then((_) {
+                                          Vibration.vibrate(pattern: [0, 5], intensities: [200]);
+                                        });
+                                      }
+
+                                      setState(() {
+                                        radicalsMap[r] = !radicalsMap[r];
+                                      });
+
+                                      searchBloc.filter(jlptMap, gradeMap, radicalsMap);
+                                    }),
+                              for (var r in radicalsMap.keys.toList().sublist(4).where((element) => radicalsMap[element]))
+                                FilterChip(
+                                    selected: true,
+                                    elevation: 4,
+                                    label: Text(r),
+                                    onSelected: (val) {
+                                      if (shouldVibrate) {
+                                        Vibration.cancel().then((_) {
+                                          Vibration.vibrate(pattern: [0, 5], intensities: [200]);
+                                        });
+                                      }
+
+                                      setState(() {
+                                        radicalsMap[r] = !radicalsMap[r];
+                                      });
+
+                                      searchBloc.filter(jlptMap, gradeMap, radicalsMap);
+                                    }),
+                              Hero(
+                                tag: 'hero',
+                                child: MaterialButton(
+                                  onPressed: showRadicalsDialog,
+                                  child: Text('More Radicals'),
+                                  shape: StadiumBorder(),
+                                  color: Colors.grey,
+                                  height: 32,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    builder: (_, child) {
-                      return Opacity(
-                        opacity: animationController.value,
-                        child: animationController.value <= 0 ? Container() : child,
-                      );
-                    },
-                  )),
-            ],
-          )),
-    );
+                  ),
+                  builder: (_, child) {
+                    return Opacity(
+                      opacity: animationController.value,
+                      child: animationController.value <= 0 ? Container() : child,
+                    );
+                  },
+                )),
+          ],
+        ));
   }
 
   showRadicalsDialog() {
@@ -279,7 +274,7 @@ class _SearchResultPageState extends State<SearchResultPage> with SingleTickerPr
         setState(() {
           radicalsMap = value;
         });
-        SearchBloc.instance.filter(jlptMap, gradeMap, radicalsMap);
+        searchBloc.filter(jlptMap, gradeMap, radicalsMap);
       }
     });
   }

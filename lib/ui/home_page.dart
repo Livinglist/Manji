@@ -42,6 +42,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final backgroundKey = GlobalKey<HomePageBackgroundState>();
   final focusNode = FocusNode();
+  final searchBloc = SearchBloc();
   double mainPageScale = 1.0;
   double opacity = 0;
   AnimationController animationController;
@@ -336,7 +337,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                                       onPressed: () {
                                         setState(() {
                                           textEditingController.clear();
-                                          SearchBloc.instance.clear();
+                                          searchBloc.clear();
                                         });
                                       },
                                     ),
@@ -363,9 +364,9 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                                 onChanged: (text) {
                                   setState(() {
                                     if (text.isEmpty) {
-                                      SearchBloc.instance.clear();
+                                      searchBloc.clear();
                                     } else {
-                                      SearchBloc.instance.search(text);
+                                      searchBloc.search(text);
                                     }
                                   });
                                 },
@@ -398,7 +399,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
                   child: Center(
                       child: StreamBuilder(
-                    stream: SearchBloc.instance.results,
+                    stream: searchBloc.results,
                     builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                       if (snapshot.hasData && snapshot.data.isNotEmpty) {
                         var kanjis = snapshot.data;
@@ -436,7 +437,9 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
           MaterialPageRoute(
               builder: (_) => KanjiDetailPage(
                     kanjiStr: textEditingController.text,
-                  )));
+                  ))).then((value) {
+        searchBloc.clear();
+      });
     } else {
       Navigator.push(
           context,
