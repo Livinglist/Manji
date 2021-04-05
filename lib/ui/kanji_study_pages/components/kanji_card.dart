@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
@@ -33,8 +35,6 @@ class KanjiCardState extends State<KanjiCard> {
     sentenceBloc.getSingleSentenceByKanji(kanji.kanji);
 
     super.initState();
-
-    //_color = Colors.grey[700].withBlue(100 + Random(DateTime.now().millisecondsSinceEpoch).nextInt(155));
   }
 
   @override
@@ -90,8 +90,7 @@ class KanjiCardState extends State<KanjiCard> {
                               stream: sentenceBloc.sentences,
                               builder: (_, AsyncSnapshot<List<Sentence>> snapshot) {
                                 if (snapshot.hasData) {
-                                  var sentence = snapshot.data.isEmpty ? null : snapshot.data.first;
-                                  if (sentence == null) {
+                                  if (snapshot.data.isEmpty) {
                                     return Container(
                                       height: 200,
                                       width: MediaQuery.of(context).size.width,
@@ -103,6 +102,10 @@ class KanjiCardState extends State<KanjiCard> {
                                       ),
                                     );
                                   }
+
+                                  final randomIndex = Random().nextInt(snapshot.data.length);
+                                  final sentence = snapshot.data.elementAt(randomIndex);
+
                                   return Padding(
                                       padding: EdgeInsets.only(
                                           left: sentence.text.length > 45 ? 4 : 8,
