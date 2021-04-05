@@ -7,7 +7,7 @@ import '../models/word.dart';
 import '../bloc/sentence_bloc.dart';
 import '../ui/sentence_detail_page.dart';
 import 'components/furigana_text.dart';
-import 'kanji_detail_page.dart';
+import 'kanji_detail_page/kanji_detail_page.dart';
 
 class WordDetailPage extends StatefulWidget {
   final Word word;

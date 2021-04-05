@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:kanji_dictionary/main.dart';
 import 'package:kanji_dictionary/models/kanji.dart';
-import 'package:kanji_dictionary/ui/kanji_detail_page.dart';
+import 'package:kanji_dictionary/ui/kanji_detail_page/kanji_detail_page.dart';
 
 void main() {
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -32,7 +32,6 @@ void main() {
   ///Todo: implement tests.
 
   testWidgets('Kanji detail page test', (WidgetTester tester) async {
-    await tester.pumpWidget(KanjiDetailPage(
-        kanji: Kanji(kanji: '一', grade: 1, jlpt: 1, strokes: 1, frequency: 1)));
+    await tester.pumpWidget(KanjiDetailPage(kanji: Kanji(kanji: '一', grade: 1, jlpt: 1, strokes: 1, frequency: 1)));
   });
 }

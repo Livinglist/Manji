@@ -5,7 +5,7 @@ import '../bloc/kanji_bloc.dart';
 import '../bloc/search_bloc.dart';
 import '../ui/radicals_page.dart';
 import 'components/kanji_list_tile.dart';
-import 'kanji_detail_page.dart';
+import 'kanji_detail_page/kanji_detail_page.dart';
 
 double _filterPanelHeight = 140;
 

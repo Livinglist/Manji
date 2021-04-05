@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../ui/kanji_detail_page.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../models/kanji.dart';
 import 'chip_collections.dart';
 
@@ -9,8 +9,7 @@ class KanjiListTile extends StatelessWidget {
   final ValueChanged<String> onLongPressed;
   final VoidCallback onTap;
 
-  KanjiListTile({this.kanji, this.onLongPressed, this.onTap})
-      : assert(kanji != null);
+  KanjiListTile({this.kanji, this.onLongPressed, this.onTap}) : assert(kanji != null);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +18,7 @@ class KanjiListTile extends StatelessWidget {
         if (onTap != null)
           this.onTap();
         else {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
         }
       },
       onLongPress: () {
@@ -36,12 +34,8 @@ class KanjiListTile extends StatelessWidget {
             tag: kanji.kanji,
             child: Material(
               color: Colors.transparent,
-              child: Text(kanji.kanji,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontFamily: 'kazei',
-                      fontFamilyFallback: ['Ai'])),
+              child:
+                  Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'kazei', fontFamilyFallback: ['Ai'])),
             ),
           ),
         ),
@@ -72,14 +66,12 @@ class KanjiListTile extends StatelessWidget {
                           padding: EdgeInsets.all(4),
                           child: Text(
                             kunyomi,
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           )),
                       decoration: BoxDecoration(
                         //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(
-                                5.0) //                 <--- border radius here
+                        borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
                             ),
                       ),
                     )),
@@ -91,14 +83,12 @@ class KanjiListTile extends StatelessWidget {
                         padding: EdgeInsets.all(4),
                         child: Text(
                           onyomi,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         )),
                     decoration: BoxDecoration(
                       //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(
-                              5.0) //                 <--- border radius here
+                      borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
                           ),
                     ),
                   ),

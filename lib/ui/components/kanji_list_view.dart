@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../ui/kanji_detail_page.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../models/kanji.dart';
 import 'kanji_list_tile.dart';
 
@@ -33,10 +33,7 @@ class KanjiListView extends StatelessWidget {
           return KanjiListTile(
             kanji: kanjis[index],
             onLongPressed: onLongPressed,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => KanjiDetailPage(kanji: kanjis[index]))),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanjis[index]))),
           );
         },
         separatorBuilder: (_, __) => Divider(height: 0),

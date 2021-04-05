@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
 import '../../models/kanji.dart';
-import '../../ui/kanji_detail_page.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 
 typedef void StringCallback(String str);
 
@@ -48,10 +48,7 @@ class KanjiGridView extends StatelessWidget {
                             child: Material(
                               color: Colors.transparent,
                               child: Text(kanji.kanji,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 48,
-                                      fontFamily: fallBackFont ?? 'kazei')),
+                                  style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
                             ))),
                     Positioned(
                       left: 4,
@@ -64,10 +61,7 @@ class KanjiGridView extends StatelessWidget {
                   ],
                 )),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => KanjiDetailPage(kanji: kanji)));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
             },
             onLongPress: () {
               if (onLongPressed != null) {

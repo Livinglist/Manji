@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../ui/kanji_detail_page.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../models/kanji.dart';
 import 'chip_collections.dart';
 
@@ -13,12 +13,7 @@ class DeletableKanjiListView extends StatefulWidget {
   final bool canRemove;
   final ScrollController scrollController;
 
-  DeletableKanjiListView(
-      {this.kanjis,
-      this.fallBackFont,
-      this.onLongPressed,
-      this.canRemove = false,
-      this.scrollController})
+  DeletableKanjiListView({this.kanjis, this.fallBackFont, this.onLongPressed, this.canRemove = false, this.scrollController})
       : assert(kanjis != null);
 
   @override
@@ -53,11 +48,7 @@ class _DeletableKanjiListViewState extends State<DeletableKanjiListView> {
               key: ObjectKey(kanjis[index]),
               child: ListTile(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              KanjiDetailPage(kanji: kanjis[index])));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanjis[index])));
                 },
                 onLongPress: () {
                   if (onLongPressed != null) {
@@ -73,10 +64,7 @@ class _DeletableKanjiListViewState extends State<DeletableKanjiListView> {
                       child: Material(
                         color: Colors.transparent,
                         child: Text(kanjis[index].kanji,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontFamily: fallBackFont ?? 'kazei')),
+                            style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: fallBackFont ?? 'kazei')),
                       ),
                     ),
                   ),
@@ -95,16 +83,12 @@ class _DeletableKanjiListViewState extends State<DeletableKanjiListView> {
                                       padding: EdgeInsets.all(4),
                                       child: Text(
                                         'N${kanjis[index].jlpt}',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                       )),
                                   decoration: BoxDecoration(
                                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            5.0) //                 <--- border radius here
+                                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
                                         ),
                                   ),
                                 ),
@@ -130,16 +114,12 @@ class _DeletableKanjiListViewState extends State<DeletableKanjiListView> {
                                     padding: EdgeInsets.all(4),
                                     child: Text(
                                       kunyomi,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                     )),
                                 decoration: BoxDecoration(
                                   //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                          5.0) //                 <--- border radius here
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
                                       ),
                                 ),
                               )),
@@ -151,15 +131,12 @@ class _DeletableKanjiListViewState extends State<DeletableKanjiListView> {
                                   padding: EdgeInsets.all(4),
                                   child: Text(
                                     onyomi,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   )),
                               decoration: BoxDecoration(
                                 //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(
-                                        5.0) //                 <--- border radius here
+                                borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
                                     ),
                               ),
                             ),

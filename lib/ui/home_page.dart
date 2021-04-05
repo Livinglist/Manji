@@ -19,7 +19,7 @@ import '../bloc/siri_suggestion_bloc.dart';
 import 'components/compact_kanji_list_tile.dart';
 import 'components/home_page_background.dart';
 import 'components/daily_kanji_card.dart';
-import 'kanji_detail_page.dart';
+import 'kanji_detail_page/kanji_detail_page.dart';
 import 'jlpt_kanji_page.dart';
 import 'bookmark_page.dart';
 import 'kana_page.dart';

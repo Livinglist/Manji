@@ -7,7 +7,7 @@ enum SearchFor { meaning, pronunciation, kanji }
 
 class SearchBloc {
   static final instance = SearchBloc._();
-
+git
   SearchBloc._();
 
   final _resultsFetcher = BehaviorSubject<List<Kanji>>();
