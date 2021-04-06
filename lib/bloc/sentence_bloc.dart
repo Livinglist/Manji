@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
@@ -207,11 +208,12 @@ class SentenceBloc {
   }
 
   ///Get a single sentence from the local database.
-  void getSingleSentenceByKanji(String kanjiStr) async {
-    var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
+  void getRandomSentenceByKanji(String kanjiStr) async {
+    final jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
-      var list = (jsonDecode(jsonStr) as List).cast<String>();
-      var sentence = Sentence.fromMap(jsonDecode(list.first));
+      final list = (jsonDecode(jsonStr) as List).cast<String>();
+      final randomIndex = Random().nextInt(list.length);
+      final sentence = Sentence.fromMap(jsonDecode(list.elementAt(randomIndex)));
 
       _unloadedSentencesStr = list;
 

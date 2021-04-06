@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
@@ -32,7 +30,7 @@ class KanjiCardState extends State<KanjiCard> {
   void initState() {
     type = widget.kanjiCardContent.contentType;
     kanji = widget.kanjiCardContent.kanji;
-    sentenceBloc.getSingleSentenceByKanji(kanji.kanji);
+    sentenceBloc.getRandomSentenceByKanji(kanji.kanji);
 
     super.initState();
   }
@@ -103,8 +101,7 @@ class KanjiCardState extends State<KanjiCard> {
                                     );
                                   }
 
-                                  final randomIndex = Random().nextInt(snapshot.data.length);
-                                  final sentence = snapshot.data.elementAt(randomIndex);
+                                  final sentence = snapshot.data.first;
 
                                   return Padding(
                                       padding: EdgeInsets.only(
