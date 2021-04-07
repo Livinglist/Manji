@@ -291,7 +291,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 applicationName: "Manji",
-                applicationVersion: "v2.5.4",
+                applicationVersion: "v2.5.5",
                 aboutBoxChildren: <Widget>[
                   ElevatedButton(
                     onPressed: () {

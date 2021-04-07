@@ -585,7 +585,16 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                     children: children,
                   );
                 } else {
-                  return Container();
+                  return Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Text(
+                        'No example sentences found _(┐「ε:)_',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ),
+                  );
                 }
               },
             ),
