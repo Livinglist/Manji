@@ -237,9 +237,8 @@ class SentenceBloc {
 
       _unloadedSentencesStr = list;
 
-      _sentences.addAll(sentences);
-
       if (sentences != null && !_sentencesFetcher.isClosed) {
+        _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
       }
     }

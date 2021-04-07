@@ -590,7 +590,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
                     width: MediaQuery.of(context).size.width,
                     child: Center(
                       child: Text(
-                        'No example sentences found _(┐「ε:)_',
+                        '_(┐「ε:)_',
                         style: TextStyle(color: Colors.white70),
                       ),
                     ),

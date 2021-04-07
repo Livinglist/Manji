@@ -475,7 +475,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.5.4;
+				MARKETING_VERSION = 2.5.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -615,7 +615,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.5.4;
+				MARKETING_VERSION = 2.5.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -657,7 +657,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.5.4;
+				MARKETING_VERSION = 2.5.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
