@@ -14,6 +14,8 @@ import 'bloc/siri_suggestion_bloc.dart';
 import 'resource/db_provider.dart';
 import 'resource/firebase_auth_provider.dart';
 
+import 'resource/constants.dart';
+
 void main() {
   runApp(MyApp());
 }

@@ -129,14 +129,18 @@ class WordDetailPageState extends State<WordDetailPage> {
                                           child: StreamBuilder(
                                             key: ObjectKey(kanjiStr),
                                             stream: SettingsBloc.instance.fontSelection,
+                                            initialData: SettingsBloc.instance.tempFontSelection,
                                             builder: (_, AsyncSnapshot<FontSelection> snapshot) {
                                               String kanji = getSingleKanji(kanjiStr) ?? "";
-                                              return Text(kanji,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
-                                                  ));
+                                              if (snapshot.hasData) {
+                                                return Text(kanji,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24,
+                                                      fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                                    ));
+                                              }
+                                              return Container();
                                             },
                                           ),
                                         ),

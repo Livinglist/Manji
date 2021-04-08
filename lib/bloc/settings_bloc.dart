@@ -16,11 +16,17 @@ class SettingsBloc {
   static final instance = SettingsBloc._();
 
   Stream<ThemeMode> get themeMode => _themeModeFetcher.stream;
+
   Stream<FontSelection> get fontSelection => _fontFetcher.stream;
+
+  FontSelection tempFontSelection = FontSelection.handwriting;
 
   void init() {
     SharedPreferencesProvider.instance.themeMode.then((val) => _themeModeFetcher.sink.add(val));
-    SharedPreferencesProvider.instance.fontSelection.then((val) => _fontFetcher.sink.add(val));
+    SharedPreferencesProvider.instance.fontSelection.then((val) {
+      tempFontSelection = val;
+      _fontFetcher.sink.add(val);
+    });
   }
 
   void setThemeMode(ThemeMode themeMode) {

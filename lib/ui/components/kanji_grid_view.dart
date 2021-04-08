@@ -51,13 +51,17 @@ class KanjiGridView extends StatelessWidget {
                               child: StreamBuilder(
                                 key: ObjectKey(kanji.kanji),
                                 stream: SettingsBloc.instance.fontSelection,
+                                initialData: SettingsBloc.instance.tempFontSelection,
                                 builder: (_, AsyncSnapshot<FontSelection> snapshot) {
-                                  return Text(kanji.kanji,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 48,
-                                        fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
-                                      ));
+                                  if (snapshot.hasData) {
+                                    return Text(kanji.kanji,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 48,
+                                          fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                        ));
+                                  }
+                                  return Container();
                                 },
                               ),
                             ))),

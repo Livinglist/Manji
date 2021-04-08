@@ -147,7 +147,7 @@ class SearchBloc {
       yield null;
     } else {
       for (var kanji in _allKanjisList) {
-        if (kanji.kanji.codeUnitAt(0) >= 63744 && kanji.kanji.codeUnitAt(0) <= 64217) continue;
+        //if (kanji.jlpt == 0) continue;
 
         if ((jlptIsEmpty || jlptMap[kanji.jlpt]) &&
             (gradeIsEmpty || gradeMap[kanji.grade]) &&
