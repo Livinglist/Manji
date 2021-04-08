@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/kanji_list.dart';
+import '../models/font_selection.dart';
 import 'constants.dart';
 
 class SharedPreferencesProvider {
@@ -99,6 +100,20 @@ class SharedPreferencesProvider {
           return ThemeMode.values.elementAt(index);
         } else {
           return ThemeMode.system;
+        }
+      });
+
+  void setFont(FontSelection fontSelection) {
+    _sharedPreferences.setInt(Keys.fontKey, fontSelection.index);
+  }
+
+  Future<FontSelection> get fontSelection => SharedPreferences.getInstance().then((prefs) {
+        final set = prefs.containsKey(Keys.fontKey);
+        if (set) {
+          final index = prefs.getInt(Keys.fontKey);
+          return FontSelection.values.elementAt(index);
+        } else {
+          return FontSelection.handwriting;
         }
       });
 

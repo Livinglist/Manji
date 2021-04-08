@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
-import '../../models/kanji.dart';
 import '../kanji_detail_page/kanji_detail_page.dart';
+import '../../models/kanji.dart';
+import '../../bloc/settings_bloc.dart';
+import '../../models/font_selection.dart';
+import '../../resource/constants.dart';
 
 typedef void StringCallback(String str);
 
@@ -47,8 +50,18 @@ class KanjiGridView extends StatelessWidget {
                             tag: kanji.kanji,
                             child: Material(
                               color: Colors.transparent,
-                              child: Text(kanji.kanji,
-                                  style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: fallBackFont ?? 'kazei')),
+                              child: StreamBuilder(
+                                key: ObjectKey(kanji.kanji),
+                                stream: SettingsBloc.instance.fontSelection,
+                                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                                  return Text(kanji.kanji,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 48,
+                                        fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                      ));
+                                },
+                              ),
                             ))),
                     Positioned(
                       left: 4,

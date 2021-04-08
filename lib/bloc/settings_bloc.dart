@@ -2,18 +2,22 @@ import 'package:flutter/material.dart' show ThemeMode;
 import 'package:rxdart/rxdart.dart';
 
 import '../resource/shared_preferences_provider.dart';
+import '../models/font_selection.dart';
 
 class SettingsBloc {
   final _themeModeFetcher = BehaviorSubject<ThemeMode>();
+  final _fontFetcher = BehaviorSubject<FontSelection>();
 
   SettingsBloc._();
 
   static final instance = SettingsBloc._();
 
   Stream<ThemeMode> get themeMode => _themeModeFetcher.stream;
+  Stream<FontSelection> get fontSelection => _fontFetcher.stream;
 
   void init() {
     SharedPreferencesProvider.instance.themeMode.then((val) => _themeModeFetcher.sink.add(val));
+    SharedPreferencesProvider.instance.fontSelection.then((val) => _fontFetcher.sink.add(val));
   }
 
   void setThemeMode(ThemeMode themeMode) {
@@ -21,7 +25,13 @@ class SettingsBloc {
     _themeModeFetcher.sink.add(themeMode);
   }
 
+  void setFont(FontSelection fontSelection) {
+    SharedPreferencesProvider.instance.setFont(fontSelection);
+    _fontFetcher.sink.add(fontSelection);
+  }
+
   void dispose() {
     _themeModeFetcher.close();
+    _fontFetcher.close();
   }
 }

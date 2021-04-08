@@ -10,6 +10,7 @@ import '../resource/repository.dart';
 import '../resource/firebase_auth_provider.dart';
 import '../resource/in_app_repo.dart';
 import '../bloc/settings_bloc.dart';
+import '../models/font_selection.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -97,75 +98,75 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           Divider(height: 0),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            child: FutureBuilder(
-              future: repo.getIsUpdated(),
-              builder: (_, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.hasData) {
-                  var isUpdated = snapshot.data;
-                  if (isUpdated) {
-                    return ListTile(
-                      leading: Icon(Icons.wrap_text, color: Colors.white),
-                      title: Text('Update database', style: TextStyle(color: Colors.white)),
-                      subtitle: Text(
-                          'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
-                          style: TextStyle(color: Colors.white54)),
-                      onTap: () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            'Your database is up to date',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: Theme.of(context).accentColor,
-                          action: SnackBarAction(
-                            label: 'Dismiss',
-                            onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-                            textColor: Colors.blueGrey,
-                          ),
-                        ));
-                      },
-                    );
-                  } else {
-                    return ListTile(
-                        leading: Icon(Icons.wrap_text, color: Colors.white),
-                        title: Text('Update database', style: TextStyle(color: Colors.white)),
-                        subtitle: Text(
-                            'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database needs to be updated)',
-                            style: TextStyle(color: Colors.white54)),
-                        onTap: () {
-                          repo.fetchUpdates().whenComplete(() {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                'Database has been updated successfully',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              backgroundColor: Theme.of(context).accentColor,
-                              action: SnackBarAction(
-                                label: 'Dismiss',
-                                onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-                                textColor: Colors.blueGrey,
-                              ),
-                            ));
-                          });
-                        });
-                  }
-                } else {
-                  return ListTile(
-                    leading: Icon(Icons.wrap_text, color: Colors.white),
-                    title: Text('Update database', style: TextStyle(color: Colors.white)),
-                    subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability',
-                        style: TextStyle(color: Colors.white54)),
-                  );
+          StreamBuilder(
+            stream: SettingsBloc.instance.fontSelection,
+            builder: (_, snapshot) {
+              var subtitle = '';
+
+              if (snapshot.hasData) {
+                switch (snapshot.data) {
+                  case FontSelection.handwriting:
+                    subtitle = 'Handwriting';
+                    break;
+                  case FontSelection.print:
+                    subtitle = 'Print';
+                    break;
                 }
-              },
-            ),
+              }
+
+              return ListTile(
+                leading: Icon(snapshot.data == FontSelection.print ? FontAwesomeIcons.font : FontAwesomeIcons.pen, color: Colors.white),
+                title: Text('Font', style: TextStyle(color: Colors.white)),
+                subtitle: Text(
+                  subtitle,
+                  style: TextStyle(color: Colors.white54),
+                ),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return StreamBuilder(
+                          stream: SettingsBloc.instance.fontSelection,
+                          builder: (_, snapshot) {
+                            if (snapshot.hasData) {
+                              final mode = snapshot.data;
+
+                              return AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    RadioListTile(
+                                      value: FontSelection.handwriting,
+                                      groupValue: mode,
+                                      onChanged: (val) => SettingsBloc.instance.setFont(val),
+                                      title: Text('Handwriting', style: TextStyle(color: Colors.black)),
+                                    ),
+                                    RadioListTile(
+                                      value: FontSelection.print,
+                                      groupValue: mode,
+                                      onChanged: (val) => SettingsBloc.instance.setFont(val),
+                                      title: Text('Print', style: TextStyle(color: Colors.black)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            return Container();
+                          },
+                        );
+                      });
+                },
+              );
+            },
           ),
           Divider(height: 0),
           ListTile(
-            leading: Icon(Icons.swap_horiz, color: Colors.white),
+            leading: Icon(
+              Icons.swap_horiz,
+              color: Colors.white,
+              size: 26,
+            ),
             title: Text('Transfer my data', style: TextStyle(color: Colors.white)),
             subtitle: Text(
               'Transfer your data to a another device',
@@ -254,6 +255,73 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               );
             },
+          ),
+          Divider(height: 0),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            child: FutureBuilder(
+              future: repo.getIsUpdated(),
+              builder: (_, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData) {
+                  var isUpdated = snapshot.data;
+                  if (isUpdated) {
+                    return ListTile(
+                      leading: Icon(Icons.wrap_text, color: Colors.white),
+                      title: Text('Update database', style: TextStyle(color: Colors.white)),
+                      subtitle: Text(
+                          'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
+                          style: TextStyle(color: Colors.white54)),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            'Your database is up to date',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          backgroundColor: Theme.of(context).accentColor,
+                          action: SnackBarAction(
+                            label: 'Dismiss',
+                            onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                            textColor: Colors.blueGrey,
+                          ),
+                        ));
+                      },
+                    );
+                  } else {
+                    return ListTile(
+                        leading: Icon(Icons.wrap_text, color: Colors.white),
+                        title: Text('Update database', style: TextStyle(color: Colors.white)),
+                        subtitle: Text(
+                            'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database needs to be updated)',
+                            style: TextStyle(color: Colors.white54)),
+                        onTap: () {
+                          repo.fetchUpdates().whenComplete(() {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                'Database has been updated successfully',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              backgroundColor: Theme.of(context).accentColor,
+                              action: SnackBarAction(
+                                label: 'Dismiss',
+                                onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                                textColor: Colors.blueGrey,
+                              ),
+                            ));
+                          });
+                        });
+                  }
+                } else {
+                  return ListTile(
+                    leading: Icon(Icons.wrap_text, color: Colors.white),
+                    title: Text('Update database', style: TextStyle(color: Colors.white)),
+                    subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability',
+                        style: TextStyle(color: Colors.white54)),
+                  );
+                }
+              },
+            ),
           ),
           Divider(height: 0),
           ListTile(

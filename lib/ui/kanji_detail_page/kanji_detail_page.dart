@@ -257,6 +257,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     double kanjiBlockHeight = MediaQuery.of(context).size.width / 2 - 24;
+
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,

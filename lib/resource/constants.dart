@@ -40,10 +40,12 @@ class Keys {
   static String uidsKey = 'uids';
   static String lastFetchedAtKey = 'lastFetchedAt';
   static String themeModeKey = 'themeMode';
+  static String fontKey = 'font';
 }
 
 class Fonts {
   static String kazei = 'kazei';
+  static String ming = 'ming';
 }
 
 const Set<String> allVideoFiles = {
