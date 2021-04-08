@@ -203,7 +203,8 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                     child: Container(
                         child: Text(
                       celebrateString.elementAt(Random(DateTime.now().millisecondsSinceEpoch).nextInt(celebrateString.length)),
-                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54, fontSize: 18),
                       textAlign: TextAlign.center,
                     )),
                   )
