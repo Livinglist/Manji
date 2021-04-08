@@ -36,6 +36,7 @@ class SettingsBloc {
 
   void setFont(FontSelection fontSelection) {
     SharedPreferencesProvider.instance.setFont(fontSelection);
+    tempFontSelection = fontSelection;
     _fontFetcher.sink.add(fontSelection);
   }
 
