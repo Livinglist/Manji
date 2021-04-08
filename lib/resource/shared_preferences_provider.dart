@@ -99,6 +99,7 @@ class SharedPreferencesProvider {
           final index = prefs.getInt(Keys.themeModeKey);
           return ThemeMode.values.elementAt(index);
         } else {
+          prefs.setInt(Keys.themeModeKey, ThemeMode.system.index);
           return ThemeMode.system;
         }
       });
@@ -113,6 +114,7 @@ class SharedPreferencesProvider {
           final index = prefs.getInt(Keys.fontKey);
           return FontSelection.values.elementAt(index);
         } else {
+          prefs.setInt(Keys.fontKey, FontSelection.handwriting.index);
           return FontSelection.handwriting;
         }
       });
