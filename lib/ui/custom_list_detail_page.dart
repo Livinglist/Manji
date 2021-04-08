@@ -10,6 +10,7 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 
 import '../bloc/kanji_bloc.dart';
 import '../bloc/kanji_list_bloc.dart';
+import '../bloc/settings_bloc.dart';
 import '../ui/sentence_detail_page.dart';
 import '../ui/word_detail_page.dart';
 import 'kanji_detail_page/kanji_detail_page.dart';
@@ -268,7 +269,18 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.center,
-                      child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 48, fontFamily: 'kazei')),
+                      child: StreamBuilder(
+                        key: ObjectKey(kanji.kanji),
+                        stream: SettingsBloc.instance.fontSelection,
+                        builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                          return Text(kanji.kanji,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 48,
+                                fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                              ));
+                        },
+                      ),
                     ),
                     Positioned(
                       left: 4,

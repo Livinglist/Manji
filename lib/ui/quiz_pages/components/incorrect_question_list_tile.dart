@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../kanji_detail_page/kanji_detail_page.dart';
 import '../../../ui/components/chip_collections.dart';
 import '../../../models/question.dart';
+import '../../../bloc/settings_bloc.dart';
 
 class IncorrectQuestionListTile extends StatelessWidget {
   final Question question;
@@ -31,7 +32,18 @@ class IncorrectQuestionListTile extends StatelessWidget {
             tag: tag,
             child: Material(
               color: Colors.transparent,
-              child: Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 36, fontFamily: 'kazei')),
+              child: StreamBuilder(
+                key: ObjectKey(kanji.kanji),
+                stream: SettingsBloc.instance.fontSelection,
+                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                  return Text(kanji.kanji,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 36,
+                        fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                      ));
+                },
+              ),
             ),
           ),
         ),

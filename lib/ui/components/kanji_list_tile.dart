@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../bloc/settings_bloc.dart';
 import '../../models/kanji.dart';
-import '../../models/font_selection.dart';
-import '../../resource/constants.dart';
 import 'chip_collections.dart';
 
 class KanjiListTile extends StatelessWidget {

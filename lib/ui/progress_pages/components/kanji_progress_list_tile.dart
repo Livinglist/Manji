@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../kanji_detail_page/kanji_detail_page.dart';
+import '../../../bloc/settings_bloc.dart';
 import '../../../models/kanji.dart';
 
 class KanjiProgressListTile extends StatelessWidget {
@@ -33,8 +34,18 @@ class KanjiProgressListTile extends StatelessWidget {
             tag: kanji.kanji,
             child: Material(
               color: Colors.transparent,
-              child:
-                  Text(kanji.kanji, style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: 'kazei', fontFamilyFallback: ['Ai'])),
+              child: StreamBuilder(
+                key: ObjectKey(kanji.kanji),
+                stream: SettingsBloc.instance.fontSelection,
+                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                  return Text(kanji.kanji,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                      ));
+                },
+              ),
             ),
           ),
         ),

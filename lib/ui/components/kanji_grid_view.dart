@@ -4,8 +4,6 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../models/kanji.dart';
 import '../../bloc/settings_bloc.dart';
-import '../../models/font_selection.dart';
-import '../../resource/constants.dart';
 
 typedef void StringCallback(String str);
 

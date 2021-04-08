@@ -5,6 +5,7 @@ import '../bloc/kanji_list_bloc.dart';
 import '../models/sentence.dart';
 import '../models/word.dart';
 import '../bloc/sentence_bloc.dart';
+import '../bloc/settings_bloc.dart';
 import '../ui/sentence_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'kanji_detail_page/kanji_detail_page.dart';
@@ -107,7 +108,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                       child: Row(
                         children: <Widget>[
                           //for (var token in widget.sentence.tokens.where((token) => token.isKanji))
-                          for (var kanji in getKanjis(widget.word.wordText))
+                          for (var kanjiStr in getKanjis(widget.word.wordText))
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: ClipRRect(
@@ -118,17 +119,27 @@ class WordDetailPageState extends State<WordDetailPage> {
                                     child: InkWell(
                                       splashColor: Colors.tealAccent,
                                       onTap: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanjiStr: kanji)));
+                                        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanjiStr: kanjiStr)));
                                       },
                                       child: Container(
                                         width: 60,
                                         height: 60,
                                         color: Colors.transparent,
                                         child: Center(
-                                            child: Text(
-                                          getSingleKanji(kanji) ?? "",
-                                          style: TextStyle(fontSize: 24, color: Colors.white, fontFamily: 'kazei'),
-                                        )),
+                                          child: StreamBuilder(
+                                            key: ObjectKey(kanjiStr),
+                                            stream: SettingsBloc.instance.fontSelection,
+                                            builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                                              String kanji = getSingleKanji(kanjiStr) ?? "";
+                                              return Text(kanji,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24,
+                                                    fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                                  ));
+                                            },
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

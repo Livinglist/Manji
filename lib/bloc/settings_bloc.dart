@@ -4,6 +4,9 @@ import 'package:rxdart/rxdart.dart';
 import '../resource/shared_preferences_provider.dart';
 import '../models/font_selection.dart';
 
+export '../resource/constants.dart';
+export '../models/font_selection.dart';
+
 class SettingsBloc {
   final _themeModeFetcher = BehaviorSubject<ThemeMode>();
   final _fontFetcher = BehaviorSubject<FontSelection>();

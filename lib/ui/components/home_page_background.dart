@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:vibration/vibration.dart';
 
+import '../../resource/constants.dart';
+
 typedef KanjiCallback = void Function(String);
 
 class HomePageBackground extends StatefulWidget {
@@ -144,20 +146,8 @@ class HomePageBackgroundState extends State<HomePageBackground> {
           key: keys[i],
           //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
           child: Center(
-            child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'kazei')),
+            child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: Fonts.kazei)),
           ));
     });
-//    return List.generate(total, (i) {
-//      return Transform.scale(
-//          scale: widget.animationController?.value ?? 1,
-//          child: AnimatedOpacity(
-//              opacity: keys[i] == targetKey ? 1 : 0.2,
-//              duration: Duration(milliseconds: 300),
-//              key: keys[i],
-//              //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
-//              child: Center(
-//                child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'kazei')),
-//              )));
-//    });
   }
 }
