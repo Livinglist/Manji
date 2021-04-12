@@ -14,9 +14,9 @@ import 'bloc/siri_suggestion_bloc.dart';
 import 'resource/db_provider.dart';
 import 'resource/firebase_auth_provider.dart';
 
-import 'resource/constants.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -28,17 +28,6 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   bool initialized = false;
   CrossFadeState crossFadeState = CrossFadeState.showSecond;
-  Widget child = Platform.isAndroid
-      ? Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        )
-      : Scaffold(
-          appBar: AppBar(
-            title: Text('Manji'),
-          ),
-          body: HomePageBackground());
 
   @override
   void initState() {
@@ -63,52 +52,61 @@ class MyAppState extends State<MyApp> {
         builder: (_, themeSnapshot) {
           final themeMode = themeSnapshot.data;
           return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Manji',
-              theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
-              darkTheme: ThemeData(primaryColor: Colors.black, primarySwatch: Colors.grey),
-              themeMode: themeMode,
-              home: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                child: FutureBuilder(
-                  future: Firebase.initializeApp(),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      return StreamBuilder(
-                          stream: KanjiBloc.instance.allKanjis,
-                          builder: (_, __) {
-                            if (__.hasData) {
-                              return HomePage();
-                            } else {
-                              if (!initialized) {
-                                initialized = true;
-                                KanjiBloc.instance.getAllKanjis();
-                                FirebaseAuthProvider.instance.checkForUpdates();
-                              } else {
-                                DBProvider.db
-                                    .initDB(refresh: true)
-                                    .whenComplete(KanjiBloc.instance.getAllKanjis)
-                                    .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
-                              }
-                              return Platform.isAndroid
-                                  ? Scaffold(
-                                      body: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Scaffold(
-                                      appBar: AppBar(
-                                        elevation: 0,
-                                        title: Text('Manji'),
-                                      ),
-                                      body: HomePageBackground());
-                            }
-                          });
-                    } else
-                      return Container();
-                  },
-                ),
-              ));
+            debugShowCheckedModeBanner: false,
+            title: 'Manji',
+            theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
+            darkTheme: ThemeData(primaryColor: Colors.black, primarySwatch: Colors.grey),
+            themeMode: themeMode,
+            home: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              child: FutureBuilder(
+                future: DBProvider.db.initDB(),
+                builder: (_, dbSnapshot) {
+                  if (dbSnapshot.hasData) {
+                    return StreamBuilder(
+                      stream: KanjiBloc.instance.allKanjis,
+                      builder: (_, snapshot) {
+                        if (snapshot.hasData) {
+                          return HomePage();
+                        } else {
+                          KanjiBloc.instance.getAllKanjis();
+                          FirebaseAuthProvider.instance.checkForUpdates();
+                          // if (!initialized) {
+                          //   initialized = true;
+                          //   KanjiBloc.instance.getAllKanjis();
+                          //   FirebaseAuthProvider.instance.checkForUpdates();
+                          // } else {
+                          //   DBProvider.db
+                          //       .initDB(refresh: true)
+                          //       .whenComplete(KanjiBloc.instance.getAllKanjis)
+                          //       .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
+                          // }
+                          return Platform.isAndroid
+                              ? Scaffold(
+                                  body: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : Scaffold(
+                                  appBar: AppBar(
+                                    elevation: 0,
+                                    title: Text('Manji'),
+                                  ),
+                                  body: HomePageBackground());
+                        }
+                      },
+                    );
+                  }
+
+                  return Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
         },
       ),
     );

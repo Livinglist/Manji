@@ -22,31 +22,12 @@ class DBProvider {
 
   Future<Database> get database async {
     if (_database != null) return _database;
+
     _database = await initDB();
     return _database;
   }
 
-  @Deprecated("Not working properly")
-  Future initVideo() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-
-    var path = appDocDir.path + '/video/一.mp4';
-    File file = File(path);
-    if ((await file.exists()) == false) {
-      print("file does not exist");
-
-      rootBundle.load('video/8.mp4').then((bytes) {
-        path = appDocDir.path + '/video/一.mp4';
-        print(path);
-        file = File(path);
-        file.writeAsBytesSync(bytes.buffer.asUint8List());
-      });
-    } else {
-      print("file exists");
-    }
-  }
-
-  Future initDB({bool refresh = false}) async {
+  Future<Database> initDB({bool refresh = false}) async {
     //Initialize database in external storage
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = join(appDocDir.path, "dictDB.db");
@@ -69,17 +50,14 @@ class DBProvider {
         }
 
         if (oldVersion == 2) {
-          db.rawQuery(
-              "ALTER TABLE IncorrectQuestions ADD questionType INTEGER NOT NULL DEFAULT 0");
-          db.rawQuery(
-              "ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
+          db.rawQuery("ALTER TABLE IncorrectQuestions ADD questionType INTEGER NOT NULL DEFAULT 0");
+          db.rawQuery("ALTER TABLE Kanji ADD studiedTimeStamps TEXT DEFAULT '[]'");
         }
 
         if (oldVersion == 3) {
           String tempPath = join(appDocDir.path, "temp.db");
           ByteData data = await rootBundle.load("data/dictDB.db");
-          List<int> bytes =
-              data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
           await File(path).writeAsBytes(bytes);
           var tempDB = await openDatabase(tempPath);
           var kanjis = await tempDB.query("Kanji");
@@ -111,8 +89,7 @@ class DBProvider {
     } else {
       print("copying");
       ByteData data = await rootBundle.load("data/dictDB.db");
-      List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes);
       return openDatabase(
         path,
@@ -137,24 +114,20 @@ class DBProvider {
         : [];
   }
 
-  @Deprecated(
-      'Use this only for scripting. Do not use this in the released app.')
+  @Deprecated('Use this only for scripting. Do not use this in the released app.')
   Future<List<Sentence>> getSentencesByKanji(String kanjiStr) async {
     final db = await database;
-    var res = await db
-        .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
+    var res = await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     var sentences = await jsonStringToSentences(res.single['text']);
 
     return sentences;
   }
 
-  @Deprecated(
-      'Use this only for scripting. Do not use this in the released app.')
+  @Deprecated('Use this only for scripting. Do not use this in the released app.')
   Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) async* {
     final db = await database;
     print(await db.query("sqlite_master"));
-    var res = await db
-        .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
+    var res = await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     jsonToSentencesStream(res.single['text']).listen((sentence) async* {
       yield sentence;
     });
@@ -162,8 +135,7 @@ class DBProvider {
 
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) async {
     final db = await database;
-    var res = await db
-        .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
+    var res = await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     if (res.isNotEmpty)
       return res.single['text'];
     else
@@ -181,8 +153,7 @@ class DBProvider {
   Future<int> addSentence(Sentence sentence) async {
     final db = await database;
     var map = sentence.toDBMap();
-    var raw =
-        await db.rawInsert('INSERT Into Sentence (kanji, text) VALUES (?,?)', [
+    var raw = await db.rawInsert('INSERT Into Sentence (kanji, text) VALUES (?,?)', [
       sentence.kanji,
       map['text'],
     ]);
@@ -191,27 +162,22 @@ class DBProvider {
 
   Future addSentences(List<Sentence> sentences) async {
     final db = await database;
-    var raw = await db.rawQuery(
-        "INSERT Into Sentence (kanji, text) VALUES (?,?)",
-        [sentences.first.kanji, sentencesToJson(sentences)]);
+    var raw = await db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)", [sentences.first.kanji, sentencesToJson(sentences)]);
     return raw;
   }
 
   Future doScript() async {
     final db = await database;
 
-    var kanjis = (await db.query('Kanji', columns: ['kanji']))
-        .map((map) => map['kanji']);
+    var kanjis = (await db.query('Kanji', columns: ['kanji'])).map((map) => map['kanji']);
 
     for (String kanji in kanjis) {
-      var q =
-          await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanji'");
+      var q = await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanji'");
       var sentences = q.map((map) => Sentence.fromDBMap(map)).toList();
       print(kanji);
 
       db.rawDelete("DELETE FROM Sentence WHERE kanji = '$kanji'").then((_) {
-        db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)",
-            [kanji, sentencesToJson(sentences)]);
+        db.rawQuery("INSERT Into Sentence (kanji, text) VALUES (?,?)", [kanji, sentencesToJson(sentences)]);
       });
     }
   }
@@ -242,21 +208,13 @@ class DBProvider {
     var map = kanji.toDBMap();
     var db = await database;
 
-    db.rawUpdate(
-        "UPDATE Kanji SET onyomiWords = ?, onyomi = ?, kunyomiWords = ?, kunyomi = ? WHERE kanji = ?",
-        [
-          map['onyomiWords'],
-          map['onyomi'],
-          map['kunyomiWords'],
-          map['kunyomi'],
-          kanji.kanji
-        ]);
+    db.rawUpdate("UPDATE Kanji SET onyomiWords = ?, onyomi = ?, kunyomiWords = ?, kunyomi = ? WHERE kanji = ?",
+        [map['onyomiWords'], map['onyomi'], map['kunyomiWords'], map['kunyomi'], kanji.kanji]);
   }
 
   Future<Kanji> getSingleKanji(String kanjiStr) async {
     var db = await database;
-    var query = await db
-        .rawQuery("SELECT FROM Kanji WHERE kanji = '$kanjiStr' LIMIT 1");
+    var query = await db.rawQuery("SELECT FROM Kanji WHERE kanji = '$kanjiStr' LIMIT 1");
     if (query == null || query.isEmpty) return null;
 
     return Kanji.fromDBMap(query.single);
@@ -298,9 +256,7 @@ class DBProvider {
 
     print(kanji.timeStamps);
 
-    return db.rawUpdate(
-        "UPDATE Kanji SET studiedTimeStamps = ? WHERE kanji = ?",
-        [jsonEncode(kanji.timeStamps), kanji.kanji]);
+    return db.rawUpdate("UPDATE Kanji SET studiedTimeStamps = ? WHERE kanji = ?", [jsonEncode(kanji.timeStamps), kanji.kanji]);
   }
 }
 
