@@ -27,14 +27,15 @@ class DBProvider {
     return _database;
   }
 
-  Future<Database> initDB({bool refresh = false}) async {
+  Future<Database> initDB({bool needRefresh = false}) async {
     //Initialize database in external storage
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = join(appDocDir.path, "dictDB.db");
 
-    if (await File(path).exists()) {
+    if (await File(path).exists() && needRefresh == false) {
       print("opening");
       return openDatabase(path, version: 4, onOpen: (db) async {
+        _database = db;
         print(await db.query("sqlite_master"));
       }, onUpgrade: (db, oldVersion, newVersion) async {
         print('upgrading');
@@ -45,8 +46,8 @@ class DBProvider {
               '"kanjiId"	INTEGER NOT NULL,'
               '"choices"	TEXT NOT NULL,'
               '"selectedIndex"	INTEGER NOT NULL,'
-              '"rightAnswer"	TEXT NOT NULL)'
-              '"questionType" INTEGER NOT NULL DEFAULT 0');
+              '"rightAnswer"	TEXT NOT NULL,'
+              '"questionType" INTEGER NOT NULL DEFAULT 0)');
         }
 
         if (oldVersion == 2) {
@@ -99,6 +100,7 @@ class DBProvider {
         path,
         version: 4,
         onOpen: (db) async {
+          _database = db;
           print(await db.query("sqlite_master"));
         },
       );
@@ -109,7 +111,10 @@ class DBProvider {
 
   Future<List<Kanji>> getAllKanjis() async {
     final db = await database;
-    var res = await db.query('Kanji');
+    var res = await db.query('Kanji').onError((error, stackTrace) {
+      print('re-initialize');
+      return initDB(needRefresh: true).then((value) => value.query('Kanji'));
+    });
 
     return res.isNotEmpty
         ? res.map((r) {
