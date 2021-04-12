@@ -31,7 +31,7 @@ jobs:
     - run: flutter pub get
     
     # Check for any formatting issues in the code.
-    - run: flutter format .
+    - run: flutter format --set-exit-if-changed .
     
     # Run widget tests for our flutter project.
     - run: flutter test
