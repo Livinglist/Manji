@@ -1,7 +1,5 @@
 name: Dart
 
-sdk: 2.10.5
-
 on:
   push:
     branches: [ master ]
