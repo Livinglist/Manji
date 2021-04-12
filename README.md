@@ -36,8 +36,9 @@ Therotically, Manji is cross-platform since it is powered by Flutter, but since 
 ## Getting Started
 
 1. Because the dictionary file exceeds the size limit of Github, `git-lfs` is used for storing the dictionary file. So make sure you have installed `git-lfs`.
-2. Clone this project and run `git-lfs pull` in the project root folder.
-3. Fill up the credential as shown below and save it as `google_api_credentials.dart` and move to Manji/lib/resource/.
+2. Clone this project and run `git-lfs fetch --all` in the project root folder.
+3. [Create a service account](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances).
+4. Fill up the credential as shown below and save it as `google_api_credentials.dart` and move to Manji/lib/resource/.
 
 ```dart
 import 'package:googleapis_auth/auth_io.dart';
@@ -58,5 +59,7 @@ final credentials = ServiceAccountCredentials.fromJson(r'''
 ''');
 ```
 
-4. Download your `GoogleService-Info.plist` and move it to under Manji/ios/Runner/. 
-5. Run the project using `flutter run`.
+5. [Setup Firebase for your project.](https://console.firebase.google.com/)
+6. (iOS) Download your `GoogleService-Info.plist` and move it to Manji/ios/Runner/.
+6. (Android) Download your `google-services.json` and move it to Manji/android/app/.
+7. Run the project using `flutter run`.
