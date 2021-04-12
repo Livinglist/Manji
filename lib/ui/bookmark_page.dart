@@ -30,7 +30,10 @@ class MyKanjiPageState extends State<MyKanjiPage> {
           //title: Text('収蔵した漢字'),
           title: FuriganaText(
             text: '収蔵した漢字',
-            tokens: [Token(text: '収蔵', furigana: 'しゅうぞう'), Token(text: '漢字', furigana: 'かんじ')],
+            tokens: [
+              Token(text: '収蔵', furigana: 'しゅうぞう'),
+              Token(text: '漢字', furigana: 'かんじ')
+            ],
             style: TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
@@ -57,7 +60,9 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                   });
                 },
               ),
-              crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              crossFadeState: showGrid
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
               duration: Duration(milliseconds: 200),
             )
           ],

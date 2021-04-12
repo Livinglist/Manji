@@ -10,7 +10,8 @@ class CompactKanjiListTile extends StatelessWidget {
   final ValueChanged<String> onLongPressed;
   final VoidCallback onTap;
 
-  CompactKanjiListTile({this.kanji, this.onLongPressed, this.onTap}) : assert(kanji != null);
+  CompactKanjiListTile({this.kanji, this.onLongPressed, this.onTap})
+      : assert(kanji != null);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,8 @@ class CompactKanjiListTile extends StatelessWidget {
         if (onTap != null)
           this.onTap();
         else {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
         }
       },
       onLongPress: () {
@@ -45,7 +47,9 @@ class CompactKanjiListTile extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 28,
-                          fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                          fontFamily: snapshot.data == FontSelection.handwriting
+                              ? Fonts.kazei
+                              : Fonts.ming,
                         ));
                   }
                   return Container();
@@ -82,11 +86,13 @@ class CompactKanjiListTile extends StatelessWidget {
                           padding: EdgeInsets.all(4),
                           child: Text(
                             kunyomi,
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.bold),
                           )),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                        borderRadius: BorderRadius.all(Radius.circular(
+                                5.0) //                 <--- border radius here
                             ),
                       ),
                     )),
@@ -98,11 +104,13 @@ class CompactKanjiListTile extends StatelessWidget {
                         padding: EdgeInsets.all(4),
                         child: Text(
                           onyomi,
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
                         )),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                      borderRadius: BorderRadius.all(Radius.circular(
+                              5.0) //                 <--- border radius here
                           ),
                     ),
                   ),

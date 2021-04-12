@@ -22,7 +22,9 @@ class QuizDetailPage extends StatefulWidget {
   final int jlptAmount;
 
   QuizDetailPage({this.kanjiList, this.kanjis, this.jlpt, this.jlptAmount})
-      : assert((kanjiList != null && kanjiList.kanjiStrs.isNotEmpty) || (kanjis != null && kanjis.isNotEmpty) || jlpt != null),
+      : assert((kanjiList != null && kanjiList.kanjiStrs.isNotEmpty) ||
+            (kanjis != null && kanjis.isNotEmpty) ||
+            jlpt != null),
         assert((jlpt != null && jlptAmount != null) || jlpt == null);
 
   @override
@@ -55,7 +57,8 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       }
       quizBloc.generateQuiz(kanjis);
     } else {
-      kanjis = quizBloc.generateQuizFromJLPT(widget.jlpt, amount: widget.jlptAmount);
+      kanjis =
+          quizBloc.generateQuizFromJLPT(widget.jlpt, amount: widget.jlptAmount);
     }
 
     total = kanjis.length;
@@ -86,7 +89,9 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((context) {
-      if (showResult && (quizResult?.percentage ?? 0) >= 90 && confettiPlayed == false) {
+      if (showResult &&
+          (quizResult?.percentage ?? 0) >= 90 &&
+          confettiPlayed == false) {
         confettiController.play();
         confettiPlayed = true;
       }
@@ -103,7 +108,10 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                   if (snapshot.hasData) {
                     return Padding(
                         padding: EdgeInsets.all(12),
-                        child: Center(child: Text('$currentIndex/${snapshot.data.questionsCount}', style: TextStyle(fontSize: 18))));
+                        child: Center(
+                            child: Text(
+                                '$currentIndex/${snapshot.data.questionsCount}',
+                                style: TextStyle(fontSize: 18))));
                   }
                   return Container();
                 },
@@ -119,8 +127,10 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                           : Stack(
                               children: <Widget>[
                                 LinearProgressIndicator(
-                                    value: currentIndex / snapshot.data.questionsCount,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),
+                                    value: currentIndex /
+                                        snapshot.data.questionsCount,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.blueGrey),
                                     backgroundColor: Colors.grey),
                               ],
                             );
@@ -128,7 +138,10 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                     return Stack(
                       children: <Widget>[
                         LinearProgressIndicator(
-                            value: 0.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey), backgroundColor: Colors.grey),
+                            value: 0.0,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blueGrey),
+                            backgroundColor: Colors.grey),
                       ],
                     );
                   },
@@ -156,7 +169,8 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                         "${quizResult.percentage.toStringAsFixed(0)}%",
                         style: TextStyle(color: Colors.white, fontSize: 96),
                       ),
-                      Icon(getCharm(quizResult.percentage), color: Colors.white, size: 90)
+                      Icon(getCharm(quizResult.percentage),
+                          color: Colors.white, size: 90)
                     ],
                   )),
                 ),
@@ -164,20 +178,30 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(12),
-                      child: Icon(FontAwesomeIcons.timesCircle, color: Colors.white),
+                      child: Icon(FontAwesomeIcons.timesCircle,
+                          color: Colors.white),
                     ),
-                    Text("Incorrect: ${quizResult.totalIncorrect}", style: TextStyle(color: Colors.white)),
+                    Text("Incorrect: ${quizResult.totalIncorrect}",
+                        style: TextStyle(color: Colors.white)),
                     Spacer(),
                     Padding(
                       padding: EdgeInsets.all(12),
-                      child: Icon(FontAwesomeIcons.checkCircle, color: Colors.white),
+                      child: Icon(FontAwesomeIcons.checkCircle,
+                          color: Colors.white),
                     ),
-                    Text("Correct: ${quizResult.totalCorrect}", style: TextStyle(color: Colors.white)),
+                    Text("Correct: ${quizResult.totalCorrect}",
+                        style: TextStyle(color: Colors.white)),
                     SizedBox(width: 12)
                   ],
                 ),
-                ...quizResult.incorrectQuestions.map((question) => IncorrectQuestionListTile(question: question)).toList(),
-                ...quizResult.correctQuestions.map((question) => CorrectQuestionListTile(question: question)).toList()
+                ...quizResult.incorrectQuestions
+                    .map((question) =>
+                        IncorrectQuestionListTile(question: question))
+                    .toList(),
+                ...quizResult.correctQuestions
+                    .map((question) =>
+                        CorrectQuestionListTile(question: question))
+                    .toList()
               ],
             ),
             Align(
@@ -223,22 +247,31 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(quiz.currentQuestion.targetedKanji.kanji,
-                                style: TextStyle(fontSize: 128, color: Colors.white, fontFamily: Fonts.kazei)),
+                                style: TextStyle(
+                                    fontSize: 128,
+                                    color: Colors.white,
+                                    fontFamily: Fonts.kazei)),
                             Text(quiz.currentQuestion.targetedKanji.kanji,
-                                style: TextStyle(fontSize: 128, color: Colors.white, fontFamily: Fonts.ming)),
+                                style: TextStyle(
+                                    fontSize: 128,
+                                    color: Colors.white,
+                                    fontFamily: Fonts.ming)),
                           ],
                         ),
                       ],
                     )),
                   ),
                 ),
-                if (quiz.currentQuestion.questionType == QuestionType.KanjiToMeaning ||
-                    quiz.currentQuestion.questionType == QuestionType.KanjiToHiragana)
+                if (quiz.currentQuestion.questionType ==
+                        QuestionType.KanjiToMeaning ||
+                    quiz.currentQuestion.questionType ==
+                        QuestionType.KanjiToHiragana)
                   Flexible(
                       flex: 4,
                       child: ListView(
                           physics: NeverScrollableScrollPhysics(),
-                          children: List.generate(quiz.currentQuestion.choices.length, (index) {
+                          children: List.generate(
+                              quiz.currentQuestion.choices.length, (index) {
                             return Padding(
                                 padding: EdgeInsets.all(12),
                                 child: Material(
@@ -248,10 +281,12 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                       onTap: () {
                                         setState(() {
                                           currentIndex++;
-                                          if (quiz.submitAnswer(index) == false) {
+                                          if (quiz.submitAnswer(index) ==
+                                              false) {
                                             showResult = true;
                                             quizResult = quiz.getQuizResult();
-                                            iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
+                                            iqBloc.addIncorrectQuestions(
+                                                quizResult.incorrectQuestions);
                                           }
                                         });
                                       },
@@ -273,17 +308,20 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                   ),
                                 ));
                           }))),
-                if (quiz.currentQuestion.questionType == QuestionType.KanjiToKatakana)
+                if (quiz.currentQuestion.questionType ==
+                    QuestionType.KanjiToKatakana)
                   Flexible(
                       flex: 4,
                       child: Container(
-                        constraints: BoxConstraints(maxWidth: 640, maxHeight: 640),
+                        constraints:
+                            BoxConstraints(maxWidth: 640, maxHeight: 640),
                         child: GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             crossAxisCount: 2,
                             shrinkWrap: true,
                             childAspectRatio: 1,
-                            children: List.generate(quiz.currentQuestion.choices.length, (index) {
+                            children: List.generate(
+                                quiz.currentQuestion.choices.length, (index) {
                               return Padding(
                                   padding: EdgeInsets.all(12),
                                   child: Material(
@@ -293,16 +331,22 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                         onTap: () {
                                           setState(() {
                                             currentIndex++;
-                                            if (quiz.submitAnswer(index) == false) {
+                                            if (quiz.submitAnswer(index) ==
+                                                false) {
                                               showResult = true;
                                               quizResult = quiz.getQuizResult();
-                                              iqBloc.addIncorrectQuestions(quizResult.incorrectQuestions);
+                                              iqBloc.addIncorrectQuestions(
+                                                  quizResult
+                                                      .incorrectQuestions);
                                             }
                                           });
                                         },
                                         child: Container(
                                           child: Center(
-                                            child: Text(quiz.currentQuestion.choices[index], style: TextStyle(fontSize: 24)),
+                                            child: Text(
+                                                quiz.currentQuestion
+                                                    .choices[index],
+                                                style: TextStyle(fontSize: 24)),
                                           ),
                                         ),
                                       ),

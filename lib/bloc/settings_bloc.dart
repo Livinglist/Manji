@@ -22,7 +22,8 @@ class SettingsBloc {
   FontSelection tempFontSelection = FontSelection.handwriting;
 
   void init() {
-    SharedPreferencesProvider.instance.themeMode.then((val) => _themeModeFetcher.sink.add(val));
+    SharedPreferencesProvider.instance.themeMode
+        .then((val) => _themeModeFetcher.sink.add(val));
     SharedPreferencesProvider.instance.fontSelection.then((val) {
       tempFontSelection = val;
       _fontFetcher.sink.add(val);

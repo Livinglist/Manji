@@ -69,8 +69,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     color: Colors.white,
                     size: 22,
                   ),
-                  title: Text('Sign out', style: TextStyle(color: Colors.white)),
-                  subtitle: Text(user.email, style: TextStyle(color: Colors.white)),
+                  title:
+                      Text('Sign out', style: TextStyle(color: Colors.white)),
+                  subtitle:
+                      Text(user.email, style: TextStyle(color: Colors.white)),
                   onTap: () => FirebaseAuthProvider.instance.signOut(),
                 );
               }
@@ -115,7 +117,11 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               return ListTile(
-                leading: Icon(snapshot.data == FontSelection.print ? FontAwesomeIcons.font : FontAwesomeIcons.pen, color: Colors.white),
+                leading: Icon(
+                    snapshot.data == FontSelection.print
+                        ? FontAwesomeIcons.font
+                        : FontAwesomeIcons.pen,
+                    color: Colors.white),
                 title: Text('Font', style: TextStyle(color: Colors.white)),
                 subtitle: Text(
                   subtitle,
@@ -138,14 +144,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                     RadioListTile(
                                       value: FontSelection.handwriting,
                                       groupValue: mode,
-                                      onChanged: (val) => SettingsBloc.instance.setFont(val),
-                                      title: Text('Handwriting', style: TextStyle(color: Colors.black)),
+                                      onChanged: (val) =>
+                                          SettingsBloc.instance.setFont(val),
+                                      title: Text('Handwriting',
+                                          style:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                     RadioListTile(
                                       value: FontSelection.print,
                                       groupValue: mode,
-                                      onChanged: (val) => SettingsBloc.instance.setFont(val),
-                                      title: Text('Print', style: TextStyle(color: Colors.black)),
+                                      onChanged: (val) =>
+                                          SettingsBloc.instance.setFont(val),
+                                      title: Text('Print',
+                                          style:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                   ],
                                 ),
@@ -167,7 +179,8 @@ class _SettingsPageState extends State<SettingsPage> {
               color: Colors.white,
               size: 26,
             ),
-            title: Text('Transfer my data', style: TextStyle(color: Colors.white)),
+            title:
+                Text('Transfer my data', style: TextStyle(color: Colors.white)),
             subtitle: Text(
               'Transfer your data to a another device',
               style: TextStyle(color: Colors.white54),
@@ -180,7 +193,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.yellow,
-                action: SnackBarAction(label: 'Dismiss', onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
+                action: SnackBarAction(
+                    label: 'Dismiss',
+                    onPressed: () =>
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar()),
               ));
             },
           ),
@@ -228,20 +244,29 @@ class _SettingsPageState extends State<SettingsPage> {
                                     RadioListTile(
                                       value: ThemeMode.light,
                                       groupValue: mode,
-                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
-                                      title: Text('Light', style: TextStyle(color: Colors.black)),
+                                      onChanged: (val) => SettingsBloc.instance
+                                          .setThemeMode(val),
+                                      title: Text('Light',
+                                          style:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                     RadioListTile(
                                       value: ThemeMode.dark,
                                       groupValue: mode,
-                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
-                                      title: Text('Dark', style: TextStyle(color: Colors.black)),
+                                      onChanged: (val) => SettingsBloc.instance
+                                          .setThemeMode(val),
+                                      title: Text('Dark',
+                                          style:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                     RadioListTile(
                                       value: ThemeMode.system,
                                       groupValue: mode,
-                                      onChanged: (val) => SettingsBloc.instance.setThemeMode(val),
-                                      title: Text('System', style: TextStyle(color: Colors.black)),
+                                      onChanged: (val) => SettingsBloc.instance
+                                          .setThemeMode(val),
+                                      title: Text('System',
+                                          style:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                   ],
                                 ),
@@ -267,7 +292,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (isUpdated) {
                     return ListTile(
                       leading: Icon(Icons.wrap_text, color: Colors.white),
-                      title: Text('Update database', style: TextStyle(color: Colors.white)),
+                      title: Text('Update database',
+                          style: TextStyle(color: Colors.white)),
                       subtitle: Text(
                           'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
                           style: TextStyle(color: Colors.white54)),
@@ -281,7 +307,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           backgroundColor: Theme.of(context).accentColor,
                           action: SnackBarAction(
                             label: 'Dismiss',
-                            onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                            onPressed: () => ScaffoldMessenger.of(context)
+                                .hideCurrentSnackBar(),
                             textColor: Colors.blueGrey,
                           ),
                         ));
@@ -290,7 +317,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   } else {
                     return ListTile(
                         leading: Icon(Icons.wrap_text, color: Colors.white),
-                        title: Text('Update database', style: TextStyle(color: Colors.white)),
+                        title: Text('Update database',
+                            style: TextStyle(color: Colors.white)),
                         subtitle: Text(
                             'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database needs to be updated)',
                             style: TextStyle(color: Colors.white54)),
@@ -305,7 +333,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               backgroundColor: Theme.of(context).accentColor,
                               action: SnackBarAction(
                                 label: 'Dismiss',
-                                onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                                onPressed: () => ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar(),
                                 textColor: Colors.blueGrey,
                               ),
                             ));
@@ -315,8 +344,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 } else {
                   return ListTile(
                     leading: Icon(Icons.wrap_text, color: Colors.white),
-                    title: Text('Update database', style: TextStyle(color: Colors.white)),
-                    subtitle: Text('Keeping dictionary database up to date increases the accuracy and reliability',
+                    title: Text('Update database',
+                        style: TextStyle(color: Colors.white)),
+                    subtitle: Text(
+                        'Keeping dictionary database up to date increases the accuracy and reliability',
                         style: TextStyle(color: Colors.white54)),
                   );
                 }
@@ -326,8 +357,10 @@ class _SettingsPageState extends State<SettingsPage> {
           Divider(height: 0),
           ListTile(
             leading: Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
-            title: Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
-            subtitle: Text('If you like this app', style: TextStyle(color: Colors.white54)),
+            title:
+                Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
+            subtitle: Text('If you like this app',
+                style: TextStyle(color: Colors.white54)),
             onTap: () async {
               InAppRepo().purchaseCoffee();
             },
@@ -421,7 +454,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ]);
       switch (result.status) {
         case AuthorizationStatus.authorized:
-          print(result.credential.user ?? "null"); //All the required credentials
+          print(
+              result.credential.user ?? "null"); //All the required credentials
           print(result.credential.fullName.familyName);
           break;
         case AuthorizationStatus.error:
@@ -451,10 +485,12 @@ class _SettingsPageState extends State<SettingsPage> {
               actions: <Widget>[
                 CupertinoActionSheetAction(
                     child: Text('Apple', style: TextStyle(color: Colors.blue)),
-                    onPressed: () => Navigator.pop(context, SignInMethod.Apple)),
+                    onPressed: () =>
+                        Navigator.pop(context, SignInMethod.Apple)),
                 CupertinoActionSheetAction(
                     child: Text('Google', style: TextStyle(color: Colors.blue)),
-                    onPressed: () => Navigator.pop(context, SignInMethod.Google)),
+                    onPressed: () =>
+                        Navigator.pop(context, SignInMethod.Google)),
               ],
             )).then((value) => value ?? null);
   }

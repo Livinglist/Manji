@@ -29,13 +29,16 @@ class _KanjiBlockState extends State<KanjiBlock> {
   loadVideo() async {
     if (allVideoFiles.contains(widget.kanjiStr)) {
       setState(() {
-        videoController = VideoPlayerController.asset(Uri.encodeFull('video/${widget.kanjiStr}.mp4'))
+        videoController = VideoPlayerController.asset(
+            Uri.encodeFull('video/${widget.kanjiStr}.mp4'))
           ..initialize().then((_) {
             setState(() {});
           })
           ..addListener(() async {
             if (videoController != null && this.mounted) {
-              if (await videoController.position >= videoController.value.duration && isPlaying) {
+              if (await videoController.position >=
+                      videoController.value.duration &&
+                  isPlaying) {
                 videoController.pause();
                 videoController.seekTo(Duration(seconds: 0));
 
@@ -74,13 +77,16 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       color: Colors.transparent,
                       child: Text(
                         widget.kanjiStr,
-                        style: TextStyle(fontFamily: 'strokeOrders', fontSize: 128),
+                        style: TextStyle(
+                            fontFamily: 'strokeOrders', fontSize: 128),
                         textScaleFactor: widget.scaleFactor,
                         textAlign: TextAlign.center,
                       ),
                     ))),
           ),
-        if (videoController != null && videoController.value.isInitialized && isPlaying == true)
+        if (videoController != null &&
+            videoController.value.isInitialized &&
+            isPlaying == true)
           Positioned.fill(
               child: Center(
                   child: Padding(
@@ -105,7 +111,9 @@ class _KanjiBlockState extends State<KanjiBlock> {
               child: Image.asset(
             'data/matts.png',
           )),
-        if (videoController != null && videoController.value.isInitialized && isPlaying == false)
+        if (videoController != null &&
+            videoController.value.isInitialized &&
+            isPlaying == false)
           Positioned.fill(
               child: Center(
                   child: Opacity(

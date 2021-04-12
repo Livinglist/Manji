@@ -51,14 +51,19 @@ class KanjiGridView extends StatelessWidget {
                               child: StreamBuilder(
                                 key: ObjectKey(kanji.kanji),
                                 stream: SettingsBloc.instance.fontSelection,
-                                initialData: SettingsBloc.instance.tempFontSelection,
-                                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                                initialData:
+                                    SettingsBloc.instance.tempFontSelection,
+                                builder:
+                                    (_, AsyncSnapshot<FontSelection> snapshot) {
                                   if (snapshot.hasData) {
                                     return Text(kanji.kanji,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 48,
-                                          fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                          fontFamily: snapshot.data ==
+                                                  FontSelection.handwriting
+                                              ? Fonts.kazei
+                                              : Fonts.ming,
                                         ));
                                   }
                                   return Container();
@@ -76,7 +81,10 @@ class KanjiGridView extends StatelessWidget {
                   ],
                 )),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => KanjiDetailPage(kanji: kanji)));
             },
             onLongPress: () {
               if (onLongPressed != null) {

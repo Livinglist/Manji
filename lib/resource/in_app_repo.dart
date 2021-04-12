@@ -6,7 +6,8 @@ class InAppRepo {
   // this is the product Id as created for the consumable on app connect and google play
   static String _coffeeId = 'coffee';
   final Set<String> _productIds = <String>{_coffeeId};
-  Stream<List<PurchaseDetails>> get purchaseStream => InAppPurchaseConnection.instance.purchaseUpdatedStream;
+  Stream<List<PurchaseDetails>> get purchaseStream =>
+      InAppPurchaseConnection.instance.purchaseUpdatedStream;
 
   StreamSubscription _subscription;
 
@@ -21,10 +22,13 @@ class InAppRepo {
     //user will now buy the product
     List<ProductDetails> availableProducts = await _getAvailableProducts();
     if (availableProducts.isNotEmpty) {
-      ProductDetails productDetails = availableProducts.firstWhere((productDetail) => productDetail.id == _coffeeId);
-      final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
+      ProductDetails productDetails = availableProducts
+          .firstWhere((productDetail) => productDetail.id == _coffeeId);
+      final PurchaseParam purchaseParam =
+          PurchaseParam(productDetails: productDetails);
       await InAppPurchaseConnection.instance.isAvailable();
-      InAppPurchaseConnection.instance.buyConsumable(purchaseParam: purchaseParam);
+      InAppPurchaseConnection.instance
+          .buyConsumable(purchaseParam: purchaseParam);
     }
   }
 
@@ -63,13 +67,19 @@ class InAppRepo {
 
   /// get products
   Future<List<ProductDetails>> _getAvailableProducts() async {
-    ProductDetailsResponse productDetailQueryResponse = await InAppPurchaseConnection.instance.queryProductDetails(_productIds);
-    return Future.value(productDetailQueryResponse.error == null ? productDetailQueryResponse.productDetails : <ProductDetails>[]);
+    ProductDetailsResponse productDetailQueryResponse =
+        await InAppPurchaseConnection.instance.queryProductDetails(_productIds);
+    return Future.value(productDetailQueryResponse.error == null
+        ? productDetailQueryResponse.productDetails
+        : <ProductDetails>[]);
   }
 
   /// get past purchases
   Future<List<PurchaseDetails>> _getPastPurchases() async {
-    QueryPurchaseDetailsResponse purchaseDetailsResponse = await InAppPurchaseConnection.instance.queryPastPurchases();
-    return Future.value(purchaseDetailsResponse.error == null ? purchaseDetailsResponse.pastPurchases : <PurchaseDetails>[]);
+    QueryPurchaseDetailsResponse purchaseDetailsResponse =
+        await InAppPurchaseConnection.instance.queryPastPurchases();
+    return Future.value(purchaseDetailsResponse.error == null
+        ? purchaseDetailsResponse.pastPurchases
+        : <PurchaseDetails>[]);
   }
 }

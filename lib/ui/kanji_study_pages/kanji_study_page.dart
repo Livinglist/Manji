@@ -18,7 +18,8 @@ class KanjiStudyPage extends StatefulWidget {
   _KanjiStudyPageState createState() => _KanjiStudyPageState();
 }
 
-class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProviderStateMixin {
+class _KanjiStudyPageState extends State<KanjiStudyPage>
+    with SingleTickerProviderStateMixin {
   final PageController pageController = PageController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final Tween<double> angleTween = Tween(begin: 0, end: pi / 8);
@@ -73,7 +74,8 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
   void initState() {
     super.initState();
 
-    animationController = AnimationController(vsync: this, lowerBound: -1, upperBound: 1);
+    animationController =
+        AnimationController(vsync: this, lowerBound: -1, upperBound: 1);
     animationController.value = 0;
 
     for (var kanji in widget.kanjis) {
@@ -102,24 +104,36 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: Theme.of(context).primaryColor == Colors.black ? Colors.black : Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).primaryColor == Colors.black
+            ? Colors.black
+            : Theme.of(context).primaryColor,
         appBar: AppBar(
           title: Text(''),
           actions: <Widget>[
-            Padding(padding: EdgeInsets.all(12), child: Center(child: Text('$index/$cardsCount', style: TextStyle(fontSize: 18)))),
+            Padding(
+                padding: EdgeInsets.all(12),
+                child: Center(
+                    child: Text('$index/$cardsCount',
+                        style: TextStyle(fontSize: 18)))),
             IconButton(
-              icon: Icon(FontAwesomeIcons.solidQuestion, color: Colors.white, size: 18),
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
+              icon: Icon(FontAwesomeIcons.solidQuestion,
+                  color: Colors.white, size: 18),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
             )
           ],
           bottom: PreferredSize(
               child: Stack(
                 children: <Widget>[
                   LinearProgressIndicator(
-                      value: cardsProgress, valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey), backgroundColor: Colors.grey),
+                      value: cardsProgress,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.blueGrey),
+                      backgroundColor: Colors.grey),
                   LinearProgressIndicator(
                       value: studyProgress,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[800]),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.grey[800]),
                       backgroundColor: Colors.transparent),
                 ],
               ),
@@ -134,9 +148,11 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
           },
           onPointerMove: (moveEvent) {
             if (moveEvent.position.dx - initialDx < 0) {
-              animationController.value = (moveEvent.position.dx - initialDx) / initialDx;
+              animationController.value =
+                  (moveEvent.position.dx - initialDx) / initialDx;
             } else {
-              animationController.value = (moveEvent.position.dx - initialDx) / distance;
+              animationController.value =
+                  (moveEvent.position.dx - initialDx) / distance;
             }
           },
           onPointerUp: (_) {
@@ -156,42 +172,57 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                         feedback: AnimatedBuilder(
                           animation: animationController,
                           builder: (_, __) {
-                            return Transform.rotate(angle: animationController.drive(angleTween).value, child: mainCard);
+                            return Transform.rotate(
+                                angle:
+                                    animationController.drive(angleTween).value,
+                                child: mainCard);
                           },
                         ),
                         onDragEnd: (dragDetails) {
                           //Swipe right.
-                          if (dragDetails.offset.dx > 230 || dragDetails.velocity.pixelsPerSecond.dx > 1600) {
+                          if (dragDetails.offset.dx > 230 ||
+                              dragDetails.velocity.pixelsPerSecond.dx > 1600) {
                             setState(() {
                               contents.add(contents[0]);
                               contents.removeAt(0);
                               mainCardKey = GlobalKey<KanjiCardState>();
                               mainCard = GestureDetector(
-                                child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                child: KanjiCard(
+                                    kanjiCardContent: contents.first,
+                                    key: mainCardKey),
                               );
-                              cardsProgress = cardsProgress == 1 ? 1 : cardsProgress + 1.0 / cardsCount;
+                              cardsProgress = cardsProgress == 1
+                                  ? 1
+                                  : cardsProgress + 1.0 / cardsCount;
                             });
 
                             //Swipe left.
-                          } else if (dragDetails.offset.dx < -170 || dragDetails.velocity.pixelsPerSecond.dx < -1600) {
+                          } else if (dragDetails.offset.dx < -170 ||
+                              dragDetails.velocity.pixelsPerSecond.dx < -1600) {
                             setState(() {
                               index++;
                               contents.removeAt(0);
                               mainCardKey = GlobalKey<KanjiCardState>();
                               if (contents.isEmpty) {
                                 mainCard = Container();
-                                var timeStamp = DateTime.now().millisecondsSinceEpoch;
+                                var timeStamp =
+                                    DateTime.now().millisecondsSinceEpoch;
                                 for (var i in widget.kanjis) {
                                   i.timeStamp = timeStamp;
                                 }
-                                KanjiBloc.instance.updateTimeStampsForKanjis(widget.kanjis);
+                                KanjiBloc.instance
+                                    .updateTimeStampsForKanjis(widget.kanjis);
                               } else {
                                 mainCard = GestureDetector(
-                                  child: KanjiCard(kanjiCardContent: contents.first, key: mainCardKey),
+                                  child: KanjiCard(
+                                      kanjiCardContent: contents.first,
+                                      key: mainCardKey),
                                 );
                               }
 
-                              studyProgress = studyProgress == 1 ? 1 : studyProgress + 1.0 / cardsCount;
+                              studyProgress = studyProgress == 1
+                                  ? 1
+                                  : studyProgress + 1.0 / cardsCount;
                             });
                           }
                         },
@@ -202,9 +233,14 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
                         child: Text(
-                      celebrateString.elementAt(Random(DateTime.now().millisecondsSinceEpoch).nextInt(celebrateString.length)),
-                      style:
-                          TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54, fontSize: 18),
+                      celebrateString.elementAt(
+                          Random(DateTime.now().millisecondsSinceEpoch)
+                              .nextInt(celebrateString.length)),
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor == Colors.black
+                              ? Colors.white60
+                              : Colors.black54,
+                          fontSize: 18),
                       textAlign: TextAlign.center,
                     )),
                   )
@@ -222,7 +258,8 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
         children.add(AnimatedBuilder(
           animation: animationController,
           child: KanjiCard(
-            color: Colors.grey[700].withAlpha(200 + ((55 / 10) * (10 - i)).toInt()),
+            color: Colors.grey[700]
+                .withAlpha(200 + ((55 / 10) * (10 - i)).toInt()),
             kanjiCardContent: contents.elementAt(i),
           ),
           builder: (_, child) {
@@ -232,12 +269,16 @@ class _KanjiStudyPageState extends State<KanjiStudyPage> with SingleTickerProvid
                 endTop = 80 - (i - 1) * 15.0 + (i - 1) * (i - 1),
                 beginScale = 0.6 + (0.4 / 10) * (10 - i),
                 endScale = 0.6 + (0.4 / 10) * (10 - i + 1);
-            double top = beginTop + animationController.value.abs() * (endTop - beginTop).abs(),
-                scale = beginScale + animationController.value.abs() * (endScale - beginScale).abs();
+            double top = beginTop +
+                    animationController.value.abs() * (endTop - beginTop).abs(),
+                scale = beginScale +
+                    animationController.value.abs() *
+                        (endScale - beginScale).abs();
 
             return Positioned(
               top: top,
-              child: Transform.scale(alignment: Alignment.topCenter, scale: scale, child: child),
+              child: Transform.scale(
+                  alignment: Alignment.topCenter, scale: scale, child: child),
             );
           },
         ));

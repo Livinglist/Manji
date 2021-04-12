@@ -5,7 +5,8 @@ class StrokeAnimationPlayer extends StatelessWidget {
   final String kanjiStr;
   final VideoPlayerController videoController;
 
-  StrokeAnimationPlayer({this.kanjiStr, this.videoController}) : assert(kanjiStr != null && kanjiStr.length == 1);
+  StrokeAnimationPlayer({this.kanjiStr, this.videoController})
+      : assert(kanjiStr != null && kanjiStr.length == 1);
 
   @override
   Widget build(BuildContext context) {

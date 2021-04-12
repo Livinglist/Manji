@@ -18,11 +18,16 @@ class CorrectQuestionListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var kanji = question.targetedKanji;
     var rightKana = question.rightAnswer;
-    var tag = UniqueKey().toString() + kanji.kanji + question.questionType.index.toString();
+    var tag = UniqueKey().toString() +
+        kanji.kanji +
+        question.questionType.index.toString();
 
     return ListTile(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji, tag: tag)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => KanjiDetailPage(kanji: kanji, tag: tag)));
       },
       leading: Container(
         width: 36,
@@ -41,7 +46,9 @@ class CorrectQuestionListTile extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 36,
-                          fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                          fontFamily: snapshot.data == FontSelection.handwriting
+                              ? Fonts.kazei
+                              : Fonts.ming,
                         ));
                   }
                   return Container();
@@ -65,18 +72,23 @@ class CorrectQuestionListTile extends StatelessWidget {
                             padding: EdgeInsets.all(4),
                             child: Text(
                               'N${kanji.jlpt}',
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
                             )),
                         decoration: BoxDecoration(
                           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                          borderRadius: BorderRadius.all(Radius.circular(
+                                  5.0) //                 <--- border radius here
                               ),
                         ),
                       ),
                     )
                   : Container(),
-              GradeChip(grade: kanji.grade, textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              GradeChip(
+                  grade: kanji.grade,
+                  textStyle:
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             ],
           ),
           Wrap(
@@ -91,12 +103,14 @@ class CorrectQuestionListTile extends StatelessWidget {
                           padding: EdgeInsets.all(4),
                           child: Text(
                             kunyomi,
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           )),
                       decoration: BoxDecoration(
                         //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                        borderRadius: BorderRadius.all(Radius.circular(
+                                5.0) //                 <--- border radius here
                             ),
                       ),
                     )),
@@ -108,12 +122,14 @@ class CorrectQuestionListTile extends StatelessWidget {
                         padding: EdgeInsets.all(4),
                         child: Text(
                           onyomi,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         )),
                     decoration: BoxDecoration(
                       //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                      borderRadius: BorderRadius.all(Radius.circular(
+                              5.0) //                 <--- border radius here
                           ),
                     ),
                   ),
@@ -125,17 +141,25 @@ class CorrectQuestionListTile extends StatelessWidget {
             Row(children: <Widget>[
               Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
               Spacer(),
-              Text(rightKana, style: TextStyle(color: Colors.greenAccent, fontSize: fontSize))
+              Text(rightKana,
+                  style:
+                      TextStyle(color: Colors.greenAccent, fontSize: fontSize))
             ]),
-          if (question.questionType == QuestionType.KanjiToMeaning || question.questionType == QuestionType.KanjiToHiragana)
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-              Spacer(),
-              Flexible(
-                child: Text(rightKana,
-                    style: TextStyle(color: Colors.greenAccent, fontSize: fontSize), maxLines: 1, overflow: TextOverflow.ellipsis),
-              )
-            ]),
+          if (question.questionType == QuestionType.KanjiToMeaning ||
+              question.questionType == QuestionType.KanjiToHiragana)
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
+                  Spacer(),
+                  Flexible(
+                    child: Text(rightKana,
+                        style: TextStyle(
+                            color: Colors.greenAccent, fontSize: fontSize),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                  )
+                ]),
           Divider(),
           Text(
             question.targetedKanji.meaning,

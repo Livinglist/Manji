@@ -90,16 +90,20 @@ class _MyListPageState extends State<MyListPage> {
                     }
 
                     if (kanjiList.wordCount > 0) {
-                      subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.wordCount} Words';
+                      subtitle += (subtitle.isEmpty ? '' : ', ') +
+                          '${kanjiList.wordCount} Words';
                     }
 
-                    if (kanjiList.wordCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                    if (kanjiList.wordCount == 1)
+                      subtitle = subtitle.substring(0, subtitle.length - 1);
 
                     if (kanjiList.sentenceCount > 0) {
-                      subtitle += (subtitle.isEmpty ? '' : ', ') + '${kanjiList.sentenceCount} Sentences';
+                      subtitle += (subtitle.isEmpty ? '' : ', ') +
+                          '${kanjiList.sentenceCount} Sentences';
                     }
 
-                    if (kanjiList.sentenceCount == 1) subtitle = subtitle.substring(0, subtitle.length - 1);
+                    if (kanjiList.sentenceCount == 1)
+                      subtitle = subtitle.substring(0, subtitle.length - 1);
 
                     if (subtitle.isEmpty) {
                       subtitle = 'Empty';
@@ -125,10 +129,18 @@ class _MyListPageState extends State<MyListPage> {
                           ),
                           subtitle: Text(
                             subtitle,
-                            style: TextStyle(color: Theme.of(context).primaryColor == Colors.black ? Colors.white60 : Colors.black54),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor ==
+                                        Colors.black
+                                    ? Colors.white60
+                                    : Colors.black54),
                           ),
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => ListDetailPage(kanjiList: kanjiList)));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        ListDetailPage(kanjiList: kanjiList)));
                           },
                           onLongPress: () => confirmChangeName(kanjiList),
                         ));
@@ -229,7 +241,8 @@ class _MyListPageState extends State<MyListPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextField(
-                decoration: InputDecoration(labelText: "Enter the name of this list"),
+                decoration:
+                    InputDecoration(labelText: "Enter the name of this list"),
                 controller: textEditingController,
               )
             ],

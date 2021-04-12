@@ -34,7 +34,8 @@ class MyAppState extends State<MyApp> {
     super.initState();
 
     //This is for Siri suggestion.
-    FlutterSiriSuggestions.instance.configure(onLaunch: (Map<String, dynamic> message) async {
+    FlutterSiriSuggestions.instance.configure(
+        onLaunch: (Map<String, dynamic> message) async {
       String siriKanji = message['key'];
       print("Siri suggestion kanji is $siriKanji");
       SiriSuggestionBloc.instance.suggest(siriKanji);
@@ -54,8 +55,10 @@ class MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Manji',
-            theme: ThemeData(primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
-            darkTheme: ThemeData(primaryColor: Colors.black, primarySwatch: Colors.grey),
+            theme: ThemeData(
+                primaryColor: Colors.grey[700], primarySwatch: Colors.grey),
+            darkTheme: ThemeData(
+                primaryColor: Colors.black, primarySwatch: Colors.grey),
             themeMode: themeMode,
             home: AnimatedContainer(
               duration: Duration(milliseconds: 300),

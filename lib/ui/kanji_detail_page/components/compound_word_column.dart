@@ -11,7 +11,8 @@ class CompoundWordColumn extends StatelessWidget {
   final Kanji kanji;
   final BuildContext scaffoldContext;
 
-  CompoundWordColumn({this.scaffoldContext, this.kanji}) : super(key: UniqueKey());
+  CompoundWordColumn({this.scaffoldContext, this.kanji})
+      : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +26,18 @@ class CompoundWordColumn extends StatelessWidget {
     var kunyomiVerbGroup = <Widget>[];
 
     var onyomis = kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
-    var kunyomis = kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
+    var kunyomis =
+        kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
 //
 
-    List<Word> onyomiWords =
-        Set<Word>.from(kanji.onyomiWords).toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
+    List<Word> onyomiWords = Set<Word>.from(kanji.onyomiWords)
+        .toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
     onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
-      var words =
-          List.from(onyomiWords.where((onyomiWord) => onyomiWord.wordFurigana.contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
+      var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord
+          .wordFurigana
+          .contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       onyomiWords.removeWhere((word) => words.contains(word));
       var tileTitle = Stack(
@@ -50,12 +53,14 @@ class CompoundWordColumn extends StatelessWidget {
                       padding: EdgeInsets.all(4),
                       child: Text(
                         onyomi,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
                         ),
                   ),
                 ),
@@ -66,7 +71,8 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
+              onPressed: () =>
+                  showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
             ),
           )
         ],
@@ -77,7 +83,8 @@ class CompoundWordColumn extends StatelessWidget {
       for (var word in words) {
         tileChildren.add(ListTile(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
           },
           onLongPress: () {
             showModalBottomSheet(
@@ -96,7 +103,8 @@ class CompoundWordColumn extends StatelessWidget {
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
             style: TextStyle(fontSize: 24),
           ),
-          subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle:
+              Text(word.meanings, style: TextStyle(color: Colors.white54)),
         ));
         tileChildren.add(Divider(
           height: 0,
@@ -138,8 +146,9 @@ class CompoundWordColumn extends StatelessWidget {
     kunyomis.sort((a, b) => b.length.compareTo(a.length));
 
     for (var kunyomi in kunyomis) {
-      var words = List.from(
-          kunyomiWords.where((kunyomiWord) => kunyomiWord.wordFurigana.contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
+      var words = List.from(kunyomiWords.where((kunyomiWord) => kunyomiWord
+          .wordFurigana
+          .contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       kunyomiWords.removeWhere((word) => words.contains(word));
 
@@ -156,12 +165,14 @@ class CompoundWordColumn extends StatelessWidget {
                       padding: EdgeInsets.all(4),
                       child: Text(
                         kunyomi,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
                         ),
                   ),
                 ),
@@ -172,7 +183,8 @@ class CompoundWordColumn extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               icon: Icon(Icons.add_circle_outline, color: Colors.white),
-              onPressed: () => showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
+              onPressed: () =>
+                  showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
             ),
           )
         ],
@@ -183,7 +195,8 @@ class CompoundWordColumn extends StatelessWidget {
       for (var word in words) {
         tileChildren.add(ListTile(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
           },
           onLongPress: () {
             showModalBottomSheet(
@@ -202,7 +215,8 @@ class CompoundWordColumn extends StatelessWidget {
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
             style: TextStyle(fontSize: 24),
           ),
-          subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle:
+              Text(word.meanings, style: TextStyle(color: Colors.white54)),
         ));
         tileChildren.add(Divider(height: 0, indent: 8, endIndent: 8));
       }
@@ -263,8 +277,14 @@ class CompoundWordColumn extends StatelessWidget {
                         child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(children: [
-                              TextSpan(text: 'どうし　　　　けいようし' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                              TextSpan(text: '動詞 と 形容詞', style: TextStyle(fontSize: 18, color: Colors.white)),
+                              TextSpan(
+                                  text: 'どうし　　　　けいようし' + '\n',
+                                  style: TextStyle(
+                                      fontSize: 9, color: Colors.white)),
+                              TextSpan(
+                                  text: '動詞 と 形容詞',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white)),
                             ]))),
                   )),
               Flexible(
@@ -312,7 +332,9 @@ class CompoundWordColumn extends StatelessWidget {
             child: Container(
               height: 368,
               margin: EdgeInsets.only(top: 48, left: 12, right: 12),
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: Theme.of(scaffoldContext).primaryColor),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Theme.of(scaffoldContext).primaryColor),
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.disabled,
@@ -334,12 +356,15 @@ class CompoundWordColumn extends StatelessWidget {
                                 padding: EdgeInsets.all(4),
                                 child: Text(
                                   yomi,
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 )),
                             decoration: BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                      5.0) //                 <--- border radius here
                                   ),
                             ),
                           ),
@@ -360,11 +385,15 @@ class CompoundWordColumn extends StatelessWidget {
                             focusColor: Colors.white,
                             labelText: isOnyomi ? 'Onyomi' : 'Kunyomi',
                             labelStyle: TextStyle(color: Colors.white70),
-                            border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white70)),
                           ),
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
                           minLines: 1,
                           maxLines: 1,
                         )),
@@ -383,9 +412,12 @@ class CompoundWordColumn extends StatelessWidget {
                           focusColor: Colors.white,
                           labelText: 'Word',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
                         ),
                         style: TextStyle(color: Colors.white),
                         minLines: 1,
@@ -407,9 +439,12 @@ class CompoundWordColumn extends StatelessWidget {
                           focusColor: Colors.white,
                           labelText: 'Meaning',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
                         ),
                         style: TextStyle(color: Colors.white),
                         minLines: 1,
@@ -424,7 +459,9 @@ class CompoundWordColumn extends StatelessWidget {
                       child: Container(
                           width: MediaQuery.of(scaffoldContext).size.width - 24,
                           height: 42,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
                           child: ElevatedButton(
                               child: Text(
                                 'Add',
@@ -434,14 +471,20 @@ class CompoundWordColumn extends StatelessWidget {
                                 if (formKey.currentState.validate()) {
                                   if (isOnyomi) {
                                     kanji.onyomiWords.add(Word(
-                                        wordText: wordTextEditingController.text,
-                                        wordFurigana: yomiTextEditingController.text,
-                                        meanings: meaningTextEditingController.text));
+                                        wordText:
+                                            wordTextEditingController.text,
+                                        wordFurigana:
+                                            yomiTextEditingController.text,
+                                        meanings:
+                                            meaningTextEditingController.text));
                                   } else {
                                     kanji.kunyomiWords.add(Word(
-                                        wordText: wordTextEditingController.text,
-                                        wordFurigana: yomiTextEditingController.text,
-                                        meanings: meaningTextEditingController.text));
+                                        wordText:
+                                            wordTextEditingController.text,
+                                        wordFurigana:
+                                            yomiTextEditingController.text,
+                                        meanings:
+                                            meaningTextEditingController.text));
                                   }
                                 }
                                 Navigator.pop(scaffoldContext);
@@ -457,7 +500,8 @@ class CompoundWordColumn extends StatelessWidget {
       },
       transitionBuilder: (_, anim, __, child) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
+          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(
+              CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
           child: child,
         );
       },

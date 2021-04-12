@@ -19,7 +19,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
 
   @override
   void initState() {
-    radicalsMap.addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
+    radicalsMap
+        .addAll(radicalsToMeaning.map((key, value) => MapEntry(key, false)));
 
     for (var selected in widget.selectedRadicals) {
       radicalsMap[selected] = true;
@@ -78,12 +79,14 @@ class _RadicalsPageState extends State<RadicalsPage> {
                           backgroundColor: Colors.orange,
                           onPressed: () {
                             setState(() {
-                              radicalsMap.updateAll((key, value) => radicalsMap[key] = false);
+                              radicalsMap.updateAll(
+                                  (key, value) => radicalsMap[key] = false);
                             });
 
                             if (shouldVibrate) {
                               Vibration.cancel().then((_) {
-                                Vibration.vibrate(pattern: [0, 5], intensities: [200]);
+                                Vibration.vibrate(
+                                    pattern: [0, 5], intensities: [200]);
                               });
                             }
                           },
@@ -104,7 +107,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
 
                             if (shouldVibrate) {
                               Vibration.cancel().then((_) {
-                                Vibration.vibrate(pattern: [0, 5], intensities: [200]);
+                                Vibration.vibrate(
+                                    pattern: [0, 5], intensities: [200]);
                               });
                             }
                           },
@@ -123,12 +127,15 @@ class _RadicalsPageState extends State<RadicalsPage> {
 
   List<Widget> buildChildren() {
     final children = <Widget>[];
-    final dividerColor = Theme.of(context).primaryColor == Colors.black ? Colors.white38 : Colors.black12;
+    final dividerColor = Theme.of(context).primaryColor == Colors.black
+        ? Colors.white38
+        : Colors.black12;
 
     for (final stroke in strokesToRadicals.keys.toList()..sort()) {
       var strokeText = '$stroke strokes';
 
-      if (stroke == 1) strokeText = strokeText.substring(0, strokeText.length - 1);
+      if (stroke == 1)
+        strokeText = strokeText.substring(0, strokeText.length - 1);
 
       final wrap = Padding(
         padding: EdgeInsets.only(left: 8, bottom: 4),
@@ -140,7 +147,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
             Chip(
               label: Text(
                 strokeText,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.grey[600],
             ),
@@ -148,7 +156,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
               FilterChip(
                   selected: radicalsMap[r],
                   elevation: radicalsMap[r] ? 4 : 0,
-                  label: Text(showMeanings ? r + " | ${radicalsToMeaning[r]}" : r),
+                  label:
+                      Text(showMeanings ? r + " | ${radicalsToMeaning[r]}" : r),
                   onSelected: (val) {
                     setState(() {
                       radicalsMap[r] = !radicalsMap[r];

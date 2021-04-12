@@ -13,7 +13,8 @@ class HomePageBackground extends StatefulWidget {
   final KanjiCallback callback;
   final AnimationController animationController;
 
-  HomePageBackground({Key key, this.callback, this.animationController}) : super(key: key);
+  HomePageBackground({Key key, this.callback, this.animationController})
+      : super(key: key);
 
   @override
   HomePageBackgroundState createState() => HomePageBackgroundState();
@@ -51,7 +52,10 @@ class HomePageBackgroundState extends State<HomePageBackground> {
         final RenderBox rBox = cxt.findRenderObject();
         final pos = rBox.localToGlobal(Offset.zero);
 
-        if (ptrPos.dy >= pos.dy && ptrPos.dy <= pos.dy + cxt.size.height && ptrPos.dx >= pos.dx && ptrPos.dx <= pos.dx + (width / perRow)) {
+        if (ptrPos.dy >= pos.dy &&
+            ptrPos.dy <= pos.dy + cxt.size.height &&
+            ptrPos.dx >= pos.dx &&
+            ptrPos.dx <= pos.dx + (width / perRow)) {
           setState(() {
             if (targetKey != keys[i] && shouldVibrate) {
               Vibration.cancel().then((_) {
@@ -62,7 +66,11 @@ class HomePageBackgroundState extends State<HomePageBackground> {
             targetKey = keys[i];
             kanji = [
               kanjiJsons[i]["character"],
-              kanjiJsons[i]["onyomi"]["katakana"].toString() + ' ' + kanjiJsons[i]["kunyomi"]["hiragana"].toString().replaceAll("n/a", ""),
+              kanjiJsons[i]["onyomi"]["katakana"].toString() +
+                  ' ' +
+                  kanjiJsons[i]["kunyomi"]["hiragana"]
+                      .toString()
+                      .replaceAll("n/a", ""),
               kanjiJsons[i]["meaning"]["english"].toString()
             ];
             widget.callback(kanjiJsons[i]["character"]);
@@ -76,8 +84,13 @@ class HomePageBackgroundState extends State<HomePageBackground> {
 
   fetch() async {
     if (!initialized) {
-      var res = await rootBundle.loadString('data/data').whenComplete(() => initialized = true);
-      kanjiJsons = (json.decode(res) as List).map((map) => map["kanji"]).toList()..shuffle();
+      var res = await rootBundle
+          .loadString('data/data')
+          .whenComplete(() => initialized = true);
+      kanjiJsons = (json.decode(res) as List)
+          .map((map) => map["kanji"])
+          .toList()
+            ..shuffle();
       kanjiJsons = kanjiJsons.take(totalKanji);
     }
   }
@@ -127,7 +140,9 @@ class HomePageBackgroundState extends State<HomePageBackground> {
                       height: double.infinity,
                       child: GridView(
                           physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: perRow),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: perRow),
                           children: buildChildren()),
                     );
                   } else
@@ -146,7 +161,11 @@ class HomePageBackgroundState extends State<HomePageBackground> {
           key: keys[i],
           //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
           child: Center(
-            child: Text(kanjiJsons[i]["character"], style: TextStyle(color: Colors.white, fontSize: 26, fontFamily: Fonts.kazei)),
+            child: Text(kanjiJsons[i]["character"],
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontFamily: Fonts.kazei)),
           ));
     });
   }

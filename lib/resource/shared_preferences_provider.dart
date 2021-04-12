@@ -28,7 +28,8 @@ class SharedPreferencesProvider {
     }
   }
 
-  List<String> getAllFavKanjiStrs() => _sharedPreferences.getStringList(Keys.favKanjiStrsKey);
+  List<String> getAllFavKanjiStrs() =>
+      _sharedPreferences.getStringList(Keys.favKanjiStrsKey);
 
   List<String> uids = [];
 
@@ -44,7 +45,8 @@ class SharedPreferencesProvider {
     _sharedPreferences.setStringList(Keys.favKanjiStrsKey, favKanjiStrs);
   }
 
-  List<String> getAllStarKanjiStrs() => _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
+  List<String> getAllStarKanjiStrs() =>
+      _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
 
   void addStar(String kanjiStr) {
     var starKanjiStrs = _sharedPreferences.getStringList(Keys.starKanjiStrsKey);
@@ -70,12 +72,14 @@ class SharedPreferencesProvider {
   void addKanjiList(KanjiList kanjiList) {
     uids.add(kanjiList.uid);
     _sharedPreferences.setStringList(Keys.uidsKey, uids);
-    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(
+        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
     _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
   }
 
   void updateKanjiListKanjis(KanjiList kanjiList) {
-    _sharedPreferences.setStringList(kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setStringList(
+        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
   }
 
   void updateKanjiListName(KanjiList kanjiList) {
@@ -93,7 +97,8 @@ class SharedPreferencesProvider {
     _sharedPreferences.setInt(Keys.themeModeKey, themeMode.index);
   }
 
-  Future<ThemeMode> get themeMode => SharedPreferences.getInstance().then((prefs) {
+  Future<ThemeMode> get themeMode =>
+      SharedPreferences.getInstance().then((prefs) {
         final set = prefs.containsKey(Keys.themeModeKey);
         if (set) {
           final index = prefs.getInt(Keys.themeModeKey);
@@ -108,7 +113,8 @@ class SharedPreferencesProvider {
     _sharedPreferences.setInt(Keys.fontKey, fontSelection.index);
   }
 
-  Future<FontSelection> get fontSelection => SharedPreferences.getInstance().then((prefs) {
+  Future<FontSelection> get fontSelection =>
+      SharedPreferences.getInstance().then((prefs) {
         final set = prefs.containsKey(Keys.fontKey);
         if (set) {
           final index = prefs.getInt(Keys.fontKey);
@@ -132,7 +138,8 @@ class SharedPreferencesProvider {
     return res;
   }
 
-  Future<bool> get isFirstTimeUser => SharedPreferences.getInstance().then((prefs) {
+  Future<bool> get isFirstTimeUser =>
+      SharedPreferences.getInstance().then((prefs) {
         var res = !prefs.containsKey('mark');
         prefs.setBool('mark', true);
         return res;
@@ -140,5 +147,6 @@ class SharedPreferencesProvider {
 
   int get lastFetchedAt => _sharedPreferences.getInt(Keys.lastFetchedAtKey);
 
-  set lastFetchedAt(int timestamp) => _sharedPreferences.setInt(Keys.lastFetchedAtKey, timestamp);
+  set lastFetchedAt(int timestamp) =>
+      _sharedPreferences.setInt(Keys.lastFetchedAtKey, timestamp);
 }

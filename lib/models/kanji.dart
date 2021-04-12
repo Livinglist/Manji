@@ -44,26 +44,26 @@ class Kanji {
   List<Word> onyomiWords;
   List<Word> kunyomiWords;
 
-  Kanji({this.id,
-    this.kanji,
-    this.onyomi,
-    this.kunyomi,
-    this.meaning,
-    this.grade,
-    this.jlpt,
-    this.strokes,
-    this.frequency,
-    this.parts,
-    this.onyomiWords,
-    this.kunyomiWords,
-    this.isFaved = false})
+  Kanji(
+      {this.id,
+      this.kanji,
+      this.onyomi,
+      this.kunyomi,
+      this.meaning,
+      this.grade,
+      this.jlpt,
+      this.strokes,
+      this.frequency,
+      this.parts,
+      this.onyomiWords,
+      this.kunyomiWords,
+      this.isFaved = false})
       : assert((grade >= 0 && grade <= 7)),
         assert(jlpt >= 0 && jlpt <= 5),
         assert(strokes != 0),
         assert(frequency >= 0);
 
-  Map toMap() =>
-      {
+  Map toMap() => {
         Keys.gradeKey: this.grade,
         Keys.jlptKey: this.jlpt,
         Keys.kanjiKey: this.kanji,
@@ -86,13 +86,18 @@ class Kanji {
     frequency = map[Keys.frequencyKey];
     parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
     kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
-    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
+    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? [])
+        .cast<String>()
+        .map((str) => Word.fromString(str))
+        .toList();
     onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
-    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? []).cast<String>().map((str) => Word.fromString(str)).toList();
+    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
+        .cast<String>()
+        .map((str) => Word.fromString(str))
+        .toList();
   }
 
-  Map<String, dynamic> toDBMap() =>
-      {
+  Map<String, dynamic> toDBMap() => {
         Keys.idKey: Keys.idKey,
         Keys.gradeKey: this.grade,
         Keys.jlptKey: this.jlpt,
@@ -105,8 +110,10 @@ class Kanji {
         Keys.meaningKey: this.meaning,
         Keys.radicalKey: this.radicals,
         Keys.radicalsMeaningKey: this.radicalsMeaning,
-        Keys.kunyomiWordsKey: jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
-        Keys.onyomiWordsKey: jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
+        Keys.kunyomiWordsKey:
+            jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
+        Keys.onyomiWordsKey:
+            jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
         Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
       };
 
@@ -122,10 +129,15 @@ class Kanji {
     frequency = map[Keys.frequencyKey];
     parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
     kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
-    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
+    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List)
+        .map((str) => Word.fromMap(str))
+        .toList();
     onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
-    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List).map((str) => Word.fromMap(str)).toList();
-    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List).cast<int>();
+    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
+        .map((str) => Word.fromMap(str))
+        .toList();
+    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List)
+        .cast<int>();
   }
 
   String toString() {
@@ -585,7 +597,29 @@ const Map<int, List<String>> strokesToRadicals = {
     '牙',
     '片'
   ],
-  2: ['二', '亠', '人(亻)', '儿', '入', '八', '冂', '冖', '冫', '刀(刂)', '力', '勹', '匕', '匚', '匸', '十', '卩', '厂', '又', '廴', '卜'],
+  2: [
+    '二',
+    '亠',
+    '人(亻)',
+    '儿',
+    '入',
+    '八',
+    '冂',
+    '冖',
+    '冫',
+    '刀(刂)',
+    '力',
+    '勹',
+    '匕',
+    '匚',
+    '匸',
+    '十',
+    '卩',
+    '厂',
+    '又',
+    '廴',
+    '卜'
+  ],
   5: [
     '目',
     '玄',
@@ -679,7 +713,26 @@ const Map<int, List<String>> strokesToRadicals = {
     '瓜',
     '缶'
   ],
-  7: ['舛', '見', '角', '言(訁)', '谷', '豆', '豕', '貝', '赤', '走(赱)', '車', '辛', '辰', '酉', '釆', '里', '豸', '身'],
+  7: [
+    '舛',
+    '見',
+    '角',
+    '言(訁)',
+    '谷',
+    '豆',
+    '豕',
+    '貝',
+    '赤',
+    '走(赱)',
+    '車',
+    '辛',
+    '辰',
+    '酉',
+    '釆',
+    '里',
+    '豸',
+    '身'
+  ],
   8: ['金(釒)', '長(镸)', '門', '隶', '隹', '雨', '青(靑)', '非'],
   9: ['面(靣)', '革', '音', '頁', '風', '飛', '食(飠)', '首', '香', '韋'],
   10: ['馬', '骨', '高(髙)', '髟', '鬼'],

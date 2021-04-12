@@ -28,7 +28,11 @@ class KanjiInfoColumn extends StatelessWidget {
               splashColor: Theme.of(context).primaryColor,
               highlightColor: Theme.of(context).primaryColor,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => SearchResultPage(radicals: kanji.radicals)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            SearchResultPage(radicals: kanji.radicals)));
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,16 +41,26 @@ class KanjiInfoColumn extends StatelessWidget {
                       child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(children: [
-                            TextSpan(text: 'ぶしゅ' + '\n', style: TextStyle(fontSize: 9, color: Colors.white)),
-                            TextSpan(text: '部首', style: TextStyle(fontSize: 18, color: Colors.white))
+                            TextSpan(
+                                text: 'ぶしゅ' + '\n',
+                                style: TextStyle(
+                                    fontSize: 9, color: Colors.white)),
+                            TextSpan(
+                                text: '部首',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white))
                           ]))),
                   Padding(
                     padding: EdgeInsets.all(0),
-                    child: Text("${kanji.radicals}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Text("${kanji.radicals}",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   Padding(
                     padding: EdgeInsets.all(0),
-                    child: Text("${kanji.radicalsMeaning}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Text("${kanji.radicalsMeaning}",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   )
                 ],
               ),
@@ -66,12 +80,15 @@ class KanjiInfoColumn extends StatelessWidget {
                                 padding: EdgeInsets.all(4),
                                 child: Text(
                                   'N${kanji.jlpt}',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 )),
                             decoration: BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                      5.0) //                 <--- border radius here
                                   ),
                             ),
                           ),
@@ -86,7 +103,8 @@ class KanjiInfoColumn extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                   child: Text(
                     "${kanji.strokes} strokes",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   )),
               if (kanji.radicals != null && kanji.radicals.isNotEmpty)
                 DescribedFeatureOverlay(
@@ -95,7 +113,8 @@ class KanjiInfoColumn extends StatelessWidget {
                     tapTarget: Text('部首', style: TextStyle(fontSize: 18)),
                     // The widget that will be displayed as the tap target.
                     title: Text('Radicals'),
-                    description: Text('Tap here if you want to see more kanji with this radical.'),
+                    description: Text(
+                        'Tap here if you want to see more kanji with this radical.'),
                     backgroundColor: Theme.of(context).primaryColor,
                     targetColor: Colors.white,
                     textColor: Colors.white,

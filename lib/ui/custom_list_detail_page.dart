@@ -108,7 +108,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 return DescribedFeatureOverlay(
                     featureId: 'study_kanji',
                     // Unique id that identifies this overlay.
-                    tapTarget: IconButton(onPressed: null, icon: Icon(FontAwesomeIcons.bookOpen, size: 16)),
+                    tapTarget: IconButton(
+                        onPressed: null,
+                        icon: Icon(FontAwesomeIcons.bookOpen, size: 16)),
                     // The widget that will be displayed as the tap target.
                     title: Text('Study'),
                     description: Text('Study this list by flash cards.'),
@@ -125,7 +127,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                                   if (stupidStrings.isEmpty) {
                                     Navigator.pop(context);
                                   } else {
-                                    var index = Random(DateTime.now().millisecondsSinceEpoch).nextInt(stupidStrings.length);
+                                    var index = Random(DateTime.now()
+                                            .millisecondsSinceEpoch)
+                                        .nextInt(stupidStrings.length);
                                     var str = stupidStrings[index];
                                     stupidStrings.removeAt(index);
                                     studyString = str;
@@ -135,7 +139,11 @@ class _ListDetailPageState extends State<ListDetailPage> {
                                 }
                               });
                             } else {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: snapshot.data)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => KanjiStudyPage(
+                                          kanjis: snapshot.data)));
                             }
                           }
                         }));
@@ -159,7 +167,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
-                crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                crossFadeState: showGrid
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
                 duration: Duration(milliseconds: 200),
               ),
               onPressed: () {
@@ -188,7 +198,8 @@ class _ListDetailPageState extends State<ListDetailPage> {
               var words = <Word>[];
               var sentences = <Sentence>[];
 
-              for (var item in widget.kanjiList.kanjiStrs.where((e) => e.length > 1)) {
+              for (var item
+                  in widget.kanjiList.kanjiStrs.where((e) => e.length > 1)) {
                 Map json = jsonDecode(item);
                 if (json.containsKey('meanings')) {
                   var word = Word.fromMap(json);
@@ -221,7 +232,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
               return AnimatedCrossFade(
                   firstChild: buildGridView(kanjis),
                   secondChild: buildListView(kanjis, words, sentences),
-                  crossFadeState: showGrid ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  crossFadeState: showGrid
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
                   duration: Duration(milliseconds: 200));
             } else {
               return Center(child: CircularProgressIndicator());
@@ -237,15 +250,18 @@ class _ListDetailPageState extends State<ListDetailPage> {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Colors.red,
-              content: Text('Are you sure you want to remove $kanjiStr from ${widget.kanjiList.name}'),
+              content: Text(
+                  'Are you sure you want to remove $kanjiStr from ${widget.kanjiList.name}'),
               action: SnackBarAction(
                   label: 'Yes',
                   onPressed: () {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                     widget.kanjiList.kanjiStrs.remove(kanjiStr);
-                    KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
-                    KanjiListBloc.instance.removeKanji(widget.kanjiList, kanjiStr);
+                    KanjiBloc.instance
+                        .fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
+                    KanjiListBloc.instance
+                        .removeKanji(widget.kanjiList, kanjiStr);
                   }),
             ));
           },
@@ -279,7 +295,10 @@ class _ListDetailPageState extends State<ListDetailPage> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 48,
-                                  fontFamily: snapshot.data == FontSelection.handwriting ? Fonts.kazei : Fonts.ming,
+                                  fontFamily:
+                                      snapshot.data == FontSelection.handwriting
+                                          ? Fonts.kazei
+                                          : Fonts.ming,
                                 ));
                           }
                           return Container();
@@ -297,7 +316,10 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   ],
                 )),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => KanjiDetailPage(kanji: kanji)));
             },
             onLongPress: () {
               confirmDismiss(kanji);
@@ -306,7 +328,8 @@ class _ListDetailPageState extends State<ListDetailPage> {
         }));
   }
 
-  Widget buildListView(List<Kanji> kanjis, List<Word> words, List<Sentence> sentences) {
+  Widget buildListView(
+      List<Kanji> kanjis, List<Word> words, List<Sentence> sentences) {
     return ListView.separated(
         shrinkWrap: true,
         controller: listViewScrollController,
@@ -349,15 +372,21 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 ),
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => WordDetailPage(word: word)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => WordDetailPage(word: word)));
                   },
                   onLongPress: () {},
                   title: FuriganaText(
                     text: word.wordText,
-                    tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
+                    tokens: [
+                      Token(text: word.wordText, furigana: word.wordFurigana)
+                    ],
                     style: TextStyle(fontSize: 24),
                   ),
-                  subtitle: Text(word.meanings, style: TextStyle(color: Colors.white54)),
+                  subtitle: Text(word.meanings,
+                      style: TextStyle(color: Colors.white54)),
                 ));
           } else {
             index = index - kanjis.length - words.length;

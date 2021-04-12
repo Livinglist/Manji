@@ -74,7 +74,9 @@ class SentenceBloc {
     if (!_allFetched && !_isFetching) {
       _isFetching = true;
       _isFetchingFetcher.sink.add(_isFetching);
-      repo.fetchSentencesByKanji(str, currentPage: _currentPage).listen((sentence) {
+      repo
+          .fetchSentencesByKanji(str, currentPage: _currentPage)
+          .listen((sentence) {
         if (sentence == null) {
           print('all fetched');
           _allFetched = true;
@@ -108,14 +110,19 @@ class SentenceBloc {
   }
 
   ///Fetch sentences from Firebase.
-  void fetchSentencesByKanjiFromFirebase(String kanji, {bool shouldClear = true}) {
+  void fetchSentencesByKanjiFromFirebase(String kanji,
+      {bool shouldClear = true}) {
     if (shouldClear) _sentences.clear();
 
     Query ref;
 
     if (lastDoc == null) {
-      ref =
-          FirebaseFirestore.instance.collection('sentences2').doc(kanji).collection(Keys.sentencesKey).orderBy(Keys.textKey).limit(_length);
+      ref = FirebaseFirestore.instance
+          .collection('sentences2')
+          .doc(kanji)
+          .collection(Keys.sentencesKey)
+          .orderBy(Keys.textKey)
+          .limit(_length);
     } else {
       ref = FirebaseFirestore.instance
           .collection('sentences2')
@@ -128,10 +135,14 @@ class SentenceBloc {
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+        var sentences =
+            snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
 
         //Remove duplicates.
-        sentences.removeWhere((e) => _sentences.singleWhere((s) => e.text == s.text, orElse: () => null) != null);
+        sentences.removeWhere((e) =>
+            _sentences.singleWhere((s) => e.text == s.text,
+                orElse: () => null) !=
+            null);
 
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
@@ -152,7 +163,8 @@ class SentenceBloc {
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+        var sentences =
+            snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
         lastDoc = snapshot.docs.last;
@@ -172,7 +184,8 @@ class SentenceBloc {
           .limit(_length);
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+          var sentences =
+              snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
           lastDoc = snapshot.docs.last;
@@ -196,7 +209,8 @@ class SentenceBloc {
 
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences = snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
+          var sentences =
+              snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
           lastDoc = snapshot.docs.last;
@@ -213,7 +227,8 @@ class SentenceBloc {
     if (jsonStr != null) {
       final list = (jsonDecode(jsonStr) as List).cast<String>();
       final randomIndex = Random().nextInt(list.length);
-      final sentence = Sentence.fromMap(jsonDecode(list.elementAt(randomIndex)));
+      final sentence =
+          Sentence.fromMap(jsonDecode(list.elementAt(randomIndex)));
 
       _unloadedSentencesStr = list;
 
@@ -231,7 +246,8 @@ class SentenceBloc {
     var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
       var list = (jsonDecode(jsonStr) as List).cast<String>();
-      var sentences = await jsonToSentences(list.sublist(0, list.length < 5 ? list.length : 5));
+      var sentences = await jsonToSentences(
+          list.sublist(0, list.length < 5 ? list.length : 5));
 
       list.removeRange(0, list.length < 5 ? list.length : 5);
 
@@ -246,15 +262,16 @@ class SentenceBloc {
 
   ///Get more sentences from the local database.
   void getMoreSentencesByKanji() async {
-    var sentences =
-        await jsonToSentences(_unloadedSentencesStr.sublist(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
+    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
+        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
 
     if (sentences.isEmpty) {
       fetchSentencesByKanjiFromFirebase(_kanjiStr, shouldClear: false);
       return;
     }
 
-    _unloadedSentencesStr.removeRange(0, _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
+    _unloadedSentencesStr.removeRange(0,
+        _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10);
 
     _sentences.addAll(sentences);
 
