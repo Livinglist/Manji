@@ -33,8 +33,8 @@ jobs:
     # Check for any formatting issues in the code.
     - run: flutter format --set-exit-if-changed .
     
-    # Run widget tests for our flutter project.
-    - run: flutter test
+#     # Run widget tests for our flutter project.
+#     - run: flutter test
     
     # Build apk.
     - run: flutter build apk
