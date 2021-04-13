@@ -74,16 +74,6 @@ class MyAppState extends State<MyApp> {
                         } else {
                           KanjiBloc.instance.getAllKanjis();
                           FirebaseAuthProvider.instance.checkForUpdates();
-                          // if (!initialized) {
-                          //   initialized = true;
-                          //   KanjiBloc.instance.getAllKanjis();
-                          //   FirebaseAuthProvider.instance.checkForUpdates();
-                          // } else {
-                          //   DBProvider.db
-                          //       .initDB(refresh: true)
-                          //       .whenComplete(KanjiBloc.instance.getAllKanjis)
-                          //       .whenComplete(FirebaseAuthProvider.instance.checkForUpdates);
-                          // }
                           return Platform.isAndroid
                               ? Scaffold(
                                   body: Center(
@@ -94,7 +84,9 @@ class MyAppState extends State<MyApp> {
                                   appBar: AppBar(
                                     elevation: 0,
                                     title: Text('Manji'),
+                                    centerTitle: false,
                                   ),
+                                  drawer: Container(),
                                   body: HomePageBackground());
                         }
                       },

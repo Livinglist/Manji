@@ -140,20 +140,33 @@ class _RadicalsPageState extends State<RadicalsPage> {
       final wrap = Padding(
         padding: EdgeInsets.only(left: 8, bottom: 4),
         child: Wrap(
-          key: ObjectKey(strokeText),
           alignment: WrapAlignment.start,
           spacing: 8,
           children: <Widget>[
-            Chip(
-              label: Text(
-                strokeText,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                key: ObjectKey(strokeText),
+                height: 32,
+                width: 96,
+                child: Center(
+                  child: Text(
+                    strokeText,
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(18),
+                  ),
+                ),
               ),
-              backgroundColor: Colors.grey[600],
             ),
             for (var r in strokesToRadicals[stroke])
               FilterChip(
+                  key: ObjectKey(r),
                   selected: radicalsMap[r],
                   elevation: radicalsMap[r] ? 4 : 0,
                   label:
