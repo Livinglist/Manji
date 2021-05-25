@@ -7,6 +7,7 @@
 [![Play Store](https://img.shields.io/badge/Play%20Store--yellow)](https://play.google.com/store/apps/details?id=jiaqifeng.kanji_dictionary)
 [![Visits Badge](https://badges.pufler.dev/visits/livinglist/Manji)](https://badges.pufler.dev)
 [![GitHub](https://img.shields.io/github/stars/livinglist/Manji?style=social)](https://img.shields.io/github/stars/livinglist/Manji?style=social)
+[![style: effective dart][badge]][badge_link]
 
 
 
