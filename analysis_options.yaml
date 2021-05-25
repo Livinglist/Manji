@@ -1,0 +1,23 @@
+include: package:effective_dart/analysis_options.1.9.0.yaml
+
+linter:
+  rules:
+    avoid_catches_without_on_clauses: false
+    avoid_classes_with_only_static_members: false
+    avoid_function_literals_in_foreach_calls: false
+    implementation_imports: false
+    lines_longer_than_80_chars: false
+    one_member_abstracts: false
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_final_locals: true
+    prefer_relative_imports: false
+    public_member_api_docs: false
+    require_trailing_commas: true
+    unnecessary_lambdas: false
+    avoid_relative_lib_imports: false
+    unnecessary_brace_in_string_interps: true
+
+analyzer:
+  exclude:

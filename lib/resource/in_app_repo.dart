@@ -20,9 +20,9 @@ class InAppRepo {
     //   return;
     // }
     //user will now buy the product
-    List<ProductDetails> availableProducts = await _getAvailableProducts();
+    final availableProducts = await _getAvailableProducts();
     if (availableProducts.isNotEmpty) {
-      ProductDetails productDetails = availableProducts
+      final productDetails = availableProducts
           .firstWhere((productDetail) => productDetail.id == _coffeeId);
       final PurchaseParam purchaseParam =
           PurchaseParam(productDetails: productDetails);
@@ -67,7 +67,7 @@ class InAppRepo {
 
   /// get products
   Future<List<ProductDetails>> _getAvailableProducts() async {
-    ProductDetailsResponse productDetailQueryResponse =
+    final productDetailQueryResponse =
         await InAppPurchaseConnection.instance.queryProductDetails(_productIds);
     return Future.value(productDetailQueryResponse.error == null
         ? productDetailQueryResponse.productDetails
@@ -75,11 +75,11 @@ class InAppRepo {
   }
 
   /// get past purchases
-  Future<List<PurchaseDetails>> _getPastPurchases() async {
-    QueryPurchaseDetailsResponse purchaseDetailsResponse =
-        await InAppPurchaseConnection.instance.queryPastPurchases();
-    return Future.value(purchaseDetailsResponse.error == null
-        ? purchaseDetailsResponse.pastPurchases
-        : <PurchaseDetails>[]);
-  }
+  // Future<List<PurchaseDetails>> _getPastPurchases() async {
+  //   QueryPurchaseDetailsResponse purchaseDetailsResponse =
+  //       await InAppPurchaseConnection.instance.queryPastPurchases();
+  //   return Future.value(purchaseDetailsResponse.error == null
+  //       ? purchaseDetailsResponse.pastPurchases
+  //       : <PurchaseDetails>[]);
+  // }
 }

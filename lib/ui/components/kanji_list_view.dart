@@ -39,7 +39,7 @@ class KanjiListView extends StatelessWidget {
                     builder: (_) => KanjiDetailPage(kanji: kanjis[index]))),
           );
         },
-        separatorBuilder: (_, __) => Divider(height: 0),
+        separatorBuilder: (_, __) => const Divider(height: 0),
         itemCount: kanjis.length);
   }
 }

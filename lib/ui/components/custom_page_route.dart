@@ -17,7 +17,7 @@ class ScaleRoute extends PageRouteBuilder {
             ).animate(
               CurvedAnimation(
                 parent: animation,
-                curve: Interval(
+                curve: const Interval(
                   0.00,
                   0.50,
                   curve: Curves.linear,
@@ -31,7 +31,7 @@ class ScaleRoute extends PageRouteBuilder {
               ).animate(
                 CurvedAnimation(
                   parent: animation,
-                  curve: Interval(
+                  curve: const Interval(
                     0.50,
                     1.00,
                     curve: Curves.linear,

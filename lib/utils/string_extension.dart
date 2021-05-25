@@ -30,7 +30,7 @@ extension StringExtension on String {
 
   ///Get all the kanjis in the string.
   List<String> getKanjis() {
-    var kanjis = <String>[];
+    final kanjis = <String>[];
     for (int i = 0; i < this.length; i++) {
       if (this.codeUnitAt(i) > 12543 && kanjis.contains(this[i]) == false) {
         kanjis.add(this[i]);
@@ -43,7 +43,7 @@ extension StringExtension on String {
     var str = '';
 
     for (var i in Iterable.generate(this.length)) {
-      var code = this.codeUnitAt(i);
+      final code = this.codeUnitAt(i);
       str += String.fromCharCode(code + 96);
     }
 
@@ -54,7 +54,7 @@ extension StringExtension on String {
     var str = '';
 
     for (var i in Iterable.generate(this.length)) {
-      var code = this.codeUnitAt(i);
+      final code = this.codeUnitAt(i);
       str += String.fromCharCode(code - 96);
     }
 

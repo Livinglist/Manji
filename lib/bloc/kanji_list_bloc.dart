@@ -40,15 +40,15 @@ class KanjiListBloc {
   }
 
   void changeName(KanjiList kanjiList, String newName) {
-    var temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
+    final temp = _kanjiLists.singleWhere((list) => list.uid == kanjiList.uid);
     temp.name = newName;
     repo.updateKanjiListName(temp);
     repo.uploadKanjiList(kanjiList);
   }
 
   void addWord(KanjiList kanjiList, Word word) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
-    var jsonStr = jsonEncode(word.toMap());
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final jsonStr = jsonEncode(word.toMap());
     temp.kanjiStrs.add(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -56,8 +56,8 @@ class KanjiListBloc {
   }
 
   void addSentence(KanjiList kanjiList, Sentence sentence) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
-    var jsonStr = jsonEncode(sentence.toMap());
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final jsonStr = jsonEncode(sentence.toMap());
     temp.kanjiStrs.add(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -65,7 +65,7 @@ class KanjiListBloc {
   }
 
   void addKanji(KanjiList kanjiList, String kanjiStr) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     temp.kanjiStrs.add(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -73,8 +73,8 @@ class KanjiListBloc {
   }
 
   void removeWord(KanjiList kanjiList, Word word) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
-    var jsonStr = jsonEncode(word.toMap());
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final jsonStr = jsonEncode(word.toMap());
     temp.kanjiStrs.remove(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -82,8 +82,8 @@ class KanjiListBloc {
   }
 
   void removeSentence(KanjiList kanjiList, Sentence sentence) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
-    var jsonStr = jsonEncode(sentence.toMap());
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final jsonStr = jsonEncode(sentence.toMap());
     temp.kanjiStrs.remove(jsonStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -91,7 +91,7 @@ class KanjiListBloc {
   }
 
   void removeKanji(KanjiList kanjiList, String kanjiStr) {
-    var temp = _kanjiLists.singleWhere((list) => list == kanjiList);
+    final temp = _kanjiLists.singleWhere((list) => list == kanjiList);
     temp.kanjiStrs.remove(kanjiStr);
     repo.updateKanjiListKanjis(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -100,17 +100,17 @@ class KanjiListBloc {
 
   void addKanjiList(String listName) {
     while (_kanjiLists.containsWhere((e) => e.name == listName) == true) {
-      var regex = RegExp(r' [0-9]*$');
-      var match = regex.firstMatch(listName);
+      final regex = RegExp(r' [0-9]*$');
+      final match = regex.firstMatch(listName);
       if (regex.hasMatch(listName)) {
-        var num = int.parse(match.group(0)) + 1;
+        final num = int.parse(match.group(0)) + 1;
         listName = listName.replaceRange(
             listName.length - 1, listName.length, num.toString());
       } else {
         listName = listName.trim() + " 1";
       }
     }
-    var temp = KanjiList(name: listName, kanjiStrs: []);
+    final temp = KanjiList(name: listName, kanjiStrs: []);
     _kanjiLists.add(temp);
     repo.addKanjiList(temp);
     if (!_kanjiListsFetcher.isClosed) _kanjiListsFetcher.sink.add(_kanjiLists);
@@ -135,9 +135,9 @@ class KanjiListBloc {
     if (_kanjiLists == null) init();
     for (var list in kanjiLists) {
       if (_kanjiLists.contains(list)) {
-        var remoteKanjis = list.kanjiStrs;
-        var localKanjis = _kanjiLists.singleWhere((e) => e == list).kanjiStrs;
-        var mergedKanjis = [...remoteKanjis, ...localKanjis].toSet().toList();
+        final remoteKanjis = list.kanjiStrs;
+        final localKanjis = _kanjiLists.singleWhere((e) => e == list).kanjiStrs;
+        final mergedKanjis = [...remoteKanjis, ...localKanjis].toSet().toList();
         list.kanjiStrs = mergedKanjis;
 
         repo.deleteKanjiList(list);

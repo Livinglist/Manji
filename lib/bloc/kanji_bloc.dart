@@ -66,7 +66,7 @@ class KanjiBloc {
   Map<String, Kanji> get allKanjisMap => _allKanjisMap;
 
   void getRandomKanji() {
-    var ran = Random(DateTime.now().millisecond);
+    final ran = Random(DateTime.now().millisecond);
     if (!_randomKanjiFetcher.isClosed) {
       Kanji kanji;
       do {
@@ -99,7 +99,7 @@ class KanjiBloc {
 
   void fetchKanjisByJLPTLevel(JLPTLevel jlptLevel) {
     Future<List<Kanji>>(() {
-      var targetKanjis = _allKanjisMap.values
+      final targetKanjis = _allKanjisMap.values
           .where((kanji) => kanji.jlptLevel == jlptLevel)
           .toList();
       return targetKanjis;
@@ -128,12 +128,12 @@ class KanjiBloc {
         _allKanjisFetcher.sink.add(_allKanjisMap.values.toList());
         getRandomKanji();
 
-        var allFavKanjiStrs = repo.getAllFavKanjiStrs();
+        final allFavKanjiStrs = repo.getAllFavKanjiStrs();
         _allFavKanjisMap = Map.fromEntries(
             allFavKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
         _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
 
-        var allStarKanjiStrs = repo.getAllStarKanjiStrs();
+        final allStarKanjiStrs = repo.getAllStarKanjiStrs();
         _allStarKanjisMap = Map.fromEntries(
             allStarKanjiStrs.map((str) => MapEntry(str, _allKanjisMap[str])));
         _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());
@@ -168,11 +168,11 @@ class KanjiBloc {
   }
 
   void getSentencesByKanji(String kanjiStr) async {
-    var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
+    final jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
-      var list = (jsonDecode(jsonStr) as List).cast<String>();
+      final list = (jsonDecode(jsonStr) as List).cast<String>();
       //var sentences = list.sublist(0 + 10 * currentPortion, 10 + 10 * currentPortion).map((str) => Sentence.fromJsonString(str)).toList();
-      var sentences = await jsonToSentences(
+      final sentences = await jsonToSentences(
           list.sublist(0, list.length < 5 ? list.length : 5));
 
       list.removeRange(0, list.length < 5 ? list.length : 5);
@@ -188,7 +188,7 @@ class KanjiBloc {
   }
 
   void getMoreSentencesByKanji() async {
-    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
+    final sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
         _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
 
     _unloadedSentencesStr.removeRange(0,
@@ -208,9 +208,9 @@ class KanjiBloc {
   }
 
   void getKanjiInfoByKanjiStr(String kanjiStr) {
-    var fetcher = BehaviorSubject<Kanji>();
+    final fetcher = BehaviorSubject<Kanji>();
     _singleKanjiFetchers.add(fetcher);
-    var kanji = _allKanjisMap[kanjiStr];
+    final kanji = _allKanjisMap[kanjiStr];
     if (kanji != null && !_singleKanjiFetchers.last.isClosed)
       _singleKanjiFetchers.last.add(kanji);
     else
@@ -228,7 +228,7 @@ class KanjiBloc {
   }
 
   void addFav(String kanjiStr) {
-    var allFav = _allFavKanjisMap.keys.toList();
+    final allFav = _allFavKanjisMap.keys.toList();
     if (allFav.contains(kanjiStr) == false) {
       _allFavKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
       _allFavKanjisFetcher.sink.add(_allFavKanjisMap.values.toList());
@@ -255,7 +255,7 @@ class KanjiBloc {
   }
 
   void addStar(String kanjiStr) {
-    var allStar = _allStarKanjisMap.keys.toList();
+    final allStar = _allStarKanjisMap.keys.toList();
     if (allStar.contains(kanjiStr) == false) {
       _allStarKanjisMap[kanjiStr] = _allKanjisMap[kanjiStr];
       _allStarKanjisFetcher.sink.add(_allStarKanjisMap.values.toList());

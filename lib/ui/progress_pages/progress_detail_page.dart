@@ -63,11 +63,11 @@ class _ProgressDetailPageState extends State<ProgressDetailPage> {
             title: Text(widget.title),
             actions: <Widget>[
               Padding(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   child: Center(
                       child: Text(
                           '${widget.totalStudied}/${widget.kanjis.length}',
-                          style: TextStyle(fontSize: 18))))
+                          style: const TextStyle(fontSize: 18))))
             ]),
         body: ListView.separated(
             controller: scrollController,
@@ -75,7 +75,7 @@ class _ProgressDetailPageState extends State<ProgressDetailPage> {
               return KanjiProgressListTile(
                   kanji: widget.kanjis.elementAt(index));
             },
-            separatorBuilder: (_, index) => Divider(height: 0),
+            separatorBuilder: (_, index) => const Divider(height: 0),
             itemCount: widget.kanjis.length));
   }
 }

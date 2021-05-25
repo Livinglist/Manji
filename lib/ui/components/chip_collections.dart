@@ -16,10 +16,10 @@ class GradeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Container(
         child: Padding(
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             child: Text(
               label,
               style: textStyle,
@@ -27,7 +27,7 @@ class GradeChip extends StatelessWidget {
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
           color: this.color,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),
         ),
@@ -72,10 +72,10 @@ class StrokeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Container(
         child: Padding(
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             child: Text(
               label,
               style: TextStyle(
@@ -84,7 +84,7 @@ class StrokeChip extends StatelessWidget {
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
           color: this.color,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),
         ),
@@ -111,10 +111,10 @@ class JLPTChip extends StatelessWidget {
   Widget build(BuildContext context) {
     if (jlpt == 0) return Container();
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Container(
         child: Padding(
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             child: Text(
               label,
               style: TextStyle(
@@ -123,7 +123,7 @@ class JLPTChip extends StatelessWidget {
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
           color: this.color,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),
         ),

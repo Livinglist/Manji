@@ -14,13 +14,13 @@ class ActivityPanel extends StatelessWidget {
   }
 
   Widget buildView(BuildContext context) {
-    double width = MediaQuery.of(context).size.width / 40;
+    final width = MediaQuery.of(context).size.width / 40;
     return FutureBuilder(
       future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(
           convertTimeStampsToDateTimeMap, KanjiBloc.instance.allKanjisList),
       builder: (_, AsyncSnapshot<Map<DateTime, List<Kanji>>> snapshot) {
         if (snapshot.hasData) {
-          var map = snapshot.data;
+          final map = snapshot.data;
           ActivityPanel.data = map;
           return Material(
               child: InkWell(
@@ -32,16 +32,16 @@ class ActivityPanel extends StatelessWidget {
               height: 120,
               child: GridView.count(
                   controller: scrollController,
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   childAspectRatio: 1,
                   crossAxisSpacing: 2,
                   mainAxisSpacing: 2,
                   scrollDirection: Axis.horizontal,
                   crossAxisCount: 10,
                   children: Iterable.generate(316, (index) {
-                    var d =
+                    final d =
                         DateTime.now().subtract(Duration(days: 315 - index));
-                    var date = DateTime(d.year, d.month, d.day);
+                    final date = DateTime(d.year, d.month, d.day);
                     if (map.containsKey(date)) {
                       return Material(
                         elevation: 2,
@@ -72,7 +72,7 @@ class ActivityPanel extends StatelessWidget {
 }
 
 Map<DateTime, List<Kanji>> convertTimeStampsToDateTimeMap(List<Kanji> kanjis) {
-  var map = Map<DateTime, List<Kanji>>();
+  final map = Map<DateTime, List<Kanji>>();
   for (var kanji in kanjis) {
     for (var timeStamp in kanji.timeStamps) {
       var dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).toLocal();

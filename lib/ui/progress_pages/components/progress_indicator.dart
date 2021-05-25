@@ -27,11 +27,11 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
   @override
   Widget build(BuildContext context) {
     if (values != null) {
-      var children = <Widget>[];
+      final children = <Widget>[];
 
       for (var studiedTimes in values.keys.toList()
         ..sort((a, b) => a.compareTo(b))) {
-        var color = Colors.blueGrey[min(800, 100 + 100 * studiedTimes)];
+        final color = Colors.blueGrey[min(800, 100 + 100 * studiedTimes)];
         children.add(LinearProgressIndicator(
             backgroundColor: Colors.transparent,
             valueColor: AlwaysStoppedAnimation<Color>(color),

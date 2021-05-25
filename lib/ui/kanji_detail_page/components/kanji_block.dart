@@ -40,7 +40,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       videoController.value.duration &&
                   isPlaying) {
                 videoController.pause();
-                videoController.seekTo(Duration(seconds: 0));
+                videoController.seekTo(const Duration(seconds: 0));
 
                 setState(() {
                   isPlaying = false;
@@ -77,7 +77,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                       color: Colors.transparent,
                       child: Text(
                         widget.kanjiStr,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'strokeOrders', fontSize: 128),
                         textScaleFactor: widget.scaleFactor,
                         textAlign: TextAlign.center,
@@ -90,7 +90,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
           Positioned.fill(
               child: Center(
                   child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: FutureBuilder(
               future: videoController.initialize(),
               builder: (_, snapshot) {
@@ -126,7 +126,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
                                 videoController.play();
                               });
                             },
-                            child: Icon(Icons.play_arrow)),
+                            child: const Icon(Icons.play_arrow)),
                       ))))
       ],
     );

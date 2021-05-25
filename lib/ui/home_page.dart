@@ -55,7 +55,7 @@ class HomePageState extends State<HomePage>
     kanaBloc.init();
     KanjiListBloc.instance.init();
     animationController = AnimationController(
-        vsync: this, value: 1, duration: Duration(seconds: 1));
+        vsync: this, value: 1, duration: const Duration(seconds: 1));
 
     //FeatureDiscovery.clearPreferences(context, <String>{ 'kanji_recognition', 'kanji_extraction' });
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
@@ -67,7 +67,7 @@ class HomePageState extends State<HomePage>
 
     super.initState();
 
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         opacity = 1;
       });
@@ -75,7 +75,7 @@ class HomePageState extends State<HomePage>
 
     SiriSuggestionBloc.instance.siriSuggestion.listen((kanjiStr) {
       if (kanjiStr != null) {
-        var kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
+        final kanji = KanjiBloc.instance.allKanjisMap[kanjiStr];
         Navigator.push(context,
             MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
       }
@@ -98,17 +98,18 @@ class HomePageState extends State<HomePage>
     return showCupertinoModalPopup<ImageSource>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Choose an image to detect kanji from"),
+              message: const Text("Choose an image to detect kanji from"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, null);
                 },
               ),
               actions: <Widget>[
                 CupertinoActionSheetAction(
-                  child: Text('Camera', style: TextStyle(color: Colors.blue)),
+                  child: const Text('Camera',
+                      style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     return Permission.camera.status.then((status) {
                       if (status.isGranted) {
@@ -130,7 +131,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 CupertinoActionSheetAction(
-                  child: Text('Gallery', style: TextStyle(color: Colors.blue)),
+                  child: const Text('Gallery',
+                      style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     return Permission.photos.status.then((status) {
                       if (status.isGranted) {
@@ -159,7 +161,7 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     final subtitleStyle = TextStyle(
         color: Theme.of(context).primaryColor == Colors.black
             ? Colors.white60
@@ -177,19 +179,19 @@ class HomePageState extends State<HomePage>
               tapTarget: IconButton(
                   onPressed: null,
                   icon: Transform.translate(
-                      offset: Offset(0, -1.5),
-                      child: Icon(FontAwesomeIcons.edit, size: 20))),
+                      offset: const Offset(0, -1.5),
+                      child: const Icon(FontAwesomeIcons.edit, size: 20))),
               // The widget that will be displayed as the tap target.
-              title: Text('Write it down'),
-              description: Text(
+              title: const Text('Write it down'),
+              description: const Text(
                   'Write down the kanji and Manji will tell you what kanji it is.'),
               backgroundColor: Theme.of(context).primaryColor,
               targetColor: Colors.white,
               textColor: Colors.white,
               child: IconButton(
                   icon: Transform.translate(
-                      offset: Offset(0, -1.5),
-                      child: Icon(FontAwesomeIcons.edit, size: 20)),
+                      offset: const Offset(0, -1.5),
+                      child: const Icon(FontAwesomeIcons.edit, size: 20)),
                   onPressed: () {
                     focusNode.unfocus();
                     Navigator.push(
@@ -204,22 +206,22 @@ class HomePageState extends State<HomePage>
                 tapTarget: IconButton(
                     onPressed: null,
                     icon: Transform.rotate(
-                        angle: pi / 2, child: Icon(Icons.flip))),
-                title: Text('Look it up'),
-                description: Text(
+                        angle: pi / 2, child: const Icon(Icons.flip))),
+                title: const Text('Look it up'),
+                description: const Text(
                     'Upload an image and all the kanji on it will be extracted.'),
                 backgroundColor: Theme.of(context).primaryColor,
                 targetColor: Colors.white,
                 textColor: Colors.white,
                 child: IconButton(
-                  icon:
-                      Transform.rotate(angle: pi / 2, child: Icon(Icons.flip)),
+                  icon: Transform.rotate(
+                      angle: pi / 2, child: const Icon(Icons.flip)),
                   onPressed: () {
                     focusNode.unfocus();
                     Connectivity().checkConnectivity().then((val) {
                       if (val == ConnectivityResult.none) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
+                          content: const Text(
                             'Text Recognition requires access to Internet',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -243,7 +245,7 @@ class HomePageState extends State<HomePage>
                   },
                 )),
           ],
-          title: Text('Manji'),
+          title: const Text('Manji'),
           elevation: 0,
         ),
         drawer: DrawerListener(
@@ -258,11 +260,12 @@ class HomePageState extends State<HomePage>
                 : Colors.grey[600],
             child: Column(
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 ListTile(
-                  title: Text('仮名', style: TextStyle(color: Colors.white)),
+                  title:
+                      const Text('仮名', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Kana', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(
@@ -270,8 +273,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title:
-                      Text('日本語能力試験漢字', style: TextStyle(color: Colors.white)),
+                  title: const Text('日本語能力試験漢字',
+                      style: TextStyle(color: Colors.white)),
                   subtitle: Text('JLPT Kanji', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(context,
@@ -279,7 +282,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title: Text('教育漢字', style: TextStyle(color: Colors.white)),
+                  title:
+                      const Text('教育漢字', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Kyōiku Kanji', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(
@@ -289,7 +293,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title: Text('収蔵した漢字', style: TextStyle(color: Colors.white)),
+                  title: const Text('収蔵した漢字',
+                      style: TextStyle(color: Colors.white)),
                   subtitle: Text('Favorite Kanji', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(context,
@@ -297,19 +302,21 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title: Text('漢字リスト', style: TextStyle(color: Colors.white)),
+                  title: const Text('漢字リスト',
+                      style: TextStyle(color: Colors.white)),
                   subtitle: Text('Kanji Lists', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => MyListPage()));
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Divider(color: Colors.white60, height: 0),
                 ),
                 ListTile(
-                  title: Text('進度', style: TextStyle(color: Colors.white)),
+                  title:
+                      const Text('進度', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Progress', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(context,
@@ -317,7 +324,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title: Text('クイズ', style: TextStyle(color: Colors.white)),
+                  title:
+                      const Text('クイズ', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Quiz', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(
@@ -325,7 +333,8 @@ class HomePageState extends State<HomePage>
                   },
                 ),
                 ListTile(
-                  title: Text('設定', style: TextStyle(color: Colors.white)),
+                  title:
+                      const Text('設定', style: TextStyle(color: Colors.white)),
                   subtitle: Text('Settings', style: subtitleStyle),
                   onTap: () {
                     Navigator.push(context,
@@ -363,7 +372,7 @@ class HomePageState extends State<HomePage>
                   right: Device.get().isTablet ? (width < 505 ? 22 : 256) : 22,
                   child: Center(
                     child: Container(
-                        decoration: BoxDecoration(boxShadow: [
+                        decoration: const BoxDecoration(boxShadow: [
                           BoxShadow(color: Colors.black54, blurRadius: 8)
                         ], shape: BoxShape.rectangle, color: Colors.white),
                         height: 42,
@@ -376,10 +385,10 @@ class HomePageState extends State<HomePage>
                             Material(
                               color: Colors.transparent,
                               child: textEditingController.text.isEmpty
-                                  ? IconButton(
+                                  ? const IconButton(
                                       icon: Icon(Icons.search), onPressed: null)
                                   : IconButton(
-                                      icon: Icon(Icons.close),
+                                      icon: const Icon(Icons.close),
                                       onPressed: () {
                                         setState(() {
                                           textEditingController.clear();
@@ -394,8 +403,9 @@ class HomePageState extends State<HomePage>
                                 controller: textEditingController,
                                 cursorWidth: 1,
                                 cursorColor: Theme.of(context).primaryColor,
-                                cursorRadius: Radius.circular(1),
-                                decoration: InputDecoration(hintText: 'Find'),
+                                cursorRadius: const Radius.circular(1),
+                                decoration:
+                                    const InputDecoration(hintText: 'Find'),
                                 focusNode: focusNode,
                                 onTap: () {
                                   setState(() {
@@ -454,10 +464,10 @@ class HomePageState extends State<HomePage>
                     stream: searchBloc.results,
                     builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                       if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                        var kanjis = snapshot.data;
+                        final kanjis = snapshot.data;
                         return Container(
                             decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       color: Colors.black54, blurRadius: 8)
                                 ],
@@ -485,7 +495,7 @@ class HomePageState extends State<HomePage>
   }
 
   void onSearchPressed() {
-    String text = textEditingController.text;
+    final text = textEditingController.text;
     if (text.length == 1 && KanjiBloc.instance.allKanjisMap.containsKey(text)) {
       Navigator.push(
           context,
@@ -545,7 +555,7 @@ class _DrawerListenerState extends State<DrawerListener> {
       if (widget.onPositionChange != null) {
         final RenderBox box = _drawerKey.currentContext?.findRenderObject();
         if (box != null) {
-          Offset newOffset = box.globalToLocal(Offset.zero);
+          final newOffset = box.globalToLocal(Offset.zero);
           if (newOffset != currentOffset) {
             currentOffset = newOffset;
             widget.onPositionChange(
@@ -566,7 +576,7 @@ class _DrawerListenerState extends State<DrawerListener> {
   void dispose() {
     SchedulerBinding.instance.cancelFrameCallbackWithId(taskID);
     if (widget.onPositionChange != null) {
-      widget.onPositionChange(FractionalOffset(1.0, 0));
+      widget.onPositionChange(const FractionalOffset(1.0, 0));
     }
     super.dispose();
   }

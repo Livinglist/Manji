@@ -17,7 +17,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  static final actionTextStyle = TextStyle(color: Colors.blue);
+  static const actionTextStyle = TextStyle(color: Colors.blue);
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool showShadow = false;
@@ -49,11 +49,11 @@ class _QuizPageState extends State<QuizPage> {
         key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          title: Text('クイズ'),
+          title: const Text('クイズ'),
           elevation: showShadow ? 8 : 0,
           actions: <Widget>[
             Padding(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: Container(
                   height: kToolbarHeight,
                   child: StreamBuilder(
@@ -63,14 +63,14 @@ class _QuizPageState extends State<QuizPage> {
                           return Center(
                             child: Text(snapshot.data.length.toString(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
+                                style: const TextStyle(fontSize: 20)),
                           );
                         }
                         return Container();
                       }),
                 )),
             IconButton(
-              icon: Icon(FontAwesomeIcons.backpack),
+              icon: const Icon(FontAwesomeIcons.backpack),
               onPressed: () {
                 Navigator.push(
                     context,
@@ -84,9 +84,9 @@ class _QuizPageState extends State<QuizPage> {
           stream: KanjiListBloc.instance.kanjiLists,
           builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
             if (snapshot.hasData) {
-              var kanjiLists = snapshot.data;
+              final kanjiLists = snapshot.data;
 
-              var children = buildChildren(kanjiLists);
+              final children = buildChildren(kanjiLists);
 
               return ListView(
                 controller: scrollController,
@@ -98,7 +98,7 @@ class _QuizPageState extends State<QuizPage> {
                       runSpacing: 12,
                       spacing: 12,
                       children: <Widget>[
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         for (var n in [5, 4, 3, 2, 1])
                           ActionChip(
                               elevation: 4,
@@ -112,14 +112,14 @@ class _QuizPageState extends State<QuizPage> {
                     Container(
                       height: 200,
                       width: MediaQuery.of(context).size.width,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Your own lists will also show up here (´・ω・`)',
                           style: TextStyle(color: Colors.white70),
                         ),
                       ),
                     ),
-                  if (children.isNotEmpty) Divider(height: 0),
+                  if (children.isNotEmpty) const Divider(height: 0),
                   ...children
                 ],
               );
@@ -132,12 +132,12 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Widget> buildChildren(List<KanjiList> kanjiLists) {
     if (kanjiLists.isEmpty) return [];
-    var children = <Widget>[];
-    for (var kanjiList in kanjiLists) {
+    final children = <Widget>[];
+    for (final kanjiList in kanjiLists) {
       children.add(ListTile(
         title: Text(
           kanjiList.name,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         subtitle: Text(
           '${kanjiList.kanjiCount} Kanji',
@@ -159,7 +159,7 @@ class _QuizPageState extends State<QuizPage> {
                 .showSnackBar(WarningSnackBar(message: "List is empty."));
         },
       ));
-      children.add(Divider(height: 0));
+      children.add(const Divider(height: 0));
     }
 
     children.removeLast();
@@ -186,23 +186,23 @@ class _QuizPageState extends State<QuizPage> {
                   child: Text("All of N$jlpt Kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onJLPTAmountPressed(jlpt, 100),
-                  child: Text("100 kanji", style: actionTextStyle)),
+                  child: const Text("100 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onJLPTAmountPressed(jlpt, 50),
-                  child: Text("50 kanji", style: actionTextStyle)),
+                  child: const Text("50 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onJLPTAmountPressed(jlpt, 20),
-                  child: Text("20 kanji", style: actionTextStyle)),
+                  child: const Text("20 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onJLPTAmountPressed(jlpt, 10),
-                  child: Text("10 kanji", style: actionTextStyle)),
+                  child: const Text("10 kanji", style: actionTextStyle)),
             ],
             cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel", style: actionTextStyle)),
+                child: const Text("Cancel", style: actionTextStyle)),
           );
         });
   }
@@ -239,33 +239,33 @@ class _QuizPageState extends State<QuizPage> {
               if (kanjis.length >= 100)
                 CupertinoActionSheetAction(
                     onPressed: () => onAmountPressed(100, kanjis),
-                    child: Text("100 kanji", style: actionTextStyle)),
+                    child: const Text("100 kanji", style: actionTextStyle)),
               if (kanjis.length >= 50)
                 CupertinoActionSheetAction(
                     onPressed: () => onAmountPressed(50, kanjis),
-                    child: Text("50 kanji", style: actionTextStyle)),
+                    child: const Text("50 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onAmountPressed(20, kanjis),
-                  child: Text("20 kanji", style: actionTextStyle)),
+                  child: const Text("20 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onAmountPressed(10, kanjis),
-                  child: Text("10 kanji", style: actionTextStyle)),
+                  child: const Text("10 kanji", style: actionTextStyle)),
             ],
             cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel", style: actionTextStyle)),
+                child: const Text("Cancel", style: actionTextStyle)),
           );
         });
   }
 
   void onAmountPressed(int amount, List<Kanji> kanjis) {
     Navigator.pop(context);
-    var start = Random(DateTime.now().millisecondsSinceEpoch)
+    final start = Random(DateTime.now().millisecondsSinceEpoch)
         .nextInt(kanjis.length - amount);
-    var temp = kanjis.sublist(start, start + amount);
+    final temp = kanjis.sublist(start, start + amount);
     Navigator.push(context,
         MaterialPageRoute(builder: (_) => QuizDetailPage(kanjis: temp)));
   }

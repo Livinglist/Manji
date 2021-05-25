@@ -30,7 +30,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   Future getImage() async {
     if (imageSource == null) return;
 
-    var image =
+    final image =
         await ImagePicker.pickImage(source: imageSource, imageQuality: 85);
 
     if (image == null) {
@@ -42,8 +42,8 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
       didChooseImage = true;
     });
 
-    var bytes = await image.readAsBytes();
-    var base64Str = base64Encode(bytes);
+    final bytes = await image.readAsBytes();
+    final base64Str = base64Encode(bytes);
 
     textRecognizeBloc.extractTextFromImage(base64Str);
   }
@@ -52,23 +52,25 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
     return showCupertinoModalPopup<ImageSource>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Choose an image to detect kanji from"),
+              message: const Text("Choose an image to detect kanji from"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, null);
                 },
               ),
               actions: <Widget>[
                 CupertinoActionSheetAction(
-                  child: Text('Camera', style: TextStyle(color: Colors.blue)),
+                  child: const Text('Camera',
+                      style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     Navigator.pop(context, ImageSource.camera);
                   },
                 ),
                 CupertinoActionSheetAction(
-                  child: Text('Gallery', style: TextStyle(color: Colors.blue)),
+                  child: const Text('Gallery',
+                      style: TextStyle(color: Colors.blue)),
                   onPressed: () {
                     Navigator.pop(context, ImageSource.gallery);
                   },
@@ -123,15 +125,15 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
         Widget body;
 
         if (!didChooseImage) {
-          body = Center(
+          body = const Center(
               child: Text(
             "Choose an image first.",
             style: TextStyle(color: Colors.white70),
           ));
         } else if (!snapshot.hasData) {
-          body = Center(child: CircularProgressIndicator());
+          body = const Center(child: CircularProgressIndicator());
         } else if (text.isEmpty || kanjis.isEmpty) {
-          body = Center(
+          body = const Center(
               child: Text("No kanji was found in the image.",
                   style: TextStyle(color: Colors.white70)));
         } else {
@@ -142,25 +144,25 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
               children: <Widget>[
                 Text(
                   text,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 8, left: 20),
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
                     child: Text(
                       "Found ${kanjis.length} kanji in the image:",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                 ),
                 showGrid
                     ? KanjiGridView(
                         kanjis: kanjis,
-                        scrollPhysics: NeverScrollableScrollPhysics())
+                        scrollPhysics: const NeverScrollableScrollPhysics())
                     : KanjiListView(
                         kanjis: kanjis,
-                        scrollPhysics: NeverScrollableScrollPhysics())
+                        scrollPhysics: const NeverScrollableScrollPhysics())
               ],
             ),
           );
@@ -173,18 +175,18 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
               if (didChooseImage && snapshot.hasData)
                 IconButton(
                   icon: AnimatedCrossFade(
-                    firstChild: Icon(
+                    firstChild: const Icon(
                       Icons.view_headline,
                       color: Colors.white,
                     ),
-                    secondChild: Icon(
+                    secondChild: const Icon(
                       Icons.view_comfy,
                       color: Colors.white,
                     ),
                     crossFadeState: showGrid
                         ? CrossFadeState.showFirst
                         : CrossFadeState.showSecond,
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                   ),
                   onPressed: () {
                     setState(() {
@@ -200,7 +202,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
                 Token(text: '漢字', furigana: 'かんじ'),
                 Token(text: '認識', furigana: 'にんしき'),
               ],
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             elevation: showShadow ? 8 : 0,
           ),
@@ -214,7 +216,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
               }
             }),
             tooltip: 'Pick Image',
-            child: Icon(Icons.add_a_photo),
+            child: const Icon(Icons.add_a_photo),
           ),
         );
       },

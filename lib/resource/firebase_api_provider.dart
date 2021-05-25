@@ -22,8 +22,8 @@ class FirebaseApiProvider {
   }
 
   Future uploadKanji(Kanji kanji, {bool overwrite = false}) async {
-    var docRef = firestore.collection('kanjis').doc(kanji.kanji);
-    var snapshot = await docRef.get();
+    final docRef = firestore.collection('kanjis').doc(kanji.kanji);
+    final snapshot = await docRef.get();
     if (!snapshot.exists || overwrite) {
       docRef.set({
         'grade': kanji.grade,
@@ -60,7 +60,7 @@ class FirebaseApiProvider {
   @Deprecated(
       'Use this only for scripting. Do not use this in the released app.')
   void fetchAllSentencesFromJishoByAllKanjis() async {
-    List<String> kanjiStrs = KanjiBloc.instance.allKanjisList
+    final List<String> kanjiStrs = KanjiBloc.instance.allKanjisList
         .expand((element) => [
               ...element.kunyomiWords
                   .where((element) => element.wordText.length > 1)
@@ -139,15 +139,14 @@ class FirebaseApiProvider {
   }
 
   Stream<Sentence> fetchAllSentencesFromFirestore() async* {
-    var kanjiQuerySnapshot = await firestore.collection('sentences').get();
+    final kanjiQuerySnapshot = await firestore.collection('sentences').get();
     for (var kanjiDoc in kanjiQuerySnapshot.docs) {
-      String kanjiStr = kanjiDoc.id;
-      print("the kanji is $kanjiStr");
-      var sentenceQuerySnapshot =
+      final String kanjiStr = kanjiDoc.id;
+      final sentenceQuerySnapshot =
           await kanjiDoc.reference.collection('sentences').get();
       for (var sentenceDoc in sentenceQuerySnapshot.docs) {
-        var map = sentenceDoc.data();
-        Sentence sentence = Sentence.fromMap(map);
+        final map = sentenceDoc.data();
+        final Sentence sentence = Sentence.fromMap(map);
         sentence.kanji = kanjiStr;
         yield sentence;
       }
@@ -160,8 +159,8 @@ class FirebaseApiProvider {
     JishoApiProvider()
         .fetchAllSentencesByKanjis(kanjis.map((kanji) => kanji.kanji).toList())
         .listen((lis) async {
-      var kanjiStr = lis[0];
-      var sentence = lis[1];
+      final kanjiStr = lis[0];
+      final sentence = lis[1];
       //print('I am listening: ${sentence.text}');
       firestore
           .collection('sentences')
@@ -180,8 +179,8 @@ class FirebaseApiProvider {
 
   ///Used to fetch kanjis that has been loaded to firebase and local db
   Future checkForUpdate(Map<String, Kanji> allLocalKanjis) async {
-    var querySnapshot = await firestore.collection('update').get();
-    var updateKanjis = <String>[];
+    final querySnapshot = await firestore.collection('update').get();
+    final updateKanjis = <String>[];
     for (var id in querySnapshot.docs.map((doc) => doc.id).toList()) {
       if (!allLocalKanjis.containsKey(id) || id == '伺') {
         updateKanjis.add(id);
@@ -198,7 +197,7 @@ class FirebaseApiProvider {
   ///fetch from Jisho, load to firestore and local database
   Future downloadKanjis(List<String> kanjiStrs) async {
     for (var kanjiStr in kanjiStrs) {
-      var kanji = await jishoApiProvider.fetchKanjiInfo(kanjiStr);
+      final kanji = await jishoApiProvider.fetchKanjiInfo(kanjiStr);
       DBProvider.db.addKanji(kanji);
       await uploadKanji(kanji);
     }
@@ -206,10 +205,10 @@ class FirebaseApiProvider {
 
   @Deprecated('Used for scripting')
   Future downloadAllKanjis() async {
-    var kanjis = <Kanji>[];
+    final kanjis = <Kanji>[];
     firestore.collection('kanjis').get().then((querySnapshot) {
       for (var snap in querySnapshot.docs) {
-        var kanji = Kanji.fromMap(snap.data());
+        final kanji = Kanji.fromMap(snap.data());
         print(kanji.kanji);
         kanjis.add(kanji);
       }
@@ -219,7 +218,8 @@ class FirebaseApiProvider {
 
   ///TODO: need to test whether the old and new list merge
   Future uploadUserModifiedKanji(Kanji kanji) async {
-    var snap = await firestore.collection('userUpdates').doc(kanji.kanji).get();
+    final snap =
+        await firestore.collection('userUpdates').doc(kanji.kanji).get();
 
     if (snap.exists) {
       firestore.collection('userUpdates').doc(kanji.kanji).update({
@@ -245,7 +245,7 @@ class FirebaseApiProvider {
   }
 
   Future fetchUpdates() async {
-    var prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     var localVersionNum = prefs.getInt(versionKey);
 
     if (localVersionNum == null) {
@@ -254,18 +254,18 @@ class FirebaseApiProvider {
     }
 
     //To store the kanji that has already been updated
-    List<String> updatedKanjiStrs = <String>[];
+    final List<String> updatedKanjiStrs = <String>[];
 
     var snap = await firestore.collection('updates').doc('version').get();
-    var versionNum = snap.data()['versionNum'];
+    final versionNum = snap.data()['versionNum'];
     if (versionNum > localVersionNum) {
       for (int i = localVersionNum + 1; i <= versionNum; i++) {
         snap = await firestore.collection('updates').doc(i.toString()).get();
-        var kanjis = snap.data()['kanjis'] as List;
+        final kanjis = snap.data()['kanjis'] as List;
         for (var kanjiStr in kanjis) {
           if (updatedKanjiStrs.contains(kanjiStr)) continue;
-          var localKanji = await DBProvider.db.getSingleKanji(kanjiStr);
-          var firestoreKanji = Kanji.fromMap(
+          final localKanji = await DBProvider.db.getSingleKanji(kanjiStr);
+          final firestoreKanji = Kanji.fromMap(
               (await firestore.collection('kanjis').doc(kanjiStr).get())
                   .data());
           localKanji.kunyomiWords.addAll(firestoreKanji.kunyomiWords);
@@ -282,8 +282,8 @@ class FirebaseApiProvider {
       (await getLocalVersion()) == (await getFirebaseVersion());
 
   Future<int> getLocalVersion() async {
-    var prefs = await SharedPreferences.getInstance();
-    var localVersionNum = prefs.getInt(versionKey);
+    final prefs = await SharedPreferences.getInstance();
+    final localVersionNum = prefs.getInt(versionKey);
     return localVersionNum ?? 0;
   }
 

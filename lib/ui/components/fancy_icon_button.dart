@@ -39,15 +39,15 @@ class FancyIconButtonState extends State<FancyIconButton>
         ? ColorTween(begin: widget.color, end: Colors.white)
         : ColorTween(begin: Colors.white, end: widget.color);
 
-    animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-          ..addListener(() {
-            if (animationController.isAnimating) {
-              setState(() {
-                icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
-              });
-            }
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200))
+      ..addListener(() {
+        if (animationController.isAnimating) {
+          setState(() {
+            icon = isFaved ? Icon(widget.icon) : Icon(widget.iconBorder);
           });
+        }
+      });
     //animationController.forward();
     super.initState();
   }

@@ -58,11 +58,11 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
           elevation: showShadow ? 8 : 0,
           actions: [
             IconButton(
-              icon: Icon(Icons.volume_up),
+              icon: const Icon(Icons.volume_up),
               onPressed: () => flutterTts.speak(widget.sentence.text),
             ),
             IconButton(
-              icon: Icon(Icons.playlist_add, size: 28),
+              icon: const Icon(Icons.playlist_add, size: 28),
               onPressed: onAddPressed,
             ),
           ],
@@ -72,18 +72,19 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: FuriganaText(
                   text: widget.sentence.text,
                   tokens: widget.sentence.tokens,
-                  style: TextStyle(fontSize: 22),
+                  style: const TextStyle(fontSize: 22),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: Text(
                   widget.sentence.englishText,
-                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
               for (var kanji in widget.sentence.text
@@ -92,7 +93,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                   .toList()
                     ..removeWhere((e) => e == null))
                 KanjiListTile(kanji: kanji),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               )
             ],
@@ -108,18 +109,18 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Material(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
                     builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
                       if (snapshot.hasData) {
-                        var kanjiLists = snapshot.data;
+                        final kanjiLists = snapshot.data;
 
                         if (kanjiLists.isEmpty) {
                           return Container(
                             height: 200,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "You don't have any list yet.",
                                 style: TextStyle(color: Colors.black54),
@@ -131,7 +132,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                         return ListView.separated(
                             shrinkWrap: true,
                             itemBuilder: (_, index) {
-                              var kanjiList = kanjiLists[index];
+                              final kanjiList = kanjiLists[index];
 
                               var subtitle = '';
 
@@ -163,7 +164,8 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
 
                               return ListTile(
                                 title: Text(kanjiLists[index].name,
-                                    style: TextStyle(color: Colors.black)),
+                                    style:
+                                        const TextStyle(color: Colors.black)),
                                 subtitle: Text(subtitle),
                                 onTap: () {
                                   Navigator.pop(context);
@@ -175,7 +177,8 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                                       .showSnackBar(SnackBar(
                                     content: Text(
                                       'This sentence has been added to ${kanjiList.name}',
-                                      style: TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     backgroundColor:
                                         Theme.of(context).accentColor,
@@ -190,7 +193,8 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                                 },
                               );
                             },
-                            separatorBuilder: (_, index) => Divider(height: 0),
+                            separatorBuilder: (_, index) =>
+                                const Divider(height: 0),
                             itemCount: kanjiLists.length);
                       } else {
                         return Container();
@@ -203,7 +207,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
   }
 
   List<String> getKanjis(List<Token> tokens) {
-    var kanjis = <String>[];
+    final kanjis = <String>[];
     for (var token in tokens) {
       for (int i = 0; i < token.text.length; i++) {
         if (token.text.codeUnitAt(i) > 12543) {
@@ -215,15 +219,15 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
   }
 
   List<Kanji> getKanjiInfos(List<Token> tokens) {
-    var kanjiStrs = <String>[];
-    var kanjis = <Kanji>[];
+    final kanjiStrs = <String>[];
+    final kanjis = <Kanji>[];
     for (var token in tokens) {
       for (int i = 0; i < token.text.length; i++) {
-        var currentStr = token.text[i];
+        final currentStr = token.text[i];
         if (token.text.codeUnitAt(i) > 12543 &&
             !kanjiStrs.contains(currentStr)) {
           kanjiStrs.add(currentStr);
-          var kanjiInfo = KanjiBloc.instance.getKanjiInfo(currentStr);
+          final kanjiInfo = KanjiBloc.instance.getKanjiInfo(currentStr);
           if (kanjiInfo != null) kanjis.add(kanjiInfo);
         }
       }

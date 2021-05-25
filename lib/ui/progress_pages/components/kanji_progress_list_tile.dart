@@ -60,10 +60,10 @@ class KanjiProgressListTile extends StatelessWidget {
       ),
       title: Text(
           'Studied ${kanji.timeStamps.length} ${kanji.timeStamps.length <= 1 ? 'time' : 'times'}',
-          style: TextStyle(color: Colors.white)),
+          style: const TextStyle(color: Colors.white)),
       subtitle: Text(
         kanji.meaning,
-        style: TextStyle(color: Colors.grey),
+        style: const TextStyle(color: Colors.grey),
       ),
     );
   }

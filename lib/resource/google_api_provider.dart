@@ -10,9 +10,9 @@ class GoogleApiProvider {
   static Future<String> extractTextFromImage(String imgStr) async {
     print("before starting extract text from image");
     return clientViaServiceAccount(credentials, _SCOPES).then((httpClient) {
-      var vision = VisionApi(httpClient);
+      final vision = VisionApi(httpClient);
 
-      BatchAnnotateImagesRequest r = BatchAnnotateImagesRequest();
+      final r = BatchAnnotateImagesRequest();
       r.requests = [
         AnnotateImageRequest.fromJson({
           "image": {

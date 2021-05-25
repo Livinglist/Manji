@@ -72,11 +72,11 @@ class WordDetailPageState extends State<WordDetailPage> {
           elevation: showShadow ? 8 : 0,
           actions: [
             IconButton(
-              icon: Icon(Icons.volume_up),
+              icon: const Icon(Icons.volume_up),
               onPressed: () => flutterTts.speak(widget.word.wordText),
             ),
             IconButton(
-              icon: Icon(Icons.playlist_add, size: 28),
+              icon: const Icon(Icons.playlist_add, size: 28),
               onPressed: onAddPressed,
             ),
           ],
@@ -86,7 +86,8 @@ class WordDetailPageState extends State<WordDetailPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: FuriganaText(
                   text: widget.word.wordText,
                   tokens: [
@@ -94,14 +95,15 @@ class WordDetailPageState extends State<WordDetailPage> {
                         text: widget.word.wordText,
                         furigana: widget.word.wordFurigana)
                   ],
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: Text(
                   widget.word.meanings,
-                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -115,7 +117,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                           //for (var token in widget.sentence.tokens.where((token) => token.isKanji))
                           for (var kanjiStr in getKanjis(widget.word.wordText))
                             Padding(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: ClipRRect(
                                 child: Container(
                                   color: Colors.teal,
@@ -144,7 +146,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                                             builder: (_,
                                                 AsyncSnapshot<FontSelection>
                                                     snapshot) {
-                                              String kanji =
+                                              final String kanji =
                                                   getSingleKanji(kanjiStr) ??
                                                       "";
                                               if (snapshot.hasData) {
@@ -169,7 +171,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                                   ),
                                 ),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                    const BorderRadius.all(Radius.circular(30)),
                               ),
                             )
                         ],
@@ -179,12 +181,12 @@ class WordDetailPageState extends State<WordDetailPage> {
                 stream: sentenceBloc.sentences,
                 builder: (_, AsyncSnapshot<List<Sentence>> snapshot) {
                   if (snapshot.hasData) {
-                    var sentences = snapshot.data;
-                    var children = <Widget>[];
+                    final sentences = snapshot.data;
+                    final children = <Widget>[];
                     if (sentences.isEmpty) {
                       return Container(
                         height: 360,
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'No example sentences found _(┐「ε:)_',
                             style: TextStyle(color: Colors.white38),
@@ -195,19 +197,19 @@ class WordDetailPageState extends State<WordDetailPage> {
                     for (var sentence in sentences) {
                       children.add(ListTile(
                         title: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
                             child: FuriganaText(
                               markTarget: true,
                               target: widget.word.wordText,
                               text: sentence.text,
                               tokens: sentence.tokens,
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             )),
                         subtitle: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Text(
                             sentence.englishText,
-                            style: TextStyle(color: Colors.white54),
+                            style: const TextStyle(color: Colors.white54),
                           ),
                         ),
                         onTap: () {
@@ -219,7 +221,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                                       )));
                         },
                       ));
-                      children.add(Divider(
+                      children.add(const Divider(
                         height: 0,
                         indent: 16,
                         endIndent: 16,
@@ -238,9 +240,9 @@ class WordDetailPageState extends State<WordDetailPage> {
                               );
                             } else if (isFetchingSnapshot.data) {
                               return Container(
-                                key: Key('ProgressIndicator'),
+                                key: const Key('ProgressIndicator'),
                                 height: 96,
-                                child: Center(
+                                child: const Center(
                                   child: CircularProgressIndicator(),
                                 ),
                               );
@@ -256,10 +258,10 @@ class WordDetailPageState extends State<WordDetailPage> {
                   } else {
                     return Container(
                       height: 360,
-                      child: Center(
-                          child: Text(
+                      child: const Center(
+                          child: const Text(
                         '( ͡• ͜ʖ ͡•)',
-                        style: TextStyle(color: Colors.white38),
+                        style: const TextStyle(color: Colors.white38),
                       )),
                     );
                   }
@@ -278,21 +280,21 @@ class WordDetailPageState extends State<WordDetailPage> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Material(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(const Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
                     builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
                       if (snapshot.hasData) {
-                        var kanjiLists = snapshot.data;
+                        final kanjiLists = snapshot.data;
 
                         if (kanjiLists.isEmpty) {
                           return Container(
                             height: 200,
-                            child: Center(
-                              child: Text(
+                            child: const Center(
+                              child: const Text(
                                 "You don't have any list yet.",
-                                style: TextStyle(color: Colors.black54),
+                                style: const TextStyle(color: Colors.black54),
                               ),
                             ),
                           );
@@ -301,8 +303,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                         return ListView.separated(
                             shrinkWrap: true,
                             itemBuilder: (_, index) {
-                              var kanjiList = kanjiLists[index];
-                              //var isInList = KanjiListBloc.instance.isInList(kanjiList);
+                              final kanjiList = kanjiLists[index];
 
                               var subtitle = '';
 
@@ -334,7 +335,8 @@ class WordDetailPageState extends State<WordDetailPage> {
 
                               return ListTile(
                                 title: Text(kanjiLists[index].name,
-                                    style: TextStyle(color: Colors.black)),
+                                    style:
+                                        const TextStyle(color: Colors.black)),
                                 subtitle: Text(subtitle),
                                 onTap: () {
                                   Navigator.pop(context);
@@ -346,7 +348,8 @@ class WordDetailPageState extends State<WordDetailPage> {
                                       .showSnackBar(SnackBar(
                                     content: Text(
                                       '${widget.word.wordText} has been added to ${kanjiList.name}',
-                                      style: TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     backgroundColor:
                                         Theme.of(context).accentColor,
@@ -361,7 +364,8 @@ class WordDetailPageState extends State<WordDetailPage> {
                                 },
                               );
                             },
-                            separatorBuilder: (_, index) => Divider(height: 0),
+                            separatorBuilder: (_, index) =>
+                                const Divider(height: 0),
                             itemCount: kanjiLists.length);
                       } else {
                         return Container();
@@ -374,7 +378,7 @@ class WordDetailPageState extends State<WordDetailPage> {
   }
 
   List<String> getKanjis(String str) {
-    var kanjis = <String>[];
+    final kanjis = <String>[];
     for (int i = 0; i < str.length; i++) {
       if (str.codeUnitAt(i) > 12543 && !kanjis.contains(str[i])) {
         kanjis.add(str[i]);

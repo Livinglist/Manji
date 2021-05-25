@@ -36,9 +36,9 @@ class KanaPageState extends State<KanaPage> {
           title: FuriganaText(
             text: '仮名',
             tokens: [Token(text: '仮名', furigana: 'かな')],
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
-          bottom: TabBar(tabs: [
+          bottom: const TabBar(tabs: [
             Tab(
               text: 'ひらがな',
             ),
@@ -61,14 +61,14 @@ class KanaPageState extends State<KanaPage> {
             stream: kanaBloc.hiragana,
             builder: (_, AsyncSnapshot<List<Hiragana>> snapshot) {
               if (snapshot.hasData) {
-                var hiraganas = snapshot.data;
+                final hiraganas = snapshot.data;
                 return KanaGridView(
                   kanas: hiraganas,
                   showHandwritten: showHandwritten,
                   onTap: (kana) => flutterTts.speak(kana),
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             },
           ),
@@ -76,14 +76,14 @@ class KanaPageState extends State<KanaPage> {
             stream: kanaBloc.katakana,
             builder: (_, AsyncSnapshot<List<Katakana>> snapshot) {
               if (snapshot.hasData) {
-                var katakana = snapshot.data;
+                final katakana = snapshot.data;
                 return KanaGridView(
                   kanas: katakana,
                   showHandwritten: showHandwritten,
                   onTap: (kana) => flutterTts.speak(kana),
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             },
           )
@@ -124,7 +124,7 @@ class KanaGridView extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               kanas[index].kana ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 36,
                                   fontFamily: 'Ai'),
@@ -135,7 +135,7 @@ class KanaGridView extends StatelessWidget {
                           Align(
                               alignment: Alignment.bottomCenter,
                               child: Text(kanas[index].pron ?? '',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white70, fontSize: 12),
                                   textScaleFactor:
                                       MediaQuery.of(context).size.width / 375))
@@ -151,7 +151,7 @@ class KanaGridView extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: Text(kanas[index].kana ?? '',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 36),
                                 textScaleFactor:
                                     MediaQuery.of(context).size.width / 375),
@@ -159,7 +159,7 @@ class KanaGridView extends StatelessWidget {
                           Align(
                               alignment: Alignment.bottomCenter,
                               child: Text(kanas[index].pron ?? '',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white70, fontSize: 12),
                                   textScaleFactor:
                                       MediaQuery.of(context).size.width / 375))

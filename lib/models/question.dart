@@ -90,7 +90,7 @@ class Question {
   void generateKanjiToKatakanaChoices() {
     String targetedKana;
     if (targetedKanji.onyomi.isNotEmpty) {
-      var candidates = targetedKanji.onyomi
+      final candidates = targetedKanji.onyomi
               .where((e) => e.contains(RegExp(r'[.-]')) == false)
               ?.toList() ??
           [];
@@ -100,11 +100,11 @@ class Question {
       targetedKana = targetedKanji.kunyomi.first;
     }
     rightAnswer = targetedKana;
-    var firstKana = targetedKana[0];
+    final firstKana = targetedKana[0];
     if (kanaShiftMap.containsKey(firstKana)) {
-      List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])
+      final List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])
         ..remove(firstKana);
-      List<String> tempKanas = [];
+      final List<String> tempKanas = [];
       int pos = -1;
       for (int i = 0; i < 3; i++) {
         while (pos == -1 || tempKanas.contains(shiftableKanas[pos])) {
@@ -121,7 +121,7 @@ class Question {
   }
 
   void generateKanjiToMeaningChoices(List<String> mockChoices) {
-    String targetedMeaning = targetedKanji.meaning;
+    final String targetedMeaning = targetedKanji.meaning;
     rightAnswer = targetedMeaning;
 
     wrongAnswers.addAll(mockChoices);

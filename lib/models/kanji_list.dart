@@ -15,7 +15,7 @@ class KanjiList {
     var count = 0;
 
     for (var item in kanjiStrs.where((e) => e.length > 1)) {
-      Map json = jsonDecode(item);
+      final Map json = jsonDecode(item);
       if (json.containsKey('meanings')) count++;
     }
 
@@ -26,19 +26,19 @@ class KanjiList {
     var count = 0;
 
     for (var item in kanjiStrs.where((e) => e.length > 1)) {
-      Map json = jsonDecode(item);
+      final Map json = jsonDecode(item);
       if (!json.containsKey('meanings')) count++;
     }
 
     return count;
   }
 
-  KanjiList({this.name, this.kanjiStrs}) : uid = Uuid().v1();
+  KanjiList({this.name, this.kanjiStrs}) : uid = const Uuid().v1();
 
   KanjiList.from({this.name, this.kanjiStrs, this.uid});
 
   KanjiList.fromMap(Map map) {
-    uid = map['uid'] ?? Uuid().v1();
+    uid = map['uid'] ?? const Uuid().v1();
     name = map['name'];
     if (map['kanjiStrs'].runtimeType is String) {
       kanjiStrs = (jsonDecode(map['kanjiStrs']) as List).cast<String>();
@@ -60,8 +60,8 @@ List<KanjiList> kanjiListsFromJsonStr(String str) {
   if (str == null) {
     return <KanjiList>[];
   }
-  List<Map> list = (jsonDecode(str) as List).cast<Map>();
-  var kanjiLists = list.map((str) => KanjiList.fromMap(str)).toList();
+  final List<Map> list = (jsonDecode(str) as List).cast<Map>();
+  final kanjiLists = list.map((str) => KanjiList.fromMap(str)).toList();
   return kanjiLists;
 }
 

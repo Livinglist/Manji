@@ -9,7 +9,7 @@ extension ListExtension<E> on List<E> {
   }
 
   List<E> getThenRemoveWhere(bool test(E e)) {
-    var tempList = <E>[];
+    final tempList = <E>[];
 
     for (var i in this) {
       if (test(i)) {
@@ -23,9 +23,9 @@ extension ListExtension<E> on List<E> {
 
   List<E> takeRandomly(int amount) {
     int index = -1;
-    var list = <E>[];
+    final list = <E>[];
 
-    var visited = <int>[];
+    final visited = <int>[];
 
     for (int i = 0; i < amount; i++) {
       index = Random(DateTime.now().millisecondsSinceEpoch)

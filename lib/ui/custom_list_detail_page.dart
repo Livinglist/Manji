@@ -108,17 +108,17 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 return DescribedFeatureOverlay(
                     featureId: 'study_kanji',
                     // Unique id that identifies this overlay.
-                    tapTarget: IconButton(
+                    tapTarget: const IconButton(
                         onPressed: null,
                         icon: Icon(FontAwesomeIcons.bookOpen, size: 16)),
                     // The widget that will be displayed as the tap target.
-                    title: Text('Study'),
-                    description: Text('Study this list by flash cards.'),
+                    title: const Text('Study'),
+                    description: const Text('Study this list by flash cards.'),
                     backgroundColor: Theme.of(context).primaryColor,
                     targetColor: Colors.white,
                     textColor: Colors.white,
                     child: IconButton(
-                        icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                        icon: const Icon(FontAwesomeIcons.bookOpen, size: 16),
                         onPressed: () {
                           if (snapshot.hasData) {
                             if (snapshot.data.isEmpty) {
@@ -127,10 +127,10 @@ class _ListDetailPageState extends State<ListDetailPage> {
                                   if (stupidStrings.isEmpty) {
                                     Navigator.pop(context);
                                   } else {
-                                    var index = Random(DateTime.now()
+                                    final index = Random(DateTime.now()
                                             .millisecondsSinceEpoch)
                                         .nextInt(stupidStrings.length);
-                                    var str = stupidStrings[index];
+                                    final str = stupidStrings[index];
                                     stupidStrings.removeAt(index);
                                     studyString = str;
                                   }
@@ -150,7 +150,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.sort),
+              icon: const Icon(Icons.sort),
               onPressed: () {
                 setState(() {
                   sortByStrokes = !sortByStrokes;
@@ -159,18 +159,18 @@ class _ListDetailPageState extends State<ListDetailPage> {
             ),
             IconButton(
               icon: AnimatedCrossFade(
-                firstChild: Icon(
+                firstChild: const Icon(
                   Icons.view_headline,
                   color: Colors.white,
                 ),
-                secondChild: Icon(
+                secondChild: const Icon(
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
                 crossFadeState: showGrid
                     ? CrossFadeState.showFirst
                     : CrossFadeState.showSecond,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
               ),
               onPressed: () {
                 if (widget.kanjiList.kanjiStrs.isNotEmpty) {
@@ -195,17 +195,17 @@ class _ListDetailPageState extends State<ListDetailPage> {
             if (snapshot.hasData) {
               var kanjis = snapshot.data;
 
-              var words = <Word>[];
-              var sentences = <Sentence>[];
+              final words = <Word>[];
+              final sentences = <Sentence>[];
 
-              for (var item
+              for (final item
                   in widget.kanjiList.kanjiStrs.where((e) => e.length > 1)) {
-                Map json = jsonDecode(item);
+                final json = jsonDecode(item);
                 if (json.containsKey('meanings')) {
-                  var word = Word.fromMap(json);
+                  final word = Word.fromMap(json);
                   words.add(word);
                 } else {
-                  var sentence = Sentence.fromMap(json);
+                  final sentence = Sentence.fromMap(json);
                   sentences.add(sentence);
                 }
               }
@@ -223,7 +223,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   child: Center(
                     child: Text(
                       studyString,
-                      style: TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.white70),
                     ),
                   ),
                 );
@@ -235,9 +235,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                   crossFadeState: showGrid
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
-                  duration: Duration(milliseconds: 200));
+                  duration: const Duration(milliseconds: 200));
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ));
@@ -276,7 +276,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
         shrinkWrap: true,
         crossAxisCount: Device.get().isTablet ? 10 : 5,
         children: List.generate(kanjis.length, (index) {
-          var kanji = kanjis[index];
+          final kanji = kanjis[index];
           return InkWell(
             child: Container(
                 width: MediaQuery.of(context).size.width / 5,
@@ -310,7 +310,8 @@ class _ListDetailPageState extends State<ListDetailPage> {
                       top: 4,
                       child: Text(
                         (index + 1).toString(),
-                        style: TextStyle(fontSize: 8, color: Colors.white24),
+                        style:
+                            const TextStyle(fontSize: 8, color: Colors.white24),
                       ),
                     )
                   ],
@@ -335,7 +336,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
         controller: listViewScrollController,
         itemBuilder: (_, index) {
           if (index < kanjis.length) {
-            var kanji = kanjis[index];
+            final kanji = kanjis[index];
 
             return Dismissible(
                 direction: DismissDirection.endToStart,
@@ -344,9 +345,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 confirmDismiss: (_) => confirmDismiss(kanji),
                 background: Container(
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 20.0),
                   color: Colors.red,
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.white,
                   ),
@@ -354,7 +355,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 child: KanjiListTile(kanji: kanji));
           } else if (index < (kanjis.length + words.length)) {
             index = index - kanjis.length;
-            var word = words[index];
+            final word = words[index];
 
             return Dismissible(
                 direction: DismissDirection.endToStart,
@@ -363,9 +364,9 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 //confirmDismiss: (_) => confirmDismiss(kanji),
                 background: Container(
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 20.0),
                   color: Colors.red,
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.white,
                   ),
@@ -383,14 +384,14 @@ class _ListDetailPageState extends State<ListDetailPage> {
                     tokens: [
                       Token(text: word.wordText, furigana: word.wordFurigana)
                     ],
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                   ),
                   subtitle: Text(word.meanings,
-                      style: TextStyle(color: Colors.white54)),
+                      style: const TextStyle(color: Colors.white54)),
                 ));
           } else {
             index = index - kanjis.length - words.length;
-            var sentence = sentences[index];
+            final sentence = sentences[index];
 
             return Dismissible(
                 direction: DismissDirection.endToStart,
@@ -398,26 +399,26 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 onDismissed: (_) => onSentenceDismissed(sentence),
                 background: Container(
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 20.0),
                   color: Colors.red,
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.white,
                   ),
                 ),
                 child: ListTile(
                   title: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: FuriganaText(
                         text: sentence.text,
                         tokens: sentence.tokens,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       )),
                   subtitle: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
                       sentence.englishText,
-                      style: TextStyle(color: Colors.white54),
+                      style: const TextStyle(color: Colors.white54),
                     ),
                   ),
                   onTap: () {
@@ -431,7 +432,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                 ));
           }
         },
-        separatorBuilder: (_, __) => Divider(height: 0),
+        separatorBuilder: (_, __) => const Divider(height: 0),
         itemCount: kanjis.length + words.length + sentences.length);
   }
 
@@ -439,10 +440,10 @@ class _ListDetailPageState extends State<ListDetailPage> {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Are you sure?"),
+              message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, false);
                   return false;
@@ -462,7 +463,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   }
 
   void onDismissed(Kanji kanji) {
-    String dismissedKanji = kanji.kanji;
+    final dismissedKanji = kanji.kanji;
     widget.kanjiList.kanjiStrs.remove(kanji.kanji);
     KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
     KanjiListBloc.instance.removeKanji(widget.kanjiList, dismissedKanji);

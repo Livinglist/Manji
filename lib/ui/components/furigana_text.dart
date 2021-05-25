@@ -8,7 +8,7 @@ import '../../models/sentence.dart';
 export '../../models/sentence.dart';
 
 List<String> getKanjis(String text) {
-  var kanjis = <String>[];
+  final kanjis = <String>[];
   for (int i = 0; i < text.length; i++) {
     if (text.codeUnitAt(i) > 12543) {
       kanjis.add(text[i]);
@@ -21,7 +21,6 @@ class FuriganaText extends StatelessWidget {
   final bool markTarget;
   final String target;
   final String text;
-  //final List<String> furigana;
   final TextStyle style;
   final TextAlign textAlign;
   final WrapAlignment alignment;
@@ -41,40 +40,40 @@ class FuriganaText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var richTexts = <RichText>[];
+    final richTexts = <RichText>[];
 
-    var queue = Queue<Token>.from(this.tokens.where(
+    final queue = Queue<Token>.from(this.tokens.where(
         (element) => text.contains(element.text) || element.furigana != null));
 
-    Color unmarkedColor = Colors.white.withOpacity(0.8);
-    Color markedColor = Colors.white;
-    Color targetColor = Colors.orange;
-    TextStyle furiganaTextStyle = style == null
+    final unmarkedColor = Colors.white.withOpacity(0.8);
+    const markedColor = Colors.white;
+    const targetColor = Colors.orange;
+    final furiganaTextStyle = style == null
         ? TextStyle(
             fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5,
             color: markedColor)
         : TextStyle(fontSize: style.fontSize * 0.5, color: style.color);
-    TextStyle targetFuriganaTextStyle = style == null
+    final targetFuriganaTextStyle = style == null
         ? TextStyle(
             fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5,
             color: targetColor)
         : TextStyle(fontSize: style.fontSize * 0.5, color: style.color);
-    TextStyle markedTextStyle = style == null
+    final markedTextStyle = style == null
         ? TextStyle(
             fontSize: Theme.of(context).textTheme.bodyText2.fontSize,
             color: markedColor)
         : TextStyle(fontSize: style.fontSize, color: style.color);
-    TextStyle targetTextStyle = style == null
+    final targetTextStyle = style == null
         ? TextStyle(
             fontSize: Theme.of(context).textTheme.bodyText2.fontSize,
             color: targetColor)
         : TextStyle(fontSize: style.fontSize, color: style.color);
-    TextStyle textTextStyle = style == null
+    final textTextStyle = style == null
         ? TextStyle(
             fontSize: Theme.of(context).textTheme.bodyText2.fontSize * 0.5,
             color: unmarkedColor)
         : TextStyle(fontSize: style.fontSize, color: style.color);
-    TextStyle invisibleTextStyle = style == null
+    final invisibleTextStyle = style == null
         ? TextStyle(
             fontSize: furiganaTextStyle.fontSize, color: Colors.transparent)
         : TextStyle(
@@ -85,7 +84,7 @@ class FuriganaText extends StatelessWidget {
     for (; i < text.length;) {
       if (queue.isEmpty) break;
 
-      var currentText = queue.first.text;
+      final currentText = queue.first.text;
       bool hasFurigana = false;
       String japText, furigana;
 
@@ -113,7 +112,7 @@ class FuriganaText extends StatelessWidget {
           hasFurigana = true;
 
           //The current one did not match any word in the sentence then we replace the part in the sentence that is incorrect.
-          var nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
+          final nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
           var nextWordIndex = nextWord == null
               ? null
               : text.substring(i).indexOf(nextWord.text);
@@ -146,7 +145,7 @@ class FuriganaText extends StatelessWidget {
                     .reduce((value, element) => '[$value$element]')))) {
           isTarget = true;
         }
-        Color color = isTarget
+        final color = isTarget
             ? targetColor
             : (furigana.isEmpty ? unmarkedColor : markedColor);
         if (japText[0].isKanji() &&

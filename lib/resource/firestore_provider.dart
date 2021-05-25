@@ -52,7 +52,7 @@ class FirestoreProvider {
     if (FirebaseAuth.instance.currentUser != null) {
       _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-      var snapshot = await FirebaseFirestore.instance
+      final snapshot = await FirebaseFirestore.instance
           .collection(usersKey)
           .doc(_uid)
           .collection(kanjiListsKey)
@@ -86,7 +86,7 @@ class FirestoreProvider {
   Future<List<String>> fetchFavKanjis() async {
     _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-    var snapshot =
+    final snapshot =
         await FirebaseFirestore.instance.collection(usersKey).doc(_uid).get();
     return (snapshot.data()[favKanjisKey] as List).cast<String>();
   }
@@ -94,7 +94,7 @@ class FirestoreProvider {
   Future<List<String>> fetchMarkedKanjis() async {
     _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-    var snapshot =
+    final snapshot =
         await FirebaseFirestore.instance.collection(usersKey).doc(_uid).get();
     return (snapshot.data()[markedKanjisKey] as List).cast<String>();
   }
@@ -102,13 +102,13 @@ class FirestoreProvider {
   Stream<KanjiList> fetchKanjiLists() async* {
     _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-    var snapshots = await FirebaseFirestore.instance
+    final snapshots = await FirebaseFirestore.instance
         .collection(usersKey)
         .doc(_uid)
         .collection(kanjiListsKey)
         .get();
     for (var snapshot in snapshots.docs) {
-      var kanjiList = KanjiList.fromMap(snapshot.data());
+      final kanjiList = KanjiList.fromMap(snapshot.data());
       yield kanjiList;
     }
   }
@@ -137,8 +137,8 @@ class FirestoreProvider {
   Future<bool> isUpgradable() async {
     _uid = _uid ?? FirebaseAuth.instance.currentUser.uid;
 
-    var lastFetchedAt = SharedPreferencesProvider.instance.lastFetchedAt;
-    var lastUpdatedAt = await FirebaseFirestore.instance
+    final lastFetchedAt = SharedPreferencesProvider.instance.lastFetchedAt;
+    final lastUpdatedAt = await FirebaseFirestore.instance
         .collection(usersKey)
         .doc(_uid)
         .get()
@@ -157,22 +157,22 @@ class FirestoreProvider {
 
   ///Upload all local data to FirebaseFirestore if user is the first time user.
   void uploadAll() {
-    var allFav = KanjiBloc.instance.getAllFavKanjis;
-    var allMarked = KanjiBloc.instance.getAllMarkedKanjis;
-    var allLists = KanjiListBloc.instance.allKanjiLists;
+    final allFav = KanjiBloc.instance.getAllFavKanjis;
+    final allMarked = KanjiBloc.instance.getAllMarkedKanjis;
+    final allLists = KanjiListBloc.instance.allKanjiLists;
 
     uploadFavKanjis(allFav);
     uploadMarkedKanjis(allMarked);
-    for (var list in allLists) {
+    for (final list in allLists) {
       uploadKanjiList(list);
     }
   }
 
   ///Fetch all remote data from FirebaseFirestore if is upgradable.
   void fetchAll() async {
-    var allFav = await fetchFavKanjis();
-    var allMarked = await fetchMarkedKanjis();
-    var allLists = await fetchKanjiLists().toList();
+    final allFav = await fetchFavKanjis();
+    final allMarked = await fetchMarkedKanjis();
+    final allLists = await fetchKanjiLists().toList();
 
     for (var kanji in allFav) {
       KanjiBloc.instance.addFav(kanji);

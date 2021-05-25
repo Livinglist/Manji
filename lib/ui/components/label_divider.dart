@@ -8,11 +8,11 @@ class LabelDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Flex(
           direction: Axis.horizontal,
           children: <Widget>[
-            Flexible(
+            const Flexible(
               flex: 4,
               child: Divider(color: Colors.white60),
             ),
@@ -21,7 +21,7 @@ class LabelDivider extends StatelessWidget {
                 child: Container(
                   child: Center(child: child),
                 )),
-            Flexible(
+            const Flexible(
               flex: 4,
               child: Divider(color: Colors.white60),
             ),

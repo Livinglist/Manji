@@ -47,7 +47,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
 
   setTarget(Offset ptrPos) {
     for (int i = 0; i < keys.length; i++) {
-      var cxt = keys[i].currentContext;
+      final cxt = keys[i].currentContext;
       if (cxt != null) {
         final RenderBox rBox = cxt.findRenderObject();
         final pos = rBox.localToGlobal(Offset.zero);
@@ -84,7 +84,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
 
   fetch() async {
     if (!initialized) {
-      var res = await rootBundle
+      final res = await rootBundle
           .loadString('data/data')
           .whenComplete(() => initialized = true);
       kanjiJsons = (json.decode(res) as List)
@@ -103,12 +103,12 @@ class HomePageBackgroundState extends State<HomePageBackground> {
 
     return Container(
       decoration: Theme.of(context).primaryColor == Colors.black
-          ? BoxDecoration(color: Colors.black)
+          ? const BoxDecoration(color: Colors.black)
           : BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                stops: [0.1, 0.5, 0.7, 1.0],
+                stops: const [0.1, 0.5, 0.7, 1.0],
                 colors: [
                   Theme.of(context).primaryColor,
                   Colors.grey[600],
@@ -139,7 +139,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
                     return Container(
                       height: double.infinity,
                       child: GridView(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: perRow),
@@ -157,7 +157,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
     return List.generate(total, (i) {
       return AnimatedOpacity(
           opacity: keys[i] == targetKey ? 1 : 0.2,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           key: keys[i],
           //decoration: BoxDecoration(color: targetKey == keys[i] ? Colors.white : Theme.of(context).primaryColor),
           child: Center(

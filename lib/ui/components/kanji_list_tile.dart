@@ -62,7 +62,7 @@ class KanjiListTile extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Wrap(
             children: <Widget>[
               JLPTChip(jlpt: kanji.jlpt),
@@ -72,23 +72,23 @@ class KanjiListTile extends StatelessWidget {
               StrokeChip(stokeCount: kanji.strokes)
             ],
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           Wrap(
             alignment: WrapAlignment.start,
             direction: Axis.horizontal,
             children: <Widget>[
               for (var kunyomi in kanji.kunyomi)
                 Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: Container(
                       child: Padding(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           child: Text(
                             kunyomi,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           )),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(
@@ -98,16 +98,16 @@ class KanjiListTile extends StatelessWidget {
                     )),
               for (var onyomi in kanji.onyomi)
                 Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   child: Container(
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text(
                           onyomi,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         )),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(
@@ -122,7 +122,7 @@ class KanjiListTile extends StatelessWidget {
       ),
       subtitle: Text(
         kanji.meaning,
-        style: TextStyle(color: Colors.grey),
+        style: const TextStyle(color: Colors.grey),
       ),
     );
   }

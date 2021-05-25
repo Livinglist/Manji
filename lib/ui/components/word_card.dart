@@ -24,7 +24,7 @@ class WordCardState extends State<WordCard>
   @override
   void initState() {
     animationController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+        vsync: this, duration: const Duration(milliseconds: 1000));
     //Future.doWhile(startAnimation);
     super.initState();
     animationController.forward();
@@ -64,7 +64,7 @@ class WordCardState extends State<WordCard>
                       Column(
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: FuriganaText(
                               text: widget.wordText,
@@ -73,16 +73,9 @@ class WordCardState extends State<WordCard>
                                     text: widget.wordText,
                                     furigana: widget.wordFurigana)
                               ],
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 28),
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 28),
                             ),
-//                            child: RichText(
-//                                textAlign: TextAlign.left,
-//                                maxLines: 2,
-//                                text: TextSpan(style: TextStyle(color: Colors.black), children: [
-//                                  TextSpan(style: TextStyle(fontSize: 15), text: widget.wordFurigana + '\n'),
-//                                  TextSpan(style: TextStyle(fontSize: 28), text: widget.wordText)
-//                                ]))
                           ),
                         ],
                       ),

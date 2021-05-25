@@ -52,12 +52,12 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
             elevation: showShadow ? 8 : 0,
             centerTitle: true,
             bottom: PreferredSize(
-                preferredSize: Size.fromHeight(0),
+                preferredSize: const Size.fromHeight(0),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 24,
                   child: GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 13,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
@@ -81,7 +81,7 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
                               child: Center(
                             child: Text(
                               e,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -114,13 +114,13 @@ class ActivityGridView extends StatelessWidget {
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
       controller: scrollController,
-      children: <Widget>[...buildChildren(context), SizedBox(height: 12)],
+      children: <Widget>[...buildChildren(context), const SizedBox(height: 12)],
     );
   }
 
   List<Widget> buildChildren(BuildContext context) {
-    Map<int, List<Kanji>> kanjisByYears = {};
-    List<Widget> children = [];
+    final kanjisByYears = <int, List<Kanji>>{};
+    final children = <Widget>[];
 
     for (var date in dateToKanjisMap.keys) {
       if (kanjisByYears.containsKey(date.year) == false) {
@@ -141,12 +141,12 @@ class ActivityGridView extends StatelessWidget {
             child: Center(
                 child: Text(
               (d + 1).toString(),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ))));
-        for (var m in Iterable.generate(12)) {
-          var date = DateTime(i, m + 1, d + 1);
+        for (final m in Iterable.generate(12)) {
+          final date = DateTime(i, m + 1, d + 1);
           if (dateToKanjisMap.containsKey(date)) {
             children.add(Material(
                 elevation: 8,
@@ -171,7 +171,7 @@ class ActivityGridView extends StatelessWidget {
 
   void showModalBottomSheet(
       BuildContext context, DateTime date, List<Kanji> kanjis) {
-    var months = [
+    final months = [
       'Jan.',
       'Feb.',
       'Mar.',
@@ -188,19 +188,19 @@ class ActivityGridView extends StatelessWidget {
     scaffoldKey.currentState.showBottomSheet((context) {
       return Material(
         elevation: 8,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         color: Theme.of(context).primaryColor,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           height: 500,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                   height: 36,
                   child: Center(
                       child: Icon(FontAwesomeIcons.horizontalRule,
@@ -211,15 +211,16 @@ class ActivityGridView extends StatelessWidget {
                     child: Column(
                   children: <Widget>[
                     Padding(
-                        padding: EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(2),
                         child: Center(
                             child: Text(
                                 "${months[date.month]} ${toDayString(date.day)} ${date.year}",
-                                style: TextStyle(color: Colors.white70)))),
+                                style:
+                                    const TextStyle(color: Colors.white70)))),
                     ...kanjis
                         .map((kanji) => KanjiListTile(kanji: kanji))
                         .toList(),
-                    SizedBox(height: 12)
+                    const SizedBox(height: 12)
                   ],
                 )),
               )
@@ -228,7 +229,7 @@ class ActivityGridView extends StatelessWidget {
         ),
       );
     },
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         elevation: 8);

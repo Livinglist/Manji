@@ -29,8 +29,8 @@ class DBProvider {
 
   Future<Database> initDB({bool needRefresh = false}) async {
     //Initialize database in external storage
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String path = join(appDocDir.path, "dictDB.db");
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String path = join(appDocDir.path, "dictDB.db");
 
     if (await File(path).exists() && needRefresh == false) {
       print("opening");
@@ -58,13 +58,13 @@ class DBProvider {
         }
 
         if (oldVersion == 3) {
-          String tempPath = join(appDocDir.path, "temp.db");
-          ByteData data = await rootBundle.load("data/dictDB.db");
-          List<int> bytes =
+          final String tempPath = join(appDocDir.path, "temp.db");
+          final ByteData data = await rootBundle.load("data/dictDB.db");
+          final List<int> bytes =
               data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
           await File(path).writeAsBytes(bytes);
-          var tempDB = await openDatabase(tempPath);
-          var kanjis = await tempDB.query("Kanji");
+          final tempDB = await openDatabase(tempPath);
+          final kanjis = await tempDB.query("Kanji");
           await db.delete('Kanji');
           await db.rawQuery('''CREATE TABLE "Kanji" (
               "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,8 +92,8 @@ class DBProvider {
       });
     } else {
       print("copying");
-      ByteData data = await rootBundle.load("data/dictDB.db");
-      List<int> bytes =
+      final ByteData data = await rootBundle.load("data/dictDB.db");
+      final List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes);
       return openDatabase(
@@ -111,7 +111,7 @@ class DBProvider {
 
   Future<List<Kanji>> getAllKanjis() async {
     final db = await database;
-    var res = await db.query('Kanji').onError((error, stackTrace) {
+    final res = await db.query('Kanji').onError((error, stackTrace) {
       print('re-initialize');
       return initDB(needRefresh: true).then((value) => value.query('Kanji'));
     });
@@ -127,9 +127,9 @@ class DBProvider {
       'Use this only for scripting. Do not use this in the released app.')
   Future<List<Sentence>> getSentencesByKanji(String kanjiStr) async {
     final db = await database;
-    var res = await db
+    final res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
-    var sentences = await jsonStringToSentences(res.single['text']);
+    final sentences = await jsonStringToSentences(res.single['text']);
 
     return sentences;
   }
@@ -139,7 +139,7 @@ class DBProvider {
   Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) async* {
     final db = await database;
     print(await db.query("sqlite_master"));
-    var res = await db
+    final res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     jsonToSentencesStream(res.single['text']).listen((sentence) async* {
       yield sentence;
@@ -148,7 +148,7 @@ class DBProvider {
 
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) async {
     final db = await database;
-    var res = await db
+    final res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
     if (res.isNotEmpty)
       return res.single['text'];
@@ -158,16 +158,16 @@ class DBProvider {
 
   Future<int> addKanji(Kanji kanji) async {
     final db = await database;
-    var map = kanji.toDBMap();
-    var raw = await db.insert('Kanji', map);
+    final map = kanji.toDBMap();
+    final raw = await db.insert('Kanji', map);
     return raw;
   }
 
   ///Used for fetching from Firestore and loading to local database
   Future<int> addSentence(Sentence sentence) async {
     final db = await database;
-    var map = sentence.toDBMap();
-    var raw =
+    final map = sentence.toDBMap();
+    final raw =
         await db.rawInsert('INSERT Into Sentence (kanji, text) VALUES (?,?)', [
       sentence.kanji,
       map['text'],
@@ -177,7 +177,7 @@ class DBProvider {
 
   Future addSentences(List<Sentence> sentences) async {
     final db = await database;
-    var raw = await db.rawQuery(
+    final raw = await db.rawQuery(
         "INSERT Into Sentence (kanji, text) VALUES (?,?)",
         [sentences.first.kanji, sentencesToJson(sentences)]);
     return raw;
@@ -186,13 +186,13 @@ class DBProvider {
   Future doScript() async {
     final db = await database;
 
-    var kanjis = (await db.query('Kanji', columns: ['kanji']))
+    final kanjis = (await db.query('Kanji', columns: ['kanji']))
         .map((map) => map['kanji']);
 
     for (String kanji in kanjis) {
-      var q =
+      final q =
           await db.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanji'");
-      var sentences = q.map((map) => Sentence.fromDBMap(map)).toList();
+      final sentences = q.map((map) => Sentence.fromDBMap(map)).toList();
       print(kanji);
 
       db.rawDelete("DELETE FROM Sentence WHERE kanji = '$kanji'").then((_) {
@@ -204,7 +204,7 @@ class DBProvider {
 
   Future<List<Hiragana>> getAllHiragana() async {
     final db = await database;
-    var res = await db.query('Hiragana');
+    final res = await db.query('Hiragana');
 
     return res.isNotEmpty
         ? res.map((r) {
@@ -215,7 +215,7 @@ class DBProvider {
 
   Future<List<Katakana>> getAllKatakana() async {
     final db = await database;
-    var res = await db.query('Katakana');
+    final res = await db.query('Katakana');
 
     return res.isNotEmpty
         ? res.map((r) {
@@ -225,8 +225,8 @@ class DBProvider {
   }
 
   Future updateKanji(Kanji kanji) async {
-    var map = kanji.toDBMap();
-    var db = await database;
+    final map = kanji.toDBMap();
+    final db = await database;
 
     db.rawUpdate(
         "UPDATE Kanji SET onyomiWords = ?, onyomi = ?, kunyomiWords = ?, kunyomi = ? WHERE kanji = ?",
@@ -240,8 +240,8 @@ class DBProvider {
   }
 
   Future<Kanji> getSingleKanji(String kanjiStr) async {
-    var db = await database;
-    var query = await db
+    final db = await database;
+    final query = await db
         .rawQuery("SELECT FROM Kanji WHERE kanji = '$kanjiStr' LIMIT 1");
     if (query == null || query.isEmpty) return null;
 
@@ -249,7 +249,7 @@ class DBProvider {
   }
 
   Future addIncorrectQuestions(List<Question> questions) async {
-    var db = await database;
+    final db = await database;
     for (var q in questions) {
       print(q.toMap());
       await db.insert("IncorrectQuestions", q.toMap());
@@ -258,19 +258,19 @@ class DBProvider {
   }
 
   Future deleteIncorrectQuestion(Question question) async {
-    var db = await database;
+    final db = await database;
     return db.delete("IncorrectQuestions", where: "id = ${question.id}");
   }
 
   Future<List<Question>> getIncorrectQuestions() async {
-    var db = await database;
+    final db = await database;
     var query = await db.query("IncorrectQuestions");
 
     print("The query is $query");
-    List<Question> qs = [];
+    final List<Question> qs = [];
     for (var i in query) {
       query = await db.query("Kanji", where: "id = ${i[Keys.kanjiIdKey]}");
-      var kanji = Kanji.fromDBMap(query.single);
+      final kanji = Kanji.fromDBMap(query.single);
       i = Map.from(i);
       i[Keys.kanjiKey] = kanji;
       qs.add(Question.fromMap(i));
@@ -280,7 +280,7 @@ class DBProvider {
   }
 
   Future updateKanjiStudiedTimeStamps(Kanji kanji) async {
-    var db = await database;
+    final db = await database;
 
     print(kanji.timeStamps);
 
@@ -291,11 +291,11 @@ class DBProvider {
 }
 
 Future<bool> getDatabaseStatus() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getBool('databaseStatus');
 }
 
 void setDatabaseStatus(bool dbStatus) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('databaseStatus', dbStatus);
 }

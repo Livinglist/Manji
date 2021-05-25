@@ -20,43 +20,42 @@ class CompoundWordColumn extends StatelessWidget {
   }
 
   Widget buildCompoundWordColumn(BuildContext context) {
-    var onyomiGroup = <Widget>[];
-    var kunyomiGroup = <Widget>[];
-    var onyomiVerbGroup = <Widget>[];
-    var kunyomiVerbGroup = <Widget>[];
+    final onyomiGroup = <Widget>[];
+    final kunyomiGroup = <Widget>[];
+    final onyomiVerbGroup = <Widget>[];
+    final kunyomiVerbGroup = <Widget>[];
 
-    var onyomis = kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
-    var kunyomis =
+    final onyomis =
+        kanji.onyomi.where((s) => s.contains(r'-') == false).toList();
+    final kunyomis =
         kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
-//
-
-    List<Word> onyomiWords = Set<Word>.from(kanji.onyomiWords)
+    final onyomiWords = Set<Word>.from(kanji.onyomiWords)
         .toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
     onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
-      var words = List.from(onyomiWords.where((onyomiWord) => onyomiWord
+      final words = List.from(onyomiWords.where((onyomiWord) => onyomiWord
           .wordFurigana
           .contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       onyomiWords.removeWhere((word) => words.contains(word));
-      var tileTitle = Stack(
+      final tileTitle = Stack(
         children: <Widget>[
           Positioned.fill(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 child: Container(
                   child: Padding(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: Text(
                         onyomi,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       )),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(
@@ -70,7 +69,7 @@ class CompoundWordColumn extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              icon: Icon(Icons.add_circle_outline, color: Colors.white),
+              icon: const Icon(Icons.add_circle_outline, color: Colors.white),
               onPressed: () =>
                   showCustomBottomSheet(yomi: onyomi, isOnyomi: true),
             ),
@@ -78,9 +77,9 @@ class CompoundWordColumn extends StatelessWidget {
         ],
       );
 
-      var tileChildren = <Widget>[];
+      final tileChildren = <Widget>[];
 
-      for (var word in words) {
+      for (final word in words) {
         tileChildren.add(ListTile(
           onTap: () {
             Navigator.push(context,
@@ -101,12 +100,12 @@ class CompoundWordColumn extends StatelessWidget {
           title: FuriganaText(
             text: word.wordText,
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
-          subtitle:
-              Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle: Text(word.meanings,
+              style: const TextStyle(color: Colors.white54)),
         ));
-        tileChildren.add(Divider(
+        tileChildren.add(const Divider(
           height: 0,
           indent: 8,
           endIndent: 8,
@@ -121,7 +120,7 @@ class CompoundWordColumn extends StatelessWidget {
       if (onyomi.contains(RegExp(r'[.-]'))) {
         if (onyomiVerbGroup.isNotEmpty) {
           onyomiVerbGroup.add(Padding(
-            padding: EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 12),
             child: tileTitle,
           ));
         } else {
@@ -131,7 +130,7 @@ class CompoundWordColumn extends StatelessWidget {
       } else {
         if (onyomiGroup.isNotEmpty) {
           onyomiGroup.add(Padding(
-            padding: EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 12),
             child: tileTitle,
           ));
         } else {
@@ -141,34 +140,34 @@ class CompoundWordColumn extends StatelessWidget {
       }
     }
 
-    var kunyomiWords = Set<Word>.from(kanji.kunyomiWords).toList();
+    final kunyomiWords = Set<Word>.from(kanji.kunyomiWords).toList();
 
     kunyomis.sort((a, b) => b.length.compareTo(a.length));
 
     for (var kunyomi in kunyomis) {
-      var words = List.from(kunyomiWords.where((kunyomiWord) => kunyomiWord
+      final words = List.from(kunyomiWords.where((kunyomiWord) => kunyomiWord
           .wordFurigana
           .contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
 
       kunyomiWords.removeWhere((word) => words.contains(word));
 
-      var tileTitle = Stack(
+      final tileTitle = Stack(
         children: <Widget>[
           Positioned.fill(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 child: Container(
                   child: Padding(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: Text(
                         kunyomi,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       )),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(
@@ -182,7 +181,7 @@ class CompoundWordColumn extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              icon: Icon(Icons.add_circle_outline, color: Colors.white),
+              icon: const Icon(Icons.add_circle_outline, color: Colors.white),
               onPressed: () =>
                   showCustomBottomSheet(yomi: kunyomi, isOnyomi: false),
             ),
@@ -190,7 +189,7 @@ class CompoundWordColumn extends StatelessWidget {
         ],
       );
 
-      var tileChildren = <Widget>[];
+      final tileChildren = <Widget>[];
 
       for (var word in words) {
         tileChildren.add(ListTile(
@@ -213,12 +212,12 @@ class CompoundWordColumn extends StatelessWidget {
           title: FuriganaText(
             text: word.wordText,
             tokens: [Token(text: word.wordText, furigana: word.wordFurigana)],
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
-          subtitle:
-              Text(word.meanings, style: TextStyle(color: Colors.white54)),
+          subtitle: Text(word.meanings,
+              style: const TextStyle(color: Colors.white54)),
         ));
-        tileChildren.add(Divider(height: 0, indent: 8, endIndent: 8));
+        tileChildren.add(const Divider(height: 0, indent: 8, endIndent: 8));
       }
 
       if (words.isEmpty) {
@@ -238,7 +237,7 @@ class CompoundWordColumn extends StatelessWidget {
       if (kunyomi.contains(RegExp(r'[.-]'))) {
         if (kunyomiVerbGroup.isNotEmpty) {
           kunyomiVerbGroup.add(Padding(
-            padding: EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 12),
             child: tileTitle,
           ));
         } else {
@@ -248,7 +247,7 @@ class CompoundWordColumn extends StatelessWidget {
       } else {
         if (kunyomiGroup.isNotEmpty) {
           kunyomiGroup.add(Padding(
-            padding: EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 12),
             child: tileTitle,
           ));
         } else {
@@ -262,11 +261,11 @@ class CompoundWordColumn extends StatelessWidget {
       ...onyomiGroup,
       ...kunyomiGroup,
       Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: Flex(
             direction: Axis.horizontal,
             children: <Widget>[
-              Flexible(
+              const Flexible(
                 flex: 4,
                 child: Divider(color: Colors.white60),
               ),
@@ -276,7 +275,7 @@ class CompoundWordColumn extends StatelessWidget {
                     child: Center(
                         child: RichText(
                             textAlign: TextAlign.center,
-                            text: TextSpan(children: [
+                            text: const TextSpan(children: [
                               TextSpan(
                                   text: 'どうし　　　　けいようし' + '\n',
                                   style: TextStyle(
@@ -287,7 +286,7 @@ class CompoundWordColumn extends StatelessWidget {
                                       fontSize: 18, color: Colors.white)),
                             ]))),
                   )),
-              Flexible(
+              const Flexible(
                 flex: 4,
                 child: Divider(color: Colors.white60),
               ),
@@ -297,7 +296,7 @@ class CompoundWordColumn extends StatelessWidget {
         Container(
           height: 100,
           width: MediaQuery.of(context).size.width,
-          child: Center(
+          child: const Center(
             child: Text(
               'No related verbs found _(┐「ε:)_',
               style: TextStyle(color: Colors.white70),
@@ -311,9 +310,9 @@ class CompoundWordColumn extends StatelessWidget {
 
   ///show modal bottom sheet where user can add words to onyomi or kunyomi
   void showCustomBottomSheet({String yomi, bool isOnyomi}) {
-    var yomiTextEditingController = TextEditingController();
-    var wordTextEditingController = TextEditingController();
-    var meaningTextEditingController = TextEditingController();
+    final yomiTextEditingController = TextEditingController();
+    final wordTextEditingController = TextEditingController();
+    final meaningTextEditingController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
     yomiTextEditingController.text = yomi.replaceFirst('.', '');
@@ -322,7 +321,7 @@ class CompoundWordColumn extends StatelessWidget {
       barrierLabel: "Barrier",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 300),
       context: scaffoldContext,
       pageBuilder: (_, __, ___) {
         return Align(
@@ -331,9 +330,9 @@ class CompoundWordColumn extends StatelessWidget {
             color: Colors.transparent,
             child: Container(
               height: 368,
-              margin: EdgeInsets.only(top: 48, left: 12, right: 12),
+              margin: const EdgeInsets.only(top: 48, left: 12, right: 12),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
                   color: Theme.of(scaffoldContext).primaryColor),
               child: Form(
                 key: formKey,
@@ -341,26 +340,26 @@ class CompoundWordColumn extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
+                          const Text(
                             'Add a word to',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Container(
                             child: Padding(
-                                padding: EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: Text(
                                   yomi,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 )),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
                               borderRadius: BorderRadius.all(Radius.circular(
@@ -372,7 +371,7 @@ class CompoundWordColumn extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: TextFormField(
                           validator: (str) {
                             if (str == null || str.isEmpty) {
@@ -384,22 +383,22 @@ class CompoundWordColumn extends StatelessWidget {
                           decoration: InputDecoration(
                             focusColor: Colors.white,
                             labelText: isOnyomi ? 'Onyomi' : 'Kunyomi',
-                            labelStyle: TextStyle(color: Colors.white70),
-                            border: UnderlineInputBorder(
+                            labelStyle: const TextStyle(color: Colors.white70),
+                            border: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white)),
-                            enabledBorder: UnderlineInputBorder(
+                            enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white70)),
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                           minLines: 1,
                           maxLines: 1,
                         )),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextFormField(
                         validator: (str) {
                           if (str == null || str.isEmpty) {
@@ -408,7 +407,7 @@ class CompoundWordColumn extends StatelessWidget {
                           return null;
                         },
                         controller: wordTextEditingController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusColor: Colors.white,
                           labelText: 'Word',
                           labelStyle: TextStyle(color: Colors.white70),
@@ -419,14 +418,14 @@ class CompoundWordColumn extends StatelessWidget {
                           enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white70)),
                         ),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         minLines: 1,
                         maxLines: 1,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextFormField(
                         validator: (str) {
                           if (str == null || str.isEmpty) {
@@ -435,7 +434,7 @@ class CompoundWordColumn extends StatelessWidget {
                           return null;
                         },
                         controller: meaningTextEditingController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusColor: Colors.white,
                           labelText: 'Meaning',
                           labelStyle: TextStyle(color: Colors.white70),
@@ -446,24 +445,24 @@ class CompoundWordColumn extends StatelessWidget {
                           enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white70)),
                         ),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         minLines: 1,
                         maxLines: 1,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Container(
                           width: MediaQuery.of(scaffoldContext).size.width - 24,
                           height: 42,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8))),
                           child: ElevatedButton(
-                              child: Text(
+                              child: const Text(
                                 'Add',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
@@ -500,8 +499,9 @@ class CompoundWordColumn extends StatelessWidget {
       },
       transitionBuilder: (_, anim, __, child) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(
-              CurvedAnimation(parent: anim, curve: SpringCurve.underDamped)),
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0))
+              .animate(CurvedAnimation(
+                  parent: anim, curve: SpringCurve.underDamped)),
           child: child,
         );
       },

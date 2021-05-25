@@ -36,7 +36,7 @@ class MyAppState extends State<MyApp> {
     //This is for Siri suggestion.
     FlutterSiriSuggestions.instance.configure(
         onLaunch: (Map<String, dynamic> message) async {
-      String siriKanji = message['key'];
+      final String siriKanji = message['key'];
       print("Siri suggestion kanji is $siriKanji");
       SiriSuggestionBloc.instance.suggest(siriKanji);
     });
@@ -61,7 +61,7 @@ class MyAppState extends State<MyApp> {
                 primaryColor: Colors.black, primarySwatch: Colors.grey),
             themeMode: themeMode,
             home: AnimatedContainer(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: FutureBuilder(
                 future: DBProvider.db.initDB(),
                 builder: (_, dbSnapshot) {
@@ -75,7 +75,7 @@ class MyAppState extends State<MyApp> {
                           KanjiBloc.instance.getAllKanjis();
                           FirebaseAuthProvider.instance.checkForUpdates();
                           return Platform.isAndroid
-                              ? Scaffold(
+                              ? const Scaffold(
                                   body: Center(
                                     child: CircularProgressIndicator(),
                                   ),
@@ -83,7 +83,7 @@ class MyAppState extends State<MyApp> {
                               : Scaffold(
                                   appBar: AppBar(
                                     elevation: 0,
-                                    title: Text('Manji'),
+                                    title: const Text('Manji'),
                                     centerTitle: false,
                                   ),
                                   drawer: Container(),
@@ -93,7 +93,7 @@ class MyAppState extends State<MyApp> {
                     );
                   }
 
-                  return Scaffold(
+                  return const Scaffold(
                     body: Center(
                       child: CircularProgressIndicator(),
                     ),

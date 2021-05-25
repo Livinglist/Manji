@@ -35,7 +35,7 @@ class AppBrain {
     final canvas = Canvas(
       recorder,
       Rect.fromPoints(
-        Offset(0.0, 0.0),
+        const Offset(0.0, 0.0),
         Offset(canvasSize, canvasSize),
       ),
     );
@@ -62,13 +62,13 @@ class AppBrain {
       canvasSizeWithPadding.toInt(),
     );
     final imgBytes = await img.toByteData(format: ImageByteFormat.png);
-    Uint8List pngUint8List = imgBytes.buffer.asUint8List();
+    final pngUint8List = imgBytes.buffer.asUint8List();
 
     // There's quite a funny game at this point. The image class we are using doesn't allow resizing.
     // In order to achieve that, we need to convert it to another image class that we are importing
     // as 'im' from package:image/image.dart
-    im.Image imImage = im.decodeImage(pngUint8List);
-    im.Image resizedImage = im.copyResize(
+    final imImage = im.decodeImage(pngUint8List);
+    final resizedImage = im.copyResize(
       imImage,
       width: kModelInputSize,
       height: kModelInputSize,
@@ -90,16 +90,16 @@ class AppBrain {
   }
 
   Uint8List imageToByteListFloat32(im.Image image, int inputSize) {
-    var convertedBytes = Float32List(inputSize * inputSize);
-    var buffer = Float32List.view(convertedBytes.buffer);
+    final convertedBytes = Float32List(inputSize * inputSize);
+    final buffer = Float32List.view(convertedBytes.buffer);
     int pixelIndex = 0;
     for (var i = 0; i < inputSize; i++) {
       for (var j = 0; j < inputSize; j++) {
-        var pixel = image.getPixel(j, i);
-        int r = im.getRed(pixel);
-        int g = im.getGreen(pixel);
-        int b = im.getBlue(pixel);
-        var gray = (0.299 * r + 0.597 * g + 0.114 * b) / 255;
+        final pixel = image.getPixel(j, i);
+        final r = im.getRed(pixel);
+        final g = im.getGreen(pixel);
+        final b = im.getBlue(pixel);
+        final gray = (0.299 * r + 0.597 * g + 0.114 * b) / 255;
         buffer[pixelIndex++] = gray;
       }
     }

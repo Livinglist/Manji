@@ -48,11 +48,11 @@ class _MyListPageState extends State<MyListPage> {
         title: FuriganaText(
           text: '漢字リスト',
           tokens: [Token(text: '漢字', furigana: 'かんじ')],
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               showCreatingDialog();
             },
@@ -63,13 +63,13 @@ class _MyListPageState extends State<MyListPage> {
           stream: KanjiListBloc.instance.kanjiLists,
           builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
             if (snapshot.hasData) {
-              var kanjiLists = snapshot.data;
+              final kanjiLists = snapshot.data;
 
               if (kanjiLists.isEmpty) {
                 return Container(
                   height: 200,
                   width: MediaQuery.of(context).size.width,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'When will you start studying！ (╯°Д°）╯',
                       style: TextStyle(color: Colors.white70),
@@ -81,7 +81,7 @@ class _MyListPageState extends State<MyListPage> {
               return ListView.separated(
                   controller: scrollController,
                   itemBuilder: (_, index) {
-                    var kanjiList = kanjiLists[index];
+                    final kanjiList = kanjiLists[index];
 
                     var subtitle = '';
 
@@ -115,9 +115,9 @@ class _MyListPageState extends State<MyListPage> {
                         confirmDismiss: (_) => confirmDelete(kanjiList),
                         background: Container(
                           alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(right: 20.0),
+                          padding: const EdgeInsets.only(right: 20.0),
                           color: Colors.red,
-                          child: Icon(
+                          child: const Icon(
                             Icons.delete,
                             color: Colors.white,
                           ),
@@ -125,7 +125,7 @@ class _MyListPageState extends State<MyListPage> {
                         child: ListTile(
                           title: Text(
                             kanjiList.name,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                           subtitle: Text(
                             subtitle,
@@ -145,7 +145,7 @@ class _MyListPageState extends State<MyListPage> {
                           onLongPress: () => confirmChangeName(kanjiList),
                         ));
                   },
-                  separatorBuilder: (_, index) => Divider(height: 0),
+                  separatorBuilder: (_, index) => const Divider(height: 0),
                   itemCount: kanjiLists.length);
             } else {
               return Container();
@@ -155,14 +155,14 @@ class _MyListPageState extends State<MyListPage> {
   }
 
   Future<bool> confirmChangeName(KanjiList kanjiList) async {
-    var listName = kanjiList.name;
+    final listName = kanjiList.name;
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              title: Text("Choose an action"),
+              title: const Text("Choose an action"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel', style: actionTextStyle),
+                child: const Text('Cancel', style: actionTextStyle),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -202,7 +202,7 @@ class _MyListPageState extends State<MyListPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 TextField(
                   controller: textEditingController,
                 )
@@ -213,17 +213,17 @@ class _MyListPageState extends State<MyListPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("Cancel")),
+                  child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    var name = textEditingController.text;
+                    final name = textEditingController.text;
                     if (name.isNotEmpty) {
                       textEditingController.clear();
                       Navigator.pop(context);
                       KanjiListBloc.instance.changeName(kanjiList, name);
                     }
                   },
-                  child: Text("Confirm")),
+                  child: const Text("Confirm")),
             ],
           );
         }).whenComplete(() {
@@ -236,13 +236,13 @@ class _MyListPageState extends State<MyListPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("Create a list"),
+          title: const Text("Create a list"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextField(
-                decoration:
-                    InputDecoration(labelText: "Enter the name of this list"),
+                decoration: const InputDecoration(
+                    labelText: "Enter the name of this list"),
                 controller: textEditingController,
               )
             ],
@@ -252,17 +252,17 @@ class _MyListPageState extends State<MyListPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel", style: actionTextStyle)),
+                child: const Text("Cancel", style: actionTextStyle)),
             TextButton(
                 onPressed: () {
-                  var name = textEditingController.text;
+                  final name = textEditingController.text;
                   if (name.isNotEmpty) {
                     textEditingController.clear();
                     KanjiListBloc.instance.addKanjiList(name);
                     Navigator.pop(context);
                   }
                 },
-                child: Text("Confirm", style: actionTextStyle)),
+                child: const Text("Confirm", style: actionTextStyle)),
           ],
         );
       });
@@ -271,10 +271,10 @@ class _MyListPageState extends State<MyListPage> {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Are you sure?"),
+              message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel', style: actionTextStyle),
+                child: const Text('Cancel', style: actionTextStyle),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },

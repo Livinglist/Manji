@@ -80,7 +80,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
 
     for (var kanji in widget.kanjis) {
       for (var type in ContentType.values) {
-        var content = KanjiCardContent(kanji: kanji, contentType: type);
+        final content = KanjiCardContent(kanji: kanji, contentType: type);
         contents.add(content);
       }
     }
@@ -108,15 +108,15 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
             ? Colors.black
             : Theme.of(context).primaryColor,
         appBar: AppBar(
-          title: Text(''),
+          title: const Text(''),
           actions: <Widget>[
             Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: Center(
                     child: Text('$index/$cardsCount',
-                        style: TextStyle(fontSize: 18)))),
+                        style: const TextStyle(fontSize: 18)))),
             IconButton(
-              icon: Icon(FontAwesomeIcons.solidQuestion,
+              icon: const Icon(FontAwesomeIcons.solidQuestion,
                   color: Colors.white, size: 18),
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => KanjiStudyHelpPage())),
@@ -128,7 +128,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
                   LinearProgressIndicator(
                       value: cardsProgress,
                       valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.blueGrey),
+                          const AlwaysStoppedAnimation<Color>(Colors.blueGrey),
                       backgroundColor: Colors.grey),
                   LinearProgressIndicator(
                       value: studyProgress,
@@ -137,7 +137,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
                       backgroundColor: Colors.transparent),
                 ],
               ),
-              preferredSize: Size.fromHeight(0)),
+              preferredSize: const Size.fromHeight(0)),
         ),
         body: Listener(
           onPointerDown: (downEvent) {
@@ -205,7 +205,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
                               mainCardKey = GlobalKey<KanjiCardState>();
                               if (contents.isEmpty) {
                                 mainCard = Container();
-                                var timeStamp =
+                                final timeStamp =
                                     DateTime.now().millisecondsSinceEpoch;
                                 for (var i in widget.kanjis) {
                                   i.timeStamp = timeStamp;
@@ -230,7 +230,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
                   ),
                 if (contents.isEmpty)
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
                         child: Text(
                       celebrateString.elementAt(
@@ -251,7 +251,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
   }
 
   List<Widget> buildMockCards() {
-    var children = <Widget>[];
+    final children = <Widget>[];
     if (contents.length > 1) {
       for (int i = min(contents.length - 1, 10); i >= 1; i--) {
         print(i);
@@ -265,11 +265,11 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
           builder: (_, child) {
             print(animationController.value);
 
-            double beginTop = 80 - i * 15.0 + i * i,
+            final beginTop = 80 - i * 15.0 + i * i,
                 endTop = 80 - (i - 1) * 15.0 + (i - 1) * (i - 1),
                 beginScale = 0.6 + (0.4 / 10) * (10 - i),
                 endScale = 0.6 + (0.4 / 10) * (10 - i + 1);
-            double top = beginTop +
+            final top = beginTop +
                     animationController.value.abs() * (endTop - beginTop).abs(),
                 scale = beginScale +
                     animationController.value.abs() *

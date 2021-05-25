@@ -51,39 +51,40 @@ class _SettingsPageState extends State<SettingsPage> {
         title: FuriganaText(
           text: '設定',
           tokens: [Token(text: '設定', furigana: 'せってい')],
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: <Widget>[
           StreamBuilder(
             stream: FirebaseAuthProvider.instance.onAuthStateChanged,
             builder: (_, AsyncSnapshot<User> snapshot) {
-              var user = snapshot.data;
+              final user = snapshot.data;
 
               if (user != null) {
                 return ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     FontAwesomeIcons.signOut,
                     color: Colors.white,
                     size: 22,
                   ),
-                  title:
-                      Text('Sign out', style: TextStyle(color: Colors.white)),
-                  subtitle:
-                      Text(user.email, style: TextStyle(color: Colors.white)),
+                  title: const Text('Sign out',
+                      style: TextStyle(color: Colors.white)),
+                  subtitle: Text(user.email,
+                      style: const TextStyle(color: Colors.white)),
                   onTap: () => FirebaseAuthProvider.instance.signOut(),
                 );
               }
 
               return ListTile(
-                leading: Icon(
+                leading: const Icon(
                   FontAwesomeIcons.signIn,
                   color: Colors.white,
                   size: 22,
                 ),
-                title: Text('Sign in', style: TextStyle(color: Colors.white)),
+                title: const Text('Sign in',
+                    style: TextStyle(color: Colors.white)),
                 onTap: () => getSignInMethod().then((method) {
                   switch (method) {
                     case SignInMethod.Apple:
@@ -99,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           StreamBuilder(
             stream: SettingsBloc.instance.fontSelection,
             builder: (_, snapshot) {
@@ -122,10 +123,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         ? FontAwesomeIcons.font
                         : FontAwesomeIcons.pen,
                     color: Colors.white),
-                title: Text('Font', style: TextStyle(color: Colors.white)),
+                title:
+                    const Text('Font', style: TextStyle(color: Colors.white)),
                 subtitle: Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white54),
+                  style: const TextStyle(color: Colors.white54),
                 ),
                 onTap: () {
                   showDialog(
@@ -146,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       groupValue: mode,
                                       onChanged: (val) =>
                                           SettingsBloc.instance.setFont(val),
-                                      title: Text('Handwriting',
+                                      title: const Text('Handwriting',
                                           style:
                                               TextStyle(color: Colors.black)),
                                     ),
@@ -155,7 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       groupValue: mode,
                                       onChanged: (val) =>
                                           SettingsBloc.instance.setFont(val),
-                                      title: Text('Print',
+                                      title: const Text('Print',
                                           style:
                                               TextStyle(color: Colors.black)),
                                     ),
@@ -172,23 +174,23 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.swap_horiz,
               color: Colors.white,
               size: 26,
             ),
-            title:
-                Text('Transfer my data', style: TextStyle(color: Colors.white)),
-            subtitle: Text(
+            title: const Text('Transfer my data',
+                style: TextStyle(color: Colors.white)),
+            subtitle: const Text(
               'Transfer your data to a another device',
               style: TextStyle(color: Colors.white54),
             ),
             onTap: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
+                content: const Text(
                   'Data Transfer is not yet available',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -200,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ));
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           StreamBuilder(
             stream: SettingsBloc.instance.themeMode,
             builder: (_, snapshot) {
@@ -221,11 +223,12 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               return ListTile(
-                leading: Icon(Icons.stream, color: Colors.white),
-                title: Text('Theme', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.stream, color: Colors.white),
+                title:
+                    const Text('Theme', style: TextStyle(color: Colors.white)),
                 subtitle: Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white54),
+                  style: const TextStyle(color: Colors.white54),
                 ),
                 onTap: () {
                   showDialog(
@@ -246,7 +249,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       groupValue: mode,
                                       onChanged: (val) => SettingsBloc.instance
                                           .setThemeMode(val),
-                                      title: Text('Light',
+                                      title: const Text('Light',
                                           style:
                                               TextStyle(color: Colors.black)),
                                     ),
@@ -255,7 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       groupValue: mode,
                                       onChanged: (val) => SettingsBloc.instance
                                           .setThemeMode(val),
-                                      title: Text('Dark',
+                                      title: const Text('Dark',
                                           style:
                                               TextStyle(color: Colors.black)),
                                     ),
@@ -264,7 +267,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       groupValue: mode,
                                       onChanged: (val) => SettingsBloc.instance
                                           .setThemeMode(val),
-                                      title: Text('System',
+                                      title: const Text('System',
                                           style:
                                               TextStyle(color: Colors.black)),
                                     ),
@@ -281,26 +284,26 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: FutureBuilder(
               future: repo.getIsUpdated(),
               builder: (_, AsyncSnapshot<bool> snapshot) {
                 if (snapshot.hasData) {
-                  var isUpdated = snapshot.data;
+                  final isUpdated = snapshot.data;
                   if (isUpdated) {
                     return ListTile(
-                      leading: Icon(Icons.wrap_text, color: Colors.white),
-                      title: Text('Update database',
+                      leading: const Icon(Icons.wrap_text, color: Colors.white),
+                      title: const Text('Update database',
                           style: TextStyle(color: Colors.white)),
-                      subtitle: Text(
+                      subtitle: const Text(
                           'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database is up to date)',
                           style: TextStyle(color: Colors.white54)),
                       onTap: () {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
+                          content: const Text(
                             'Your database is up to date',
                             style: TextStyle(color: Colors.black),
                           ),
@@ -316,17 +319,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   } else {
                     return ListTile(
-                        leading: Icon(Icons.wrap_text, color: Colors.white),
-                        title: Text('Update database',
+                        leading:
+                            const Icon(Icons.wrap_text, color: Colors.white),
+                        title: const Text('Update database',
                             style: TextStyle(color: Colors.white)),
-                        subtitle: Text(
+                        subtitle: const Text(
                             'Keeping dictionary database up to date increases the accuracy and reliability \n(Your database needs to be updated)',
                             style: TextStyle(color: Colors.white54)),
                         onTap: () {
                           repo.fetchUpdates().whenComplete(() {
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
+                              content: const Text(
                                 'Database has been updated successfully',
                                 style: TextStyle(color: Colors.black),
                               ),
@@ -342,7 +346,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         });
                   }
                 } else {
-                  return ListTile(
+                  return const ListTile(
                     leading: Icon(Icons.wrap_text, color: Colors.white),
                     title: Text('Update database',
                         style: TextStyle(color: Colors.white)),
@@ -354,21 +358,23 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
-            leading: Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
-            title:
-                Text('Buy me a coffee', style: TextStyle(color: Colors.white)),
-            subtitle: Text('If you like this app',
+            leading:
+                const Icon(FontAwesomeIcons.coffeeTogo, color: Colors.brown),
+            title: const Text('Buy me a coffee',
+                style: TextStyle(color: Colors.white)),
+            subtitle: const Text('If you like this app',
                 style: TextStyle(color: Colors.white54)),
             onTap: () async {
               InAppRepo().purchaseCoffee();
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
-            leading: Icon(Icons.person, color: Colors.white),
-            title: Text('About me', style: TextStyle(color: Colors.white)),
+            leading: const Icon(Icons.person, color: Colors.white),
+            title:
+                const Text('About me', style: TextStyle(color: Colors.white)),
             onTap: () async {
               final url = Uri.encodeFull('https://github.com/Livinglist');
 
@@ -379,7 +385,7 @@ class _SettingsPageState extends State<SettingsPage> {
               }
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTileTheme(
               textColor: Colors.white70,
               child: AboutListTile(
@@ -399,7 +405,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       launch("https://livinglist.github.io");
                     },
                     child: Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Icon(FontAwesomeIcons.addressCard),
                         SizedBox(
                           width: 12,
@@ -413,7 +419,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       launch("https://github.com/Livinglist/Manji");
                     },
                     child: Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Icon(FontAwesomeIcons.github),
                         SizedBox(
                           width: 12,
@@ -434,14 +440,14 @@ class _SettingsPageState extends State<SettingsPage> {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text('Thank You!'),
-            content: Text('You just fed the developer a cup of coffee.'),
+            title: const Text('Thank You!'),
+            content: const Text('You just fed the developer a cup of coffee.'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("You are welcome.")),
+                  child: const Text("You are welcome.")),
             ],
           );
         });
@@ -450,7 +456,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void appleLogIn() async {
     if (await AppleSignIn.isAvailable()) {
       final result = await AppleSignIn.performRequests([
-        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+        const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
       ]);
       switch (result.status) {
         case AuthorizationStatus.authorized:
@@ -474,21 +480,23 @@ class _SettingsPageState extends State<SettingsPage> {
     return showCupertinoModalPopup<SignInMethod>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Sign In Via"),
+              message: const Text("Sign In Via"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, null);
                 },
               ),
               actions: <Widget>[
                 CupertinoActionSheetAction(
-                    child: Text('Apple', style: TextStyle(color: Colors.blue)),
+                    child: const Text('Apple',
+                        style: TextStyle(color: Colors.blue)),
                     onPressed: () =>
                         Navigator.pop(context, SignInMethod.Apple)),
                 CupertinoActionSheetAction(
-                    child: Text('Google', style: TextStyle(color: Colors.blue)),
+                    child: const Text('Google',
+                        style: TextStyle(color: Colors.blue)),
                     onPressed: () =>
                         Navigator.pop(context, SignInMethod.Google)),
               ],

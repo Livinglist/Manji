@@ -49,7 +49,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
                     return Container();
                   }
                   return IconButton(
-                      icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                      icon: const Icon(FontAwesomeIcons.bookOpen, size: 16),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -61,7 +61,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
                 return Container();
               }),
           IconButton(
-            icon: Icon(Icons.delete_sweep),
+            icon: const Icon(Icons.delete_sweep),
             onPressed: () => confirmDeleteAll().then((val) {
               if (val) iqBloc.deleteAllIncorrectQuestions();
             }),
@@ -74,7 +74,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
           builder: (_, AsyncSnapshot<List<Question>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text(
                       "Questions you got wrong\nwill appear here for you to study.",
                       textAlign: TextAlign.center,
@@ -91,9 +91,9 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
                           confirmDismiss: (_) => confirmDismiss(q),
                           background: Container(
                             alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(right: 20.0),
+                            padding: const EdgeInsets.only(right: 20.0),
                             color: Colors.red,
-                            child: Icon(
+                            child: const Icon(
                               Icons.delete,
                               color: Colors.white,
                             ),
@@ -111,10 +111,10 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Are you sure?"),
+              message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -122,7 +122,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
               actions: <Widget>[
                 CupertinoActionSheetAction(
                   isDestructiveAction: true,
-                  child: Text('Remove all'),
+                  child: const Text('Remove all'),
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
@@ -135,10 +135,10 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
     return showCupertinoModalPopup<bool>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-              message: Text("Are you sure?"),
+              message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },

@@ -30,7 +30,7 @@ class FirebaseAuthProvider {
   );
 
   Future checkForUpdates() async {
-    var user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       FirestoreProvider.instance.isUpgradable().then((isUpgradable) {
         if (isUpgradable) {
@@ -71,10 +71,10 @@ class FirebaseAuthProvider {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((UserCredential cred) async {
       if (cred.user.emailVerified || true) {
-        var firebaseUser = cred.user;
+        final firebaseUser = cred.user;
         return firebaseUser;
       } else {
-        var firebaseUser = cred.user;
+        final firebaseUser = cred.user;
         return firebaseUser;
       }
     }).catchError((Object err) {
@@ -95,18 +95,18 @@ class FirebaseAuthProvider {
   }
 
   Future<User> signInApple() async {
-    var firebaseAuth = FirebaseAuth.instance;
-    var sharedPrefs = await SharedPreferences.getInstance();
+    final firebaseAuth = FirebaseAuth.instance;
+    final sharedPrefs = await SharedPreferences.getInstance();
 
     if (await AppleSignIn.isAvailable()) {
       final result = await AppleSignIn.performRequests([
-        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+        const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
       ]);
 
       if (result.status == AuthorizationStatus.authorized) {
-        var appleIdCredential = result.credential;
+        final appleIdCredential = result.credential;
 
-        var userId = appleIdCredential.user;
+        final userId = appleIdCredential.user;
 
         var email = appleIdCredential.email;
         var password = appleIdCredential.email;
@@ -118,7 +118,7 @@ class FirebaseAuthProvider {
           password = sharedPrefs.getString(passwordKey);
 
           if (email == null) {
-            var snapshot = await FirebaseFirestore.instance
+            final snapshot = await FirebaseFirestore.instance
                 .collection('appleIdToEmail')
                 .doc(userId)
                 .get();
@@ -188,9 +188,9 @@ class FirebaseAuthProvider {
   }
 
   Future<User> signInGoogle() async {
-    var firebaseAuth = FirebaseAuth.instance;
+    final firebaseAuth = FirebaseAuth.instance;
 
-    var googleUser = await googleSignIn.signIn().then((value) {
+    final googleUser = await googleSignIn.signIn().then((value) {
       return value;
     }, onError: (_) {
       return null;
@@ -198,8 +198,8 @@ class FirebaseAuthProvider {
 
     if (googleUser == null) return null;
 
-    var email = googleUser.email;
-    var password = email;
+    final email = googleUser.email;
+    final password = email;
 
     return firebaseAuth
         .signInWithEmailAndPassword(email: email, password: email)

@@ -103,12 +103,12 @@ class _SearchResultPageState extends State<SearchResultPage>
           elevation: showShadow ? 8 : 0,
           actions: <Widget>[
             Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: StreamBuilder(
                 stream: searchBloc.results,
                 builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                   if (snapshot.hasData) {
-                    var kanjis = snapshot.data;
+                    final kanjis = snapshot.data;
 
                     return Center(child: Text('${kanjis.length} kanji found'));
                   }
@@ -125,19 +125,19 @@ class _SearchResultPageState extends State<SearchResultPage>
                 stream: searchBloc.results,
                 builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                   if (snapshot.hasData) {
-                    var kanjis = snapshot.data;
+                    final kanjis = snapshot.data;
 
                     return kanjis.isNotEmpty
                         ? _KanjiListView(
                             kanjis: kanjis, scrollController: scrollController)
-                        : Center(
+                        : const Center(
                             child: Text(
                               'No results found _(┐「ε:)_',
-                              style: TextStyle(color: Colors.white70),
+                              style: const TextStyle(color: Colors.white70),
                             ),
                           );
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -146,7 +146,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 child: AnimatedBuilder(
                   animation: animationController,
                   child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -156,7 +156,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                             alignment: WrapAlignment.start,
                             spacing: 8,
                             children: <Widget>[
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               for (var n in jlptMap.keys)
                                 FilterChip(
                                     selected: jlptMap[n],
@@ -187,7 +187,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                             alignment: WrapAlignment.start,
                             spacing: 8,
                             children: <Widget>[
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               for (var g in gradeMap.keys)
                                 FilterChip(
                                     selected: gradeMap[g],
@@ -218,7 +218,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                             alignment: WrapAlignment.start,
                             spacing: 8,
                             children: <Widget>[
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               for (var r
                                   in radicalsMap.keys.toList().sublist(0, 4))
                                 FilterChip(
@@ -269,8 +269,8 @@ class _SearchResultPageState extends State<SearchResultPage>
                                 tag: 'hero',
                                 child: MaterialButton(
                                   onPressed: showRadicalsDialog,
-                                  child: Text('More Radicals'),
-                                  shape: StadiumBorder(),
+                                  child: const Text('More Radicals'),
+                                  shape: const StadiumBorder(),
                                   color: Colors.grey,
                                   height: 32,
                                 ),
@@ -349,12 +349,12 @@ class _KanjiListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[];
+    final children = <Widget>[];
 
     children.add(Container(
       height: _filterPanelHeight,
     ));
-    for (var kanji in kanjis) {
+    for (final kanji in kanjis) {
       children.add(Material(
         color: Theme.of(context).primaryColor,
         child: KanjiListTile(
@@ -364,7 +364,7 @@ class _KanjiListView extends StatelessWidget {
               MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji))),
         ),
       ));
-      children.add(Divider(height: 0));
+      children.add(const Divider(height: 0));
     }
     children.removeLast();
     children.add(Container(

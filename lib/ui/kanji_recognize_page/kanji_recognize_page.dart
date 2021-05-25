@@ -107,12 +107,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         title: Text(widget.title),
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: StreamBuilder(
                 stream: kanjiRecognizeBloc.predictedKanji,
                 builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
                   if (snapshot.hasData) {
-                    var kanjis = snapshot.data;
+                    final kanjis = snapshot.data;
 
                     return Center(child: Text('${kanjis.length} kanji found'));
                   }
@@ -165,7 +165,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
           _cleanDrawing();
         },
         tooltip: 'Clean',
-        child: Icon(Icons.delete),
+        child: const Icon(Icons.delete),
       ),
     );
   }
@@ -180,16 +180,16 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder(
           stream: kanjiRecognizeBloc.predictedKanji,
-          initialData: <Kanji>[],
+          initialData: const <Kanji>[],
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-            var kanjis = snapshot.data;
+            final kanjis = snapshot.data;
             if (kanjis.isEmpty) {
-              return Center(
+              return const Center(
                   child: Text(r'Empty ¯\_(ツ)_/¯',
                       style: TextStyle(color: Colors.white70)));
             }
 
-            List<Widget> children = [];
+            final children = <Widget>[];
 
             for (var k in kanjis) {
               print(k.kanji);
@@ -197,12 +197,12 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
                 color: Colors.transparent,
                 child: KanjiListTile(kanji: k),
               ));
-              children.add(Divider(height: 0));
+              children.add(const Divider(height: 0));
             }
 
             children.removeLast();
 
-            children.add(SizedBox(height: 360));
+            children.add(const SizedBox(height: 360));
 
             return ListView(
               controller: scrollController,
@@ -220,17 +220,15 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder(
           stream: kanjiRecognizeBloc.predictedKanji,
-          initialData: <Kanji>[],
+          initialData: const <Kanji>[],
           builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
-            var kanjis = snapshot.data;
+            final kanjis = snapshot.data;
             if (kanjis.isEmpty) {
-              return Center(
+              return const Center(
                   child: Text(r'Empty ¯\_(ツ)_/¯',
                       style: TextStyle(color: Colors.white70)));
             }
-            for (var i in kanjis) {
-              print(i.kanji);
-            }
+
             return SingleChildScrollView(
               controller: scrollController,
               child: Column(
@@ -248,7 +246,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
     return Container(
       height: MediaQuery.of(context).size.width,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: Builder(
@@ -256,13 +254,13 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
           return GestureDetector(
             onPanUpdate: (details) {
               setState(() {
-                RenderBox renderBox = context.findRenderObject();
+                final renderBox = context.findRenderObject() as RenderBox;
                 points.add(renderBox.globalToLocal(details.globalPosition));
               });
             },
             onPanStart: (details) {
               setState(() {
-                RenderBox renderBox = context.findRenderObject();
+                final renderBox = context.findRenderObject() as RenderBox;
                 points.add(renderBox.globalToLocal(details.globalPosition));
               });
             },
@@ -292,7 +290,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
 
   Widget buildForTablet() {
     return Container(
-      constraints: BoxConstraints(maxHeight: 360, maxWidth: 360),
+      constraints: const BoxConstraints(maxHeight: 360, maxWidth: 360),
       height: 360,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -308,13 +306,13 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
           return GestureDetector(
             onPanUpdate: (details) {
               setState(() {
-                RenderBox renderBox = context.findRenderObject();
+                final renderBox = context.findRenderObject() as RenderBox;
                 points.add(renderBox.globalToLocal(details.globalPosition));
               });
             },
             onPanStart: (details) {
               setState(() {
-                RenderBox renderBox = context.findRenderObject();
+                final renderBox = context.findRenderObject() as RenderBox;
                 points.add(renderBox.globalToLocal(details.globalPosition));
               });
             },

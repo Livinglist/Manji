@@ -15,7 +15,7 @@ class KanjiRecognitionBloc {
 
   void predict(List<Offset> points, double canvasSize) {
     _brain.processCanvasPoints(points, canvasSize).then((predicts) {
-      var temp = <Kanji>[];
+      final temp = <Kanji>[];
       for (var p in predicts) {
         if (KanjiBloc.instance.allKanjisMap.containsKey(p['label'])) {
           temp.add(KanjiBloc.instance.allKanjisMap[p['label']]);

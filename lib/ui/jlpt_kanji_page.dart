@@ -17,7 +17,8 @@ class JLPTKanjiPage extends StatefulWidget {
 }
 
 class JLPTKanjiPageState extends State<JLPTKanjiPage> {
-  static final actionTextStyle = TextStyle(color: Colors.blue);
+  static const actionTextStyle = TextStyle(color: Colors.blue);
+
   //show gridview by default
   JLPTLevel currentLevel = JLPTLevel.n5;
   bool showGrid = true;
@@ -55,27 +56,27 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
               Token(text: '日能試', furigana: 'にのうし'),
               Token(text: '漢字', furigana: 'かんじ')
             ],
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             IconButton(
-                icon: Icon(FontAwesomeIcons.bookOpen, size: 16),
+                icon: const Icon(FontAwesomeIcons.bookOpen, size: 16),
                 onPressed: () => showAmountDialog(jlptToKanjisMap[currentLevel],
                     'Study N${currentLevel.index + 1}')),
             IconButton(
                 icon: AnimatedCrossFade(
-                  firstChild: Icon(
+                  firstChild: const Icon(
                     FontAwesomeIcons.sortNumericDown,
                     color: Colors.white,
                   ),
-                  secondChild: Icon(
+                  secondChild: const Icon(
                     FontAwesomeIcons.sortNumericDownAlt,
                     color: Colors.white,
                   ),
                   crossFadeState: altSorted
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                 ),
                 color: Colors.white,
                 onPressed: () {
@@ -85,18 +86,18 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
                 }),
             IconButton(
               icon: AnimatedCrossFade(
-                firstChild: Icon(
+                firstChild: const Icon(
                   Icons.view_headline,
                   color: Colors.white,
                 ),
-                secondChild: Icon(
+                secondChild: const Icon(
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
                 crossFadeState: showGrid
                     ? CrossFadeState.showFirst
                     : CrossFadeState.showSecond,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
               ),
               onPressed: () {
                 setState(() {
@@ -107,7 +108,7 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
           ],
           //elevation: 0,
           bottom: TabBar(
-              tabs: [
+              tabs: const [
                 Tab(
                   text: 'N5',
                 ),
@@ -198,33 +199,33 @@ class JLPTKanjiPageState extends State<JLPTKanjiPage> {
               if (kanjis.length >= 100)
                 CupertinoActionSheetAction(
                     onPressed: () => onAmountPressed(100, kanjis),
-                    child: Text("100 kanji", style: actionTextStyle)),
+                    child: const Text("100 kanji", style: actionTextStyle)),
               if (kanjis.length >= 50)
                 CupertinoActionSheetAction(
                     onPressed: () => onAmountPressed(50, kanjis),
-                    child: Text("50 kanji", style: actionTextStyle)),
+                    child: const Text("50 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onAmountPressed(20, kanjis),
-                  child: Text("20 kanji", style: actionTextStyle)),
+                  child: const Text("20 kanji", style: actionTextStyle)),
               CupertinoActionSheetAction(
                   onPressed: () => onAmountPressed(10, kanjis),
-                  child: Text("10 kanji", style: actionTextStyle)),
+                  child: const Text("10 kanji", style: actionTextStyle)),
             ],
             cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel", style: actionTextStyle)),
+                child: const Text("Cancel", style: actionTextStyle)),
           );
         });
   }
 
   void onAmountPressed(int amount, List<Kanji> kanjis) {
     Navigator.pop(context);
-    var start = Random(DateTime.now().millisecondsSinceEpoch)
+    final start = Random(DateTime.now().millisecondsSinceEpoch)
         .nextInt(kanjis.length - amount);
-    var temp = kanjis.sublist(start, start + amount);
+    final temp = kanjis.sublist(start, start + amount);
     Navigator.push(context,
         MaterialPageRoute(builder: (_) => KanjiStudyPage(kanjis: temp)));
   }

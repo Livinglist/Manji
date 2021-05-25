@@ -16,10 +16,10 @@ class IncorrectQuestionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var kanji = question.targetedKanji;
-    var wrongKana = question.choices[question.selected];
-    var rightKana = question.rightAnswer;
-    var tag = UniqueKey().toString() +
+    final kanji = question.targetedKanji;
+    final wrongKana = question.choices[question.selected];
+    final rightKana = question.rightAnswer;
+    final tag = UniqueKey().toString() +
         kanji.kanji +
         question.questionType.index.toString();
     return ListTile(
@@ -58,21 +58,21 @@ class IncorrectQuestionListTile extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Wrap(
             children: <Widget>[
               kanji.jlpt != 0
                   ? Padding(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: Container(
                         child: Padding(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: Text(
                               'N${kanji.jlpt}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             )),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(
@@ -84,8 +84,8 @@ class IncorrectQuestionListTile extends StatelessWidget {
                   : Container(),
               GradeChip(
                   grade: kanji.grade,
-                  textStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  textStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold)),
             ],
           ),
           Wrap(
@@ -94,36 +94,35 @@ class IncorrectQuestionListTile extends StatelessWidget {
             children: <Widget>[
               for (var kunyomi in kanji.kunyomi)
                 Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: Container(
                       child: Padding(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           child: Text(
                             kunyomi,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           )),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(
+                        borderRadius: const BorderRadius.all(Radius.circular(
                                 5.0) //                 <--- border radius here
                             ),
                       ),
                     )),
               for (var onyomi in kanji.onyomi)
                 Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   child: Container(
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text(
                           onyomi,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold),
                         )),
-                    decoration: BoxDecoration(
-                      //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(
                               5.0) //                 <--- border radius here
@@ -133,11 +132,12 @@ class IncorrectQuestionListTile extends StatelessWidget {
                 )
             ],
           ),
-          Divider(),
+          const Divider(),
           if (question.questionType == QuestionType.KanjiToKatakana)
             Row(children: <Widget>[
-              Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-              Spacer(),
+              const Icon(FontAwesomeIcons.checkCircle,
+                  color: Colors.greenAccent),
+              const Spacer(),
               Text(rightKana,
                   style:
                       TextStyle(color: Colors.greenAccent, fontSize: fontSize))
@@ -147,8 +147,9 @@ class IncorrectQuestionListTile extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(FontAwesomeIcons.checkCircle, color: Colors.greenAccent),
-                  Spacer(),
+                  const Icon(FontAwesomeIcons.checkCircle,
+                      color: Colors.greenAccent),
+                  const Spacer(),
                   Flexible(
                     child: Text(rightKana,
                         style: TextStyle(
@@ -157,11 +158,11 @@ class IncorrectQuestionListTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis),
                   )
                 ]),
-          Divider(),
+          const Divider(),
           if (question.questionType == QuestionType.KanjiToKatakana)
             Row(children: <Widget>[
-              Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
-              Spacer(),
+              const Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
+              const Spacer(),
               Text(wrongKana,
                   style: TextStyle(color: Colors.redAccent, fontSize: fontSize))
             ]),
@@ -170,8 +171,9 @@ class IncorrectQuestionListTile extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
-                  Spacer(),
+                  const Icon(FontAwesomeIcons.timesCircle,
+                      color: Colors.redAccent),
+                  const Spacer(),
                   Flexible(
                       child: Text(wrongKana,
                           style: TextStyle(
@@ -180,10 +182,10 @@ class IncorrectQuestionListTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis))
                 ]),
-          Divider(),
+          const Divider(),
           Text(
             question.targetedKanji.meaning,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),

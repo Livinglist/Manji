@@ -87,23 +87,23 @@ class KanaDetailPageState extends State<KanaDetailPage> {
           title: Container(),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.volume_up),
+              icon: const Icon(Icons.volume_up),
               onPressed: () => flutterTts.speak(widget.kana),
             ),
             IconButton(
               icon: AnimatedCrossFade(
-                  firstChild: Icon(
+                  firstChild: const Icon(
                     Icons.view_headline,
                     color: Colors.white,
                   ),
-                  secondChild: Icon(
+                  secondChild: const Icon(
                     Icons.view_comfy,
                     color: Colors.white,
                   ),
                   crossFadeState: showGrid
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
-                  duration: Duration(milliseconds: 200)),
+                  duration: const Duration(milliseconds: 200)),
               onPressed: () {
                 setState(() {
                   showGrid = !showGrid;
@@ -126,7 +126,7 @@ class KanaDetailPageState extends State<KanaDetailPage> {
                     child: Center(
                       child: Text(
                         widget.kana,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 48,
                           color: Colors.white,
                           //fontFamily: 'Ai'

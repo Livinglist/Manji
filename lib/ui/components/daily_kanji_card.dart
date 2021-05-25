@@ -21,14 +21,14 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
   Widget build(BuildContext context) {
     return AnimatedSize(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       child: StreamBuilder(
         stream: KanjiBloc.instance.randomKanji,
         builder: (_, AsyncSnapshot<Kanji> snapshot) {
           if (snapshot.hasData) {
-            var kanji = snapshot.data;
+            final kanji = snapshot.data;
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                 color: Colors.white,
               ),
@@ -36,11 +36,11 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
                 color: Colors.transparent,
                 child: InkWell(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.transparent,
                     ),
                     child: Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Flex(
                           direction: Axis.horizontal,
                           children: <Widget>[
@@ -60,7 +60,7 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
                                                 tag: '',
                                                 child: Text(
                                                   kanji.kanji,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontFamily:
                                                           'strokeOrders',
                                                       fontSize: 128),
@@ -84,20 +84,23 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
                                       children: <Widget>[
                                         kanji.jlpt != 0
                                             ? Padding(
-                                                padding: EdgeInsets.all(4),
+                                                padding:
+                                                    const EdgeInsets.all(4),
                                                 child: Container(
                                                   child: Padding(
                                                       padding:
-                                                          EdgeInsets.all(4),
+                                                          const EdgeInsets.all(
+                                                              4),
                                                       child: Text(
                                                         'N${kanji.jlpt}',
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontSize: 18,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
                                                       )),
-                                                  decoration: BoxDecoration(
+                                                  decoration:
+                                                      const BoxDecoration(
                                                     //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                                                     color: Colors.grey,
                                                     borderRadius: BorderRadius.all(
@@ -116,28 +119,28 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
                                     ),
                                     RichText(
                                       text: TextSpan(children: [
-                                        TextSpan(
+                                        const TextSpan(
                                             text: '意味 ',
                                             style: TextStyle(
                                                 color: Colors.grey,
                                                 fontWeight: FontWeight.w600)),
                                         TextSpan(
                                             text: kanji.meaning,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600))
                                       ]),
                                     ),
                                     RichText(
                                       text: TextSpan(children: [
-                                        TextSpan(
+                                        const TextSpan(
                                             text: '使用頻度 ',
                                             style: TextStyle(
                                                 color: Colors.grey,
                                                 fontWeight: FontWeight.w600)),
                                         TextSpan(
                                             text: kanji.frequency.toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600))
                                       ]),

@@ -15,7 +15,7 @@ class Word {
   }
 
   Word.fromString(String str) {
-    var subStrs = str.split('^');
+    final subStrs = str.split('^');
     wordText = subStrs[0];
     wordFurigana = subStrs[1];
     meanings = subStrs[2];

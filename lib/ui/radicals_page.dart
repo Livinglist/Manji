@@ -56,10 +56,10 @@ class _RadicalsPageState extends State<RadicalsPage> {
             backgroundColor: Theme.of(context).primaryColor,
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(radicalsMap),
               ),
-              title: Text('Radicals'),
+              title: const Text('Radicals'),
               elevation: showShadow ? 8 : 0,
             ),
             body: ListView(
@@ -68,11 +68,11 @@ class _RadicalsPageState extends State<RadicalsPage> {
               addAutomaticKeepAlives: true,
               children: [
                 Padding(
-                    padding: EdgeInsets.only(left: 8, bottom: 4),
+                    padding: const EdgeInsets.only(left: 8, bottom: 4),
                     child: Row(
                       children: [
                         ActionChip(
-                          label: Text(
+                          label: const Text(
                             'Clear',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -91,13 +91,13 @@ class _RadicalsPageState extends State<RadicalsPage> {
                             }
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         ActionChip(
                           label: Text(
                             showMeanings ? 'Hide meanings' : 'Show meanings',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           backgroundColor: Colors.orange,
                           onPressed: () {
@@ -115,7 +115,7 @@ class _RadicalsPageState extends State<RadicalsPage> {
                         ),
                       ],
                     )),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Divider(height: 0),
                 ),
@@ -138,13 +138,13 @@ class _RadicalsPageState extends State<RadicalsPage> {
         strokeText = strokeText.substring(0, strokeText.length - 1);
 
       final wrap = Padding(
-        padding: EdgeInsets.only(left: 8, bottom: 4),
+        padding: const EdgeInsets.only(left: 8, bottom: 4),
         child: Wrap(
           alignment: WrapAlignment.start,
           spacing: 8,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Container(
                 key: ObjectKey(strokeText),
                 height: 32,
@@ -152,13 +152,13 @@ class _RadicalsPageState extends State<RadicalsPage> {
                 child: Center(
                   child: Text(
                     strokeText,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 decoration: BoxDecoration(
                   color: Colors.grey[600],
-                  borderRadius: BorderRadius.all(
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(18),
                   ),
                 ),
@@ -189,14 +189,14 @@ class _RadicalsPageState extends State<RadicalsPage> {
       children.add(wrap);
 
       children.add(Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Divider(height: 0, color: dividerColor),
       ));
     }
 
     children.removeLast();
 
-    children.add(SizedBox(height: 128));
+    children.add(const SizedBox(height: 128));
 
     return children;
   }

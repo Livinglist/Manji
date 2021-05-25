@@ -44,19 +44,19 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
                     'Tap on the card to reveal more information about the kanji.',
                     style: TextStyle(color: Colors.white)),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
                     'Tip: You can double tap on the card to check out detailed information about the kanji.',
-                    style: TextStyle(color: Colors.white)),
+                    style: const TextStyle(color: Colors.white)),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
                     'Swipe right if you want to keep studying the current card.',
@@ -68,7 +68,7 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
                   child: Image.asset('data/right.png', width: 240),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
                     'Swipe left if you have memorized the current card. (This card will then be removed from the deck)',
@@ -80,7 +80,7 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
                   child: Image.asset('data/left.png', width: 240),
                 ),
               ),
-              SizedBox(height: 48, width: double.infinity)
+              const SizedBox(height: 48, width: double.infinity)
             ],
           ),
         ));

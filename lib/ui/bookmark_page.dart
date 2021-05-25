@@ -34,12 +34,12 @@ class MyKanjiPageState extends State<MyKanjiPage> {
               Token(text: '収蔵', furigana: 'しゅうぞう'),
               Token(text: '漢字', furigana: 'かんじ')
             ],
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
           actions: <Widget>[
             AnimatedCrossFade(
               firstChild: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.view_headline,
                   color: Colors.white,
                 ),
@@ -50,7 +50,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                 },
               ),
               secondChild: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.view_comfy,
                   color: Colors.white,
                 ),
@@ -63,11 +63,10 @@ class MyKanjiPageState extends State<MyKanjiPage> {
               crossFadeState: showGrid
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-              duration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
             )
           ],
-          bottom: TabBar(tabs: [
-            //Tab(child: Container(child: Text('N5'),color: Colors.black),),
+          bottom: const TabBar(tabs: [
             Tab(
               icon: Icon(FontAwesomeIcons.solidBookmark, color: Colors.teal),
             ),
@@ -81,15 +80,13 @@ class MyKanjiPageState extends State<MyKanjiPage> {
             stream: KanjiBloc.instance.allStarKanjis,
             builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
               if (snapshot.hasData) {
-                var kanjis = snapshot.data;
-                //kanjis.sort((kanjiLeft, kanjiRight)=>kanjiLeft.strokes.compareTo(kanjiRight.strokes));
-                //return showGrid ? KanjiGridView(kanjis: kanjis) : KanjiListView(kanjis: kanjis);
+                final kanjis = snapshot.data;
 
                 if (kanjis.isEmpty) {
                   return Container(
                     height: 200,
                     width: MediaQuery.of(context).size.width,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Go and explore more kanji！ (╯°Д°）╯',
                         style: TextStyle(color: Colors.white70),
@@ -101,7 +98,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                 if (showGrid) return KanjiGridView(kanjis: kanjis);
                 return KanjiListView(kanjis: kanjis);
               } else {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             },
           ),
@@ -109,7 +106,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
             stream: KanjiBloc.instance.allFavKanjis,
             builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
               if (snapshot.hasData) {
-                var kanjis = snapshot.data;
+                final kanjis = snapshot.data;
 
                 //kanjis.sort((kanjiLeft, kanjiRight)=>kanjiLeft.strokes.compareTo(kanjiRight.strokes));
                 //return showGrid ? KanjiGridView(kanjis: kanjis) : KanjiListView(kanjis: kanjis);
@@ -118,7 +115,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                   return Container(
                     height: 200,
                     width: MediaQuery.of(context).size.width,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Go and explore more kanji！ (╯°Д°）╯',
                         style: TextStyle(color: Colors.white70),
@@ -130,7 +127,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
                 if (showGrid) return KanjiGridView(kanjis: kanjis);
                 return KanjiListView(kanjis: kanjis);
               } else {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             },
           )

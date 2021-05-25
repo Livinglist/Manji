@@ -13,7 +13,7 @@ class QuizBloc {
   Stream<Quiz> get quiz => _quizFetcher.stream;
 
   void generateQuiz(List<Kanji> kanjis) {
-    var quiz = generate(kanjis);
+    final quiz = generate(kanjis);
     if (_quizFetcher.isClosed == false) _quizFetcher.sink.add(quiz);
   }
 
@@ -23,7 +23,7 @@ class QuizBloc {
         .toList();
     print(amount);
     if (amount != 0 && amount <= kanjis.length) {
-      var start = Random(DateTime.now().millisecondsSinceEpoch)
+      final start = Random(DateTime.now().millisecondsSinceEpoch)
           .nextInt(kanjis.length - amount);
       kanjis = kanjis.sublist(start, start + amount);
     }
@@ -39,7 +39,7 @@ class QuizBloc {
 }
 
 Quiz generate(List<Kanji> kanjis) {
-  var questions = <Question>[];
+  final questions = <Question>[];
 
   kanjis.shuffle();
 
@@ -53,10 +53,10 @@ Quiz generate(List<Kanji> kanjis) {
       questions.add(Question(targetedKanji: kanjis[i]));
 
       //KanjiToMeaning
-      var random = Random(DateTime.now().millisecondsSinceEpoch + i);
-      var set = Set<int>();
+      final random = Random(DateTime.now().millisecondsSinceEpoch + i);
+      final set = Set<int>();
       while (set.length != 3) {
-        var index = random.nextInt(kanjis.length);
+        final index = random.nextInt(kanjis.length);
         if (index != i) set.add(index);
       }
 
@@ -73,7 +73,7 @@ Quiz generate(List<Kanji> kanjis) {
       //KanjiToHiragana
       set.clear();
       while (set.length != 3) {
-        var index = random.nextInt(kanjis.length);
+        final index = random.nextInt(kanjis.length);
         if (index != i) set.add(index);
       }
       indexes = set.toList();
@@ -97,7 +97,7 @@ Quiz generate(List<Kanji> kanjis) {
     }
   }
 
-  var quiz = Quiz.from(questions);
+  final quiz = Quiz.from(questions);
 
   return quiz;
 }

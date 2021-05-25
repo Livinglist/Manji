@@ -25,13 +25,13 @@ class SearchBloc {
       return;
     }
 
-    var kanjiSet = <Kanji>{};
+    final kanjiSet = <Kanji>{};
     String hiraganaText = '';
     String katakanaText = '';
 
     if (text.isAllKanji()) {
       for (var i in Iterable.generate(text.length)) {
-        var kanjiStr = text[i];
+        final kanjiStr = text[i];
         if (_allKanjisMap.containsKey(kanjiStr)) {
           kanjiSet.add(_allKanjisMap[kanjiStr]);
         }
@@ -88,7 +88,7 @@ class SearchBloc {
       }
 
       if (katakanaText.isNotEmpty) {
-        var onyomiMatch = kanji.onyomi.where((str) => str == katakanaText);
+        final onyomiMatch = kanji.onyomi.where((str) => str == katakanaText);
         if (onyomiMatch.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
@@ -96,7 +96,7 @@ class SearchBloc {
       }
 
       if (hiraganaText.isNotEmpty) {
-        var kunyomiMatch = kanji.kunyomi.where((str) => str == hiraganaText);
+        final kunyomiMatch = kanji.kunyomi.where((str) => str == hiraganaText);
         if (kunyomiMatch.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
@@ -104,13 +104,13 @@ class SearchBloc {
       }
 
       if (hiraganaText.isEmpty) {
-        var onyomiWords = kanji.onyomiWords.where((word) =>
+        final onyomiWords = kanji.onyomiWords.where((word) =>
             word.meanings.contains(text) || word.wordText.contains(text));
         if (onyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
           continue;
         }
-        var kunyomiWords = kanji.kunyomiWords.where((word) =>
+        final kunyomiWords = kanji.kunyomiWords.where((word) =>
             word.meanings.contains(text) || word.wordText.contains(text));
         if (kunyomiWords.isNotEmpty) {
           kanjiSet.add(kanji);
@@ -124,7 +124,7 @@ class SearchBloc {
 
   void filter(Map<int, bool> jlptMap, Map<int, bool> gradeMap,
       Map<String, bool> radicalsMap) {
-    var list = <Kanji>[];
+    final list = <Kanji>[];
 
     this.clear();
 
@@ -143,7 +143,7 @@ class SearchBloc {
 
   Stream<Kanji> _filterKanjiStream(Map<int, bool> jlptMap,
       Map<int, bool> gradeMap, Map<String, bool> radicalsMap) async* {
-    bool jlptIsEmpty = !jlptMap.containsValue(true),
+    final jlptIsEmpty = !jlptMap.containsValue(true),
         gradeIsEmpty = !gradeMap.containsValue(true),
         radicalIsEmpty = !radicalsMap.containsValue(true);
 

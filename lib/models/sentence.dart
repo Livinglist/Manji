@@ -65,7 +65,7 @@ class Sentence {
   }
 
   Sentence.fromJsonString(String str) {
-    var map = jsonDecode(str);
+    final map = jsonDecode(str);
     id = map[Keys.idKey];
     text = map[Keys.textKey];
     englishText = map[Keys.englishTextKey];
@@ -75,7 +75,7 @@ class Sentence {
   }
 
   String toJsonString() {
-    var map = toMap();
+    final map = toMap();
     return jsonEncode(map);
   }
 }
@@ -91,14 +91,14 @@ Future<List<Sentence>> jsonToSentences(List<String> jsonStrs) async {
 }
 
 Future<List<Sentence>> jsonStringToSentences(String jsonStr) async {
-  var list = jsonDecode(jsonStr) as List;
+  final list = jsonDecode(jsonStr) as List;
   return Future<List<Sentence>>(() {
     return list.map((sen) => Sentence.fromMap(jsonDecode(sen))).toList();
   });
 }
 
 Stream<Sentence> jsonToSentencesStream(String jsonStr) async* {
-  var list = jsonDecode(jsonStr) as List;
+  final list = jsonDecode(jsonStr) as List;
   for (var sen in list) {
     yield Sentence.fromMap(jsonDecode(sen));
   }

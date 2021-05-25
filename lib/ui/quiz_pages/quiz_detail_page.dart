@@ -32,7 +32,8 @@ class QuizDetailPage extends StatefulWidget {
 }
 
 class _QuizDetailPageState extends State<QuizDetailPage> {
-  final confettiController = ConfettiController(duration: Duration(seconds: 6));
+  final confettiController =
+      ConfettiController(duration: const Duration(seconds: 6));
   final scrollController = ScrollController();
   final quizBloc = QuizBloc();
   bool showShadow = false;
@@ -107,11 +108,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                 builder: (_, AsyncSnapshot<Quiz> snapshot) {
                   if (snapshot.hasData) {
                     return Padding(
-                        padding: EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(12),
                         child: Center(
                             child: Text(
                                 '$currentIndex/${snapshot.data.questionsCount}',
-                                style: TextStyle(fontSize: 18))));
+                                style: const TextStyle(fontSize: 18))));
                   }
                   return Container();
                 },
@@ -129,14 +130,15 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                 LinearProgressIndicator(
                                     value: currentIndex /
                                         snapshot.data.questionsCount,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.blueGrey),
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                            Colors.blueGrey),
                                     backgroundColor: Colors.grey),
                               ],
                             );
                     }
                     return Stack(
-                      children: <Widget>[
+                      children: const <Widget>[
                         LinearProgressIndicator(
                             value: 0.0,
                             valueColor:
@@ -146,7 +148,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                     );
                   },
                 ),
-                preferredSize: Size.fromHeight(0))),
+                preferredSize: const Size.fromHeight(0))),
         body: showResult ? buildResultView() : buildQuizView());
   }
 
@@ -167,7 +169,8 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                     children: <Widget>[
                       Text(
                         "${quizResult.percentage.toStringAsFixed(0)}%",
-                        style: TextStyle(color: Colors.white, fontSize: 96),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 96),
                       ),
                       Icon(getCharm(quizResult.percentage),
                           color: Colors.white, size: 90)
@@ -176,22 +179,22 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                 ),
                 Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(FontAwesomeIcons.timesCircle,
                           color: Colors.white),
                     ),
                     Text("Incorrect: ${quizResult.totalIncorrect}",
-                        style: TextStyle(color: Colors.white)),
-                    Spacer(),
-                    Padding(
+                        style: const TextStyle(color: Colors.white)),
+                    const Spacer(),
+                    const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(FontAwesomeIcons.checkCircle,
                           color: Colors.white),
                     ),
                     Text("Correct: ${quizResult.totalCorrect}",
-                        style: TextStyle(color: Colors.white)),
-                    SizedBox(width: 12)
+                        style: const TextStyle(color: Colors.white)),
+                    const SizedBox(width: 12)
                   ],
                 ),
                 ...quizResult.incorrectQuestions
@@ -226,7 +229,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       stream: quizBloc.quiz,
       builder: (_, AsyncSnapshot<Quiz> snapshot) {
         if (snapshot.hasData) {
-          var quiz = snapshot.data;
+          final quiz = snapshot.data;
 
           return Container(
             width: MediaQuery.of(context).size.width,
@@ -269,11 +272,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                   Flexible(
                       flex: 4,
                       child: ListView(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           children: List.generate(
                               quiz.currentQuestion.choices.length, (index) {
                             return Padding(
-                                padding: EdgeInsets.all(12),
+                                padding: const EdgeInsets.all(12),
                                 child: Material(
                                   elevation: 4,
                                   child: Ink(
@@ -294,10 +297,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                         height: 72,
                                         child: Center(
                                             child: Padding(
-                                          padding: EdgeInsets.all(12),
+                                          padding: const EdgeInsets.all(12),
                                           child: Text(
                                             quiz.currentQuestion.choices[index],
-                                            style: TextStyle(fontSize: 18),
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                             textAlign: TextAlign.center,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -314,16 +318,16 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                       flex: 4,
                       child: Container(
                         constraints:
-                            BoxConstraints(maxWidth: 640, maxHeight: 640),
+                            const BoxConstraints(maxWidth: 640, maxHeight: 640),
                         child: GridView.count(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             crossAxisCount: 2,
                             shrinkWrap: true,
                             childAspectRatio: 1,
                             children: List.generate(
                                 quiz.currentQuestion.choices.length, (index) {
                               return Padding(
-                                  padding: EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(12),
                                   child: Material(
                                     elevation: 4,
                                     child: Ink(
@@ -346,7 +350,8 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                             child: Text(
                                                 quiz.currentQuestion
                                                     .choices[index],
-                                                style: TextStyle(fontSize: 24)),
+                                                style: const TextStyle(
+                                                    fontSize: 24)),
                                           ),
                                         ),
                                       ),
@@ -359,7 +364,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
           );
         }
 
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

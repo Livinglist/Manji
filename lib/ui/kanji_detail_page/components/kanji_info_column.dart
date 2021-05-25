@@ -19,7 +19,7 @@ class KanjiInfoColumn extends StatelessWidget {
       stream: KanjiBloc.instance.kanji,
       builder: (_, AsyncSnapshot<Kanji> snapshot) {
         if (snapshot.hasData || this.kanji != null) {
-          var kanji = this.kanji == null ? snapshot.data : this.kanji;
+          final kanji = this.kanji == null ? snapshot.data : this.kanji;
 
           Widget radicalPanel;
 
@@ -40,7 +40,7 @@ class KanjiInfoColumn extends StatelessWidget {
                   LabelDivider(
                       child: RichText(
                           textAlign: TextAlign.center,
-                          text: TextSpan(children: [
+                          text: const TextSpan(children: [
                             TextSpan(
                                 text: 'ぶしゅ' + '\n',
                                 style: TextStyle(
@@ -51,15 +51,15 @@ class KanjiInfoColumn extends StatelessWidget {
                                     fontSize: 18, color: Colors.white))
                           ]))),
                   Padding(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     child: Text("${kanji.radicals}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     child: Text("${kanji.radicalsMeaning}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   )
                 ],
@@ -74,17 +74,17 @@ class KanjiInfoColumn extends StatelessWidget {
                 children: <Widget>[
                   kanji.jlpt != 0
                       ? Padding(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           child: Container(
                             child: Padding(
-                                padding: EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: Text(
                                   'N${kanji.jlpt}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 )),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                               color: Colors.white,
                               borderRadius: BorderRadius.all(Radius.circular(
@@ -100,20 +100,21 @@ class KanjiInfoColumn extends StatelessWidget {
                 ],
               ),
               Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                   child: Text(
                     "${kanji.strokes} strokes",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   )),
               if (kanji.radicals != null && kanji.radicals.isNotEmpty)
                 DescribedFeatureOverlay(
                     featureId: 'more_radicals',
                     // Unique id that identifies this overlay.
-                    tapTarget: Text('部首', style: TextStyle(fontSize: 18)),
+                    tapTarget: const Text('部首', style: TextStyle(fontSize: 18)),
                     // The widget that will be displayed as the tap target.
-                    title: Text('Radicals'),
-                    description: Text(
+                    title: const Text('Radicals'),
+                    description: const Text(
                         'Tap here if you want to see more kanji with this radical.'),
                     backgroundColor: Theme.of(context).primaryColor,
                     targetColor: Colors.white,

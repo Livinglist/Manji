@@ -135,7 +135,7 @@ class SentenceBloc {
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences =
+        final sentences =
             snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
 
         //Remove duplicates.
@@ -153,7 +153,7 @@ class SentenceBloc {
 
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByKanji(String kanji) {
-    var ref = FirebaseFirestore.instance
+    final ref = FirebaseFirestore.instance
         .collection('sentences2')
         .doc(kanji)
         .collection(Keys.sentencesKey)
@@ -163,7 +163,7 @@ class SentenceBloc {
 
     ref.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        var sentences =
+        final sentences =
             snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
         _sentences.addAll(sentences);
         _sentencesFetcher.sink.add(_sentences);
@@ -176,7 +176,7 @@ class SentenceBloc {
   void fetchSentencesByWordFromFirebase(String word) {
     _sentences.clear();
     if (word.length > 1) {
-      var ref = FirebaseFirestore.instance
+      final ref = FirebaseFirestore.instance
           .collection('wordSentences')
           .doc(word)
           .collection(Keys.sentencesKey)
@@ -184,7 +184,7 @@ class SentenceBloc {
           .limit(_length);
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences =
+          final sentences =
               snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
@@ -199,7 +199,7 @@ class SentenceBloc {
   ///Fetch more sentences from Firebase.
   void fetchMoreSentencesByWord(String word) {
     if (word.length > 1) {
-      var ref = FirebaseFirestore.instance
+      final ref = FirebaseFirestore.instance
           .collection('wordSentences')
           .doc(word)
           .collection(Keys.sentencesKey)
@@ -209,7 +209,7 @@ class SentenceBloc {
 
       ref.get().then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          var sentences =
+          final sentences =
               snapshot.docs.map((e) => Sentence.fromMap(e.data())).toList();
           _sentences.addAll(sentences);
           _sentencesFetcher.sink.add(_sentences);
@@ -243,10 +243,10 @@ class SentenceBloc {
   ///Get sentences from the local database.
   void getSentencesByKanji(String kanjiStr) async {
     this._kanjiStr = kanjiStr;
-    var jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
+    final jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
-      var list = (jsonDecode(jsonStr) as List).cast<String>();
-      var sentences = await jsonToSentences(
+      final list = (jsonDecode(jsonStr) as List).cast<String>();
+      final sentences = await jsonToSentences(
           list.sublist(0, list.length < 5 ? list.length : 5));
 
       list.removeRange(0, list.length < 5 ? list.length : 5);
@@ -262,7 +262,7 @@ class SentenceBloc {
 
   ///Get more sentences from the local database.
   void getMoreSentencesByKanji() async {
-    var sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
+    final sentences = await jsonToSentences(_unloadedSentencesStr.sublist(0,
         _unloadedSentencesStr.length < 10 ? _unloadedSentencesStr.length : 10));
 
     if (sentences.isEmpty) {
