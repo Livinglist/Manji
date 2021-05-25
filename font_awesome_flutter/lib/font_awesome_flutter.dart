@@ -115,10 +115,14 @@ class FontAwesomeIcons {
   static const IconData solidAmbulance = const IconDataSolid(0xf0f9);
   static const IconData lightAmbulance = const IconDataLight(0xf0f9);
   static const IconData duotoneAmbulance = const IconDataDuotone(0xf0f9);
-  static const IconData americanSignLanguageInterpreting = const IconDataRegular(0xf2a3);
-  static const IconData solidAmericanSignLanguageInterpreting = const IconDataSolid(0xf2a3);
-  static const IconData lightAmericanSignLanguageInterpreting = const IconDataLight(0xf2a3);
-  static const IconData duotoneAmericanSignLanguageInterpreting = const IconDataDuotone(0xf2a3);
+  static const IconData americanSignLanguageInterpreting =
+      const IconDataRegular(0xf2a3);
+  static const IconData solidAmericanSignLanguageInterpreting =
+      const IconDataSolid(0xf2a3);
+  static const IconData lightAmericanSignLanguageInterpreting =
+      const IconDataLight(0xf2a3);
+  static const IconData duotoneAmericanSignLanguageInterpreting =
+      const IconDataDuotone(0xf2a3);
   static const IconData amilia = const IconDataBrands(0xf36d);
   static const IconData ampGuitar = const IconDataRegular(0xf8a1);
   static const IconData lightAmpGuitar = const IconDataLight(0xf8a1);
@@ -204,15 +208,18 @@ class FontAwesomeIcons {
   static const IconData arrowAltCircleDown = const IconDataRegular(0xf358);
   static const IconData solidArrowAltCircleDown = const IconDataSolid(0xf358);
   static const IconData lightArrowAltCircleDown = const IconDataLight(0xf358);
-  static const IconData duotoneArrowAltCircleDown = const IconDataDuotone(0xf358);
+  static const IconData duotoneArrowAltCircleDown =
+      const IconDataDuotone(0xf358);
   static const IconData arrowAltCircleLeft = const IconDataRegular(0xf359);
   static const IconData solidArrowAltCircleLeft = const IconDataSolid(0xf359);
   static const IconData lightArrowAltCircleLeft = const IconDataLight(0xf359);
-  static const IconData duotoneArrowAltCircleLeft = const IconDataDuotone(0xf359);
+  static const IconData duotoneArrowAltCircleLeft =
+      const IconDataDuotone(0xf359);
   static const IconData arrowAltCircleRight = const IconDataRegular(0xf35a);
   static const IconData solidArrowAltCircleRight = const IconDataSolid(0xf35a);
   static const IconData lightArrowAltCircleRight = const IconDataLight(0xf35a);
-  static const IconData duotoneArrowAltCircleRight = const IconDataDuotone(0xf35a);
+  static const IconData duotoneArrowAltCircleRight =
+      const IconDataDuotone(0xf35a);
   static const IconData arrowAltCircleUp = const IconDataRegular(0xf35b);
   static const IconData solidArrowAltCircleUp = const IconDataSolid(0xf35b);
   static const IconData lightArrowAltCircleUp = const IconDataLight(0xf35b);
@@ -224,7 +231,8 @@ class FontAwesomeIcons {
   static const IconData arrowAltFromBottom = const IconDataRegular(0xf346);
   static const IconData solidArrowAltFromBottom = const IconDataSolid(0xf346);
   static const IconData lightArrowAltFromBottom = const IconDataLight(0xf346);
-  static const IconData duotoneArrowAltFromBottom = const IconDataDuotone(0xf346);
+  static const IconData duotoneArrowAltFromBottom =
+      const IconDataDuotone(0xf346);
   static const IconData arrowAltFromLeft = const IconDataRegular(0xf347);
   static const IconData solidArrowAltFromLeft = const IconDataSolid(0xf347);
   static const IconData lightArrowAltFromLeft = const IconDataLight(0xf347);
@@ -232,7 +240,8 @@ class FontAwesomeIcons {
   static const IconData arrowAltFromRight = const IconDataRegular(0xf348);
   static const IconData solidArrowAltFromRight = const IconDataSolid(0xf348);
   static const IconData lightArrowAltFromRight = const IconDataLight(0xf348);
-  static const IconData duotoneArrowAltFromRight = const IconDataDuotone(0xf348);
+  static const IconData duotoneArrowAltFromRight =
+      const IconDataDuotone(0xf348);
   static const IconData arrowAltFromTop = const IconDataRegular(0xf349);
   static const IconData solidArrowAltFromTop = const IconDataSolid(0xf349);
   static const IconData lightArrowAltFromTop = const IconDataLight(0xf349);
@@ -248,15 +257,18 @@ class FontAwesomeIcons {
   static const IconData arrowAltSquareDown = const IconDataRegular(0xf350);
   static const IconData solidArrowAltSquareDown = const IconDataSolid(0xf350);
   static const IconData lightArrowAltSquareDown = const IconDataLight(0xf350);
-  static const IconData duotoneArrowAltSquareDown = const IconDataDuotone(0xf350);
+  static const IconData duotoneArrowAltSquareDown =
+      const IconDataDuotone(0xf350);
   static const IconData arrowAltSquareLeft = const IconDataRegular(0xf351);
   static const IconData solidArrowAltSquareLeft = const IconDataSolid(0xf351);
   static const IconData lightArrowAltSquareLeft = const IconDataLight(0xf351);
-  static const IconData duotoneArrowAltSquareLeft = const IconDataDuotone(0xf351);
+  static const IconData duotoneArrowAltSquareLeft =
+      const IconDataDuotone(0xf351);
   static const IconData arrowAltSquareRight = const IconDataRegular(0xf352);
   static const IconData solidArrowAltSquareRight = const IconDataSolid(0xf352);
   static const IconData lightArrowAltSquareRight = const IconDataLight(0xf352);
-  static const IconData duotoneArrowAltSquareRight = const IconDataDuotone(0xf352);
+  static const IconData duotoneArrowAltSquareRight =
+      const IconDataDuotone(0xf352);
   static const IconData arrowAltSquareUp = const IconDataRegular(0xf353);
   static const IconData solidArrowAltSquareUp = const IconDataSolid(0xf353);
   static const IconData lightArrowAltSquareUp = const IconDataLight(0xf353);
@@ -386,10 +398,14 @@ class FontAwesomeIcons {
   static const IconData lightArrowsV = const IconDataLight(0xf07d);
   static const IconData duotoneArrowsV = const IconDataDuotone(0xf07d);
   static const IconData artstation = const IconDataBrands(0xf77a);
-  static const IconData assistiveListeningSystems = const IconDataRegular(0xf2a2);
-  static const IconData solidAssistiveListeningSystems = const IconDataSolid(0xf2a2);
-  static const IconData lightAssistiveListeningSystems = const IconDataLight(0xf2a2);
-  static const IconData duotoneAssistiveListeningSystems = const IconDataDuotone(0xf2a2);
+  static const IconData assistiveListeningSystems =
+      const IconDataRegular(0xf2a2);
+  static const IconData solidAssistiveListeningSystems =
+      const IconDataSolid(0xf2a2);
+  static const IconData lightAssistiveListeningSystems =
+      const IconDataLight(0xf2a2);
+  static const IconData duotoneAssistiveListeningSystems =
+      const IconDataDuotone(0xf2a2);
   static const IconData asterisk = const IconDataRegular(0xf069);
   static const IconData solidAsterisk = const IconDataSolid(0xf069);
   static const IconData lightAsterisk = const IconDataLight(0xf069);
@@ -500,7 +516,8 @@ class FontAwesomeIcons {
   static const IconData balanceScaleRight = const IconDataRegular(0xf516);
   static const IconData solidBalanceScaleRight = const IconDataSolid(0xf516);
   static const IconData lightBalanceScaleRight = const IconDataLight(0xf516);
-  static const IconData duotoneBalanceScaleRight = const IconDataDuotone(0xf516);
+  static const IconData duotoneBalanceScaleRight =
+      const IconDataDuotone(0xf516);
   static const IconData ballPile = const IconDataRegular(0xf77e);
   static const IconData solidBallPile = const IconDataSolid(0xf77e);
   static const IconData lightBallPile = const IconDataLight(0xf77e);
@@ -597,7 +614,8 @@ class FontAwesomeIcons {
   static const IconData batteryThreeQuarters = const IconDataRegular(0xf241);
   static const IconData solidBatteryThreeQuarters = const IconDataSolid(0xf241);
   static const IconData lightBatteryThreeQuarters = const IconDataLight(0xf241);
-  static const IconData duotoneBatteryThreeQuarters = const IconDataDuotone(0xf241);
+  static const IconData duotoneBatteryThreeQuarters =
+      const IconDataDuotone(0xf241);
   static const IconData battleNet = const IconDataBrands(0xf835);
   static const IconData bed = const IconDataRegular(0xf236);
   static const IconData solidBed = const IconDataSolid(0xf236);
@@ -1080,7 +1098,8 @@ class FontAwesomeIcons {
   static const IconData calendarExclamation = const IconDataRegular(0xf334);
   static const IconData solidCalendarExclamation = const IconDataSolid(0xf334);
   static const IconData lightCalendarExclamation = const IconDataLight(0xf334);
-  static const IconData duotoneCalendarExclamation = const IconDataDuotone(0xf334);
+  static const IconData duotoneCalendarExclamation =
+      const IconDataDuotone(0xf334);
   static const IconData calendarMinus = const IconDataRegular(0xf272);
   static const IconData solidCalendarMinus = const IconDataSolid(0xf272);
   static const IconData lightCalendarMinus = const IconDataLight(0xf272);
@@ -1333,7 +1352,8 @@ class FontAwesomeIcons {
   static const IconData chalkboardTeacher = const IconDataRegular(0xf51c);
   static const IconData solidChalkboardTeacher = const IconDataSolid(0xf51c);
   static const IconData lightChalkboardTeacher = const IconDataLight(0xf51c);
-  static const IconData duotoneChalkboardTeacher = const IconDataDuotone(0xf51c);
+  static const IconData duotoneChalkboardTeacher =
+      const IconDataDuotone(0xf51c);
   static const IconData chargingStation = const IconDataRegular(0xf5e7);
   static const IconData solidChargingStation = const IconDataSolid(0xf5e7);
   static const IconData lightChargingStation = const IconDataLight(0xf5e7);
@@ -1465,15 +1485,18 @@ class FontAwesomeIcons {
   static const IconData chevronCircleDown = const IconDataRegular(0xf13a);
   static const IconData solidChevronCircleDown = const IconDataSolid(0xf13a);
   static const IconData lightChevronCircleDown = const IconDataLight(0xf13a);
-  static const IconData duotoneChevronCircleDown = const IconDataDuotone(0xf13a);
+  static const IconData duotoneChevronCircleDown =
+      const IconDataDuotone(0xf13a);
   static const IconData chevronCircleLeft = const IconDataRegular(0xf137);
   static const IconData solidChevronCircleLeft = const IconDataSolid(0xf137);
   static const IconData lightChevronCircleLeft = const IconDataLight(0xf137);
-  static const IconData duotoneChevronCircleLeft = const IconDataDuotone(0xf137);
+  static const IconData duotoneChevronCircleLeft =
+      const IconDataDuotone(0xf137);
   static const IconData chevronCircleRight = const IconDataRegular(0xf138);
   static const IconData solidChevronCircleRight = const IconDataSolid(0xf138);
   static const IconData lightChevronCircleRight = const IconDataLight(0xf138);
-  static const IconData duotoneChevronCircleRight = const IconDataDuotone(0xf138);
+  static const IconData duotoneChevronCircleRight =
+      const IconDataDuotone(0xf138);
   static const IconData chevronCircleUp = const IconDataRegular(0xf139);
   static const IconData solidChevronCircleUp = const IconDataSolid(0xf139);
   static const IconData lightChevronCircleUp = const IconDataLight(0xf139);
@@ -1481,15 +1504,18 @@ class FontAwesomeIcons {
   static const IconData chevronDoubleDown = const IconDataRegular(0xf322);
   static const IconData solidChevronDoubleDown = const IconDataSolid(0xf322);
   static const IconData lightChevronDoubleDown = const IconDataLight(0xf322);
-  static const IconData duotoneChevronDoubleDown = const IconDataDuotone(0xf322);
+  static const IconData duotoneChevronDoubleDown =
+      const IconDataDuotone(0xf322);
   static const IconData chevronDoubleLeft = const IconDataRegular(0xf323);
   static const IconData solidChevronDoubleLeft = const IconDataSolid(0xf323);
   static const IconData lightChevronDoubleLeft = const IconDataLight(0xf323);
-  static const IconData duotoneChevronDoubleLeft = const IconDataDuotone(0xf323);
+  static const IconData duotoneChevronDoubleLeft =
+      const IconDataDuotone(0xf323);
   static const IconData chevronDoubleRight = const IconDataRegular(0xf324);
   static const IconData solidChevronDoubleRight = const IconDataSolid(0xf324);
   static const IconData lightChevronDoubleRight = const IconDataLight(0xf324);
-  static const IconData duotoneChevronDoubleRight = const IconDataDuotone(0xf324);
+  static const IconData duotoneChevronDoubleRight =
+      const IconDataDuotone(0xf324);
   static const IconData chevronDoubleUp = const IconDataRegular(0xf325);
   static const IconData solidChevronDoubleUp = const IconDataSolid(0xf325);
   static const IconData lightChevronDoubleUp = const IconDataLight(0xf325);
@@ -1509,15 +1535,18 @@ class FontAwesomeIcons {
   static const IconData chevronSquareDown = const IconDataRegular(0xf329);
   static const IconData solidChevronSquareDown = const IconDataSolid(0xf329);
   static const IconData lightChevronSquareDown = const IconDataLight(0xf329);
-  static const IconData duotoneChevronSquareDown = const IconDataDuotone(0xf329);
+  static const IconData duotoneChevronSquareDown =
+      const IconDataDuotone(0xf329);
   static const IconData chevronSquareLeft = const IconDataRegular(0xf32a);
   static const IconData solidChevronSquareLeft = const IconDataSolid(0xf32a);
   static const IconData lightChevronSquareLeft = const IconDataLight(0xf32a);
-  static const IconData duotoneChevronSquareLeft = const IconDataDuotone(0xf32a);
+  static const IconData duotoneChevronSquareLeft =
+      const IconDataDuotone(0xf32a);
   static const IconData chevronSquareRight = const IconDataRegular(0xf32b);
   static const IconData solidChevronSquareRight = const IconDataSolid(0xf32b);
   static const IconData lightChevronSquareRight = const IconDataLight(0xf32b);
-  static const IconData duotoneChevronSquareRight = const IconDataDuotone(0xf32b);
+  static const IconData duotoneChevronSquareRight =
+      const IconDataDuotone(0xf32b);
   static const IconData chevronSquareUp = const IconDataRegular(0xf32c);
   static const IconData solidChevronSquareUp = const IconDataSolid(0xf32c);
   static const IconData lightChevronSquareUp = const IconDataLight(0xf32c);
@@ -1579,11 +1608,15 @@ class FontAwesomeIcons {
   static const IconData clipboardListCheck = const IconDataRegular(0xf737);
   static const IconData solidClipboardListCheck = const IconDataSolid(0xf737);
   static const IconData lightClipboardListCheck = const IconDataLight(0xf737);
-  static const IconData duotoneClipboardListCheck = const IconDataDuotone(0xf737);
+  static const IconData duotoneClipboardListCheck =
+      const IconDataDuotone(0xf737);
   static const IconData clipboardPrescription = const IconDataRegular(0xf5e8);
-  static const IconData solidClipboardPrescription = const IconDataSolid(0xf5e8);
-  static const IconData lightClipboardPrescription = const IconDataLight(0xf5e8);
-  static const IconData duotoneClipboardPrescription = const IconDataDuotone(0xf5e8);
+  static const IconData solidClipboardPrescription =
+      const IconDataSolid(0xf5e8);
+  static const IconData lightClipboardPrescription =
+      const IconDataLight(0xf5e8);
+  static const IconData duotoneClipboardPrescription =
+      const IconDataDuotone(0xf5e8);
   static const IconData clipboardUser = const IconDataRegular(0xf7f3);
   static const IconData solidClipboardUser = const IconDataSolid(0xf7f3);
   static const IconData lightClipboardUser = const IconDataLight(0xf7f3);
@@ -1655,7 +1688,8 @@ class FontAwesomeIcons {
   static const IconData cloudShowersHeavy = const IconDataRegular(0xf740);
   static const IconData solidCloudShowersHeavy = const IconDataSolid(0xf740);
   static const IconData lightCloudShowersHeavy = const IconDataLight(0xf740);
-  static const IconData duotoneCloudShowersHeavy = const IconDataDuotone(0xf740);
+  static const IconData duotoneCloudShowersHeavy =
+      const IconDataDuotone(0xf740);
   static const IconData cloudSleet = const IconDataRegular(0xf741);
   static const IconData solidCloudSleet = const IconDataSolid(0xf741);
   static const IconData lightCloudSleet = const IconDataLight(0xf741);
@@ -1786,9 +1820,12 @@ class FontAwesomeIcons {
   static const IconData lightCommentAltEdit = const IconDataLight(0xf4a4);
   static const IconData duotoneCommentAltEdit = const IconDataDuotone(0xf4a4);
   static const IconData commentAltExclamation = const IconDataRegular(0xf4a5);
-  static const IconData solidCommentAltExclamation = const IconDataSolid(0xf4a5);
-  static const IconData lightCommentAltExclamation = const IconDataLight(0xf4a5);
-  static const IconData duotoneCommentAltExclamation = const IconDataDuotone(0xf4a5);
+  static const IconData solidCommentAltExclamation =
+      const IconDataSolid(0xf4a5);
+  static const IconData lightCommentAltExclamation =
+      const IconDataLight(0xf4a5);
+  static const IconData duotoneCommentAltExclamation =
+      const IconDataDuotone(0xf4a5);
   static const IconData commentAltLines = const IconDataRegular(0xf4a6);
   static const IconData solidCommentAltLines = const IconDataSolid(0xf4a6);
   static const IconData lightCommentAltLines = const IconDataLight(0xf4a6);
@@ -1796,7 +1833,8 @@ class FontAwesomeIcons {
   static const IconData commentAltMedical = const IconDataRegular(0xf7f4);
   static const IconData solidCommentAltMedical = const IconDataSolid(0xf7f4);
   static const IconData lightCommentAltMedical = const IconDataLight(0xf7f4);
-  static const IconData duotoneCommentAltMedical = const IconDataDuotone(0xf7f4);
+  static const IconData duotoneCommentAltMedical =
+      const IconDataDuotone(0xf7f4);
   static const IconData commentAltMinus = const IconDataRegular(0xf4a7);
   static const IconData solidCommentAltMinus = const IconDataSolid(0xf4a7);
   static const IconData lightCommentAltMinus = const IconDataLight(0xf4a7);
@@ -1840,7 +1878,8 @@ class FontAwesomeIcons {
   static const IconData commentExclamation = const IconDataRegular(0xf4af);
   static const IconData solidCommentExclamation = const IconDataSolid(0xf4af);
   static const IconData lightCommentExclamation = const IconDataLight(0xf4af);
-  static const IconData duotoneCommentExclamation = const IconDataDuotone(0xf4af);
+  static const IconData duotoneCommentExclamation =
+      const IconDataDuotone(0xf4af);
   static const IconData commentLines = const IconDataRegular(0xf4b0);
   static const IconData solidCommentLines = const IconDataSolid(0xf4b0);
   static const IconData lightCommentLines = const IconDataLight(0xf4b0);
@@ -1884,7 +1923,8 @@ class FontAwesomeIcons {
   static const IconData commentsAltDollar = const IconDataRegular(0xf652);
   static const IconData solidCommentsAltDollar = const IconDataSolid(0xf652);
   static const IconData lightCommentsAltDollar = const IconDataLight(0xf652);
-  static const IconData duotoneCommentsAltDollar = const IconDataDuotone(0xf652);
+  static const IconData duotoneCommentsAltDollar =
+      const IconDataDuotone(0xf652);
   static const IconData commentsDollar = const IconDataRegular(0xf653);
   static const IconData solidCommentsDollar = const IconDataSolid(0xf653);
   static const IconData lightCommentsDollar = const IconDataLight(0xf653);
@@ -1912,7 +1952,8 @@ class FontAwesomeIcons {
   static const IconData compressArrowsAlt = const IconDataRegular(0xf78c);
   static const IconData solidCompressArrowsAlt = const IconDataSolid(0xf78c);
   static const IconData lightCompressArrowsAlt = const IconDataLight(0xf78c);
-  static const IconData duotoneCompressArrowsAlt = const IconDataDuotone(0xf78c);
+  static const IconData duotoneCompressArrowsAlt =
+      const IconDataDuotone(0xf78c);
   static const IconData compressWide = const IconDataRegular(0xf326);
   static const IconData solidCompressWide = const IconDataSolid(0xf326);
   static const IconData lightCompressWide = const IconDataLight(0xf326);
@@ -1997,7 +2038,8 @@ class FontAwesomeIcons {
   static const IconData creativeCommonsRemix = const IconDataBrands(0xf4ee);
   static const IconData creativeCommonsSa = const IconDataBrands(0xf4ef);
   static const IconData creativeCommonsSampling = const IconDataBrands(0xf4f0);
-  static const IconData creativeCommonsSamplingPlus = const IconDataBrands(0xf4f1);
+  static const IconData creativeCommonsSamplingPlus =
+      const IconDataBrands(0xf4f1);
   static const IconData creativeCommonsShare = const IconDataBrands(0xf4f2);
   static const IconData creativeCommonsZero = const IconDataBrands(0xf4f3);
   static const IconData creditCard = const IconDataRegular(0xf09d);
@@ -2195,7 +2237,8 @@ class FontAwesomeIcons {
   static const IconData digitalTachograph = const IconDataRegular(0xf566);
   static const IconData solidDigitalTachograph = const IconDataSolid(0xf566);
   static const IconData lightDigitalTachograph = const IconDataLight(0xf566);
-  static const IconData duotoneDigitalTachograph = const IconDataDuotone(0xf566);
+  static const IconData duotoneDigitalTachograph =
+      const IconDataDuotone(0xf566);
   static const IconData diploma = const IconDataRegular(0xf5ea);
   static const IconData solidDiploma = const IconDataSolid(0xf5ea);
   static const IconData lightDiploma = const IconDataLight(0xf5ea);
@@ -2263,7 +2306,8 @@ class FontAwesomeIcons {
   static const IconData dollyFlatbedEmpty = const IconDataRegular(0xf476);
   static const IconData solidDollyFlatbedEmpty = const IconDataSolid(0xf476);
   static const IconData lightDollyFlatbedEmpty = const IconDataLight(0xf476);
-  static const IconData duotoneDollyFlatbedEmpty = const IconDataDuotone(0xf476);
+  static const IconData duotoneDollyFlatbedEmpty =
+      const IconDataDuotone(0xf476);
   static const IconData donate = const IconDataRegular(0xf4b9);
   static const IconData solidDonate = const IconDataSolid(0xf4b9);
   static const IconData lightDonate = const IconDataLight(0xf4b9);
@@ -2448,7 +2492,8 @@ class FontAwesomeIcons {
   static const IconData envelopeOpenDollar = const IconDataRegular(0xf657);
   static const IconData solidEnvelopeOpenDollar = const IconDataSolid(0xf657);
   static const IconData lightEnvelopeOpenDollar = const IconDataLight(0xf657);
-  static const IconData duotoneEnvelopeOpenDollar = const IconDataDuotone(0xf657);
+  static const IconData duotoneEnvelopeOpenDollar =
+      const IconDataDuotone(0xf657);
   static const IconData envelopeOpenText = const IconDataRegular(0xf658);
   static const IconData solidEnvelopeOpenText = const IconDataSolid(0xf658);
   static const IconData lightEnvelopeOpenText = const IconDataLight(0xf658);
@@ -2493,15 +2538,18 @@ class FontAwesomeIcons {
   static const IconData exclamationCircle = const IconDataRegular(0xf06a);
   static const IconData solidExclamationCircle = const IconDataSolid(0xf06a);
   static const IconData lightExclamationCircle = const IconDataLight(0xf06a);
-  static const IconData duotoneExclamationCircle = const IconDataDuotone(0xf06a);
+  static const IconData duotoneExclamationCircle =
+      const IconDataDuotone(0xf06a);
   static const IconData exclamationSquare = const IconDataRegular(0xf321);
   static const IconData solidExclamationSquare = const IconDataSolid(0xf321);
   static const IconData lightExclamationSquare = const IconDataLight(0xf321);
-  static const IconData duotoneExclamationSquare = const IconDataDuotone(0xf321);
+  static const IconData duotoneExclamationSquare =
+      const IconDataDuotone(0xf321);
   static const IconData exclamationTriangle = const IconDataRegular(0xf071);
   static const IconData solidExclamationTriangle = const IconDataSolid(0xf071);
   static const IconData lightExclamationTriangle = const IconDataLight(0xf071);
-  static const IconData duotoneExclamationTriangle = const IconDataDuotone(0xf071);
+  static const IconData duotoneExclamationTriangle =
+      const IconDataDuotone(0xf071);
   static const IconData expand = const IconDataRegular(0xf065);
   static const IconData solidExpand = const IconDataSolid(0xf065);
   static const IconData lightExpand = const IconDataLight(0xf065);
@@ -2534,11 +2582,15 @@ class FontAwesomeIcons {
   static const IconData externalLinkSquare = const IconDataRegular(0xf14c);
   static const IconData solidExternalLinkSquare = const IconDataSolid(0xf14c);
   static const IconData lightExternalLinkSquare = const IconDataLight(0xf14c);
-  static const IconData duotoneExternalLinkSquare = const IconDataDuotone(0xf14c);
+  static const IconData duotoneExternalLinkSquare =
+      const IconDataDuotone(0xf14c);
   static const IconData externalLinkSquareAlt = const IconDataRegular(0xf360);
-  static const IconData solidExternalLinkSquareAlt = const IconDataSolid(0xf360);
-  static const IconData lightExternalLinkSquareAlt = const IconDataLight(0xf360);
-  static const IconData duotoneExternalLinkSquareAlt = const IconDataDuotone(0xf360);
+  static const IconData solidExternalLinkSquareAlt =
+      const IconDataSolid(0xf360);
+  static const IconData lightExternalLinkSquareAlt =
+      const IconDataLight(0xf360);
+  static const IconData duotoneExternalLinkSquareAlt =
+      const IconDataDuotone(0xf360);
   static const IconData eye = const IconDataRegular(0xf06e);
   static const IconData solidEye = const IconDataSolid(0xf06e);
   static const IconData lightEye = const IconDataLight(0xf06e);
@@ -2694,7 +2746,8 @@ class FontAwesomeIcons {
   static const IconData fileInvoiceDollar = const IconDataRegular(0xf571);
   static const IconData solidFileInvoiceDollar = const IconDataSolid(0xf571);
   static const IconData lightFileInvoiceDollar = const IconDataLight(0xf571);
-  static const IconData duotoneFileInvoiceDollar = const IconDataDuotone(0xf571);
+  static const IconData duotoneFileInvoiceDollar =
+      const IconDataDuotone(0xf571);
   static const IconData fileMedical = const IconDataRegular(0xf477);
   static const IconData solidFileMedical = const IconDataSolid(0xf477);
   static const IconData lightFileMedical = const IconDataLight(0xf477);
@@ -2937,8 +2990,10 @@ class FontAwesomeIcons {
   static const IconData fontAwesomeLogoFull = const IconDataRegular(0xf4e6);
   static const IconData solidFontAwesomeLogoFull = const IconDataSolid(0xf4e6);
   static const IconData lightFontAwesomeLogoFull = const IconDataLight(0xf4e6);
-  static const IconData brandsFontAwesomeLogoFull = const IconDataBrands(0xf4e6);
-  static const IconData duotoneFontAwesomeLogoFull = const IconDataDuotone(0xf4e6);
+  static const IconData brandsFontAwesomeLogoFull =
+      const IconDataBrands(0xf4e6);
+  static const IconData duotoneFontAwesomeLogoFull =
+      const IconDataDuotone(0xf4e6);
   static const IconData fontCase = const IconDataRegular(0xf866);
   static const IconData solidFontCase = const IconDataSolid(0xf866);
   static const IconData lightFontCase = const IconDataLight(0xf866);
@@ -3021,7 +3076,8 @@ class FontAwesomeIcons {
   static const IconData gameConsoleHandheld = const IconDataRegular(0xf8bb);
   static const IconData solidGameConsoleHandheld = const IconDataSolid(0xf8bb);
   static const IconData lightGameConsoleHandheld = const IconDataLight(0xf8bb);
-  static const IconData duotoneGameConsoleHandheld = const IconDataDuotone(0xf8bb);
+  static const IconData duotoneGameConsoleHandheld =
+      const IconDataDuotone(0xf8bb);
   static const IconData gamepad = const IconDataRegular(0xf11b);
   static const IconData solidGamepad = const IconDataSolid(0xf11b);
   static const IconData lightGamepad = const IconDataLight(0xf11b);
@@ -3125,7 +3181,8 @@ class FontAwesomeIcons {
   static const IconData glassWhiskeyRocks = const IconDataRegular(0xf7a1);
   static const IconData solidGlassWhiskeyRocks = const IconDataSolid(0xf7a1);
   static const IconData lightGlassWhiskeyRocks = const IconDataLight(0xf7a1);
-  static const IconData duotoneGlassWhiskeyRocks = const IconDataDuotone(0xf7a1);
+  static const IconData duotoneGlassWhiskeyRocks =
+      const IconDataDuotone(0xf7a1);
   static const IconData glasses = const IconDataRegular(0xf530);
   static const IconData solidGlasses = const IconDataSolid(0xf530);
   static const IconData lightGlasses = const IconDataLight(0xf530);
@@ -3271,7 +3328,8 @@ class FontAwesomeIcons {
   static const IconData gripLinesVertical = const IconDataRegular(0xf7a5);
   static const IconData solidGripLinesVertical = const IconDataSolid(0xf7a5);
   static const IconData lightGripLinesVertical = const IconDataLight(0xf7a5);
-  static const IconData duotoneGripLinesVertical = const IconDataDuotone(0xf7a5);
+  static const IconData duotoneGripLinesVertical =
+      const IconDataDuotone(0xf7a5);
   static const IconData gripVertical = const IconDataRegular(0xf58e);
   static const IconData solidGripVertical = const IconDataSolid(0xf58e);
   static const IconData lightGripVertical = const IconDataLight(0xf58e);
@@ -3353,7 +3411,8 @@ class FontAwesomeIcons {
   static const IconData handHoldingSeedling = const IconDataRegular(0xf4bf);
   static const IconData solidHandHoldingSeedling = const IconDataSolid(0xf4bf);
   static const IconData lightHandHoldingSeedling = const IconDataLight(0xf4bf);
-  static const IconData duotoneHandHoldingSeedling = const IconDataDuotone(0xf4bf);
+  static const IconData duotoneHandHoldingSeedling =
+      const IconDataDuotone(0xf4bf);
   static const IconData handHoldingUsd = const IconDataRegular(0xf4c0);
   static const IconData solidHandHoldingUsd = const IconDataSolid(0xf4c0);
   static const IconData lightHandHoldingUsd = const IconDataLight(0xf4c0);
@@ -3493,7 +3552,8 @@ class FontAwesomeIcons {
   static const IconData headSideHeadphones = const IconDataRegular(0xf8c2);
   static const IconData solidHeadSideHeadphones = const IconDataSolid(0xf8c2);
   static const IconData lightHeadSideHeadphones = const IconDataLight(0xf8c2);
-  static const IconData duotoneHeadSideHeadphones = const IconDataDuotone(0xf8c2);
+  static const IconData duotoneHeadSideHeadphones =
+      const IconDataDuotone(0xf8c2);
   static const IconData headSideMedical = const IconDataRegular(0xf809);
   static const IconData solidHeadSideMedical = const IconDataSolid(0xf809);
   static const IconData lightHeadSideMedical = const IconDataLight(0xf809);
@@ -4107,7 +4167,8 @@ class FontAwesomeIcons {
   static const IconData lightbulbExclamation = const IconDataRegular(0xf671);
   static const IconData solidLightbulbExclamation = const IconDataSolid(0xf671);
   static const IconData lightLightbulbExclamation = const IconDataLight(0xf671);
-  static const IconData duotoneLightbulbExclamation = const IconDataDuotone(0xf671);
+  static const IconData duotoneLightbulbExclamation =
+      const IconDataDuotone(0xf671);
   static const IconData lightbulbOn = const IconDataRegular(0xf672);
   static const IconData solidLightbulbOn = const IconDataSolid(0xf672);
   static const IconData lightLightbulbOn = const IconDataLight(0xf672);
@@ -4208,7 +4269,8 @@ class FontAwesomeIcons {
   static const IconData longArrowAltRight = const IconDataRegular(0xf30b);
   static const IconData solidLongArrowAltRight = const IconDataSolid(0xf30b);
   static const IconData lightLongArrowAltRight = const IconDataLight(0xf30b);
-  static const IconData duotoneLongArrowAltRight = const IconDataDuotone(0xf30b);
+  static const IconData duotoneLongArrowAltRight =
+      const IconDataDuotone(0xf30b);
   static const IconData longArrowAltUp = const IconDataRegular(0xf30c);
   static const IconData solidLongArrowAltUp = const IconDataSolid(0xf30c);
   static const IconData lightLongArrowAltUp = const IconDataLight(0xf30c);
@@ -4304,7 +4366,8 @@ class FontAwesomeIcons {
   static const IconData mapMarkerAltSlash = const IconDataRegular(0xf605);
   static const IconData solidMapMarkerAltSlash = const IconDataSolid(0xf605);
   static const IconData lightMapMarkerAltSlash = const IconDataLight(0xf605);
-  static const IconData duotoneMapMarkerAltSlash = const IconDataDuotone(0xf605);
+  static const IconData duotoneMapMarkerAltSlash =
+      const IconDataDuotone(0xf605);
   static const IconData mapMarkerCheck = const IconDataRegular(0xf606);
   static const IconData solidMapMarkerCheck = const IconDataSolid(0xf606);
   static const IconData lightMapMarkerCheck = const IconDataLight(0xf606);
@@ -4316,7 +4379,8 @@ class FontAwesomeIcons {
   static const IconData mapMarkerExclamation = const IconDataRegular(0xf608);
   static const IconData solidMapMarkerExclamation = const IconDataSolid(0xf608);
   static const IconData lightMapMarkerExclamation = const IconDataLight(0xf608);
-  static const IconData duotoneMapMarkerExclamation = const IconDataDuotone(0xf608);
+  static const IconData duotoneMapMarkerExclamation =
+      const IconDataDuotone(0xf608);
   static const IconData mapMarkerMinus = const IconDataRegular(0xf609);
   static const IconData solidMapMarkerMinus = const IconDataSolid(0xf609);
   static const IconData lightMapMarkerMinus = const IconDataLight(0xf609);
@@ -4328,7 +4392,8 @@ class FontAwesomeIcons {
   static const IconData mapMarkerQuestion = const IconDataRegular(0xf60b);
   static const IconData solidMapMarkerQuestion = const IconDataSolid(0xf60b);
   static const IconData lightMapMarkerQuestion = const IconDataLight(0xf60b);
-  static const IconData duotoneMapMarkerQuestion = const IconDataDuotone(0xf60b);
+  static const IconData duotoneMapMarkerQuestion =
+      const IconDataDuotone(0xf60b);
   static const IconData mapMarkerSlash = const IconDataRegular(0xf60c);
   static const IconData solidMapMarkerSlash = const IconDataSolid(0xf60c);
   static const IconData lightMapMarkerSlash = const IconDataLight(0xf60c);
@@ -4448,7 +4513,8 @@ class FontAwesomeIcons {
   static const IconData microphoneAltSlash = const IconDataRegular(0xf539);
   static const IconData solidMicrophoneAltSlash = const IconDataSolid(0xf539);
   static const IconData lightMicrophoneAltSlash = const IconDataLight(0xf539);
-  static const IconData duotoneMicrophoneAltSlash = const IconDataDuotone(0xf539);
+  static const IconData duotoneMicrophoneAltSlash =
+      const IconDataDuotone(0xf539);
   static const IconData microphoneSlash = const IconDataRegular(0xf131);
   static const IconData solidMicrophoneSlash = const IconDataSolid(0xf131);
   static const IconData lightMicrophoneSlash = const IconDataLight(0xf131);
@@ -4550,7 +4616,8 @@ class FontAwesomeIcons {
   static const IconData moneyCheckEditAlt = const IconDataRegular(0xf873);
   static const IconData solidMoneyCheckEditAlt = const IconDataSolid(0xf873);
   static const IconData lightMoneyCheckEditAlt = const IconDataLight(0xf873);
-  static const IconData duotoneMoneyCheckEditAlt = const IconDataDuotone(0xf873);
+  static const IconData duotoneMoneyCheckEditAlt =
+      const IconDataDuotone(0xf873);
   static const IconData monitorHeartRate = const IconDataRegular(0xf611);
   static const IconData solidMonitorHeartRate = const IconDataSolid(0xf611);
   static const IconData lightMonitorHeartRate = const IconDataLight(0xf611);
@@ -4802,7 +4869,8 @@ class FontAwesomeIcons {
   static const IconData parkingCircleSlash = const IconDataRegular(0xf616);
   static const IconData solidParkingCircleSlash = const IconDataSolid(0xf616);
   static const IconData lightParkingCircleSlash = const IconDataLight(0xf616);
-  static const IconData duotoneParkingCircleSlash = const IconDataDuotone(0xf616);
+  static const IconData duotoneParkingCircleSlash =
+      const IconDataDuotone(0xf616);
   static const IconData parkingSlash = const IconDataRegular(0xf617);
   static const IconData solidParkingSlash = const IconDataSolid(0xf617);
   static const IconData lightParkingSlash = const IconDataLight(0xf617);
@@ -5159,11 +5227,15 @@ class FontAwesomeIcons {
   static const IconData prescriptionBottle = const IconDataRegular(0xf485);
   static const IconData solidPrescriptionBottle = const IconDataSolid(0xf485);
   static const IconData lightPrescriptionBottle = const IconDataLight(0xf485);
-  static const IconData duotonePrescriptionBottle = const IconDataDuotone(0xf485);
+  static const IconData duotonePrescriptionBottle =
+      const IconDataDuotone(0xf485);
   static const IconData prescriptionBottleAlt = const IconDataRegular(0xf486);
-  static const IconData solidPrescriptionBottleAlt = const IconDataSolid(0xf486);
-  static const IconData lightPrescriptionBottleAlt = const IconDataLight(0xf486);
-  static const IconData duotonePrescriptionBottleAlt = const IconDataDuotone(0xf486);
+  static const IconData solidPrescriptionBottleAlt =
+      const IconDataSolid(0xf486);
+  static const IconData lightPrescriptionBottleAlt =
+      const IconDataLight(0xf486);
+  static const IconData duotonePrescriptionBottleAlt =
+      const IconDataDuotone(0xf486);
   static const IconData presentation = const IconDataRegular(0xf685);
   static const IconData solidPresentation = const IconDataSolid(0xf685);
   static const IconData lightPresentation = const IconDataLight(0xf685);
@@ -5312,11 +5384,13 @@ class FontAwesomeIcons {
   static const IconData rectangleLandscape = const IconDataRegular(0xf2fa);
   static const IconData solidRectangleLandscape = const IconDataSolid(0xf2fa);
   static const IconData lightRectangleLandscape = const IconDataLight(0xf2fa);
-  static const IconData duotoneRectangleLandscape = const IconDataDuotone(0xf2fa);
+  static const IconData duotoneRectangleLandscape =
+      const IconDataDuotone(0xf2fa);
   static const IconData rectanglePortrait = const IconDataRegular(0xf2fb);
   static const IconData solidRectanglePortrait = const IconDataSolid(0xf2fb);
   static const IconData lightRectanglePortrait = const IconDataLight(0xf2fb);
-  static const IconData duotoneRectanglePortrait = const IconDataDuotone(0xf2fb);
+  static const IconData duotoneRectanglePortrait =
+      const IconDataDuotone(0xf2fb);
   static const IconData rectangleWide = const IconDataRegular(0xf2fc);
   static const IconData solidRectangleWide = const IconDataSolid(0xf2fc);
   static const IconData lightRectangleWide = const IconDataLight(0xf2fc);
@@ -5559,7 +5633,8 @@ class FontAwesomeIcons {
   static const IconData scannerTouchscreen = const IconDataRegular(0xf48a);
   static const IconData solidScannerTouchscreen = const IconDataSolid(0xf48a);
   static const IconData lightScannerTouchscreen = const IconDataLight(0xf48a);
-  static const IconData duotoneScannerTouchscreen = const IconDataDuotone(0xf48a);
+  static const IconData duotoneScannerTouchscreen =
+      const IconDataDuotone(0xf48a);
   static const IconData scarecrow = const IconDataRegular(0xf70d);
   static const IconData solidScarecrow = const IconDataSolid(0xf70d);
   static const IconData lightScarecrow = const IconDataLight(0xf70d);
@@ -6055,7 +6130,8 @@ class FontAwesomeIcons {
   static const IconData sortAmountDownAlt = const IconDataRegular(0xf884);
   static const IconData solidSortAmountDownAlt = const IconDataSolid(0xf884);
   static const IconData lightSortAmountDownAlt = const IconDataLight(0xf884);
-  static const IconData duotoneSortAmountDownAlt = const IconDataDuotone(0xf884);
+  static const IconData duotoneSortAmountDownAlt =
+      const IconDataDuotone(0xf884);
   static const IconData sortAmountUp = const IconDataRegular(0xf161);
   static const IconData solidSortAmountUp = const IconDataSolid(0xf161);
   static const IconData lightSortAmountUp = const IconDataLight(0xf161);
@@ -6087,7 +6163,8 @@ class FontAwesomeIcons {
   static const IconData sortNumericDownAlt = const IconDataRegular(0xf886);
   static const IconData solidSortNumericDownAlt = const IconDataSolid(0xf886);
   static const IconData lightSortNumericDownAlt = const IconDataLight(0xf886);
-  static const IconData duotoneSortNumericDownAlt = const IconDataDuotone(0xf886);
+  static const IconData duotoneSortNumericDownAlt =
+      const IconDataDuotone(0xf886);
   static const IconData sortNumericUp = const IconDataRegular(0xf163);
   static const IconData solidSortNumericUp = const IconDataSolid(0xf163);
   static const IconData lightSortNumericUp = const IconDataLight(0xf163);
@@ -6103,7 +6180,8 @@ class FontAwesomeIcons {
   static const IconData sortShapesDownAlt = const IconDataRegular(0xf889);
   static const IconData solidSortShapesDownAlt = const IconDataSolid(0xf889);
   static const IconData lightSortShapesDownAlt = const IconDataLight(0xf889);
-  static const IconData duotoneSortShapesDownAlt = const IconDataDuotone(0xf889);
+  static const IconData duotoneSortShapesDownAlt =
+      const IconDataDuotone(0xf889);
   static const IconData sortShapesUp = const IconDataRegular(0xf88a);
   static const IconData solidSortShapesUp = const IconDataSolid(0xf88a);
   static const IconData lightSortShapesUp = const IconDataLight(0xf88a);
@@ -6153,7 +6231,8 @@ class FontAwesomeIcons {
   static const IconData spaceStationMoonAlt = const IconDataRegular(0xf934);
   static const IconData solidSpaceStationMoonAlt = const IconDataSolid(0xf934);
   static const IconData lightSpaceStationMoonAlt = const IconDataLight(0xf934);
-  static const IconData duotoneSpaceStationMoonAlt = const IconDataDuotone(0xf934);
+  static const IconData duotoneSpaceStationMoonAlt =
+      const IconDataDuotone(0xf934);
   static const IconData spade = const IconDataRegular(0xf2f4);
   static const IconData solidSpade = const IconDataSolid(0xf2f4);
   static const IconData lightSpade = const IconDataLight(0xf2f4);
@@ -6296,7 +6375,8 @@ class FontAwesomeIcons {
   static const IconData starshipFreighter = const IconDataRegular(0xf93a);
   static const IconData solidStarshipFreighter = const IconDataSolid(0xf93a);
   static const IconData lightStarshipFreighter = const IconDataLight(0xf93a);
-  static const IconData duotoneStarshipFreighter = const IconDataDuotone(0xf93a);
+  static const IconData duotoneStarshipFreighter =
+      const IconDataDuotone(0xf93a);
   static const IconData staylinked = const IconDataBrands(0xf3f5);
   static const IconData steak = const IconDataRegular(0xf824);
   static const IconData solidSteak = const IconDataSolid(0xf824);
@@ -6528,27 +6608,33 @@ class FontAwesomeIcons {
   static const IconData tachometerAltAverage = const IconDataRegular(0xf624);
   static const IconData solidTachometerAltAverage = const IconDataSolid(0xf624);
   static const IconData lightTachometerAltAverage = const IconDataLight(0xf624);
-  static const IconData duotoneTachometerAltAverage = const IconDataDuotone(0xf624);
+  static const IconData duotoneTachometerAltAverage =
+      const IconDataDuotone(0xf624);
   static const IconData tachometerAltFast = const IconDataRegular(0xf625);
   static const IconData solidTachometerAltFast = const IconDataSolid(0xf625);
   static const IconData lightTachometerAltFast = const IconDataLight(0xf625);
-  static const IconData duotoneTachometerAltFast = const IconDataDuotone(0xf625);
+  static const IconData duotoneTachometerAltFast =
+      const IconDataDuotone(0xf625);
   static const IconData tachometerAltFastest = const IconDataRegular(0xf626);
   static const IconData solidTachometerAltFastest = const IconDataSolid(0xf626);
   static const IconData lightTachometerAltFastest = const IconDataLight(0xf626);
-  static const IconData duotoneTachometerAltFastest = const IconDataDuotone(0xf626);
+  static const IconData duotoneTachometerAltFastest =
+      const IconDataDuotone(0xf626);
   static const IconData tachometerAltSlow = const IconDataRegular(0xf627);
   static const IconData solidTachometerAltSlow = const IconDataSolid(0xf627);
   static const IconData lightTachometerAltSlow = const IconDataLight(0xf627);
-  static const IconData duotoneTachometerAltSlow = const IconDataDuotone(0xf627);
+  static const IconData duotoneTachometerAltSlow =
+      const IconDataDuotone(0xf627);
   static const IconData tachometerAltSlowest = const IconDataRegular(0xf628);
   static const IconData solidTachometerAltSlowest = const IconDataSolid(0xf628);
   static const IconData lightTachometerAltSlowest = const IconDataLight(0xf628);
-  static const IconData duotoneTachometerAltSlowest = const IconDataDuotone(0xf628);
+  static const IconData duotoneTachometerAltSlowest =
+      const IconDataDuotone(0xf628);
   static const IconData tachometerAverage = const IconDataRegular(0xf629);
   static const IconData solidTachometerAverage = const IconDataSolid(0xf629);
   static const IconData lightTachometerAverage = const IconDataLight(0xf629);
-  static const IconData duotoneTachometerAverage = const IconDataDuotone(0xf629);
+  static const IconData duotoneTachometerAverage =
+      const IconDataDuotone(0xf629);
   static const IconData tachometerFast = const IconDataRegular(0xf62a);
   static const IconData solidTachometerFast = const IconDataSolid(0xf62a);
   static const IconData lightTachometerFast = const IconDataLight(0xf62a);
@@ -6556,7 +6642,8 @@ class FontAwesomeIcons {
   static const IconData tachometerFastest = const IconDataRegular(0xf62b);
   static const IconData solidTachometerFastest = const IconDataSolid(0xf62b);
   static const IconData lightTachometerFastest = const IconDataLight(0xf62b);
-  static const IconData duotoneTachometerFastest = const IconDataDuotone(0xf62b);
+  static const IconData duotoneTachometerFastest =
+      const IconDataDuotone(0xf62b);
   static const IconData tachometerSlow = const IconDataRegular(0xf62c);
   static const IconData solidTachometerSlow = const IconDataSolid(0xf62c);
   static const IconData lightTachometerSlow = const IconDataLight(0xf62c);
@@ -6564,7 +6651,8 @@ class FontAwesomeIcons {
   static const IconData tachometerSlowest = const IconDataRegular(0xf62d);
   static const IconData solidTachometerSlowest = const IconDataSolid(0xf62d);
   static const IconData lightTachometerSlowest = const IconDataLight(0xf62d);
-  static const IconData duotoneTachometerSlowest = const IconDataDuotone(0xf62d);
+  static const IconData duotoneTachometerSlowest =
+      const IconDataDuotone(0xf62d);
   static const IconData taco = const IconDataRegular(0xf826);
   static const IconData solidTaco = const IconDataSolid(0xf826);
   static const IconData lightTaco = const IconDataLight(0xf826);
@@ -6623,7 +6711,8 @@ class FontAwesomeIcons {
   static const IconData temperatureFrigid = const IconDataRegular(0xf768);
   static const IconData solidTemperatureFrigid = const IconDataSolid(0xf768);
   static const IconData lightTemperatureFrigid = const IconDataLight(0xf768);
-  static const IconData duotoneTemperatureFrigid = const IconDataDuotone(0xf768);
+  static const IconData duotoneTemperatureFrigid =
+      const IconDataDuotone(0xf768);
   static const IconData temperatureHigh = const IconDataRegular(0xf769);
   static const IconData solidTemperatureHigh = const IconDataSolid(0xf769);
   static const IconData lightTemperatureHigh = const IconDataLight(0xf769);
@@ -6707,11 +6796,16 @@ class FontAwesomeIcons {
   static const IconData thermometerQuarter = const IconDataRegular(0xf2ca);
   static const IconData solidThermometerQuarter = const IconDataSolid(0xf2ca);
   static const IconData lightThermometerQuarter = const IconDataLight(0xf2ca);
-  static const IconData duotoneThermometerQuarter = const IconDataDuotone(0xf2ca);
-  static const IconData thermometerThreeQuarters = const IconDataRegular(0xf2c8);
-  static const IconData solidThermometerThreeQuarters = const IconDataSolid(0xf2c8);
-  static const IconData lightThermometerThreeQuarters = const IconDataLight(0xf2c8);
-  static const IconData duotoneThermometerThreeQuarters = const IconDataDuotone(0xf2c8);
+  static const IconData duotoneThermometerQuarter =
+      const IconDataDuotone(0xf2ca);
+  static const IconData thermometerThreeQuarters =
+      const IconDataRegular(0xf2c8);
+  static const IconData solidThermometerThreeQuarters =
+      const IconDataSolid(0xf2c8);
+  static const IconData lightThermometerThreeQuarters =
+      const IconDataLight(0xf2c8);
+  static const IconData duotoneThermometerThreeQuarters =
+      const IconDataDuotone(0xf2c8);
   static const IconData theta = const IconDataRegular(0xf69e);
   static const IconData solidTheta = const IconDataSolid(0xf69e);
   static const IconData lightTheta = const IconDataLight(0xf69e);
@@ -6792,7 +6886,8 @@ class FontAwesomeIcons {
   static const IconData tirePressureWarning = const IconDataRegular(0xf633);
   static const IconData solidTirePressureWarning = const IconDataSolid(0xf633);
   static const IconData lightTirePressureWarning = const IconDataLight(0xf633);
-  static const IconData duotoneTirePressureWarning = const IconDataDuotone(0xf633);
+  static const IconData duotoneTirePressureWarning =
+      const IconDataDuotone(0xf633);
   static const IconData tireRugged = const IconDataRegular(0xf634);
   static const IconData solidTireRugged = const IconDataSolid(0xf634);
   static const IconData lightTireRugged = const IconDataLight(0xf634);
