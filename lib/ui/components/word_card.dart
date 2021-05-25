@@ -31,7 +31,7 @@ class WordCardState extends State<WordCard>
   }
 
   Future<bool> startAnimation() {
-    if (this.mounted) {
+    if (mounted) {
       animationController.forward();
       return Future.value(false);
     }

@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 class ScaleRoute extends PageRouteBuilder {
   final Widget widget;
   ScaleRoute({this.widget})
-      : super(pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
+      : super(pageBuilder: (context, animation, secondaryAnimation) {
           return widget;
-        }, transitionsBuilder: (BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child) {
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return ScaleTransition(
             scale: Tween<double>(
               begin: 0.0,

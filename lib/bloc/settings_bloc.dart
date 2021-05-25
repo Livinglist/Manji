@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:rxdart/rxdart.dart';
 
-import '../resource/shared_preferences_provider.dart';
 import '../models/font_selection.dart';
+import '../resource/shared_preferences_provider.dart';
 
-export '../resource/constants.dart';
 export '../models/font_selection.dart';
+export '../resource/constants.dart';
 
 class SettingsBloc {
   final _themeModeFetcher = BehaviorSubject<ThemeMode>();

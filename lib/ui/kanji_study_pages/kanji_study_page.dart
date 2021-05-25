@@ -12,7 +12,7 @@ class KanjiStudyPage extends StatefulWidget {
 
   KanjiStudyPage({List<Kanji> kanjis})
       : assert(kanjis != null),
-        this.kanjis = List.from(kanjis);
+        kanjis = List.from(kanjis);
 
   @override
   _KanjiStudyPageState createState() => _KanjiStudyPageState();
@@ -40,7 +40,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
 
   int cardsCount;
 
-  static const List<String> celebrateString = const [
+  static const List<String> celebrateString = [
     "You are the chosen one.",
     "お前はもう死んでいる!",
     "Dannnnng, ain't nobody told me you this good.",
@@ -163,7 +163,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
               alignment: Alignment.center,
               children: <Widget>[
                 ...buildMockCards(),
-                if (contents.length >= 1)
+                if (contents.isNotEmpty)
                   Positioned(
                     top: 80,
                     child: Draggable(
@@ -208,7 +208,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
                                 final timeStamp =
                                     DateTime.now().millisecondsSinceEpoch;
                                 for (var i in widget.kanjis) {
-                                  i.timeStamp = timeStamp;
+                                  i.timeStamps.add(timeStamp);
                                 }
                                 KanjiBloc.instance
                                     .updateTimeStampsForKanjis(widget.kanjis);
@@ -253,7 +253,7 @@ class _KanjiStudyPageState extends State<KanjiStudyPage>
   List<Widget> buildMockCards() {
     final children = <Widget>[];
     if (contents.length > 1) {
-      for (int i = min(contents.length - 1, 10); i >= 1; i--) {
+      for (var i = min(contents.length - 1, 10); i >= 1; i--) {
         print(i);
         children.add(AnimatedBuilder(
           animation: animationController,

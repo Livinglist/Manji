@@ -14,7 +14,7 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -54,7 +54,7 @@ class _KanjiStudyHelpPageState extends State<KanjiStudyHelpPage> {
                 padding: EdgeInsets.all(12),
                 child: Text(
                     'Tip: You can double tap on the card to check out detailed information about the kanji.',
-                    style: const TextStyle(color: Colors.white)),
+                    style: TextStyle(color: Colors.white)),
               ),
               const Padding(
                 padding: EdgeInsets.all(12),

@@ -23,7 +23,7 @@ class HomePageBackground extends StatefulWidget {
 class HomePageBackgroundState extends State<HomePageBackground> {
   final totalKanji = Device.get().isTablet ? 500 : 190;
   final total = Device.get().isTablet ? 500 : 190;
-  var perRow = Device.get().isTablet ? 20 : 10;
+  int perRow = Device.get().isTablet ? 20 : 10;
   double width, height;
   List<GlobalKey> keys;
   List<String> kanji = ['', '', ''];
@@ -45,8 +45,8 @@ class HomePageBackgroundState extends State<HomePageBackground> {
     });
   }
 
-  setTarget(Offset ptrPos) {
-    for (int i = 0; i < keys.length; i++) {
+  void setTarget(Offset ptrPos) {
+    for (var i = 0; i < keys.length; i++) {
       final cxt = keys[i].currentContext;
       if (cxt != null) {
         final RenderBox rBox = cxt.findRenderObject();
@@ -66,11 +66,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
             targetKey = keys[i];
             kanji = [
               kanjiJsons[i]["character"],
-              kanjiJsons[i]["onyomi"]["katakana"].toString() +
-                  ' ' +
-                  kanjiJsons[i]["kunyomi"]["hiragana"]
-                      .toString()
-                      .replaceAll("n/a", ""),
+              '${kanjiJsons[i]["onyomi"]["katakana"]} ${kanjiJsons[i]["kunyomi"]["hiragana"].toString().replaceAll("n/a", "")}',
               kanjiJsons[i]["meaning"]["english"].toString()
             ];
             widget.callback(kanjiJsons[i]["character"]);
@@ -82,7 +78,7 @@ class HomePageBackgroundState extends State<HomePageBackground> {
     }
   }
 
-  fetch() async {
+  Future fetch() async {
     if (!initialized) {
       final res = await rootBundle
           .loadString('data/data')
@@ -145,8 +141,9 @@ class HomePageBackgroundState extends State<HomePageBackground> {
                                   crossAxisCount: perRow),
                           children: buildChildren()),
                     );
-                  } else
+                  } else {
                     return Container();
+                  }
                   //return Center(child: CircularProgressIndicator());
                 })),
       ),

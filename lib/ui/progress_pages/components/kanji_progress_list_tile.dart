@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../kanji_detail_page/kanji_detail_page.dart';
 import '../../../bloc/settings_bloc.dart';
 import '../../../models/kanji.dart';
+import '../../kanji_detail_page/kanji_detail_page.dart';
 
 class KanjiProgressListTile extends StatelessWidget {
   final Kanji kanji;
@@ -16,9 +16,9 @@ class KanjiProgressListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        if (onTap != null)
-          this.onTap();
-        else {
+        if (onTap != null) {
+          onTap();
+        } else {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => KanjiDetailPage(kanji: kanji)));
         }
@@ -40,7 +40,7 @@ class KanjiProgressListTile extends StatelessWidget {
                 key: ObjectKey(kanji.kanji),
                 stream: SettingsBloc.instance.fontSelection,
                 initialData: SettingsBloc.instance.tempFontSelection,
-                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     return Text(kanji.kanji,
                         style: TextStyle(

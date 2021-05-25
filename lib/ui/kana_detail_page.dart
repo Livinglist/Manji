@@ -35,13 +35,13 @@ class KanaDetailPageState extends State<KanaDetailPage> {
     KanjiBloc.instance
         .findKanjiByKana(widget.kana, widget.yomikata)
         .listen((kanji) {
-      this.setState(() {
+      setState(() {
         kanjis.add(kanji);
       });
     });
 
     gridScrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (gridScrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -55,7 +55,7 @@ class KanaDetailPageState extends State<KanaDetailPage> {
     });
 
     listScrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (listScrollController.offset <= 0) {
           setState(() {
             showShadow = false;

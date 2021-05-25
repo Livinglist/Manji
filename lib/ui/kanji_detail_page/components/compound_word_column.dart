@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../bloc/kanji_bloc.dart';
-import '../../../bloc/sentence_bloc.dart';
 import '../../../bloc/kanji_list_bloc.dart';
+import '../../../bloc/sentence_bloc.dart';
+import '../../components/furigana_text.dart';
 import '../../components/spring_curve.dart';
 import '../../word_detail_page.dart';
-import '../../components/furigana_text.dart';
 
 class CompoundWordColumn extends StatelessWidget {
   final Kanji kanji;
@@ -30,15 +30,14 @@ class CompoundWordColumn extends StatelessWidget {
     final kunyomis =
         kanji.kunyomi.where((s) => s.contains(r'-') == false).toList();
 
-    final onyomiWords = Set<Word>.from(kanji.onyomiWords)
-        .toList(); //..sort((a, b) => a.wordFurigana.length.compareTo(b.wordFurigana.length));
+    final onyomiWords = Set<Word>.from(kanji.onyomiWords).toList();
     onyomis.sort((a, b) => b.length.compareTo(a.length));
     for (var onyomi in onyomis) {
       final words = List.from(onyomiWords.where((onyomiWord) => onyomiWord
           .wordFurigana
           .contains(onyomi.replaceAll('.', '').replaceAll('-', ''))));
 
-      onyomiWords.removeWhere((word) => words.contains(word));
+      onyomiWords.removeWhere(words.contains);
       final tileTitle = Stack(
         children: <Widget>[
           Positioned.fill(
@@ -56,7 +55,6 @@ class CompoundWordColumn extends StatelessWidget {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: const BoxDecoration(
-                    //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(
                             5.0) //                 <--- border radius here
@@ -149,7 +147,7 @@ class CompoundWordColumn extends StatelessWidget {
           .wordFurigana
           .contains(kunyomi.replaceAll('.', '').replaceAll('-', ''))));
 
-      kunyomiWords.removeWhere((word) => words.contains(word));
+      kunyomiWords.removeWhere(words.contains);
 
       final tileTitle = Stack(
         children: <Widget>[
@@ -168,7 +166,6 @@ class CompoundWordColumn extends StatelessWidget {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       )),
                   decoration: const BoxDecoration(
-                    //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(
                             5.0) //                 <--- border radius here
@@ -277,7 +274,7 @@ class CompoundWordColumn extends StatelessWidget {
                             textAlign: TextAlign.center,
                             text: const TextSpan(children: [
                               TextSpan(
-                                  text: 'どうし　　　　けいようし' + '\n',
+                                  text: 'どうし　　　　けいようし\n',
                                   style: TextStyle(
                                       fontSize: 9, color: Colors.white)),
                               TextSpan(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../models/kanji.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 import 'kanji_list_tile.dart';
 
 //typedef void StringCallback(String str);

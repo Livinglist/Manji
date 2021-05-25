@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../models/kanji.dart';
 import '../bloc/kanji_bloc.dart';
-import '../ui/components/kanji_list_view.dart';
+import '../models/kanji.dart';
 import '../ui/components/kanji_grid_view.dart';
+import '../ui/components/kanji_list_view.dart';
 import 'components/furigana_text.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
 

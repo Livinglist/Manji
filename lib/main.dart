@@ -1,18 +1,18 @@
 import 'dart:io';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
-import 'package:feature_discovery/feature_discovery.dart';
 
-import 'bloc/settings_bloc.dart';
-import 'ui/home_page.dart';
-import 'ui/components/home_page_background.dart';
 import 'bloc/kanji_bloc.dart';
+import 'bloc/settings_bloc.dart';
 import 'bloc/siri_suggestion_bloc.dart';
 import 'resource/db_provider.dart';
 import 'resource/firebase_auth_provider.dart';
+import 'ui/components/home_page_background.dart';
+import 'ui/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,8 +34,7 @@ class MyAppState extends State<MyApp> {
     super.initState();
 
     //This is for Siri suggestion.
-    FlutterSiriSuggestions.instance.configure(
-        onLaunch: (Map<String, dynamic> message) async {
+    FlutterSiriSuggestions.instance.configure(onLaunch: (message) async {
       final String siriKanji = message['key'];
       print("Siri suggestion kanji is $siriKanji");
       SiriSuggestionBloc.instance.suggest(siriKanji);

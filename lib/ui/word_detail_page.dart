@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import '../bloc/kanji_list_bloc.dart';
-import '../models/sentence.dart';
-import '../models/word.dart';
 import '../bloc/sentence_bloc.dart';
 import '../bloc/settings_bloc.dart';
+import '../models/sentence.dart';
+import '../models/word.dart';
 import '../ui/sentence_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'kanji_detail_page/kanji_detail_page.dart';
@@ -38,7 +38,7 @@ class WordDetailPageState extends State<WordDetailPage> {
     sentenceBloc.fetchSentencesByWords(widget.word.wordText);
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -52,7 +52,7 @@ class WordDetailPageState extends State<WordDetailPage> {
     });
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset >=
             scrollController.position.maxScrollExtent) {
           sentenceBloc.fetchMoreSentencesByWordFromJisho(widget.word.wordText);
@@ -143,10 +143,8 @@ class WordDetailPageState extends State<WordDetailPage> {
                                                 .instance.fontSelection,
                                             initialData: SettingsBloc
                                                 .instance.tempFontSelection,
-                                            builder: (_,
-                                                AsyncSnapshot<FontSelection>
-                                                    snapshot) {
-                                              final String kanji =
+                                            builder: (_, snapshot) {
+                                              final kanji =
                                                   getSingleKanji(kanjiStr) ??
                                                       "";
                                               if (snapshot.hasData) {
@@ -179,7 +177,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                     )),
               StreamBuilder(
                 stream: sentenceBloc.sentences,
-                builder: (_, AsyncSnapshot<List<Sentence>> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final sentences = snapshot.data;
                     final children = <Widget>[];
@@ -233,7 +231,7 @@ class WordDetailPageState extends State<WordDetailPage> {
                         StreamBuilder(
                           stream: sentenceBloc.isFetching,
                           initialData: false,
-                          builder: (_, AsyncSnapshot<bool> isFetchingSnapshot) {
+                          builder: (_, isFetchingSnapshot) {
                             if (isFetchingSnapshot.data == null) {
                               return Container(
                                 height: 48,
@@ -259,9 +257,9 @@ class WordDetailPageState extends State<WordDetailPage> {
                     return Container(
                       height: 360,
                       child: const Center(
-                          child: const Text(
+                          child: Text(
                         '( ͡• ͜ʖ ͡•)',
-                        style: const TextStyle(color: Colors.white38),
+                        style: TextStyle(color: Colors.white38),
                       )),
                     );
                   }
@@ -281,10 +279,10 @@ class WordDetailPageState extends State<WordDetailPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               child: Material(
                 shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(const Radius.circular(4))),
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
-                    builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+                    builder: (_, snapshot) {
                       if (snapshot.hasData) {
                         final kanjiLists = snapshot.data;
 
@@ -292,9 +290,9 @@ class WordDetailPageState extends State<WordDetailPage> {
                           return Container(
                             height: 200,
                             child: const Center(
-                              child: const Text(
+                              child: Text(
                                 "You don't have any list yet.",
-                                style: const TextStyle(color: Colors.black54),
+                                style: TextStyle(color: Colors.black54),
                               ),
                             ),
                           );
@@ -312,22 +310,24 @@ class WordDetailPageState extends State<WordDetailPage> {
                               }
 
                               if (kanjiList.wordCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.wordCount} Words';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.wordCount} Words'}';
                               }
 
-                              if (kanjiList.wordCount == 1)
+                              if (kanjiList.wordCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (kanjiList.sentenceCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.sentenceCount} Sentences';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.sentenceCount} Sentences'}';
                               }
 
-                              if (kanjiList.sentenceCount == 1)
+                              if (kanjiList.sentenceCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
@@ -379,7 +379,7 @@ class WordDetailPageState extends State<WordDetailPage> {
 
   List<String> getKanjis(String str) {
     final kanjis = <String>[];
-    for (int i = 0; i < str.length; i++) {
+    for (var i = 0; i < str.length; i++) {
       if (str.codeUnitAt(i) > 12543 && !kanjis.contains(str[i])) {
         kanjis.add(str[i]);
       }
@@ -389,7 +389,7 @@ class WordDetailPageState extends State<WordDetailPage> {
   }
 
   String getSingleKanji(String text) {
-    for (int i = 0; i < text.length; i++) {
+    for (var i = 0; i < text.length; i++) {
       if (text.codeUnitAt(i) > 12543) {
         return text[i];
       }

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../bloc/text_recognize_bloc.dart';
 import '../../bloc/kanji_bloc.dart';
+import '../../bloc/text_recognize_bloc.dart';
 import '../../utils/string_extension.dart';
-import '../components/kanji_list_view.dart';
-import '../components/kanji_grid_view.dart';
 import '../components/furigana_text.dart';
+import '../components/kanji_grid_view.dart';
+import '../components/kanji_list_view.dart';
 
 class TextRecognizePage extends StatefulWidget {
   final ImageSource imageSource;
@@ -51,7 +51,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   Future<ImageSource> getImageSource() {
     return showCupertinoModalPopup<ImageSource>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Choose an image to detect kanji from"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -87,7 +87,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -111,7 +111,7 @@ class _TextRecognizePageState extends State<TextRecognizePage> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: textRecognizeBloc.text,
-      builder: (_, AsyncSnapshot<String> snapshot) {
+      builder: (_, snapshot) {
         text = snapshot.data;
 
         if (text != null && text.isNotEmpty) {

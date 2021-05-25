@@ -1,16 +1,16 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'components/furigana_text.dart';
-import '../resource/repository.dart';
-import '../resource/firebase_auth_provider.dart';
-import '../resource/in_app_repo.dart';
 import '../bloc/settings_bloc.dart';
 import '../models/font_selection.dart';
+import '../resource/firebase_auth_provider.dart';
+import '../resource/in_app_repo.dart';
+import '../resource/repository.dart';
+import 'components/furigana_text.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -59,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
         children: <Widget>[
           StreamBuilder(
             stream: FirebaseAuthProvider.instance.onAuthStateChanged,
-            builder: (_, AsyncSnapshot<User> snapshot) {
+            builder: (_, snapshot) {
               final user = snapshot.data;
 
               if (user != null) {
@@ -73,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: TextStyle(color: Colors.white)),
                   subtitle: Text(user.email,
                       style: const TextStyle(color: Colors.white)),
-                  onTap: () => FirebaseAuthProvider.instance.signOut(),
+                  onTap: FirebaseAuthProvider.instance.signOut,
                 );
               }
 
@@ -87,10 +87,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: TextStyle(color: Colors.white)),
                 onTap: () => getSignInMethod().then((method) {
                   switch (method) {
-                    case SignInMethod.Apple:
+                    case SignInMethod.apple:
                       FirebaseAuthProvider.instance.signInApple();
                       return;
-                    case SignInMethod.Google:
+                    case SignInMethod.google:
                       FirebaseAuthProvider.instance.signInGoogle();
                       return;
                     default:
@@ -289,7 +289,7 @@ class _SettingsPageState extends State<SettingsPage> {
             duration: const Duration(milliseconds: 300),
             child: FutureBuilder(
               future: repo.getIsUpdated(),
-              builder: (_, AsyncSnapshot<bool> snapshot) {
+              builder: (_, snapshot) {
                 if (snapshot.hasData) {
                   final isUpdated = snapshot.data;
                   if (isUpdated) {
@@ -479,7 +479,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<SignInMethod> getSignInMethod() {
     return showCupertinoModalPopup<SignInMethod>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Sign In Via"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -493,12 +493,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: const Text('Apple',
                         style: TextStyle(color: Colors.blue)),
                     onPressed: () =>
-                        Navigator.pop(context, SignInMethod.Apple)),
+                        Navigator.pop(context, SignInMethod.apple)),
                 CupertinoActionSheetAction(
                     child: const Text('Google',
                         style: TextStyle(color: Colors.blue)),
                     onPressed: () =>
-                        Navigator.pop(context, SignInMethod.Google)),
+                        Navigator.pop(context, SignInMethod.google)),
               ],
             )).then((value) => value ?? null);
   }

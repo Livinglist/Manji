@@ -37,30 +37,29 @@ class KanjiList {
 
   KanjiList.from({this.name, this.kanjiStrs, this.uid});
 
-  KanjiList.fromMap(Map map) {
-    uid = map['uid'] ?? const Uuid().v1();
-    name = map['name'];
-    if (map['kanjiStrs'].runtimeType is String) {
-      kanjiStrs = (jsonDecode(map['kanjiStrs']) as List).cast<String>();
-    } else {
-      kanjiStrs = (map['kanjiStrs'] as List).cast<String>();
-    }
-  }
+  KanjiList.fromMap(Map map)
+      : uid = map['uid'] ?? const Uuid().v1(),
+        name = map['name'],
+        kanjiStrs = map['kanjiStrs'].runtimeType is String
+            ? (jsonDecode(map['kanjiStrs']) as List).cast<String>()
+            : (map['kanjiStrs'] as List).cast<String>();
 
   Map toMap() => {'uid': uid, 'name': name, 'kanjiStrs': jsonEncode(kanjiStrs)};
 
   @override
-  bool operator ==(Object other) => other is KanjiList && this.uid == other.uid;
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) => other is KanjiList && uid == other.uid;
 
   @override
-  int get hashCode => this.uid.hashCode;
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => uid.hashCode;
 }
 
 List<KanjiList> kanjiListsFromJsonStr(String str) {
   if (str == null) {
     return <KanjiList>[];
   }
-  final List<Map> list = (jsonDecode(str) as List).cast<Map>();
+  final list = (jsonDecode(str) as List).cast<Map>();
   final kanjiLists = list.map((str) => KanjiList.fromMap(str)).toList();
   return kanjiLists;
 }

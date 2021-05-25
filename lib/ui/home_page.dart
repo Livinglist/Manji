@@ -1,36 +1,36 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart' show ImageSource;
-import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 
-import '../bloc/kanji_bloc.dart';
-import '../bloc/search_bloc.dart';
-import '../bloc/kanji_list_bloc.dart';
 import '../bloc/kana_bloc.dart';
+import '../bloc/kanji_bloc.dart';
+import '../bloc/kanji_list_bloc.dart';
+import '../bloc/search_bloc.dart';
 import '../bloc/siri_suggestion_bloc.dart';
-import 'components/compact_kanji_list_tile.dart';
-import 'components/home_page_background.dart';
-import 'components/daily_kanji_card.dart';
-import 'kanji_detail_page/kanji_detail_page.dart';
-import 'jlpt_kanji_page.dart';
 import 'bookmark_page.dart';
-import 'kana_page.dart';
-import 'settings_page.dart';
-import 'education_kanji_page.dart';
-import 'search_result_page.dart';
+import 'components/compact_kanji_list_tile.dart';
+import 'components/daily_kanji_card.dart';
+import 'components/home_page_background.dart';
 import 'custom_list_page.dart';
-import 'quiz_pages/quiz_page.dart';
-import 'text_recognize_page/text_recognize_page.dart';
+import 'education_kanji_page.dart';
+import 'jlpt_kanji_page.dart';
+import 'kana_page.dart';
+import 'kanji_detail_page/kanji_detail_page.dart';
 import 'kanji_recognize_page/kanji_recognize_page.dart';
 import 'progress_pages/progress_page.dart';
+import 'quiz_pages/quiz_page.dart';
+import 'search_result_page.dart';
+import 'settings_page.dart';
+import 'text_recognize_page/text_recognize_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -58,7 +58,7 @@ class HomePageState extends State<HomePage>
         vsync: this, value: 1, duration: const Duration(seconds: 1));
 
     //FeatureDiscovery.clearPreferences(context, <String>{ 'kanji_recognition', 'kanji_extraction' });
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
       FeatureDiscovery.discoverFeatures(
         context,
         const <String>{'kanji_recognition', 'kanji_extraction'},
@@ -97,7 +97,7 @@ class HomePageState extends State<HomePage>
   Future<ImageSource> getImageSource() {
     return showCupertinoModalPopup<ImageSource>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Choose an image to detect kanji from"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -233,12 +233,13 @@ class HomePageState extends State<HomePage>
                         ));
                       } else {
                         getImageSource().then((val) {
-                          if (val != null)
+                          if (val != null) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) =>
                                         TextRecognizePage(imageSource: val)));
+                          }
                         });
                       }
                     });
@@ -249,9 +250,10 @@ class HomePageState extends State<HomePage>
           elevation: 0,
         ),
         drawer: DrawerListener(
-          onPositionChange: (FractionalOffset offset) {
-            if (Device.get().isTablet == false)
+          onPositionChange: (offset) {
+            if (Device.get().isTablet == false) {
               animationController.value = offset.dx;
+            }
           },
           child: Drawer(
               child: Material(
@@ -357,7 +359,7 @@ class HomePageState extends State<HomePage>
                         return HomePageBackground(
                           key: backgroundKey,
                           animationController: animationController,
-                          callback: (String kanji) {
+                          callback: (kanji) {
                             if (textEditingController.text.isEmpty ||
                                 textEditingController.text.length == 1) {
                               focusNode.unfocus();
@@ -462,7 +464,7 @@ class HomePageState extends State<HomePage>
                   child: Center(
                       child: StreamBuilder(
                     stream: searchBloc.results,
-                    builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                    builder: (_, snapshot) {
                       if (snapshot.hasData && snapshot.data.isNotEmpty) {
                         final kanjis = snapshot.data;
                         return Container(
@@ -516,11 +518,12 @@ class HomePageState extends State<HomePage>
   }
 
   bool areAllKanjis(String text) {
-    for (int i = 0; i < text.length; i++) {
-      if (text.codeUnitAt(i) > 12543)
+    for (var i = 0; i < text.length; i++) {
+      if (text.codeUnitAt(i) > 12543) {
         continue;
-      else
+      } else {
         return false;
+      }
     }
     return true;
   }
@@ -540,7 +543,7 @@ class DrawerListener extends StatefulWidget {
 }
 
 class _DrawerListenerState extends State<DrawerListener> {
-  GlobalKey _drawerKey = GlobalKey();
+  final _drawerKey = GlobalKey();
   int taskID;
   Offset currentOffset;
 

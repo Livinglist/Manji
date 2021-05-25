@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../bloc/incorrect_question_bloc.dart';
 import '../../models/question.dart';
-import '../../ui/quiz_pages/components/incorrect_question_list_tile.dart';
 import '../../ui/kanji_study_pages/kanji_study_page.dart';
+import '../../ui/quiz_pages/components/incorrect_question_list_tile.dart';
 
 class IncorrectQuestionsPage extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -43,7 +43,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
         actions: <Widget>[
           StreamBuilder(
               stream: iqBloc.incorrectQuestions,
-              builder: (_, AsyncSnapshot<List<Question>> snapshot) {
+              builder: (_, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.isEmpty) {
                     return Container();
@@ -71,7 +71,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
       backgroundColor: Theme.of(context).primaryColor,
       body: StreamBuilder(
           stream: iqBloc.incorrectQuestions,
-          builder: (_, AsyncSnapshot<List<Question>> snapshot) {
+          builder: (_, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.isEmpty) {
                 return const Center(
@@ -110,7 +110,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
   Future<bool> confirmDeleteAll() async {
     return showCupertinoModalPopup<bool>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -134,7 +134,7 @@ class _IncorrectQuestionsPageState extends State<IncorrectQuestionsPage> {
   Future<bool> confirmDismiss(Question q) async {
     return showCupertinoModalPopup<bool>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,

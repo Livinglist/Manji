@@ -33,7 +33,7 @@ class QuizBloc {
     return kanjis;
   }
 
-  dispose() {
+  void dispose() {
     _quizFetcher.close();
   }
 }
@@ -44,17 +44,17 @@ Quiz generate(List<Kanji> kanjis) {
   kanjis.shuffle();
 
   if (kanjis.length < 4) {
-    for (int i = 0; i < kanjis.length; i++) {
+    for (var i = 0; i < kanjis.length; i++) {
       questions.add(Question(targetedKanji: kanjis[i]));
     }
   } else {
-    for (int i = 0; i < kanjis.length; i++) {
+    for (var i = 0; i < kanjis.length; i++) {
       //KanjiToKatakana
       questions.add(Question(targetedKanji: kanjis[i]));
 
       //KanjiToMeaning
       final random = Random(DateTime.now().millisecondsSinceEpoch + i);
-      final set = Set<int>();
+      final set = <int>{};
       while (set.length != 3) {
         final index = random.nextInt(kanjis.length);
         if (index != i) set.add(index);
@@ -68,7 +68,7 @@ Quiz generate(List<Kanji> kanjis) {
       questions.add(Question(
           targetedKanji: kanjis[i],
           mockChoices: [a, b, c],
-          questionType: QuestionType.KanjiToMeaning));
+          questionType: QuestionType.kanjiToMeaning));
 
       //KanjiToHiragana
       set.clear();
@@ -93,7 +93,7 @@ Quiz generate(List<Kanji> kanjis) {
       questions.add(Question(
           targetedKanji: kanjis[i],
           mockChoices: [a, b, c],
-          questionType: QuestionType.KanjiToHiragana));
+          questionType: QuestionType.kanjiToHiragana));
     }
   }
 

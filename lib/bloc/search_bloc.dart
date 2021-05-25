@@ -26,8 +26,8 @@ class SearchBloc {
     }
 
     final kanjiSet = <Kanji>{};
-    String hiraganaText = '';
-    String katakanaText = '';
+    var hiraganaText = '';
+    var katakanaText = '';
 
     if (text.isAllKanji()) {
       for (var i in Iterable.generate(text.length)) {
@@ -64,7 +64,7 @@ class SearchBloc {
           continue;
         }
 
-        bool matched = false;
+        var matched = false;
 
         for (var word in kanji.onyomiWords) {
           if (word.meanings.contains(text)) {
@@ -126,7 +126,7 @@ class SearchBloc {
       Map<String, bool> radicalsMap) {
     final list = <Kanji>[];
 
-    this.clear();
+    clear();
 
     _filterKanjiStream(jlptMap, gradeMap, radicalsMap).listen((kanji) {
       if (kanji == null) {
@@ -160,7 +160,7 @@ class SearchBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _resultsFetcher.close();
   }
 }

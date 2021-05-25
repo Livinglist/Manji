@@ -47,7 +47,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   void initState() {
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= _filterPanelHeight) {
           setState(() {
             showShadow = false;
@@ -61,7 +61,7 @@ class _SearchResultPageState extends State<SearchResultPage>
     });
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         animationController.value =
             scrollController.offset >= _filterPanelHeight
                 ? 0
@@ -106,7 +106,7 @@ class _SearchResultPageState extends State<SearchResultPage>
               padding: const EdgeInsets.all(12),
               child: StreamBuilder(
                 stream: searchBloc.results,
-                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final kanjis = snapshot.data;
 
@@ -123,7 +123,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             Positioned.fill(
               child: StreamBuilder(
                 stream: searchBloc.results,
-                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final kanjis = snapshot.data;
 
@@ -133,7 +133,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                         : const Center(
                             child: Text(
                               'No results found _(┐「ε:)_',
-                              style: const TextStyle(color: Colors.white70),
+                              style: TextStyle(color: Colors.white70),
                             ),
                           );
                   }
@@ -293,7 +293,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         ));
   }
 
-  showRadicalsDialog() {
+  void showRadicalsDialog() {
     Navigator.push(
         context,
         MaterialPageRoute(

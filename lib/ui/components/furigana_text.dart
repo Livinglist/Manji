@@ -3,13 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../utils/string_extension.dart';
 import '../../models/sentence.dart';
+import '../../utils/string_extension.dart';
+
 export '../../models/sentence.dart';
 
 List<String> getKanjis(String text) {
   final kanjis = <String>[];
-  for (int i = 0; i < text.length; i++) {
+  for (var i = 0; i < text.length; i++) {
     if (text.codeUnitAt(i) > 12543) {
       kanjis.add(text[i]);
     }
@@ -42,7 +43,7 @@ class FuriganaText extends StatelessWidget {
   Widget build(BuildContext context) {
     final richTexts = <RichText>[];
 
-    final queue = Queue<Token>.from(this.tokens.where(
+    final queue = Queue<Token>.from(tokens.where(
         (element) => text.contains(element.text) || element.furigana != null));
 
     final unmarkedColor = Colors.white.withOpacity(0.8);
@@ -80,12 +81,12 @@ class FuriganaText extends StatelessWidget {
             fontSize: furiganaTextStyle.fontSize, color: Colors.transparent);
 
     //try {
-    int i = 0;
+    var i = 0;
     for (; i < text.length;) {
       if (queue.isEmpty) break;
 
       final currentText = queue.first.text;
-      bool hasFurigana = false;
+      var hasFurigana = false;
       String japText, furigana;
 
       if (currentText[0] == text[i]) {
@@ -96,12 +97,13 @@ class FuriganaText extends StatelessWidget {
               text.substring(i, min(text.length, i + currentText.length))) {
             japText = currentText;
           } else {
-            int matchIndex =
+            var matchIndex =
                 text.substring(i).indexOf(currentText[currentText.length - 1]);
-            if (matchIndex == -1)
+            if (matchIndex == -1) {
               matchIndex = text.length - 1;
-            else
+            } else {
               matchIndex = min(text.length, matchIndex);
+            }
             japText = text.substring(i, i + matchIndex + 1);
           }
 
@@ -111,7 +113,8 @@ class FuriganaText extends StatelessWidget {
         } else {
           hasFurigana = true;
 
-          //The current one did not match any word in the sentence then we replace the part in the sentence that is incorrect.
+          //The current one did not match any word in the sentence then
+          // we replace the part in the sentence that is incorrect.
           final nextWord = queue.length >= 2 ? queue.elementAt(1) : null;
           var nextWordIndex = nextWord == null
               ? null
@@ -136,7 +139,7 @@ class FuriganaText extends StatelessWidget {
         }
       }
       if (hasFurigana) {
-        bool isTarget = false;
+        var isTarget = false;
         if (markTarget &&
             japText != null &&
             (japText.contains(target) ||
@@ -159,7 +162,7 @@ class FuriganaText extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                        text: furigana + '\n',
+                        text: '$furigana\n',
                         style: isTarget
                             ? targetFuriganaTextStyle
                             : furiganaTextStyle),

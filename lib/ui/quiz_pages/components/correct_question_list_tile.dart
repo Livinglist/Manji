@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../kanji_detail_page/kanji_detail_page.dart';
 import '../../../bloc/settings_bloc.dart';
-import '../../../ui/components/chip_collections.dart';
 import '../../../models/question.dart';
+import '../../../ui/components/chip_collections.dart';
+import '../../kanji_detail_page/kanji_detail_page.dart';
 
 class CorrectQuestionListTile extends StatelessWidget {
   final Question question;
@@ -40,7 +40,7 @@ class CorrectQuestionListTile extends StatelessWidget {
               child: StreamBuilder(
                 key: ObjectKey(kanji.kanji),
                 stream: SettingsBloc.instance.fontSelection,
-                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     return Text(kanji.kanji,
                         style: TextStyle(
@@ -137,7 +137,7 @@ class CorrectQuestionListTile extends StatelessWidget {
             ],
           ),
           const Divider(),
-          if (question.questionType == QuestionType.KanjiToKatakana)
+          if (question.questionType == QuestionType.kanjiToKatakana)
             Row(children: <Widget>[
               const Icon(FontAwesomeIcons.checkCircle,
                   color: Colors.greenAccent),
@@ -146,8 +146,8 @@ class CorrectQuestionListTile extends StatelessWidget {
                   style:
                       TextStyle(color: Colors.greenAccent, fontSize: fontSize))
             ]),
-          if (question.questionType == QuestionType.KanjiToMeaning ||
-              question.questionType == QuestionType.KanjiToHiragana)
+          if (question.questionType == QuestionType.kanjiToMeaning ||
+              question.questionType == QuestionType.kanjiToHiragana)
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -174,9 +174,9 @@ class CorrectQuestionListTile extends StatelessWidget {
 
   static double typeToFontSize(QuestionType type) {
     switch (type) {
-      case QuestionType.KanjiToKatakana:
+      case QuestionType.kanjiToKatakana:
         return 22;
-      case QuestionType.KanjiToMeaning:
+      case QuestionType.kanjiToMeaning:
         return 16;
       default:
         return 16;

@@ -1,23 +1,23 @@
 import 'dart:math';
 
+import 'package:app_review/app_review.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:app_review/app_review.dart';
 
 import '../../bloc/kanji_bloc.dart';
-import '../../bloc/sentence_bloc.dart';
 import '../../bloc/kanji_list_bloc.dart';
+import '../../bloc/sentence_bloc.dart';
 import '../components/fancy_icon_button.dart';
-import '../kana_detail_page.dart';
-import '../sentence_detail_page.dart';
 import '../components/furigana_text.dart';
 import '../components/label_divider.dart';
+import '../kana_detail_page.dart';
+import '../sentence_detail_page.dart';
 import 'components/compound_word_column.dart';
-import 'components/kanji_info_column.dart';
 import 'components/kanji_block.dart';
+import 'components/kanji_info_column.dart';
 
 class KanjiDetailPage extends StatefulWidget {
   final Kanji kanji;
@@ -54,7 +54,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
     isFaved = KanjiBloc.instance.getIsFaved(kanjiStr);
     isStared = KanjiBloc.instance.getIsStared(kanjiStr);
 
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
       FeatureDiscovery.discoverFeatures(
         context,
         const <String>{'wikitionary', 'add_item', 'more_radicals'},
@@ -64,7 +64,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted &&
+      if (mounted &&
           scrollController.offset ==
               scrollController.position.maxScrollExtent) {
         sentenceBloc.getMoreSentencesByKanji();
@@ -73,7 +73,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
 
     scrollController.addListener(() {
       final offset = scrollController.offset;
-      if (this.mounted) {
+      if (mounted) {
         if (offset <= 0) {
           setState(() {
             elevation = 0;
@@ -82,10 +82,11 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
         } else {
           setState(() {
             elevation = 8;
-            if (offset > 200)
+            if (offset > 200) {
               opacity = 1;
-            else
+            } else {
               opacity = offset / 200;
+            }
           });
         }
       }
@@ -97,8 +98,9 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
 
     sentenceBloc.getSentencesByKanji(kanjiStr);
 
-    if (widget.kanjiStr != null)
+    if (widget.kanjiStr != null) {
       KanjiBloc.instance.getKanjiInfoByKanjiStr(widget.kanjiStr);
+    }
 
     if (Random(DateTime.now().millisecondsSinceEpoch).nextBool()) {
       AppReview.isRequestReviewAvailable.then((isAvailable) {
@@ -135,7 +137,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                     borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
-                    builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+                    builder: (_, snapshot) {
                       if (snapshot.hasData) {
                         final kanjiLists = snapshot.data;
 
@@ -165,22 +167,24 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                               }
 
                               if (kanjiList.wordCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.wordCount} Words';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.wordCount} Words'}';
                               }
 
-                              if (kanjiList.wordCount == 1)
+                              if (kanjiList.wordCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (kanjiList.sentenceCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.sentenceCount} Sentences';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.sentenceCount} Sentences'}';
                               }
 
-                              if (kanjiList.sentenceCount == 1)
+                              if (kanjiList.sentenceCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
@@ -255,7 +259,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
   }
 
   String getAppBarInfo() {
-    String str = '';
+    var str = '';
     if (kanji.jlpt != 0) {
       str += "N${kanji.jlpt}";
     }
@@ -299,7 +303,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
             opacity: opacity,
             child: StreamBuilder(
               stream: KanjiBloc.instance.kanji,
-              builder: (_, AsyncSnapshot<Kanji> snapshot) {
+              builder: (_, snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
                   final kanji =
                       widget.kanji == null ? snapshot.data : widget.kanji;
@@ -448,7 +452,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
             StreamBuilder(
               key: ObjectKey(widget.kanji ?? widget.kanjiStr),
               stream: KanjiBloc.instance.kanji,
-              builder: (_, AsyncSnapshot<Kanji> snapshot) {
+              builder: (_, snapshot) {
                 if (snapshot.hasData || widget.kanji != null) {
                   final kanji =
                       widget.kanji == null ? snapshot.data : widget.kanji;
@@ -471,7 +475,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                             textAlign: TextAlign.center,
                                             text: const TextSpan(children: [
                                               TextSpan(
-                                                  text: 'いみ' + '\n',
+                                                  text: 'いみ\n',
                                                   style: TextStyle(
                                                       fontSize: 9,
                                                       color: Colors.white)),
@@ -496,7 +500,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                         textAlign: TextAlign.center,
                                         text: const TextSpan(children: [
                                           TextSpan(
-                                              text: 'よみ      かた' + '\n',
+                                              text: 'よみ      かた\n',
                                               style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white)),
@@ -621,7 +625,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                         textAlign: TextAlign.center,
                                         text: const TextSpan(children: [
                                           TextSpan(
-                                              text: 'たんご' + '\n',
+                                              text: 'たんご\n',
                                               style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white)),
@@ -639,7 +643,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
                                         textAlign: TextAlign.center,
                                         text: const TextSpan(children: [
                                           TextSpan(
-                                              text: 'れいぶん' + '\n',
+                                              text: 'れいぶん\n',
                                               style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white)),
@@ -661,7 +665,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
             ),
             StreamBuilder(
               stream: sentenceBloc.sentences,
-              builder: (_, AsyncSnapshot<List<Sentence>> snapshot) {
+              builder: (_, snapshot) {
                 if (snapshot.hasData) {
                   final sentences = snapshot.data;
                   final children = <Widget>[];
@@ -732,7 +736,7 @@ class _KanjiDetailPageState extends State<KanjiDetailPage>
         ));
   }
 
-  launchURL(String targetKanji) async {
+  void launchURL(String targetKanji) async {
     final url = Uri.encodeFull('https://en.wiktionary.org/wiki/$targetKanji');
 
     if (await canLaunch(url)) {

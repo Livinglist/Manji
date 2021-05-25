@@ -14,7 +14,7 @@ extension ListExtension<E> on List<E> {
     for (var i in this) {
       if (test(i)) {
         tempList.add(i);
-        this.remove(i);
+        remove(i);
       }
     }
 
@@ -22,20 +22,19 @@ extension ListExtension<E> on List<E> {
   }
 
   List<E> takeRandomly(int amount) {
-    int index = -1;
+    var index = -1;
     final list = <E>[];
 
     final visited = <int>[];
 
-    for (int i = 0; i < amount; i++) {
-      index = Random(DateTime.now().millisecondsSinceEpoch)
-              .nextInt(this.length - 1) +
-          1;
+    for (var i = 0; i < amount; i++) {
+      index =
+          Random(DateTime.now().millisecondsSinceEpoch).nextInt(length - 1) + 1;
 
       while (visited.contains(index)) {
-        index = Random(DateTime.now().millisecondsSinceEpoch)
-                .nextInt(this.length - 1) +
-            1;
+        index =
+            Random(DateTime.now().millisecondsSinceEpoch).nextInt(length - 1) +
+                1;
       }
 
       visited.add(index);

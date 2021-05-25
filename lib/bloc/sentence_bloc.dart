@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../models/sentence.dart';
-import '../resource/repository.dart';
 import '../resource/constants.dart';
+import '../resource/repository.dart';
 
 export '../models/kanji.dart';
 export '../models/sentence.dart';
@@ -16,8 +16,8 @@ class SentenceBloc {
   final _sentencesFetcher = BehaviorSubject<List<Sentence>>();
   final _isFetchingFetcher = BehaviorSubject<bool>();
 
-  List<Sentence> _sentences = <Sentence>[];
-  List<String> _unloadedSentencesStr = <String>[];
+  final _sentences = <Sentence>[];
+  var _unloadedSentencesStr = <String>[];
 
   Stream<List<Sentence>> get sentences => _sentencesFetcher.stream;
 
@@ -26,7 +26,7 @@ class SentenceBloc {
   bool _isFetching, _allFetched = false;
 
   ///Used for pagination.
-  int _length;
+  final int _length;
 
   ///Used for pagination for fetching sentences from Jisho.org.
   int _currentPage;
@@ -242,7 +242,7 @@ class SentenceBloc {
 
   ///Get sentences from the local database.
   void getSentencesByKanji(String kanjiStr) async {
-    this._kanjiStr = kanjiStr;
+    _kanjiStr = kanjiStr;
     final jsonStr = await repo.getSentencesJsonStringByKanji(kanjiStr);
     if (jsonStr != null) {
       final list = (jsonDecode(jsonStr) as List).cast<String>();

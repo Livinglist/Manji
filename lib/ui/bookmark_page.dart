@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../bloc/kanji_bloc.dart';
+import 'components/furigana_text.dart';
 import 'components/kanji_grid_view.dart';
 import 'components/kanji_list_view.dart';
-import 'components/furigana_text.dart';
 
 class MyKanjiPage extends StatefulWidget {
   @override
@@ -78,7 +78,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
         body: TabBarView(children: [
           StreamBuilder(
             stream: KanjiBloc.instance.allStarKanjis,
-            builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+            builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final kanjis = snapshot.data;
 
@@ -104,7 +104,7 @@ class MyKanjiPageState extends State<MyKanjiPage> {
           ),
           StreamBuilder(
             stream: KanjiBloc.instance.allFavKanjis,
-            builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+            builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final kanjis = snapshot.data;
 

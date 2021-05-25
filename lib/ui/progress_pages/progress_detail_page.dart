@@ -33,7 +33,7 @@ class _ProgressDetailPageState extends State<ProgressDetailPage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;

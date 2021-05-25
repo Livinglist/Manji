@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 
-import '../utils/list_extension.dart';
-import '../resource/repository.dart';
 import '../models/kanji_list.dart';
+import '../resource/repository.dart';
+import '../utils/list_extension.dart';
 
-export '../models/kanji_list.dart';
 export '../models/kanji.dart';
+export '../models/kanji_list.dart';
 
 class KanjiListBloc {
   static final instance = KanjiListBloc();
@@ -22,8 +22,9 @@ class KanjiListBloc {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
 
-      if (!_kanjiListsFetcher.isClosed)
+      if (!_kanjiListsFetcher.isClosed) {
         _kanjiListsFetcher.sink.add(_kanjiLists);
+      }
 
       return _kanjiLists;
     }
@@ -34,8 +35,9 @@ class KanjiListBloc {
   void init() {
     if (_kanjiLists == null) {
       _kanjiLists = repo.getAllKanjiList();
-      if (!_kanjiListsFetcher.isClosed)
+      if (!_kanjiListsFetcher.isClosed) {
         _kanjiListsFetcher.sink.add(_kanjiLists);
+      }
     }
   }
 
@@ -107,7 +109,7 @@ class KanjiListBloc {
         listName = listName.replaceRange(
             listName.length - 1, listName.length, num.toString());
       } else {
-        listName = listName.trim() + " 1";
+        listName = "${listName.trim()} 1";
       }
     }
     final temp = KanjiList(name: listName, kanjiStrs: []);
@@ -137,7 +139,7 @@ class KanjiListBloc {
       if (_kanjiLists.contains(list)) {
         final remoteKanjis = list.kanjiStrs;
         final localKanjis = _kanjiLists.singleWhere((e) => e == list).kanjiStrs;
-        final mergedKanjis = [...remoteKanjis, ...localKanjis].toSet().toList();
+        final mergedKanjis = {...remoteKanjis, ...localKanjis}.toList();
         list.kanjiStrs = mergedKanjis;
 
         repo.deleteKanjiList(list);

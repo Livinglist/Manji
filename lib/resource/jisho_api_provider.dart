@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:html/dom.dart';
+import 'package:http/http.dart';
 
-import '../models/sentence.dart';
 import '../models/kanji.dart';
+import '../models/sentence.dart';
 import '../models/word.dart';
-import 'firebase_api_provider.dart';
 import 'db_provider.dart';
+import 'firebase_api_provider.dart';
 
 class JishoApiProvider {
   final client = Client();
@@ -19,7 +18,7 @@ class JishoApiProvider {
         'https://jisho.org/search/$kanji%20%23sentences?page=${currentPage + 1}'));
     final doc = parse(response.body);
 
-    int index = 0;
+    var index = 0;
 
     //from element we can fetch tokens in a Japanese sentence, each element contains all the tokens of one Japanese sentence
     final elements = doc.querySelectorAll('#secondary > div > ul > li');
@@ -38,7 +37,7 @@ class JishoApiProvider {
     }
 
     for (final ele in elements) {
-      int childIndex = 1;
+      var childIndex = 1;
       final tokens = <Token>[];
       while (true) {
         var element = ele.querySelector(
@@ -48,8 +47,9 @@ class JishoApiProvider {
         final nextElement = ele.querySelector(
             'div.sentence_content > ul > li:nth-child(${childIndex + 1}) > span.unlinked');
 
-        if (element == null && nextElement == null && nextNextElement == null)
+        if (element == null && nextElement == null && nextNextElement == null) {
           break;
+        }
         if (element == null) {
           childIndex++;
           continue;
@@ -68,7 +68,7 @@ class JishoApiProvider {
         childIndex++;
       }
 
-      String japSentence = uls[index].text;
+      var japSentence = uls[index].text;
 
       for (var token in tokens) {
         if (token.furigana == null) continue;
@@ -95,7 +95,7 @@ class JishoApiProvider {
     //Each wordDiv contains a section for one word
     final wordDivs = doc.querySelectorAll('#primary > div > div');
 
-    for (int i = 0; i < wordDivs.length; i++) {
+    for (var i = 0; i < wordDivs.length; i++) {
       final furiganaSpan = wordDivs.elementAt(i).querySelector(
           'div.concept_light-wrapper.columns.zero-padding > div.concept_light-readings.japanese.japanese_gothic > div > span.furigana');
       final textSpan = wordDivs.elementAt(i).querySelector(
@@ -103,7 +103,7 @@ class JishoApiProvider {
 
       final meaningDivs =
           wordDivs.elementAt(i).getElementsByClassName('meaning-meaning');
-      String meanings = '';
+      var meanings = '';
       for (var meaningDiv in meaningDivs) {
         meanings += meaningDiv.text;
       }
@@ -156,7 +156,7 @@ class JishoApiProvider {
 
     for (final kanji in kanjis) {
       for (final type in types) {
-        int pageNum = 1;
+        var pageNum = 1;
         var response = await client.get(Uri.parse(
             'https://jisho.org/search/$kanji%20%23words%20%23${wordTypeToString(type)}?page=$pageNum'));
         var doc = parse(response.body);
@@ -165,7 +165,7 @@ class JishoApiProvider {
         var wordDivs = doc.querySelectorAll('#primary > div > div');
 
         while (wordDivs != null && wordDivs.isNotEmpty) {
-          for (int i = 0; i < wordDivs.length; i++) {
+          for (var i = 0; i < wordDivs.length; i++) {
             final furiganaSpan = wordDivs.elementAt(i).querySelector(
                 'div.concept_light-wrapper.columns.zero-padding > div.concept_light-readings.japanese.japanese_gothic > div > span.furigana');
             final textSpan = wordDivs.elementAt(i).querySelector(
@@ -173,7 +173,7 @@ class JishoApiProvider {
 
             final meaningDivs =
                 wordDivs.elementAt(i).getElementsByClassName('meaning-meaning');
-            String meanings = '';
+            var meanings = '';
             for (var meaningDiv in meaningDivs) {
               meanings += meaningDiv.text;
             }
@@ -219,18 +219,18 @@ class JishoApiProvider {
       await ref.set({'kanji': kanji});
       //if(alreadyScrappedKanjis.contains(kanji)) continue;
       //get the html from
-      int pageNum = 1;
-      Response response = await client.get(Uri.parse(
+      var pageNum = 1;
+      var response = await client.get(Uri.parse(
           'https://jisho.org/search/$kanji%20%23sentences?page=$pageNum'));
       var doc = parse(response.body);
 
-      int sentenceCount = 0;
-      int index = 0;
+      var sentenceCount = 0;
+      var index = 0;
 
       //from element we can fetch tokens in a Japanese sentence, each element contains all the tokens of one Japanese sentence
       List elements = doc.querySelectorAll('#secondary > div > ul > li');
 
-      List<Element> engEles = doc.querySelectorAll(
+      var engEles = doc.querySelectorAll(
           '#secondary > div > ul > li > div.sentence_content > div > span.english');
 
       //the reason we are getting uls is because ul.text contains the full Japanese sentence with punctuations,
@@ -240,7 +240,7 @@ class JishoApiProvider {
           '#secondary > div > ul > li > div.sentence_content > ul');
       while (elements.isNotEmpty && elements != null) {
         for (var ele in elements) {
-          int childIndex = 1;
+          var childIndex = 1;
           final tokens = <Token>[];
           while (true) {
             var element = ele.querySelector(
@@ -332,18 +332,18 @@ class JishoApiProvider {
       print('now fetching for $kanji');
       //if(alreadyScrappedKanjis.contains(kanji)) continue;
       //get the html from
-      int pageNum = 1;
-      Response response = await client.get(Uri.parse(
+      var pageNum = 1;
+      var response = await client.get(Uri.parse(
           'https://jisho.org/search/$kanji%20%23sentences?page=$pageNum'));
       var doc = parse(response.body);
 
-      int sentenceCount = 0;
-      int index = 0;
+      var sentenceCount = 0;
+      var index = 0;
 
       //from element we can fetch tokens in a Japanese sentence, each element contains all the tokens of one Japanese sentence
-      List elements = doc.querySelectorAll('#secondary > div > ul > li');
+      var elements = doc.querySelectorAll('#secondary > div > ul > li');
 
-      List<Element> engEles = doc.querySelectorAll(
+      var engEles = doc.querySelectorAll(
           '#secondary > div > ul > li > div.sentence_content > div > span.english');
 
       //the reason we are getting uls is because ul.text contains the full Japanese sentence with punctuations,
@@ -353,11 +353,12 @@ class JishoApiProvider {
           '#secondary > div > ul > li > div.sentence_content > ul');
       while (elements.isNotEmpty && elements != null && sentenceCount < 240) {
         for (var ele in elements) {
-          int childIndex = 1;
+          var childIndex = 1;
           final tokens = <Token>[];
           while (true) {
             var element = ele.querySelector(
-                'div.sentence_content > ul > li:nth-child($childIndex) > span.unlinked');
+              'div.sentence_content > ul > li:nth-child($childIndex) > span.unlinked',
+            );
             final nextNextElement = ele.querySelector(
                 'div.sentence_content > ul > li:nth-child(${childIndex + 2}) > span.unlinked');
             final nextElement = ele.querySelector(
@@ -427,18 +428,18 @@ class JishoApiProvider {
   //Used for scrapping.
   Stream<Sentence> fetchAllSentencesByKanji(String kanji) async* {
     //get the html from
-    int pageNum = 1;
+    var pageNum = 1;
     final c = Client();
-    Response response = await c.get(Uri.parse(
+    var response = await c.get(Uri.parse(
         'https://jisho.org/search/$kanji%20%23sentences?page=$pageNum'));
     var doc = parse(response.body);
 
-    int index = 0;
+    var index = 0;
 
     //from element we can fetch tokens in a Japanese sentence, each element contains all the tokens of one Japanese sentence
     List elements = doc.querySelectorAll('#secondary > div > ul > li');
 
-    List<Element> engEles = doc.querySelectorAll(
+    var engEles = doc.querySelectorAll(
         '#secondary > div > ul > li > div.sentence_content > div > span.english');
 
     //the reason we are getting uls is because ul.text contains the full Japanese sentence with punctuations,
@@ -448,7 +449,7 @@ class JishoApiProvider {
         '#secondary > div > ul > li > div.sentence_content > ul');
     while (elements.isNotEmpty && elements != null) {
       for (final ele in elements) {
-        int childIndex = 1;
+        var childIndex = 1;
         final tokens = <Token>[];
         while (true) {
           var element = ele.querySelector(
@@ -458,8 +459,11 @@ class JishoApiProvider {
           final nextElement = ele.querySelector(
               'div.sentence_content > ul > li:nth-child(${childIndex + 1}) > span.unlinked');
 
-          if (element == null && nextElement == null && nextNextElement == null)
+          if (element == null &&
+              nextElement == null &&
+              nextNextElement == null) {
             break;
+          }
           if (element == null) {
             childIndex++;
             continue;
@@ -521,17 +525,17 @@ class JishoApiProvider {
   Future<List<Sentence>> fetchAllSentencesByKanjiAsync(String kanji) async {
     //get the html from
     final sentences = <Sentence>[];
-    int pageNum = 1;
-    Response response = await client.get(Uri.parse(
+    var pageNum = 1;
+    var response = await client.get(Uri.parse(
         'https://jisho.org/search/$kanji%20%23sentences?page=$pageNum'));
     var doc = parse(response.body);
 
-    int index = 0;
+    var index = 0;
 
     //from element we can fetch tokens in a Japanese sentence, each element contains all the tokens of one Japanese sentence
-    List elements = doc.querySelectorAll('#secondary > div > ul > li');
+    var elements = doc.querySelectorAll('#secondary > div > ul > li');
 
-    List<Element> engEles = doc.querySelectorAll(
+    var engEles = doc.querySelectorAll(
         '#secondary > div > ul > li > div.sentence_content > div > span.english');
 
     //the reason we are getting uls is because ul.text contains the full Japanese sentence with punctuations,
@@ -541,7 +545,7 @@ class JishoApiProvider {
         '#secondary > div > ul > li > div.sentence_content > ul');
     while (elements.isNotEmpty && elements != null) {
       for (var ele in elements) {
-        int childIndex = 1;
+        var childIndex = 1;
         final tokens = <Token>[];
         while (true) {
           var element = ele.querySelector(
@@ -551,8 +555,11 @@ class JishoApiProvider {
           final nextElement = ele.querySelector(
               'div.sentence_content > ul > li:nth-child(${childIndex + 1}) > span.unlinked');
 
-          if (element == null && nextElement == null && nextNextElement == null)
+          if (element == null &&
+              nextElement == null &&
+              nextNextElement == null) {
             break;
+          }
           if (element == null) {
             childIndex++;
             continue;
@@ -648,7 +655,7 @@ class JishoApiProvider {
 
   Stream<Kanji> fetchKanjisByJLPTLevel(JLPTLevel jlptLevel) async* {
     //var url = Uri.encodeFull('https://jisho.org/search/${_jlptLevelToSearchString(jlptLevel)} #kanji');
-    int pageNum = 1;
+    var pageNum = 1;
     var url = Uri.parse(
         'https://jisho.org/search/%23${_jlptLevelToSearchString(jlptLevel)}%20%23kanji?page=1');
     var response = await client.get(url);
@@ -658,7 +665,7 @@ class JishoApiProvider {
     var allKanjiEles = doc.querySelectorAll(
         '#secondary > div > div > div > div.literal_block > span > a');
 
-    int index = 1;
+    var index = 1;
     jlptLevel = JLPTLevel.n1;
     while (jlptLevel != null) {
       pageNum = 10;
@@ -699,7 +706,7 @@ class JishoApiProvider {
 
   Stream<Kanji> fetchKanjisByGrade(int grade) async* {
     //var url = Uri.encodeFull('https://jisho.org/search/${_jlptLevelToSearchString(jlptLevel)} #kanji');
-    int pageNum = 1;
+    var pageNum = 1;
     var url = Uri.parse(
         'https://jisho.org/search/%23grade%3A$grade%20%23kanji?page=1');
     var response = await client.get(url);
@@ -708,7 +715,7 @@ class JishoApiProvider {
     var allKanjiEles = doc.querySelectorAll(
         '#secondary > div > div > div > div.literal_block > span > a');
 
-    int index = 1;
+    var index = 1;
     while (grade >= 1) {
       pageNum = 1;
       url = Uri.parse(
@@ -859,20 +866,23 @@ class JishoApiProvider {
     int grade;
     int jlpt;
     int frequency;
-    if (gradeStrEle == null)
+    if (gradeStrEle == null) {
       grade = 0;
-    else
+    } else {
       grade = getGradeFromString(gradeStrEle.text.trim());
+    }
 
-    if (jlptStrEle == null)
+    if (jlptStrEle == null) {
       jlpt = 0;
-    else
+    } else {
       jlpt = getJLPTFromString(jlptStrEle.text);
+    }
 
-    if (frequencyStrEle == null)
+    if (frequencyStrEle == null) {
       frequency = 0;
-    else
+    } else {
       frequency = int.tryParse(frequencyStrEle.text) ?? 0;
+    }
 
     return Kanji(
         kanji: kanji,

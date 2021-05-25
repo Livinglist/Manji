@@ -25,7 +25,7 @@ class KanjiRecognitionBloc {
     });
   }
 
-  dispose() {
+  void dispose() {
     _predictedKanjiFetcher.close();
   }
 }

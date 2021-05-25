@@ -54,10 +54,11 @@ class FancyIconButtonState extends State<FancyIconButton>
 
   void changeStatus() {
     isFaved = !isFaved;
-    if (animationController.status == AnimationStatus.completed)
+    if (animationController.status == AnimationStatus.completed) {
       animationController.reverse();
-    else
+    } else {
       animationController.forward();
+    }
   }
 
   @override

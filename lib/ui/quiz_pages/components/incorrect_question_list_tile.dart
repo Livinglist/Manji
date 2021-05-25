@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../kanji_detail_page/kanji_detail_page.dart';
-import '../../../ui/components/chip_collections.dart';
-import '../../../models/question.dart';
 import '../../../bloc/settings_bloc.dart';
+import '../../../models/question.dart';
+import '../../../ui/components/chip_collections.dart';
+import '../../kanji_detail_page/kanji_detail_page.dart';
 
 class IncorrectQuestionListTile extends StatelessWidget {
   final Question question;
@@ -40,7 +40,7 @@ class IncorrectQuestionListTile extends StatelessWidget {
               child: StreamBuilder(
                 key: ObjectKey(kanji.kanji),
                 stream: SettingsBloc.instance.fontSelection,
-                builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                builder: (_, snapshot) {
                   return Text(kanji.kanji,
                       style: TextStyle(
                         color: Colors.white,
@@ -104,9 +104,8 @@ class IncorrectQuestionListTile extends StatelessWidget {
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           )),
                       decoration: const BoxDecoration(
-                        //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
                         color: Colors.white,
-                        borderRadius: const BorderRadius.all(Radius.circular(
+                        borderRadius: BorderRadius.all(Radius.circular(
                                 5.0) //                 <--- border radius here
                             ),
                       ),
@@ -133,7 +132,7 @@ class IncorrectQuestionListTile extends StatelessWidget {
             ],
           ),
           const Divider(),
-          if (question.questionType == QuestionType.KanjiToKatakana)
+          if (question.questionType == QuestionType.kanjiToKatakana)
             Row(children: <Widget>[
               const Icon(FontAwesomeIcons.checkCircle,
                   color: Colors.greenAccent),
@@ -142,8 +141,8 @@ class IncorrectQuestionListTile extends StatelessWidget {
                   style:
                       TextStyle(color: Colors.greenAccent, fontSize: fontSize))
             ]),
-          if (question.questionType == QuestionType.KanjiToMeaning ||
-              question.questionType == QuestionType.KanjiToHiragana)
+          if (question.questionType == QuestionType.kanjiToMeaning ||
+              question.questionType == QuestionType.kanjiToHiragana)
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -159,15 +158,15 @@ class IncorrectQuestionListTile extends StatelessWidget {
                   )
                 ]),
           const Divider(),
-          if (question.questionType == QuestionType.KanjiToKatakana)
+          if (question.questionType == QuestionType.kanjiToKatakana)
             Row(children: <Widget>[
               const Icon(FontAwesomeIcons.timesCircle, color: Colors.redAccent),
               const Spacer(),
               Text(wrongKana,
                   style: TextStyle(color: Colors.redAccent, fontSize: fontSize))
             ]),
-          if (question.questionType == QuestionType.KanjiToMeaning ||
-              question.questionType == QuestionType.KanjiToHiragana)
+          if (question.questionType == QuestionType.kanjiToMeaning ||
+              question.questionType == QuestionType.kanjiToHiragana)
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -194,9 +193,9 @@ class IncorrectQuestionListTile extends StatelessWidget {
 
   static double typeToFontSize(QuestionType type) {
     switch (type) {
-      case QuestionType.KanjiToKatakana:
+      case QuestionType.kanjiToKatakana:
         return 22;
-      case QuestionType.KanjiToMeaning:
+      case QuestionType.kanjiToMeaning:
         return 16;
       default:
         return 16;

@@ -34,15 +34,17 @@ class Word {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (other is Word &&
-        other.wordText == this.wordText &&
-        other.meanings == this.meanings) return true;
+        other.wordText == wordText &&
+        other.meanings == meanings) return true;
     return false;
   }
 
   @override
-  int get hashCode => this.wordText.hashCode + this.meanings.hashCode;
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => wordText.hashCode + meanings.hashCode;
 }
 
 String wordTypeToString(WordType wordType) {

@@ -27,7 +27,7 @@ class _RadicalsPageState extends State<RadicalsPage> {
     }
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -134,8 +134,9 @@ class _RadicalsPageState extends State<RadicalsPage> {
     for (final stroke in strokesToRadicals.keys.toList()..sort()) {
       var strokeText = '$stroke strokes';
 
-      if (stroke == 1)
+      if (stroke == 1) {
         strokeText = strokeText.substring(0, strokeText.length - 1);
+      }
 
       final wrap = Padding(
         padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -169,8 +170,8 @@ class _RadicalsPageState extends State<RadicalsPage> {
                   key: ObjectKey(r),
                   selected: radicalsMap[r],
                   elevation: radicalsMap[r] ? 4 : 0,
-                  label:
-                      Text(showMeanings ? r + " | ${radicalsToMeaning[r]}" : r),
+                  label: Text(
+                      showMeanings ? "$r${" | ${radicalsToMeaning[r]}"}" : r),
                   onSelected: (val) {
                     setState(() {
                       radicalsMap[r] = !radicalsMap[r];

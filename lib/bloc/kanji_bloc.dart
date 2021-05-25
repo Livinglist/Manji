@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:math';
-import 'dart:convert';
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,8 +9,8 @@ import 'package:rxdart/rxdart.dart';
 import '../models/kanji.dart';
 import '../models/sentence.dart';
 import '../models/word.dart';
-import '../resource/repository.dart';
 import '../resource/firebase_auth_provider.dart';
+import '../resource/repository.dart';
 
 export '../models/kanji.dart';
 export '../models/sentence.dart';
@@ -34,11 +34,10 @@ class KanjiBloc {
   final Queue<BehaviorSubject<Kanji>> _singleKanjiFetchers =
       Queue<BehaviorSubject<Kanji>>();
 
-  List<Sentence> _sentences = <Sentence>[];
+  final _sentences = <Sentence>[];
   List<String> _unloadedSentencesStr = <String>[];
-  List<Word> _words = <Word>[];
+  final _words = <Word>[];
   List<Kanji> _kanjis = <Kanji>[];
-  //List<Kanji> _allKanjis = <Kanji>[];
   Map<String, Kanji> _allKanjisMap = <String, Kanji>{};
   Map<String, Kanji> _allFavKanjisMap = <String, Kanji>{};
   Map<String, Kanji> _allStarKanjisMap = <String, Kanji>{};
@@ -211,12 +210,14 @@ class KanjiBloc {
     final fetcher = BehaviorSubject<Kanji>();
     _singleKanjiFetchers.add(fetcher);
     final kanji = _allKanjisMap[kanjiStr];
-    if (kanji != null && !_singleKanjiFetchers.last.isClosed)
+    if (kanji != null && !_singleKanjiFetchers.last.isClosed) {
       _singleKanjiFetchers.last.add(kanji);
-    else
+    } else {
       _singleKanjiFetchers.last.addError('No data found');
+    }
   }
 
+  // ignore: type_annotate_public_apis
   void updateKanji(Kanji kanji, {isDeleted = false}) {
     for (var i in kanji.kunyomiWords) {
       print(i.wordText);
@@ -224,7 +225,7 @@ class KanjiBloc {
     _allKanjisMap[kanji.kanji] = kanji;
     _allKanjisFetcher.sink.add(_allKanjisMap.values.toList());
     _singleKanjiFetchers.last.sink.add(kanji);
-    repo.updateKanji(kanji, isDeleted);
+    repo.updateKanji(kanji, isDeleted: isDeleted);
   }
 
   void addFav(String kanjiStr) {

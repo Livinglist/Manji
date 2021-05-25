@@ -19,8 +19,6 @@ class Kanji {
   bool isFaved;
   List<int> timeStamps = [];
 
-  set timeStamp(int timeStamp) => timeStamps.add(timeStamp);
-
   JLPTLevel get jlptLevel {
     switch (jlpt) {
       case 1:
@@ -64,17 +62,17 @@ class Kanji {
         assert(frequency >= 0);
 
   Map toMap() => {
-        Keys.gradeKey: this.grade,
-        Keys.jlptKey: this.jlpt,
-        Keys.kanjiKey: this.kanji,
-        Keys.frequencyKey: this.frequency,
-        Keys.onyomiKey: this.onyomi,
-        Keys.kunyomiKey: this.kunyomi,
-        Keys.strokesKey: this.strokes,
-        Keys.partsKey: this.parts,
-        Keys.meaningKey: this.meaning,
-        Keys.kunyomiWordsKey: this.kunyomiWords,
-        Keys.onyomiWordsKey: this.onyomiWords
+        Keys.gradeKey: grade,
+        Keys.jlptKey: jlpt,
+        Keys.kanjiKey: kanji,
+        Keys.frequencyKey: frequency,
+        Keys.onyomiKey: onyomi,
+        Keys.kunyomiKey: kunyomi,
+        Keys.strokesKey: strokes,
+        Keys.partsKey: parts,
+        Keys.meaningKey: meaning,
+        Keys.kunyomiWordsKey: kunyomiWords,
+        Keys.onyomiWordsKey: onyomiWords
       };
 
   Kanji.fromMap(Map map) {
@@ -99,22 +97,22 @@ class Kanji {
 
   Map<String, dynamic> toDBMap() => {
         Keys.idKey: Keys.idKey,
-        Keys.gradeKey: this.grade,
-        Keys.jlptKey: this.jlpt,
-        Keys.kanjiKey: this.kanji,
-        Keys.frequencyKey: this.frequency,
-        Keys.onyomiKey: jsonEncode(this.onyomi),
-        Keys.kunyomiKey: jsonEncode(this.kunyomi),
-        Keys.strokesKey: this.strokes,
-        Keys.partsKey: jsonEncode(this.parts),
-        Keys.meaningKey: this.meaning,
-        Keys.radicalKey: this.radicals,
-        Keys.radicalsMeaningKey: this.radicalsMeaning,
+        Keys.gradeKey: grade,
+        Keys.jlptKey: jlpt,
+        Keys.kanjiKey: kanji,
+        Keys.frequencyKey: frequency,
+        Keys.onyomiKey: jsonEncode(onyomi),
+        Keys.kunyomiKey: jsonEncode(kunyomi),
+        Keys.strokesKey: strokes,
+        Keys.partsKey: jsonEncode(parts),
+        Keys.meaningKey: meaning,
+        Keys.radicalKey: radicals,
+        Keys.radicalsMeaningKey: radicalsMeaning,
         Keys.kunyomiWordsKey:
-            jsonEncode(this.kunyomiWords.map((word) => word.toMap()).toList()),
+            jsonEncode(kunyomiWords.map((word) => word.toMap()).toList()),
         Keys.onyomiWordsKey:
-            jsonEncode(this.onyomiWords.map((word) => word.toMap()).toList()),
-        Keys.studiedTimeStampsKey: jsonEncode(this.timeStamps)
+            jsonEncode(onyomiWords.map((word) => word.toMap()).toList()),
+        Keys.studiedTimeStampsKey: jsonEncode(timeStamps)
       };
 
   Kanji.fromDBMap(Map map) {

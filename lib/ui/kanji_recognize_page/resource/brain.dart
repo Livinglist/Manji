@@ -48,7 +48,7 @@ class AppBrain {
         kBackgroundPaint);
 
     // Now we draw our list of points on white paint
-    for (int i = 0; i < points.length - 1; i++) {
+    for (var i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null) {
         //canvas.drawLine(points[i] + canvasOffset, points[i + 1] + canvasOffset, kWhitePaint);
         canvas.drawLine(points[i], points[i + 1], kWhitePaint);
@@ -92,7 +92,7 @@ class AppBrain {
   Uint8List imageToByteListFloat32(im.Image image, int inputSize) {
     final convertedBytes = Float32List(inputSize * inputSize);
     final buffer = Float32List.view(convertedBytes.buffer);
-    int pixelIndex = 0;
+    var pixelIndex = 0;
     for (var i = 0; i < inputSize; i++) {
       for (var j = 0; j < inputSize; j++) {
         final pixel = image.getPixel(j, i);

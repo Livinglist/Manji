@@ -18,7 +18,7 @@ class ActivityPanel extends StatelessWidget {
     return FutureBuilder(
       future: compute<List<Kanji>, Map<DateTime, List<Kanji>>>(
           convertTimeStampsToDateTimeMap, KanjiBloc.instance.allKanjisList),
-      builder: (_, AsyncSnapshot<Map<DateTime, List<Kanji>>> snapshot) {
+      builder: (_, snapshot) {
         if (snapshot.hasData) {
           final map = snapshot.data;
           ActivityPanel.data = map;
@@ -72,7 +72,7 @@ class ActivityPanel extends StatelessWidget {
 }
 
 Map<DateTime, List<Kanji>> convertTimeStampsToDateTimeMap(List<Kanji> kanjis) {
-  final map = Map<DateTime, List<Kanji>>();
+  final map = <DateTime, List<Kanji>>{};
   for (var kanji in kanjis) {
     for (var timeStamp in kanji.timeStamps) {
       var dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).toLocal();

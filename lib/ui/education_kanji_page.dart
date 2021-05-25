@@ -2,13 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../models/kanji.dart';
-import '../bloc/kanji_bloc.dart';
-import '../ui/components/kanji_list_view.dart';
-import '../ui/components/kanji_grid_view.dart';
-import 'components/furigana_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../bloc/kanji_bloc.dart';
+import '../models/kanji.dart';
+import '../ui/components/kanji_grid_view.dart';
+import '../ui/components/kanji_list_view.dart';
+import 'components/furigana_text.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
 
 class EducationKanjiPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: KanjiBloc.instance.allKanjis,
-      builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+      builder: (_, snapshot) {
         return DefaultTabController(
           length: 7,
           child: Scaffold(
@@ -136,10 +136,11 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
                   ),
                 ],
                 onTap: (index) {
-                  if (index <= 5)
+                  if (index <= 5) {
                     currentGrade = index + 1;
-                  else
+                  } else {
                     currentGrade = 0;
+                  }
                 },
               ),
             ),
@@ -165,11 +166,12 @@ class EducationKanjiPageState extends State<EducationKanjiPage> {
       gradeToKanjisMap[grade].sort((l, r) => l.strokes.compareTo(r.strokes));
     }
 
-    if (showGrid)
+    if (showGrid) {
       return KanjiGridView(
         kanjis: gradeToKanjisMap[grade],
         fallBackFont: 'ming',
       );
+    }
     return KanjiListView(
       kanjis: gradeToKanjisMap[grade],
       fallBackFont: 'ming',

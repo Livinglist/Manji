@@ -26,7 +26,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
     super.initState();
   }
 
-  loadVideo() async {
+  void loadVideo() async {
     if (allVideoFiles.contains(widget.kanjiStr)) {
       setState(() {
         videoController = VideoPlayerController.asset(
@@ -35,7 +35,7 @@ class _KanjiBlockState extends State<KanjiBlock> {
             setState(() {});
           })
           ..addListener(() async {
-            if (videoController != null && this.mounted) {
+            if (videoController != null && mounted) {
               if (await videoController.position >=
                       videoController.value.duration &&
                   isPlaying) {

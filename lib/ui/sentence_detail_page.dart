@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../models/sentence.dart';
 import '../bloc/kanji_bloc.dart';
 import '../bloc/kanji_list_bloc.dart';
+import '../models/sentence.dart';
 import '../utils/string_extension.dart';
 import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
@@ -33,7 +33,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
     flutterTts.setLanguage("ja");
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -113,7 +113,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                     borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: StreamBuilder(
                     stream: KanjiListBloc.instance.kanjiLists,
-                    builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+                    builder: (_, snapshot) {
                       if (snapshot.hasData) {
                         final kanjiLists = snapshot.data;
 
@@ -141,22 +141,24 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
                               }
 
                               if (kanjiList.wordCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.wordCount} Words';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.wordCount} Words'}';
                               }
 
-                              if (kanjiList.wordCount == 1)
+                              if (kanjiList.wordCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (kanjiList.sentenceCount > 0) {
-                                subtitle += (subtitle.isEmpty ? '' : ', ') +
-                                    '${kanjiList.sentenceCount} Sentences';
+                                subtitle +=
+                                    '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.sentenceCount} Sentences'}';
                               }
 
-                              if (kanjiList.sentenceCount == 1)
+                              if (kanjiList.sentenceCount == 1) {
                                 subtitle =
                                     subtitle.substring(0, subtitle.length - 1);
+                              }
 
                               if (subtitle.isEmpty) {
                                 subtitle = 'Empty';
@@ -209,7 +211,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
   List<String> getKanjis(List<Token> tokens) {
     final kanjis = <String>[];
     for (var token in tokens) {
-      for (int i = 0; i < token.text.length; i++) {
+      for (var i = 0; i < token.text.length; i++) {
         if (token.text.codeUnitAt(i) > 12543) {
           if (!kanjis.contains(token.text[i])) kanjis.add(token.text[i]);
         }
@@ -222,7 +224,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
     final kanjiStrs = <String>[];
     final kanjis = <Kanji>[];
     for (var token in tokens) {
-      for (int i = 0; i < token.text.length; i++) {
+      for (var i = 0; i < token.text.length; i++) {
         final currentStr = token.text[i];
         if (token.text.codeUnitAt(i) > 12543 &&
             !kanjiStrs.contains(currentStr)) {
@@ -236,7 +238,7 @@ class SentenceDetailPageState extends State<SentenceDetailPage> {
   }
 
   String getSingleKanji(String text) {
-    for (int i = 0; i < text.length; i++) {
+    for (var i = 0; i < text.length; i++) {
       if (text.codeUnitAt(i) > 12543) {
         return text[i];
       }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/kanji_list.dart';
 import '../models/font_selection.dart';
+import '../models/kanji_list.dart';
 import 'constants.dart';
 
 class SharedPreferencesProvider {
@@ -75,24 +75,24 @@ class SharedPreferencesProvider {
     uids.add(kanjiList.uid);
     _sharedPreferences.setStringList(Keys.uidsKey, uids);
     _sharedPreferences.setStringList(
-        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
-    _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
+        '${kanjiList.uid}kanjis', kanjiList.kanjiStrs);
+    _sharedPreferences.setString('${kanjiList.uid}name', kanjiList.name);
   }
 
   void updateKanjiListKanjis(KanjiList kanjiList) {
     _sharedPreferences.setStringList(
-        kanjiList.uid + 'kanjis', kanjiList.kanjiStrs);
+        '${kanjiList.uid}kanjis', kanjiList.kanjiStrs);
   }
 
   void updateKanjiListName(KanjiList kanjiList) {
-    _sharedPreferences.setString(kanjiList.uid + 'name', kanjiList.name);
+    _sharedPreferences.setString('${kanjiList.uid}name', kanjiList.name);
   }
 
   void deleteKanjiList(KanjiList kanjiList) {
     uids.remove(kanjiList.uid);
     _sharedPreferences.setStringList(Keys.uidsKey, uids);
-    _sharedPreferences.remove(kanjiList.uid + 'kanjis');
-    _sharedPreferences.remove(kanjiList.uid + 'name');
+    _sharedPreferences.remove('${kanjiList.uid}kanjis');
+    _sharedPreferences.remove('${kanjiList.uid}name');
   }
 
   void setThemeMode(ThemeMode themeMode) {
@@ -128,8 +128,8 @@ class SharedPreferencesProvider {
       });
 
   KanjiList getKanjiListByUid(String uid) {
-    final kanjiStrs = _sharedPreferences.getStringList(uid + 'kanjis');
-    final name = _sharedPreferences.getString(uid + 'name');
+    final kanjiStrs = _sharedPreferences.getStringList('${uid}kanjis');
+    final name = _sharedPreferences.getString('${uid}name');
     final list = KanjiList.from(uid: uid, name: name, kanjiStrs: kanjiStrs);
     return list;
   }

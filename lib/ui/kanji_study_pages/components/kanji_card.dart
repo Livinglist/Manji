@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 
 import '../../../bloc/sentence_bloc.dart';
+import '../../../models/kanji_card_content.dart';
 import '../../../ui/components/furigana_text.dart';
 import '../../kanji_detail_page/kanji_detail_page.dart';
-import '../../../models/kanji_card_content.dart';
 
 export '../../../models/kanji_card_content.dart';
 
@@ -13,7 +13,7 @@ class KanjiCard extends StatefulWidget {
   final Color color;
 
   KanjiCard({this.kanjiCardContent, Color color, Key key})
-      : this.color = color ?? Colors.grey[700],
+      : color = color ?? Colors.grey[700],
         super(key: key ?? UniqueKey());
 
   @override
@@ -52,7 +52,7 @@ class KanjiCardState extends State<KanjiCard> {
     return Material(
       elevation: 12,
       color: widget.color,
-      borderRadius: const BorderRadius.all(const Radius.circular(12)),
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(12)),
           splashColor: Colors.grey[600],
@@ -99,8 +99,7 @@ class KanjiCardState extends State<KanjiCard> {
                             padding: const EdgeInsets.symmetric(horizontal: 0),
                             child: StreamBuilder(
                               stream: sentenceBloc.sentences,
-                              builder:
-                                  (_, AsyncSnapshot<List<Sentence>> snapshot) {
+                              builder: (_, snapshot) {
                                 if (snapshot.hasData) {
                                   if (snapshot.data.isEmpty) {
                                     return Container(

@@ -60,7 +60,7 @@ class FirebaseApiProvider {
   @Deprecated(
       'Use this only for scripting. Do not use this in the released app.')
   void fetchAllSentencesFromJishoByAllKanjis() async {
-    final List<String> kanjiStrs = KanjiBloc.instance.allKanjisList
+    final kanjiStrs = KanjiBloc.instance.allKanjisList
         .expand((element) => [
               ...element.kunyomiWords
                   .where((element) => element.wordText.length > 1)
@@ -141,12 +141,12 @@ class FirebaseApiProvider {
   Stream<Sentence> fetchAllSentencesFromFirestore() async* {
     final kanjiQuerySnapshot = await firestore.collection('sentences').get();
     for (var kanjiDoc in kanjiQuerySnapshot.docs) {
-      final String kanjiStr = kanjiDoc.id;
+      final kanjiStr = kanjiDoc.id;
       final sentenceQuerySnapshot =
           await kanjiDoc.reference.collection('sentences').get();
       for (var sentenceDoc in sentenceQuerySnapshot.docs) {
         final map = sentenceDoc.data();
-        final Sentence sentence = Sentence.fromMap(map);
+        final sentence = Sentence.fromMap(map);
         sentence.kanji = kanjiStr;
         yield sentence;
       }
@@ -254,12 +254,12 @@ class FirebaseApiProvider {
     }
 
     //To store the kanji that has already been updated
-    final List<String> updatedKanjiStrs = <String>[];
+    final updatedKanjiStrs = <String>[];
 
     var snap = await firestore.collection('updates').doc('version').get();
     final versionNum = snap.data()['versionNum'];
     if (versionNum > localVersionNum) {
-      for (int i = localVersionNum + 1; i <= versionNum; i++) {
+      for (var i = localVersionNum + 1; i <= versionNum; i++) {
         snap = await firestore.collection('updates').doc(i.toString()).get();
         final kanjis = snap.data()['kanjis'] as List;
         for (var kanjiStr in kanjis) {

@@ -17,13 +17,13 @@ class Quiz {
   Quiz({this.targetedKanjis}) {
     questions = <Question>[];
 
-    for (int i = 0; i < questionsCount; i++) {
+    for (var i = 0; i < questionsCount; i++) {
       questions[i] = Question(targetedKanji: targetedKanjis[i]);
     }
   }
 
   Quiz.from(List<Question> questions)
-      : this.targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
+      : targetedKanjis = questions.map((q) => q.targetedKanji).toList() {
     this.questions = questions..shuffle();
   }
 

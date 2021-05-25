@@ -11,7 +11,7 @@ import '../resource/firestore_provider.dart';
 
 export 'package:firebase_auth/firebase_auth.dart';
 
-enum SignInMethod { Apple, Google }
+enum SignInMethod { apple, google }
 
 class FirebaseAuthProvider {
   User get firebaseUser => FirebaseAuth.instance.currentUser;
@@ -52,7 +52,7 @@ class FirebaseAuthProvider {
   Future<User> registerNewUser(String email, String password) async {
     return FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((UserCredential cred) {
+        .then((cred) {
       //verify email address
       cred.user.sendEmailVerification();
 
@@ -69,7 +69,7 @@ class FirebaseAuthProvider {
   Future<User> signInUser(String email, String password) async {
     return FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((UserCredential cred) async {
+        .then((cred) async {
       if (cred.user.emailVerified || true) {
         final firebaseUser = cred.user;
         return firebaseUser;
@@ -77,7 +77,7 @@ class FirebaseAuthProvider {
         final firebaseUser = cred.user;
         return firebaseUser;
       }
-    }).catchError((Object err) {
+    }).catchError((err) {
       print(err);
       throw err;
     });
@@ -155,7 +155,7 @@ class FirebaseAuthProvider {
               .signInWithEmailAndPassword(email: email, password: password)
               .then((cred) {
             return cred.user;
-          }, onError: (Object error) {
+          }, onError: (error) {
             if (error is FirebaseAuthException) {
               if (error.code == 'user-not-found') {
                 return registerNewUser(
@@ -211,7 +211,7 @@ class FirebaseAuthProvider {
       });
 
       return cred.user;
-    }, onError: (Object error) {
+    }, onError: (error) {
       if (error is FirebaseAuthException) {
         if (error.code == "user-not-found") {
           return registerNewUser(email, password).then((firebaseUser) {

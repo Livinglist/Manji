@@ -28,7 +28,7 @@ class _YearlyActivityPageState extends State<YearlyActivityPage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -236,9 +236,9 @@ class ActivityGridView extends StatelessWidget {
   }
 
   String toDayString(int day) {
-    if (day > 3)
-      return day.toString() + 'th';
-    else {
+    if (day > 3) {
+      return '${day}th';
+    } else {
       if (day == 1) return '1st';
       if (day == 2) return '2nd';
       if (day == 3) return '3rd';

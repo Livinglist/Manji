@@ -1,12 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../../bloc/kanji_bloc.dart';
-import '../../ui/components/furigana_text.dart';
 import '../../bloc/kanji_list_bloc.dart';
-import 'components/progress_list_tile.dart';
+import '../../ui/components/furigana_text.dart';
 import 'components/activity_panel.dart';
+import 'components/progress_list_tile.dart';
 import 'progress_detail_page.dart';
 
 ///This is the page that displays lists created by users
@@ -67,7 +67,9 @@ class _ProgressPageState extends State<ProgressPage>
 
   @override
   void dispose() {
-    controllers.forEach((c) => c.dispose());
+    for (final c in controllers) {
+      c.dispose();
+    }
     panelAnimationController.dispose();
     super.dispose();
   }
@@ -89,7 +91,7 @@ class _ProgressPageState extends State<ProgressPage>
       ),
       body: StreamBuilder(
           stream: KanjiListBloc.instance.kanjiLists,
-          builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+          builder: (_, snapshot) {
             if (snapshot.hasData) {
               final kanjiLists = snapshot.data;
               return ListView.separated(
@@ -191,9 +193,9 @@ class _ProgressPageState extends State<ProgressPage>
   }
 
   Stream<double> computeJLPTProgress(int jlpt) async* {
-    double progress = 0.0;
-    int total = 0;
-    int iterated = 0;
+    var progress = 0.0;
+    var total = 0;
+    var iterated = 0;
     final kanjis = await compute<List<dynamic>, List<Kanji>>(
         getTargetedKanjis, [jlpt, KanjiBloc.instance.allKanjisList]);
     jlptToKanjisMap[jlpt] = kanjis;

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import '../ui/components/furigana_text.dart';
 import '../bloc/kanji_list_bloc.dart';
+import '../ui/components/furigana_text.dart';
 import '../ui/custom_list_detail_page.dart';
 
 const actionTextStyle = TextStyle(color: Colors.blue);
@@ -24,7 +24,7 @@ class _MyListPageState extends State<MyListPage> {
     super.initState();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -61,7 +61,7 @@ class _MyListPageState extends State<MyListPage> {
       ),
       body: StreamBuilder(
           stream: KanjiListBloc.instance.kanjiLists,
-          builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+          builder: (_, snapshot) {
             if (snapshot.hasData) {
               final kanjiLists = snapshot.data;
 
@@ -90,20 +90,22 @@ class _MyListPageState extends State<MyListPage> {
                     }
 
                     if (kanjiList.wordCount > 0) {
-                      subtitle += (subtitle.isEmpty ? '' : ', ') +
-                          '${kanjiList.wordCount} Words';
+                      subtitle +=
+                          '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.wordCount} Words'}';
                     }
 
-                    if (kanjiList.wordCount == 1)
+                    if (kanjiList.wordCount == 1) {
                       subtitle = subtitle.substring(0, subtitle.length - 1);
+                    }
 
                     if (kanjiList.sentenceCount > 0) {
-                      subtitle += (subtitle.isEmpty ? '' : ', ') +
-                          '${kanjiList.sentenceCount} Sentences';
+                      subtitle +=
+                          '${subtitle.isEmpty ? '' : ', '}${'${kanjiList.sentenceCount} Sentences'}';
                     }
 
-                    if (kanjiList.sentenceCount == 1)
+                    if (kanjiList.sentenceCount == 1) {
                       subtitle = subtitle.substring(0, subtitle.length - 1);
+                    }
 
                     if (subtitle.isEmpty) {
                       subtitle = 'Empty';
@@ -158,7 +160,7 @@ class _MyListPageState extends State<MyListPage> {
     final listName = kanjiList.name;
     return showCupertinoModalPopup<bool>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               title: const Text("Choose an action"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
@@ -270,7 +272,7 @@ class _MyListPageState extends State<MyListPage> {
   Future<bool> confirmDelete(KanjiList kanjiList) async {
     return showCupertinoModalPopup<bool>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,

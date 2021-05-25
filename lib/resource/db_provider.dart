@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
-import '../models/kanji.dart';
-import '../models/sentence.dart';
 import '../models/kana.dart';
+import '../models/kanji.dart';
 import '../models/question.dart';
+import '../models/sentence.dart';
 import 'constants.dart';
 
 class DBProvider {
@@ -29,8 +29,8 @@ class DBProvider {
 
   Future<Database> initDB({bool needRefresh = false}) async {
     //Initialize database in external storage
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final String path = join(appDocDir.path, "dictDB.db");
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final path = join(appDocDir.path, "dictDB.db");
 
     if (await File(path).exists() && needRefresh == false) {
       print("opening");
@@ -58,8 +58,8 @@ class DBProvider {
         }
 
         if (oldVersion == 3) {
-          final String tempPath = join(appDocDir.path, "temp.db");
-          final ByteData data = await rootBundle.load("data/dictDB.db");
+          final tempPath = join(appDocDir.path, "temp.db");
+          final data = await rootBundle.load("data/dictDB.db");
           final List<int> bytes =
               data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
           await File(path).writeAsBytes(bytes);
@@ -92,7 +92,7 @@ class DBProvider {
       });
     } else {
       print("copying");
-      final ByteData data = await rootBundle.load("data/dictDB.db");
+      final data = await rootBundle.load("data/dictDB.db");
       final List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes);
@@ -150,10 +150,11 @@ class DBProvider {
     final db = await database;
     final res = await db
         .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
-    if (res.isNotEmpty)
+    if (res.isNotEmpty) {
       return res.single['text'];
-    else
+    } else {
       return null;
+    }
   }
 
   Future<int> addKanji(Kanji kanji) async {
@@ -266,8 +267,7 @@ class DBProvider {
     final db = await database;
     var query = await db.query("IncorrectQuestions");
 
-    print("The query is $query");
-    final List<Question> qs = [];
+    final qs = <Question>[];
     for (var i in query) {
       query = await db.query("Kanji", where: "id = ${i[Keys.kanjiIdKey]}");
       final kanji = Kanji.fromDBMap(query.single);
@@ -291,11 +291,11 @@ class DBProvider {
 }
 
 Future<bool> getDatabaseStatus() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
   return prefs.getBool('databaseStatus');
 }
 
-void setDatabaseStatus(bool dbStatus) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+void setDatabaseStatus({bool dbStatus}) async {
+  final prefs = await SharedPreferences.getInstance();
   prefs.setBool('databaseStatus', dbStatus);
 }

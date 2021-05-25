@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../bloc/incorrect_question_bloc.dart';
 import '../../bloc/kanji_bloc.dart';
 import '../../bloc/kanji_list_bloc.dart';
-import '../../bloc/incorrect_question_bloc.dart';
 import '../components/snack_bar_collections.dart';
-import 'quiz_detail_page.dart';
 import 'incorrect_question_page.dart';
+import 'quiz_detail_page.dart';
 
 class QuizPage extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _QuizPageState extends State<QuizPage> {
     iqBloc.getAllIncorrectQuestions();
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -58,7 +58,7 @@ class _QuizPageState extends State<QuizPage> {
                   height: kToolbarHeight,
                   child: StreamBuilder(
                       stream: iqBloc.incorrectQuestions,
-                      builder: (_, AsyncSnapshot<List<Question>> snapshot) {
+                      builder: (_, snapshot) {
                         if (snapshot.hasData) {
                           return Center(
                             child: Text(snapshot.data.length.toString(),
@@ -82,7 +82,7 @@ class _QuizPageState extends State<QuizPage> {
         ),
         body: StreamBuilder(
           stream: KanjiListBloc.instance.kanjiLists,
-          builder: (_, AsyncSnapshot<List<KanjiList>> snapshot) {
+          builder: (_, snapshot) {
             if (snapshot.hasData) {
               final kanjiLists = snapshot.data;
 
@@ -147,16 +147,17 @@ class _QuizPageState extends State<QuizPage> {
                   : Colors.black54),
         ),
         onTap: () {
-          if (kanjiList.kanjiCount != 0)
+          if (kanjiList.kanjiCount != 0) {
             showAmountDialog(
                 kanjiList.kanjiStrs
                     .where((e) => e.length == 1)
                     .map((str) => KanjiBloc.instance.allKanjisMap[str])
                     .toList(),
                 kanjiList.name);
-          else
+          } else {
             ScaffoldMessenger.of(context)
                 .showSnackBar(WarningSnackBar(message: "List is empty."));
+          }
         },
       ));
       children.add(const Divider(height: 0));

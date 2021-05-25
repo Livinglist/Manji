@@ -1,15 +1,15 @@
 import 'package:googleapis/vision/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
-import 'google_api_credentials.dart';
 import '../utils/string_extension.dart';
+import 'google_api_credentials.dart';
 
-const _SCOPES = const [VisionApi.cloudVisionScope];
+const _scopes = [VisionApi.cloudVisionScope];
 
 class GoogleApiProvider {
   static Future<String> extractTextFromImage(String imgStr) async {
     print("before starting extract text from image");
-    return clientViaServiceAccount(credentials, _SCOPES).then((httpClient) {
+    return clientViaServiceAccount(credentials, _scopes).then((httpClient) {
       final vision = VisionApi(httpClient);
 
       final r = BatchAnnotateImagesRequest();
@@ -27,16 +27,16 @@ class GoogleApiProvider {
         })
       ];
 
-      return vision.images.annotate(r).then((BatchAnnotateImagesResponse b) {
-        return b.responses.single.textAnnotations.isEmpty
+      return vision.images.annotate(r).then((batchAnnotateImagesResponse) {
+        return batchAnnotateImagesResponse
+                .responses.single.textAnnotations.isEmpty
             ? ""
-            : b.responses.single.fullTextAnnotation.text;
+            : batchAnnotateImagesResponse
+                .responses.single.fullTextAnnotation.text;
       });
-    }, onError: (Object err) {
+    }, onError: (err) {
       print(err);
-    }).catchError((Object e) {
-      print(e);
-    });
+    }).catchError(print);
   }
 
   static Future<List<String>> extractKanjiFromImage(String imgStr) =>

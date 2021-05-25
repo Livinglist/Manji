@@ -59,13 +59,13 @@ class KanaPageState extends State<KanaPage> {
         body: TabBarView(children: [
           StreamBuilder(
             stream: kanaBloc.hiragana,
-            builder: (_, AsyncSnapshot<List<Hiragana>> snapshot) {
+            builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final hiraganas = snapshot.data;
                 return KanaGridView(
                   kanas: hiraganas,
                   showHandwritten: showHandwritten,
-                  onTap: (kana) => flutterTts.speak(kana),
+                  onTap: flutterTts.speak,
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());
@@ -74,13 +74,13 @@ class KanaPageState extends State<KanaPage> {
           ),
           StreamBuilder(
             stream: kanaBloc.katakana,
-            builder: (_, AsyncSnapshot<List<Katakana>> snapshot) {
+            builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final katakana = snapshot.data;
                 return KanaGridView(
                   kanas: katakana,
                   showHandwritten: showHandwritten,
-                  onTap: (kana) => flutterTts.speak(kana),
+                  onTap: flutterTts.speak,
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());

@@ -18,7 +18,7 @@ class SpringCurve extends Curve {
     double damping = 20,
     double stiffness = 180,
     double mass = 1.0,
-  }) : this._sim = SpringSimulation(
+  }) : _sim = SpringSimulation(
           SpringDescription(
             damping: damping,
             mass: mass,

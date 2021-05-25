@@ -6,11 +6,11 @@ import '../resource/constants.dart';
 import 'kanji.dart';
 
 enum QuestionType {
-  KanjiToKatakana, //choose the correct katakana for the kanji
-  KanjiToMeaning, //choose the correct meaning for the kanji
-  KanjiToHiragana,
-  MeaningToKanji, //choose the correct kanji for the meaning
-  YomikataToKanji //choose the correct kanji for the pronunciation
+  kanjiToKatakana, //choose the correct katakana for the kanji
+  kanjiToMeaning, //choose the correct meaning for the kanji
+  kanjiToHiragana,
+  meaningToKanji, //choose the correct kanji for the meaning
+  yomikataToKanji //choose the correct kanji for the pronunciation
 }
 
 class Question {
@@ -21,48 +21,52 @@ class Question {
   List<String> wrongAnswers = [];
 
   bool _isCorrect;
+
   bool get isCorrect => _isCorrect;
 
   int _selected;
+
   int get selected => _selected;
+
   set selected(int selected) {
     _selected = selected;
 
-    if (choices[selected] == rightAnswer)
+    if (choices[selected] == rightAnswer) {
       _isCorrect = true;
-    else
+    } else {
       _isCorrect = false;
+    }
   }
 
   List<String> _choices;
+
   List<String> get choices => _choices;
 
   final QuestionType questionType;
 
   Question(
       {this.targetedKanji,
-      QuestionType questionType = QuestionType.KanjiToKatakana,
+      this.questionType = QuestionType.kanjiToKatakana,
       List<String> mockChoices})
-      : this.questionType = questionType,
-        assert(questionType != QuestionType.KanjiToMeaning ||
-            (questionType == QuestionType.KanjiToMeaning &&
+      : assert(questionType != QuestionType.kanjiToMeaning ||
+            (questionType == QuestionType.kanjiToMeaning &&
                 mockChoices != null &&
                 mockChoices.isNotEmpty &&
                 mockChoices.length == 3)) {
     switch (questionType) {
-      case QuestionType.KanjiToKatakana:
+      case QuestionType.kanjiToKatakana:
         generateKanjiToKatakanaChoices();
         break;
-      case QuestionType.KanjiToMeaning:
+      case QuestionType.kanjiToMeaning:
         generateKanjiToMeaningChoices(mockChoices);
         break;
-      case QuestionType.KanjiToHiragana:
+      case QuestionType.kanjiToHiragana:
         generateKanjiToHiraganaChoices(mockChoices);
         break;
-      case QuestionType.MeaningToKanji:
+      case QuestionType.meaningToKanji:
         generateKanjiToKatakanaChoices();
         break;
-      case QuestionType.YomikataToKanji:
+      case QuestionType.yomikataToKanji:
         generateKanjiToKatakanaChoices();
         break;
       default:
@@ -102,11 +106,11 @@ class Question {
     rightAnswer = targetedKana;
     final firstKana = targetedKana[0];
     if (kanaShiftMap.containsKey(firstKana)) {
-      final List<String> shiftableKanas = List.from(kanaShiftMap[firstKana])
+      final shiftableKanas = List<String>.from(kanaShiftMap[firstKana])
         ..remove(firstKana);
-      final List<String> tempKanas = [];
-      int pos = -1;
-      for (int i = 0; i < 3; i++) {
+      final tempKanas = <String>[];
+      var pos = -1;
+      for (var i = 0; i < 3; i++) {
         while (pos == -1 || tempKanas.contains(shiftableKanas[pos])) {
           pos = Random(DateTime.now().millisecondsSinceEpoch)
               .nextInt(shiftableKanas.length);
@@ -121,7 +125,7 @@ class Question {
   }
 
   void generateKanjiToMeaningChoices(List<String> mockChoices) {
-    final String targetedMeaning = targetedKanji.meaning;
+    final targetedMeaning = targetedKanji.meaning;
     rightAnswer = targetedMeaning;
 
     wrongAnswers.addAll(mockChoices);
@@ -130,7 +134,7 @@ class Question {
   }
 
   void generateKanjiToHiraganaChoices(List<String> mockChoices) {
-    String targetedHiragana = targetedKanji.kunyomi.toString();
+    var targetedHiragana = targetedKanji.kunyomi.toString();
     targetedHiragana = targetedKanji.kunyomi
         .toString()
         .substring(1, targetedHiragana.length - 1);
@@ -154,10 +158,10 @@ class Question {
       };
 
   String toString() =>
-      "kanji: ${this.targetedKanji}, choices: ${this._choices}, selected: ${this._selected}";
+      "kanji: $targetedKanji, choices: $_choices, selected: $_selected";
 }
 
-const List<String> hiraganaA = const [
+const List<String> hiraganaA = [
   "あ",
   "か",
   "が",
@@ -174,7 +178,7 @@ const List<String> hiraganaA = const [
   "ら",
   "わ"
 ];
-const List<String> hiraganaI = const [
+const List<String> hiraganaI = [
   "い",
   "き",
   "ぎ",
@@ -188,7 +192,7 @@ const List<String> hiraganaI = const [
   "み",
   "り"
 ];
-const List<String> hiraganaU = const [
+const List<String> hiraganaU = [
   "う",
   "ぐ",
   "く",
@@ -203,7 +207,7 @@ const List<String> hiraganaU = const [
   "る",
   "つ"
 ];
-const List<String> hiraganaE = const [
+const List<String> hiraganaE = [
   "え",
   "け",
   "げ",
@@ -218,7 +222,7 @@ const List<String> hiraganaE = const [
   "れ",
   "め"
 ];
-const List<String> hiraganaO = const [
+const List<String> hiraganaO = [
   "お",
   "こ",
   "ご",
@@ -236,7 +240,7 @@ const List<String> hiraganaO = const [
   "を"
 ];
 
-const List<String> katakanaA = const [
+const List<String> katakanaA = [
   "ア",
   "カ",
   "ガ",
@@ -253,7 +257,7 @@ const List<String> katakanaA = const [
   "ラ",
   "ワ"
 ];
-const List<String> katakanaI = const [
+const List<String> katakanaI = [
   "イ",
   "キ",
   "ギ",
@@ -267,7 +271,7 @@ const List<String> katakanaI = const [
   "ミ",
   "リ"
 ];
-const List<String> katakanaU = const [
+const List<String> katakanaU = [
   "ウ",
   "グ",
   "ク",
@@ -282,7 +286,7 @@ const List<String> katakanaU = const [
   "ル",
   "ツ"
 ];
-const List<String> katakanaE = const [
+const List<String> katakanaE = [
   "エ",
   "ケ",
   "ゲ",
@@ -297,7 +301,7 @@ const List<String> katakanaE = const [
   "レ",
   "メ"
 ];
-const List<String> katakanaO = const [
+const List<String> katakanaO = [
   "オ",
   "コ",
   "ゴ",

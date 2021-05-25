@@ -4,7 +4,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 class InAppRepo {
   // this is the product Id as created for the consumable on app connect and google play
-  static String _coffeeId = 'coffee';
+  static const _coffeeId = 'coffee';
   final Set<String> _productIds = <String>{_coffeeId};
   Stream<List<PurchaseDetails>> get purchaseStream =>
       InAppPurchaseConnection.instance.purchaseUpdatedStream;
@@ -24,15 +24,14 @@ class InAppRepo {
     if (availableProducts.isNotEmpty) {
       final productDetails = availableProducts
           .firstWhere((productDetail) => productDetail.id == _coffeeId);
-      final PurchaseParam purchaseParam =
-          PurchaseParam(productDetails: productDetails);
+      final purchaseParam = PurchaseParam(productDetails: productDetails);
       await InAppPurchaseConnection.instance.isAvailable();
       InAppPurchaseConnection.instance
           .buyConsumable(purchaseParam: purchaseParam);
     }
   }
 
-  void completePurchase(purchaseDetails) {
+  void completePurchase(PurchaseDetails purchaseDetails) {
     InAppPurchaseConnection.instance.completePurchase(purchaseDetails);
   }
 

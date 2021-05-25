@@ -26,7 +26,7 @@ class GradeChip extends StatelessWidget {
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-          color: this.color,
+          color: color,
           borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),
@@ -63,11 +63,11 @@ class StrokeChip extends StatelessWidget {
 
   StrokeChip({this.color = Colors.white, this.stokeCount})
       : isCompact = false,
-        label = "$stokeCount stroke" + (stokeCount == 1 ? "" : "s");
+        label = "${"$stokeCount stroke"}${stokeCount == 1 ? "" : "s"}";
 
   StrokeChip.compact({this.color = Colors.white, this.stokeCount})
       : isCompact = true,
-        label = "$stokeCount stroke" + (stokeCount == 1 ? "" : "s");
+        label = "${"$stokeCount stroke"}${stokeCount == 1 ? "" : "s"}";
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class StrokeChip extends StatelessWidget {
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-          color: this.color,
+          color: color,
           borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),
@@ -122,7 +122,7 @@ class JLPTChip extends StatelessWidget {
             )),
         decoration: BoxDecoration(
           //boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 8)],
-          color: this.color,
+          color: color,
           borderRadius: const BorderRadius.all(
               Radius.circular(5.0) //                 <--- border radius here
               ),

@@ -5,17 +5,17 @@ import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../bloc/kanji_bloc.dart';
 import '../bloc/kanji_list_bloc.dart';
 import '../bloc/settings_bloc.dart';
 import '../ui/sentence_detail_page.dart';
 import '../ui/word_detail_page.dart';
-import 'kanji_detail_page/kanji_detail_page.dart';
 import 'components/furigana_text.dart';
 import 'components/kanji_list_tile.dart';
+import 'kanji_detail_page/kanji_detail_page.dart';
 import 'kanji_study_pages/kanji_study_page.dart';
 
 ///This is the page that displays the list created by the user
@@ -35,7 +35,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   bool showGrid = false, showShadow = false;
   bool sortByStrokes = false;
   String studyString = 'When will you start studying！ (╯°Д°）╯';
-  var stupidStrings = [
+  final stupidStrings = <String>[
     "You can stop it now...",
     "emmmm......",
     "why?",
@@ -51,7 +51,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   void initState() {
     KanjiListBloc.instance.init();
     KanjiBloc.instance.fetchKanjisByKanjiStrs(widget.kanjiList.kanjiStrs);
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
       FeatureDiscovery.discoverFeatures(
         context,
         const <String>{
@@ -63,7 +63,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
     super.initState();
 
     gridViewScrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (gridViewScrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -77,7 +77,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
     });
 
     listViewScrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (listViewScrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -102,7 +102,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
           actions: <Widget>[
             StreamBuilder(
               stream: KanjiBloc.instance.kanjis,
-              builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+              builder: (_, snapshot) {
                 print("snapshot: ${snapshot.data}");
 
                 return DescribedFeatureOverlay(
@@ -191,7 +191,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
         ),
         body: StreamBuilder(
           stream: KanjiBloc.instance.kanjis,
-          builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+          builder: (_, snapshot) {
             if (snapshot.hasData) {
               var kanjis = snapshot.data;
 
@@ -289,7 +289,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
                         key: ObjectKey(kanji.kanji),
                         stream: SettingsBloc.instance.fontSelection,
                         initialData: SettingsBloc.instance.tempFontSelection,
-                        builder: (_, AsyncSnapshot<FontSelection> snapshot) {
+                        builder: (_, snapshot) {
                           if (snapshot.hasData) {
                             return Text(kanji.kanji,
                                 style: TextStyle(
@@ -439,7 +439,7 @@ class _ListDetailPageState extends State<ListDetailPage> {
   Future<bool> confirmDismiss(Kanji kanji) async {
     return showCupertinoModalPopup<bool>(
         context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (context) => CupertinoActionSheet(
               message: const Text("Are you sure?"),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,

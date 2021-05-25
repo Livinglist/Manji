@@ -1,19 +1,19 @@
 import 'dart:math';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:confetti/confetti.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../bloc/incorrect_question_bloc.dart';
-import '../../bloc/quiz_bloc.dart';
 import '../../bloc/kanji_bloc.dart';
+import '../../bloc/quiz_bloc.dart';
 import '../../models/kanji_list.dart';
 import '../../models/quiz.dart';
 import '../../models/quiz_result.dart';
 import '../../resource/constants.dart';
-import 'components/incorrect_question_list_tile.dart';
 import 'components/correct_question_list_tile.dart';
+import 'components/incorrect_question_list_tile.dart';
 
 class QuizDetailPage extends StatefulWidget {
   final List<Kanji> kanjis;
@@ -65,7 +65,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
     total = kanjis.length;
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -105,7 +105,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
             actions: <Widget>[
               StreamBuilder(
                 stream: quizBloc.quiz,
-                builder: (_, AsyncSnapshot<Quiz> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     return Padding(
                         padding: const EdgeInsets.all(12),
@@ -121,7 +121,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
             bottom: PreferredSize(
                 child: StreamBuilder(
                   stream: quizBloc.quiz,
-                  builder: (_, AsyncSnapshot<Quiz> snapshot) {
+                  builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       return showResult
                           ? Container()
@@ -227,7 +227,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
     print(MediaQuery.of(context).devicePixelRatio);
     return StreamBuilder(
       stream: quizBloc.quiz,
-      builder: (_, AsyncSnapshot<Quiz> snapshot) {
+      builder: (_, snapshot) {
         if (snapshot.hasData) {
           final quiz = snapshot.data;
 
@@ -266,9 +266,9 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                   ),
                 ),
                 if (quiz.currentQuestion.questionType ==
-                        QuestionType.KanjiToMeaning ||
+                        QuestionType.kanjiToMeaning ||
                     quiz.currentQuestion.questionType ==
-                        QuestionType.KanjiToHiragana)
+                        QuestionType.kanjiToHiragana)
                   Flexible(
                       flex: 4,
                       child: ListView(
@@ -313,7 +313,7 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
                                 ));
                           }))),
                 if (quiz.currentQuestion.questionType ==
-                    QuestionType.KanjiToKatakana)
+                    QuestionType.kanjiToKatakana)
                   Flexible(
                       flex: 4,
                       child: Container(

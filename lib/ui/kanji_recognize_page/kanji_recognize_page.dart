@@ -15,7 +15,7 @@ class DrawingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (int i = 0; i < offsetPoints.length - 1; i++) {
+    for (var i = 0; i < offsetPoints.length - 1; i++) {
       if (offsetPoints[i] != null && offsetPoints[i + 1] != null) {
         canvas.drawLine(offsetPoints[i], offsetPoints[i + 1], kDrawingPaint);
       }
@@ -54,7 +54,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
     animationController = AnimationController(vsync: this, value: 1);
 
     scrollController.addListener(() {
-      if (this.mounted) {
+      if (mounted) {
         if (scrollController.offset <= 0) {
           setState(() {
             showShadow = false;
@@ -68,19 +68,9 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
     });
 
     scrollController.addListener(() {
-      if (this.mounted) {
-//        if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
-//          setState(() {
-//            canvasEnabled = true;
-//          });
-//        } else {
-//          setState(() {
-//            canvasEnabled = false;
-//          });
-//        }
-
+      if (mounted) {
         scrollController.addListener(() {
-          if (this.mounted) {
+          if (mounted) {
             animationController.value = scrollController.offset >= 120
                 ? 0
                 : 1 - scrollController.offset / 120;
@@ -110,7 +100,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
               padding: const EdgeInsets.all(12),
               child: StreamBuilder(
                 stream: kanjiRecognizeBloc.predictedKanji,
-                builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final kanjis = snapshot.data;
 
@@ -181,7 +171,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         child: StreamBuilder(
           stream: kanjiRecognizeBloc.predictedKanji,
           initialData: const <Kanji>[],
-          builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+          builder: (_, snapshot) {
             final kanjis = snapshot.data;
             if (kanjis.isEmpty) {
               return const Center(
@@ -221,7 +211,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         child: StreamBuilder(
           stream: kanjiRecognizeBloc.predictedKanji,
           initialData: const <Kanji>[],
-          builder: (_, AsyncSnapshot<List<Kanji>> snapshot) {
+          builder: (_, snapshot) {
             final kanjis = snapshot.data;
             if (kanjis.isEmpty) {
               return const Center(
@@ -250,7 +240,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         color: Colors.white,
       ),
       child: Builder(
-        builder: (BuildContext context) {
+        builder: (context) {
           return GestureDetector(
             onPanUpdate: (details) {
               setState(() {
@@ -302,7 +292,7 @@ class _KanjiRecognizePageState extends State<KanjiRecognizePage>
         borderRadius: BorderRadius.circular(12),
       ),
       child: Builder(
-        builder: (BuildContext context) {
+        builder: (context) {
           return GestureDetector(
             onPanUpdate: (details) {
               setState(() {

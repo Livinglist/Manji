@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/kanji.dart';
 import '../../bloc/kanji_bloc.dart';
-import '../kanji_detail_page/kanji_detail_page.dart';
 import '../../ui/components/chip_collections.dart';
+import '../kanji_detail_page/kanji_detail_page.dart';
 
 class DailyKanjiCard extends StatefulWidget {
   @override
@@ -24,7 +23,7 @@ class DailyKanjiCardState extends State<DailyKanjiCard>
       duration: const Duration(milliseconds: 300),
       child: StreamBuilder(
         stream: KanjiBloc.instance.randomKanji,
-        builder: (_, AsyncSnapshot<Kanji> snapshot) {
+        builder: (_, snapshot) {
           if (snapshot.hasData) {
             final kanji = snapshot.data;
             return Container(

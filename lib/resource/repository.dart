@@ -1,21 +1,21 @@
-import '../models/sentence.dart';
-import '../models/word.dart';
-import '../models/kanji.dart';
 import '../models/kana.dart';
+import '../models/kanji.dart';
 import '../models/kanji_list.dart';
 import '../models/question.dart';
-import 'jisho_api_provider.dart';
+import '../models/sentence.dart';
+import '../models/word.dart';
 import 'db_provider.dart';
 import 'firebase_api_provider.dart';
-import 'shared_preferences_provider.dart';
 import 'firestore_provider.dart';
+import 'jisho_api_provider.dart';
+import 'shared_preferences_provider.dart';
 
 export '../models/kana.dart';
 export '../models/kanji.dart';
 export '../models/kanji_list.dart';
+export '../models/question.dart';
 export '../models/sentence.dart';
 export '../models/word.dart';
-export '../models/question.dart';
 
 class Repository {
   final _jishoApiProvider = JishoApiProvider();
@@ -33,10 +33,6 @@ class Repository {
 
   Future<List<Kanji>> getAllKanjisFromDB() => DBProvider.db.getAllKanjis();
 
-  //Future<List<Sentence>> getSentencesByKanji(String kanjiStr) => DBProvider.db.getSentencesByKanji(kanjiStr);
-
-  //Stream<Sentence> getSentencesByKanjiStream(String kanjiStr) => DBProvider.db.getSentencesByKanjiStream(kanjiStr);
-
   Future<String> getSentencesJsonStringByKanji(String kanjiStr) =>
       DBProvider.db.getSentencesJsonStringByKanji(kanjiStr);
 
@@ -46,10 +42,11 @@ class Repository {
   Future checkForUpdate(Map<String, Kanji> allLocalKanjis) =>
       _firebaseApiProvider.checkForUpdate(allLocalKanjis);
 
-  void updateKanji(Kanji kanji, [bool isDeleted = false]) {
+  void updateKanji(Kanji kanji, {bool isDeleted = false}) {
     DBProvider.db.updateKanji(kanji);
 
-    //If user did not delete from but added a new word to database, upload to firebase
+    //If user did not delete from but added a new word to database,
+    // upload to firebase
     if (!isDeleted) {
       _firebaseApiProvider.uploadUserModifiedKanji(kanji);
     }

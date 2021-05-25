@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/material.dart';
 
 import '../../../bloc/kanji_bloc.dart';
-import '../../../bloc/sentence_bloc.dart';
 import '../../../bloc/kanji_list_bloc.dart';
-import '../../search_result_page.dart';
+import '../../../bloc/sentence_bloc.dart';
 import '../../components/chip_collections.dart';
 import '../../components/label_divider.dart';
+import '../../search_result_page.dart';
 
 class KanjiInfoColumn extends StatelessWidget {
   final Kanji kanji;
@@ -17,8 +17,8 @@ class KanjiInfoColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: KanjiBloc.instance.kanji,
-      builder: (_, AsyncSnapshot<Kanji> snapshot) {
-        if (snapshot.hasData || this.kanji != null) {
+      builder: (_, snapshot) {
+        if (snapshot.hasData || kanji != null) {
           final kanji = this.kanji == null ? snapshot.data : this.kanji;
 
           Widget radicalPanel;
@@ -42,7 +42,7 @@ class KanjiInfoColumn extends StatelessWidget {
                           textAlign: TextAlign.center,
                           text: const TextSpan(children: [
                             TextSpan(
-                                text: 'ぶしゅ' + '\n',
+                                text: 'ぶしゅ\n',
                                 style: TextStyle(
                                     fontSize: 9, color: Colors.white)),
                             TextSpan(
