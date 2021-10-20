@@ -1,4 +1,4 @@
-# Manji ![50](https://user-images.githubusercontent.com/7277662/108042074-33ff3a00-6ff4-11eb-91b6-713e33d57873.png)
+# Manji
 
 
 ![iOS](https://img.shields.io/badge/iOS-11%20-blue)
