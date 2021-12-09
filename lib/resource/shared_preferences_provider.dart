@@ -6,7 +6,7 @@ import '../models/kanji_list.dart';
 import 'constants.dart';
 
 class SharedPreferencesProvider {
-  static SharedPreferences _sharedPreferences;
+  static SharedPreferences? _sharedPreferences;
 
   SharedPreferencesProvider._() {
     if (_sharedPreferences == null) initSharedPrefs();

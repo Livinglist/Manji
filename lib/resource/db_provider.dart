@@ -14,13 +14,11 @@ import '../models/sentence.dart';
 import 'constants.dart';
 
 class DBProvider {
-  DBProvider._();
-
   static final DBProvider db = DBProvider._();
 
-  Database _database;
+  Database? _database;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) return _database;
 
     _database = await initDB();
@@ -128,8 +126,8 @@ class DBProvider {
   Future<List<Sentence>> getSentencesByKanji(String kanjiStr) async {
     final db = await database;
     final res = await db
-        .rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
-    final sentences = await jsonStringToSentences(res.single['text']);
+        ?.rawQuery("SELECT * FROM Sentence WHERE kanji = '$kanjiStr' LIMIT 1");
+    final sentences = await jsonStringToSentences(res?.single['text']);
 
     return sentences;
   }
@@ -209,7 +207,7 @@ class DBProvider {
 
     return res.isNotEmpty
         ? res.map((r) {
-            return Hiragana.fromMap(r);
+            return HiraganaHiragana.fromMap(r);
           }).toList()
         : [];
   }

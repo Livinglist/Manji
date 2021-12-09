@@ -8,18 +8,24 @@ enum Grade { g1, g2, g3, g4, g5, g6, g7, g8 }
 enum Yomikata { kunyomi, onyomi }
 
 class Kanji {
-  int id;
-  String kanji;
-  List<String> onyomi;
-  List<String> kunyomi;
-  String meaning;
-  String radicals;
-  String radicalsMeaning;
-  int strokes;
-  bool isFaved;
-  List<int> timeStamps = [];
+  final int id;
+  final String kanji;
+  final List<String> onyomi;
+  final List<String> kunyomi;
+  final String meaning;
+  final String radicals;
+  final String radicalsMeaning;
+  final int strokes;
+  final bool isFaved;
+  final List<int> timeStamps;
+  final int grade;
+  final int jlpt;
+  final int frequency;
+  final List<String> parts;
+  final List<Word> onyomiWords;
+  final List<Word> kunyomiWords;
 
-  JLPTLevel get jlptLevel {
+  JLPTLevel? get jlptLevel {
     switch (jlpt) {
       case 1:
         return JLPTLevel.n1;
@@ -35,28 +41,24 @@ class Kanji {
     return null;
   }
 
-  int grade;
-  int jlpt;
-  int frequency;
-  List<String> parts;
-  List<Word> onyomiWords;
-  List<Word> kunyomiWords;
-
-  Kanji(
-      {this.id,
-      this.kanji,
-      this.onyomi,
-      this.kunyomi,
-      this.meaning,
-      this.grade,
-      this.jlpt,
-      this.strokes,
-      this.frequency,
-      this.parts,
-      this.onyomiWords,
-      this.kunyomiWords,
-      this.isFaved = false})
-      : assert((grade >= 0 && grade <= 7)),
+  Kanji({
+    required this.id,
+    required this.kanji,
+    required this.onyomi,
+    required this.kunyomi,
+    required this.meaning,
+    required this.grade,
+    required this.jlpt,
+    required this.strokes,
+    required this.frequency,
+    required this.parts,
+    required this.onyomiWords,
+    required this.kunyomiWords,
+    required this.radicalsMeaning,
+    required this.radicals,
+    required this.timeStamps,
+    this.isFaved = false,
+  })  : assert((grade >= 0 && grade <= 7)),
         assert(jlpt >= 0 && jlpt <= 5),
         assert(strokes != 0),
         assert(frequency >= 0);
@@ -75,25 +77,29 @@ class Kanji {
         Keys.onyomiWordsKey: onyomiWords
       };
 
-  Kanji.fromMap(Map map) {
-    kanji = map[Keys.kanjiKey];
-    meaning = map[Keys.meaningKey];
-    strokes = map[Keys.strokesKey];
-    grade = map[Keys.gradeKey];
-    jlpt = map[Keys.jlptKey];
-    frequency = map[Keys.frequencyKey];
-    parts = ((map[Keys.partsKey] as List) ?? []).cast<String>();
-    kunyomi = (map[Keys.kunyomiKey] as List ?? []).cast<String>();
-    kunyomiWords = (map[Keys.kunyomiWordsKey] as List ?? [])
-        .cast<String>()
-        .map((str) => Word.fromString(str))
-        .toList();
-    onyomi = (map[Keys.onyomiKey] as List ?? []).cast<String>();
-    onyomiWords = (map[Keys.onyomiWordsKey] as List ?? [])
-        .cast<String>()
-        .map((str) => Word.fromString(str))
-        .toList();
-  }
+  Kanji.fromMap(Map<String, dynamic> map)
+      : id = map[Keys.kanjiKey],
+        radicals = '',
+        radicalsMeaning = '',
+        isFaved = false,
+        kanji = map[Keys.kanjiKey],
+        meaning = map[Keys.meaningKey],
+        strokes = map[Keys.strokesKey],
+        grade = map[Keys.gradeKey],
+        jlpt = map[Keys.jlptKey],
+        frequency = map[Keys.frequencyKey],
+        parts = ((map[Keys.partsKey] as List)).cast<String>(),
+        kunyomi = (map[Keys.kunyomiKey] as List).cast<String>(),
+        kunyomiWords = (map[Keys.kunyomiWordsKey] as List)
+            .cast<String>()
+            .map((str) => Word.fromString(str))
+            .toList(),
+        onyomi = (map[Keys.onyomiKey] as List).cast<String>(),
+        onyomiWords = (map[Keys.onyomiWordsKey] as List)
+            .cast<String>()
+            .map((str) => Word.fromString(str))
+            .toList(),
+        timeStamps = [];
 
   Map<String, dynamic> toDBMap() => {
         Keys.idKey: Keys.idKey,
@@ -115,28 +121,29 @@ class Kanji {
         Keys.studiedTimeStampsKey: jsonEncode(timeStamps)
       };
 
-  Kanji.fromDBMap(Map map) {
-    id = map[Keys.idKey];
-    kanji = map[Keys.kanjiKey];
-    meaning = map[Keys.meaningKey];
-    radicals = map[Keys.radicalKey];
-    radicalsMeaning = map[Keys.radicalsMeaningKey];
-    strokes = map[Keys.strokesKey];
-    grade = map[Keys.gradeKey];
-    jlpt = map[Keys.jlptKey];
-    frequency = map[Keys.frequencyKey];
-    parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>();
-    kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>();
-    kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List)
-        .map((str) => Word.fromMap(str))
-        .toList();
-    onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>();
-    onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
-        .map((str) => Word.fromMap(str))
-        .toList();
-    timeStamps = (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List)
-        .cast<int>();
-  }
+  Kanji.fromDBMap(Map map)
+      : isFaved = false,
+        id = map[Keys.idKey],
+        kanji = map[Keys.kanjiKey],
+        meaning = map[Keys.meaningKey],
+        radicals = map[Keys.radicalKey],
+        radicalsMeaning = map[Keys.radicalsMeaningKey],
+        strokes = map[Keys.strokesKey],
+        grade = map[Keys.gradeKey],
+        jlpt = map[Keys.jlptKey],
+        frequency = map[Keys.frequencyKey],
+        parts = (jsonDecode(map[Keys.partsKey]) as List).cast<String>(),
+        kunyomi = (jsonDecode(map[Keys.kunyomiKey]) as List).cast<String>(),
+        kunyomiWords = (jsonDecode(map[Keys.kunyomiWordsKey]) as List)
+            .map((str) => Word.fromMap(str))
+            .toList(),
+        onyomi = (jsonDecode(map[Keys.onyomiKey]) as List).cast<String>(),
+        onyomiWords = (jsonDecode(map[Keys.onyomiWordsKey]) as List)
+            .map((str) => Word.fromMap(str))
+            .toList(),
+        timeStamps =
+            (jsonDecode(map[Keys.studiedTimeStampsKey] ?? '[]') as List)
+                .cast<int>();
 
   String toString() {
     return 'Instance of Kanji: $kanji, meaning: $meaning';

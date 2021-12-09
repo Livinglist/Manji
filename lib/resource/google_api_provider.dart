@@ -7,36 +7,39 @@ import 'google_api_credentials.dart';
 const _scopes = [VisionApi.cloudVisionScope];
 
 class GoogleApiProvider {
-  static Future<String> extractTextFromImage(String imgStr) async {
+  static Future<String?> extractTextFromImage(String imgStr) async {
     print("before starting extract text from image");
-    return clientViaServiceAccount(credentials, _scopes).then((httpClient) {
-      final vision = VisionApi(httpClient);
+    return clientViaServiceAccount(credentials, _scopes).then(
+      (httpClient) {
+        final vision = VisionApi(httpClient);
 
-      final r = BatchAnnotateImagesRequest();
-      r.requests = [
-        AnnotateImageRequest.fromJson({
-          "image": {
-            "content": imgStr,
-          },
-          "features": [
-            {"type": "TEXT_DETECTION", "maxResults": 1}
-          ],
-          "imageContext": {
-            "languageHints": ["ja"],
-          }
-        })
-      ];
+        final r = BatchAnnotateImagesRequest();
+        r.requests = [
+          AnnotateImageRequest.fromJson({
+            "image": {
+              "content": imgStr,
+            },
+            "features": [
+              {"type": "TEXT_DETECTION", "maxResults": 1}
+            ],
+            "imageContext": {
+              "languageHints": ["ja"],
+            }
+          })
+        ];
 
-      return vision.images.annotate(r).then((batchAnnotateImagesResponse) {
-        return batchAnnotateImagesResponse
-                .responses.single.textAnnotations.isEmpty
-            ? ""
-            : batchAnnotateImagesResponse
-                .responses.single.fullTextAnnotation.text;
-      });
-    }, onError: (err) {
-      print(err);
-    }).catchError(print);
+        return vision.images.annotate(r).then((batchAnnotateImagesResponse) {
+          return batchAnnotateImagesResponse
+                  .responses.single.textAnnotations.isEmpty
+              ? ""
+              : batchAnnotateImagesResponse
+                  .responses.single.fullTextAnnotation.text;
+        });
+      },
+      onError: (err) {
+        print(err);
+      },
+    );
   }
 
   static Future<List<String>> extractKanjiFromImage(String imgStr) =>
